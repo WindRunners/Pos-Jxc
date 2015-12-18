@@ -23,9 +23,8 @@ class Announcement
   field :news_url, type: String #链接
   field :source, type: String #来源
 
-  has_mongoid_attached_file :avatar, :path => "public/upload/image/:class/:id/:filename",
-                            :url => "/upload/image/:class/:id/:basename.:extension", styles: {thumb: "150x150>"}
-
+  has_mongoid_attached_file :avatar, styles: {thumb: "640x480>"},
+                            :default_url => '/missing.png'
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
 

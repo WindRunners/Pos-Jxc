@@ -1,0 +1,2 @@
+module ImportBagReceiversHelper
+end

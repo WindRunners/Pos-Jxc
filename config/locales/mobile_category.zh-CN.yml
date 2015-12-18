@@ -1,0 +1,9 @@
+zh-CN:
+  mongoid:
+    models:
+      mobile_category: "商品分组"
+    attributes:
+      mobile_category:
+        title: "分组名称"
+        num: "排序号"
+        created_at: '创建时间'

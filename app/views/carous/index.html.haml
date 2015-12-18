@@ -1,0 +1,19 @@
+%h1 Listing carous
+= @carous.inspect
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @carous.each do |carou|
+      %tr
+        %td= link_to 'Show', carou
+        %td= link_to 'Edit', edit_carou_path(carou)
+        %td= link_to 'Destroy', carou, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Carou', new_carou_path

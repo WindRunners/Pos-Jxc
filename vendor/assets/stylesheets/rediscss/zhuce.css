@@ -1,0 +1,38 @@
+@charset "utf-8";
+/*重置*/
+body{background-color: inherit}
+*{ margin:0px; padding:0px; font-family:"微软雅黑";}
+html,body{ width:100%; min-width:1140px}
+/*注册*/
+#zhuce{ width:100%; height:45px; line-height:45px; text-align:center; color:#000; font-size:18px;  background:#FFF; margin-bottom:50px; border-bottom:1px solid #d8d8d8;}
+#zhuce .zhuce{ width:25%; float:left;}
+#zhuce .zhuce_yx{ width:25%; background:url(../images/jiantou_02.png) no-repeat;}
+#zhuce .zhuce_xin{ background:url(../images/daohang01.png) no-repeat; background-size:100% 100%; color:#FFF;}
+/*内容*/
+.main{ width:1102px; margin:0 auto;}
+/*左侧内容*/
+.main .main_left{ width:550px; float:left; border-right:2px solid #e5e5e5;}
+.main .main_left p{ font-size:14px; color:#303030; line-height:24px; margin-bottom:40px; }
+.main .main_left p span{color:red;}
+.main .main_left form .frm_control_group{ margin-bottom:40px;}
+.main .main_left form .frm_control_group .frm_label{ float:left; margin-right:30px; font-family:"微软雅黑";width:88px;}
+.main .main_left form .frm_control_group .frm_controls{ float:left;}
+.main .main_left form .frm_control_group .clear{ clear:both;}
+.main .main_left form .frm_control_group .frm_controls .frm_input{ width:340px; height:30px; line-height:30px;}
+
+.main .main_left .form .frm_control_group .frm_controls .frm_tips{color:#737272; font-size:14px; padding:10px 0px;}
+/*左侧内容--验证码*/
+.main .main_left .form .frm_control_group .frm_controls .frm_input_box #input1{ height:30px; width:100px; margin-bottom:30px;}
+.code {
+background:#e1e1e1; font-family: Arial; font-style: italic; color:#20c8ff; border:1px solid #e1e1e1;  letter-spacing: 3px; font-weight: bolder; margin-left:40px; height:30px; line-height:30px; text-align:center; padding:0px 10px; margin-top:-2px;}
+.main .main_left .form .frm_control_group .frm_controls .frm_input_box .unchanged { width:140px; border:0px; font-size:16px; margin-left:40px; background:#e1e1e1; border:1px solid #e1e1e1; color:#20c8ff; text-align:center; padding:4px 10px;}
+/*右侧内容*/
+.main .main_right{ width:550px; float:left; }
+.main .main_right .main_right_zh span{ width:px; font-size:14px; float:right; margin-bottom:400px;}
+.main .main_right .main_right_zh span a{ color:#20c8ff; text-decoration:none;}
+.main .main_right .main_right_zh span a:hover{ text-decoration:underline;}
+.main .main_right .clear{ clear:both;}
+.main .main_right .frm_control_group{ width:210px;font-size:18px; margin:0px auto; }
+	/*右侧内容--提交按钮*/
+.main .main_right .button{ width:340px;height:36px; margin: 0px auto;background:#48e065;}
+.main .main_right .button b{border-radius:4px;  font-size:18px; line-height:36px;  border:none; color:#fff; text-decoration:none;}

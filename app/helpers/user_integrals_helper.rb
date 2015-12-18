@@ -1,0 +1,2 @@
+module UserIntegralsHelper
+end

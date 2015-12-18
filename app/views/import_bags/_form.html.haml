@@ -1,0 +1,89 @@
+= form_for @import_bag,html: {class: "form-horizontal"} do |f|
+  - if @import_bag.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@import_bag.errors.count, "error")} prohibited this import_bag from being saved:"
+      %ul
+        - @import_bag.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :name,'礼包名称:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.text_field :name,class: 'form-control',placeholder:'礼包名称'
+  .form-group
+    = f.label :business_user,'业务人员:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.text_field :business_user,class: 'form-control',placeholder:'业务人员姓名'
+  .form-group
+    = f.label :business_mobile,'业务人员手机号:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.number_field :business_mobile,class: 'form-control',placeholder:'业务人员手机号码'
+  .form-group
+    = f.label :sender_mobile,'送礼人账号:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.number_field :sender_mobile,class: 'form-control',placeholder:'送礼人账号'
+  .form-group
+    = f.label :expiry_days,'过期天数:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.number_field :expiry_days,class: 'form-control',placeholder:'过期天数',min: '1'
+  .form-group
+    = f.label :memo,'备注:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.text_field :memo,class: 'form-control',placeholder:'备注'
+  .form-group
+    .col-sm-2{"style"=>"text-align:right"}
+      %a.btn.btn-primary.btn-lg#bag_product_select_btn{'data-toggle'=>'modal','data-target'=>'#myModal'} 选择商品
+      //%a.btn.btn-primary.btn-lg#bag_product_select_btn{'href'=>'javascript:add_tr();'} 选择商品
+    .col-sm-8
+      %table#bag_product_table.table.table-striped.table-bordered.table-hover
+        %thead
+          %tr
+            %th 缩略图
+            %th 商品名称
+            %th 数量
+            %th
+        %tbody
+          %tr#bag_product_tr{'style'=>'display:none'}
+            %td.product_avatar_url
+            %td.product_name 五粮液
+            %td
+              %input.form-control{"type"=>"number","name"=>"product_num[]","placeholder"=>"商品数量","value"=>"1","min"=>"1"}
+              %input{"type"=>"hidden","name"=>"product_id[]","value"=>""}
+              %input{"type"=>"hidden","name"=>"product_title[]","value"=>""}
+              %input{"type"=>"hidden","name"=>"product_avatar_url[]","value"=>""}
+            %td
+              %a.btn.btn-minier.btn-danger 删除
+          - @product_list.each do |product|
+            %tr#bag_product_tr
+              %td.product_avatar_url
+                %img{'src'=>"#{RestConfig::IMG_SERVER}#{product.avatar_url}",'class'=>"product_avatar"}
+              %td.product_name #{product.title}
+              %td
+                %input.form-control{"type"=>"number","name"=>"product_num[]","placeholder"=>"商品数量","value"=>"#{product.count}"}
+                %input{"type"=>"hidden","name"=>"product_id[]","value"=>"#{product.id}"}
+                %input{"type"=>"hidden","name"=>"product_title[]","value"=>"#{product.title}"}
+                %input{"type"=>"hidden","name"=>"product_avatar_url[]","value"=>"#{product.avatar_url}"}
+              %td
+                %a.btn.btn-minier.btn-danger 删除
+
+
+  .form-group
+    .col-sm-offset-2.col-sm-8
+      = f.submit '保存',class: 'btn btn-default',onclick: 'return save_check()'
+
+%input{"type"=>"hidden","id"=>"img_server","value"=>"#{RestConfig::IMG_SERVER}"}
+
+/模态框
+.modal.fade.bs-example-modal-lg#myModal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}
+  .modal-dialog.modal-lg{'role'=>'document'}
+    .modal-content
+      %table#products_table.table.table-striped.table-bordered.table-hover
+        %thead
+          %tr
+            %th 缩略图
+            %th 名称
+            %th 类型
+            %th 价格
+    .modal-footer
+      %button.btn.btn-primary{'onclick'=>'add_select_product()'} 确定
+      %button.btn.btn-default{'data-dismiss'=>'modal'} 关闭

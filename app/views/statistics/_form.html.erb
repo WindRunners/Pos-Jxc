@@ -1,0 +1,43 @@
+<%= form_for(@statistic) do |f| %>
+  <% if @statistic.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@statistic.errors.count, "error") %> prohibited this statistic from being saved:</h2>
+
+      <ul>
+      <% @statistic.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :qrcode %><br>
+    <%= f.text_field :qrcode %>
+  </div>
+  <div class="field">
+    <%= f.label :productName %><br>
+    <%= f.text_field :productName %>
+  </div>
+  <div class="field">
+    <%= f.label :purchasePrice %><br>
+    <%= f.text_field :purchasePrice %>
+  </div>
+  <div class="field">
+    <%= f.label :retailPrice %><br>
+    <%= f.text_field :retailPrice %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity %><br>
+    <%= f.number_field :quantity %>
+  </div>
+  <div class="field">
+    <%= f.label :retailDate %><br>
+    <%= f.date_field :retailDate %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<%= tag(:input, :type => "text", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) %>
+<% end %>
+

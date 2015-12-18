@@ -1,0 +1,140 @@
+<div class="zxc01">
+
+
+  <div class="att">
+    <div class="aww">
+      <div class="aww01">
+        <div class="aww0101">温馨提示</div>
+        <%= image_tag ("img22.png"),:class=>"aww0102" %>
+      </div>
+      <div class="aww02">
+        <%= image_tag ("img23.png"),:class=>"aww0201" %>
+        <div class="aww0202">
+          <div class="awz01">您选择的类型是：经销商</div>
+          <div class="awz02">选择类型之后不可更改，是否继续操作？</div>
+        </div>
+      </div>
+      <div class="aww03">
+        <input type="button" class="abtn01" value="确定">
+        <input type="button" class="abtn02" value="取消">
+      </div>
+    </div>
+
+  </div>
+
+
+  <!--header-->
+  <div class="aheader">
+    <div class="ahbox">
+      <%= image_tag ("img01.png"),:class=>"ahb03" %>
+      <div class="ahb">
+        <div class="ahb01">未认证</div>
+        <div class="ahb02">
+          <div class="ahb0201"><%= current_user.name %></div>
+          <%= image_tag ("img15.png"),:class=>"ahb0202" %>
+          <div class="ahb0203"><%= link_to raw("<i class='qq_close'></i>退出"), destroy_user_session_path, :method=>'delete' %></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--内容-->
+  <div class="azz">
+    <div class="anav">
+      <div class="ana01">
+        <div class="ana0101">1、基本信息</div>
+      </div>
+      <div class="ana02">
+        <div class="ana0201">2、邮箱激活</div>
+      </div>
+      <div class="ana03">
+        <div class="ana0301">3、信息登记</div>
+      </div>
+      <div class="ana04">
+        <div class="ana0401">4、审核</div>
+      </div>
+    </div>
+
+    <div class="amm">请选择账号类型，一旦账号成功建立，类型不可更改!</div>
+    <div class="ann">
+      <div class="ann01">
+        <%= image_tag ("img18.png"),:class=>"ann0101" %>
+        <div class="ann0102">供应商</div>
+      </div>
+      <div class="ann02">直接向零售商提供商品及相应服务的企业及其分支机构、个体工商户，包括制造商、经销商和其他中介商。</div>
+      <div class="ann03">适用于个人或企业</div>
+      <div class="ann04"></div>
+      <div class="ann05">
+        <%= image_tag ("img21.png"),:class=>"ann0502" %>
+        <div class="ann0501">选择并继续</div>
+      </div>
+    </div>
+    <div class="all">
+      <div class="ann01">
+        <%= image_tag ("img19.png"),:class=>"ann0101" %>
+        <div class="ann0102">经销商</div>
+      </div>
+      <div class="ann02">在某一区域和领域只拥有销售或服务的单位或个人。</div>
+      <div class="all03">适用于企业</div>
+      <div class="ann04"></div>
+      <div class="ann05">
+        <%= image_tag ("img21.png"),:class=>"all0502" %>
+        <div class="all0501">选择并继续</div>
+      </div>
+    </div>
+    <div class="akk">
+      <div class="ann01">
+        <%= image_tag ("img20.png"),:class=>"ann0101" %>
+        <div class="ann0102">个人</div>
+      </div>
+      <div class="ann02">或称个体，一般指一个人或是一个群体中的特定的主体。</div>
+      <div class="all03">适用于个人</div>
+      <div class="ann04"></div>
+      <div class="ann05">
+        <%= image_tag ("img21.png"),:class=>"akk0502" %>
+        <div class="akk0501">选择并继续</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!--footer-->
+  <div class="afooter">
+    <div class="aftbox">
+      <div class="aft01">
+        <a href="">关于我们</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">服务协议</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">运营规范</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">辟谣中心</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">客服中心</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">联系邮箱</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft01">
+        <a href="">侵权投诉</a>
+        <%= image_tag("img06.png") %>
+      </div>
+      <div class="aft02">
+        <a>Copyright<span style="font-family:'Arial';">&copy;</span>2012-2015  tencent. All  Rights  Reserved.</a>
+      </div>
+    </div>
+  </div>
+
+</div>

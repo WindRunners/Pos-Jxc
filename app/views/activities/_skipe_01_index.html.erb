@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>秒杀活动</title>
+  <%= stylesheet_link_tag "ace/bootstrap.min.css" %>
+  <%= javascript_include_tag "ace/jquery.js"  %>
+  <style>
+      body{ margin:0;}
+      .container{ padding:0; background-color:#efefef;}
+      *{ font-family:"微软雅黑"}
+      img{ width:100% ;}
+      .at01,.at02,.at03,.at04,.at05{ float:left; width:20%; background-color:#f8f8f8;}
+      .at01 img,.at02 img,.at03 img,.at04 img,.at05 img{ width:100%; padding-top:8px}
+      .at01 p,.at02 p,.at03 p,.at04 p,.at05 p{ text-align:center; margin-bottom:3%; margin-top:3%;}
+      .aee{ height:1px; background-color:#e8e8e8; width:100%; margin-top:3%;}
+      .ahh{ background-color:#fdf8ef; overflow:hidden; margin-top:5%; margin-bottom:5%;}
+      .ahh01{ background-color:#ffffff; margin-top:3%; margin-bottom:3%; margin-left:7%; margin-right:7%;}
+      .ahh01 div{ width:84%; margin-left:8%; color:#585858; line-height:150%;}
+      .ahh0101{ padding-bottom:5%;}
+      h4{ text-align:center; padding-top:5%;}
+      .gg{ height:10px; width:100%;}
+      .acc01 img,.acc02 img,.akk01 img,.akk02 img{ width:20%}
+      #summary-container .col-xs-6{ text-align:center; padding-top:2%; padding-bottom:2%; background-color:#ffffff;}
+      .carousel img{ width:100%; }
+      .abtn{ margin-top:67%;}
+      .aff{ padding-left:15px; padding-right:15px; overflow:hidden; background-color:#ffffff;}
+      .col-xs-7,.col-xs-8,.col-xs-3,.col-xs-4,.col-xs-12{ padding:0;}
+      .col-xs-5{ padding-top:7%; padding-left:2%;}
+      .banner{ overflow:hidden; position:relative; margin-bottom:4%}
+      .abtn01{ background:url(/images/panic_buying/a02.png) repeat-x; font-size:80%; color:#ffffff; border-radius:20px; position:absolute;right:4%; bottom:5%; border:0; height:30px; padding:0;}
+      .timebox{ overflow:hidden; text-align:center; margin-bottom:4%}
+      .timebox strong{line-height:110%;font-size:90%;font-family:Arial;border-radius:5px; color:#ffffff;}
+      .att{ width:100%; overflow:hidden;  background-color:#ffffff; margin-bottom:5%}
+      .att01{ float:left; background-color:#fe9d03; width:33%;}
+      .att01 p{ text-align:center; font-size:90%; line-height:110%; color:#ffffff;}
+      .azz01{ margin-top:5%; margin-bottom:6%;}
+      .azz02{ margin-bottom:3%}
+      .att02{ float:right; width:40%; height:100%; margin-top:2%}
+      .abtn02{ background-color:#999999; width:90%; height:30px; border-radius:30px; border:0; color:#ffffff;}
+      .t01,.t02,.t03,.t04,.t05{ float:left; width:20%; background-color:#f8f8f8;}
+      .t01 img,.t02 img,.t03 img,.t04 img,.t05 img{ width:100%; padding-top:8px}
+      .t01 p,.t02 p,.t03 p,.t04 p,.t05 p{ text-align:center; margin-bottom:3%; margin-top:3%;}
+      .ee{ height:1px; background-color:#e8e8e8; width:100%}
+      .hh{ background-color:#f8f8f8; height:200px; border-bottom:solid 1px #e8e8e8;}
+      .btn{ margin-top:60%;}
+      .ff{ padding-left:15px; padding-right:15px; background-color:#ffffff; overflow:hidden;}
+      .con01{ display:none;}
+      .tr{ overflow:hidden;}
+      .bee{ height:1px; background-color:#e8e8e8; width:100%}
+      .bhh{ background-color:#f8f8f8; height:300px; border-bottom:solid 1px #e8e8e8;}
+      .bss{ position:absolute; width:25%; right:2%; bottom:6%;}
+      .bbtn{ margin-top:67%;}
+      .bff{ padding-left:15px; padding-right:15px; overflow:hidden; background-color:#ffffff;}
+      .cll01,.cll02,.cll03{ padding:5% 0;}
+      .cll02{ padding-top:7%;}
+      .te{ overflow:hidden; display:none;}
+      .uu02{ display:none;}
+      .lt{ padding-top:5%;}
+      .ll01,.ll02{ padding-top:6%;}
+      .btn04{ width:64%; margin-left:36%; background-color:#fe9d03; border-radius:6px; height:26px; color:#ffffff; border:0;}
+      .btn05{ width:70%; margin-left:30%; height:26px; border-radius:6px;}
+      .yt{ font-size:80%; color:#a8a8a8; float:left; margin-top:3px;}
+      .ys{ width:64%; border:solid 1px #fe9d03; height:12px; border-radius:6px; overflow:hidden; float:right; margin-top:4px;}
+      .ys01{ height:12px; background-color:#feb645;}
+      .ys02{ width:64%; height:12px; text-align:center; font-size:80%; color:#a8a8a8; float:right;}
+      .ys03{ width:70%; height:12px; text-align:center; font-size:80%; color:#a8a8a8; float:right;}
+      .yss{  margin-top:2px;}
+  </style>
+
+  <script>
+      function getPanicListByTime(userinfo_id,timeid,time){
+          $(".timeback").attr('src',"/images/panic_buying/a04.png");
+          $('#'+timeid).attr('src',"/images/panic_buying/a03.png");
+          $.get('<%= activities_skipe_one_search_path%>',{userinfo_id:userinfo_id,beginTime:time[0],endTime:time[1]},function(data,status){
+              if(status == 'success'){
+                  $('#productList').html(data);
+              }else{
+                  ;
+              }
+          });
+      }
+
+      function addToShoppingCart(id, platform)
+      {
+          if("android" == platform)
+          {
+              Android.addToShoppingCart(id);
+          }
+          else if("ios" == platform)
+          {
+              var url= "myapp:&func=addToShoppingCart&product_id=" + id;
+              document.location = url;
+          }
+      }
+
+
+      function timer(intDiff){
+          window.setInterval(function(){
+              var day=0,
+                      hour=0,
+                      minute=0,
+                      second=0;//时间默认值
+              if(intDiff > 0){
+                  /*day = Math.floor(intDiff / (60 * 60 * 24));*/
+                  hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                  minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                  second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+              }
+              if (minute <= 9) minute = '0' + minute;
+              if (second <= 9) second = '0' + second;
+              /*$('#day_show').html(day+"天");*/
+              $('#hourshow').html('<s id="h"></s>'+hour+':');
+              $('#minuteshow').html('<s></s>'+minute+':');
+              $('#secondshow').html('<s></s>'+second+'');
+              intDiff--;
+          }, 1000);
+      }
+
+      $(function(){
+          <% if !@panic_buying.nil? %>
+            <% intDiff = (@panic_buying.endTime.to_time.to_i) - (Time.now.to_i)%>
+            timer(<%= intDiff %>);
+          <% end%>
+      });
+
+  </script>
+</head>
+
+<body>
+<div class="container">
+  <div class="banner">
+    <%= image_tag "panic_buying/a01.png" %>
+    <button class="col-xs-3 abtn01">分享给朋友</button>
+  </div>
+
+  <div class="tr">
+    <div class="abt01">
+      <% @TimeArray.each do |time| %>
+          <% timeid = time[0].to_time.strftime("%Y%m%d%H%M%S") %>
+          <div class="at01" onclick="getPanicListByTime('<%= @current_userinfo.id%>','<%= timeid %>',<%= time %>)">
+            <% nowtime = Time.now.strftime('%H:%M:%S'); %>
+            <% if nowtime > time[0] && nowtime < time[1] %>
+                <%= image_tag "panic_buying/a03.png",:class=>"timeback",:id=> timeid  %>
+            <% else %>
+                <%= image_tag "panic_buying/a04.png",:class=>"timeback",:id=> timeid %>
+            <% end  %>
+            <p><%= time[0] %></p>
+          </div>
+      <% end %>
+    </div>
+
+
+    <div class="att">
+      <div class="att01">
+        <p class="azz01">距离本场结束</p>
+        <div class="timebox">
+          <strong id="hourshow">00:</strong>
+          <strong id="minuteshow">00:</strong>
+          <strong id="secondshow">00</strong>
+        </div><!--倒计时模块-->
+      </div>
+      <div class="att02">
+        <button class="abtn02 btn-xs" type="button">查看活动规则</button>
+      </div>
+    </div>
+
+
+    <div class="aff" id="productList">
+
+      <%= render 'skipe_01_product' %>
+
+    </div>
+
+
+    <div class="ahh">
+
+      <div class="ahh01">
+        <h4>活动规则</h4>
+        <div class="text-justify">1.活动时间：每天11点、17点；</div>
+        <div class="text-justify">2.每个活动单品限每人每天抢购一次；</div>
+        <div class="text-justify">3.商品数量有限，售完为止。下单后请在15分钟内及时在线支付，过期视为放弃。</div>
+        <div class="text-justify">4.实付订单满20元免配送费，不满20元需支付5元配送费。</div>
+        <div class="ahh0101 text-justify">5.本次活动最终解释权归XXX所有。</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="container uu01" id="summary-container">
+  <div class="col-xs-6 acc01">
+    <%= image_tag "panic_buying/a06.png" %>
+    <h5 style="color:#fe9d03;">超级秒杀</h5>
+  </div>
+
+  <div class="col-xs-6 acc02">
+    <%= image_tag "panic_buying/a07.png" %>
+    <h5>我的提醒</h5>
+  </div>
+</div>
+
+</body>
+</html>

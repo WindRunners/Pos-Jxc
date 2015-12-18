@@ -1,0 +1,52 @@
+<div class="skin_gray">
+  <div class="container">
+    <div id="sidebar2" class="sidebar h-sidebar navbar-collapse collapse" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
+      <ul class="nav nav-list" style="top: 0px;">
+        <li class="hover" style="width: 90px">
+          <a data-href="<%= warehouse_index_products_path %>">
+            <img src="/images/category_all.png" class="img-responsive center-block"/>
+            <span class="menu-text"> 所有类目 </span>
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <% Warehouse::MobileCategory.all.each do |category| %>
+            <li class="hover" style="width: 90px">
+              <a data-href="<%= warehouse_index_products_path(category_id: category.id) %>">
+                <img src="<%= RestConfig::PRODUCT_SERVER + category.avatar %>" class="img-responsive center-block"/>
+                <span class="menu-text"><%= category.title %></span>
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+        <% end %>
+
+      </ul><!-- /.nav-list -->
+    </div>
+
+    <br/>
+
+    <div id="list-products" class="clearfix">
+      <% @products.each do |product| %>
+          <%= render :partial => 'warehouse_product', :locals => {:product => product} %>
+      <% end %>
+    </div>
+
+    <br/>
+
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+          <%= page_entries_info @products, :entry_name => '商品' %></div>
+      </div>
+      <div class="col-xs-8">
+        <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @products,:remote => true %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'online_modal_form' %>

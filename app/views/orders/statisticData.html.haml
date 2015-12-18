@@ -1,0 +1,39 @@
+#overview.col-xs-4
+	.overview-block.clearfix.overview-user
+		.cell
+			.cell-header 访客数
+			.cell-footer
+				%span#visitor-num 0
+	.overview-block.clearfix.overview-order
+		.cell
+			.cell-header 下单人数
+			.cell-footer
+				%span#order-person-num= @orderPersonNum
+		.cell
+			.cell-header 下单笔数
+			.cell-footer
+				%span#order-num= @orderNum
+		.cell
+			.cell-header 下单金额
+			.cell-footer
+				%span#order-amount= @orderAmount
+	-# .overview-block.clearfix.overview-pay
+	-# 	.cell
+	-# 		.cell-header 付款人数
+	-# 		.cell-footer
+	-# 			%span#pay-person-num 0
+	-# 	.cell
+	-# 		.cell-header 付款笔数
+	-# 		.cell-footer
+	-# 			%span#pay-num 0
+	-# 	.cell
+	-# 		.cell-header 付款金额
+	-# 		.cell-footer
+	-# 			%span#pay-amount 0.00
+.overview-rate.col-xs-8
+	.pic
+		.pic-user
+		.pic-order
+		-# .pic-pay
+#order-transaction-trend{:style => "position: relative; top: 30px; height: 300px;"}
+	= line_chart @data, :library => @options

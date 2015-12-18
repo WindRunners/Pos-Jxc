@@ -1,0 +1,42 @@
+%h1 礼包认领情况
+
+%form#search-scope.form-inline
+  .form-group
+    %label{"for"=>"receiver_mobile"} 收礼人:
+    %input#receiver_mobile.form-control{'placeholder'=>'业务员'}
+  .form-group
+    %label{"for"=>"sign_status"} 状态:
+    %select#sign_status.form-control
+      %option{value:''} --请选择--
+      %option{value:'0'} 待签收
+      %option{value:'-1'} 已过期
+      %option{value:'1'} 已领取
+
+  %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 收礼人
+      %th 状态
+      %th 失效日期
+      %th 签收日期
+      %th 消息
+
+  %tbody
+    - @gift_bags.each do |gift_bag|
+      %tr
+        %td= gift_bag.receiver_mobile
+        /-1:过期,0:待签收,1:已签收
+        %td
+          - if gift_bag.sign_status == -1 || gift_bag.expiry_time<Time.now
+            已过期
+          - elsif gift_bag.sign_status == 0
+            待签收
+          - else
+            已签收
+        %td= gift_bag.expiry_time.to_s(:db)
+        %td= gift_bag.sign_time.present? ? gift_bag.sign_time.to_s(:db):gift_bag.sign_time
+        %td= gift_bag.content
+%br
+

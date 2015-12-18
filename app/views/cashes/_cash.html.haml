@@ -1,0 +1,21 @@
+%tbody
+  - @cashes.each do |cash|
+    %tr
+      %td= cash.cash if cash.cash.present?
+      %td= cash.cash_state_to_s if cash.cash_state.present?
+      %td= cash.data_show
+      %td= cash.orderno
+      %td= cash.pay_state
+      %td= cash.pay_type
+      %td= cash.paycost
+      %td= cash.pay_date.strftime('%Y-%m-%d %H:%M:%S').to_s if cash.pay_date.present?
+      %td= link_to 'Show', cash
+      %td= link_to 'Edit', edit_cash_path(cash)
+      %td= link_to 'Destroy', cash, :method => :delete, :data => { :confirm => 'Are you sure?' }
+    %tr
+      %td
+      %td
+      %td
+      %td
+      %td= "总计:"
+      %td= @pay_totle

@@ -1,0 +1,132 @@
+.col-xs-4
+  .app-preview
+    .app-header
+  .app-field
+    %h1{:class => "app-coupon-header"}
+      %span 优惠券
+    .clearfix{:id => "couponId"}= @coupon.title.blank? ? "优惠卷标题" : @coupon.title
+    .promote-value.center
+      %span{:class => "unit"} ￥
+      %span{:id => "couponAmount"}= @coupon.value.blank? ? "0.00" : @coupon.value
+    .promote-limit.center
+      %span{:id => "orderLimit", :style => "display: #{"1" == @coupon.order_amount_way ? "block" : "none"};"}
+        订单满
+        %span{:id => "orderAmount"}XX
+        元可使用
+      %span{:id => "orderNoLimit", :style => "display: #{"0" == @coupon.order_amount_way ? "block" : "none"};"}无限制
+    .valid-date.center
+      有限日期:
+      %span{:id => "couponStartTime"}= @coupon.start_time.blank? ? "20xx:00:00" : @coupon.startTimeShow
+      = "-"
+      %span{:id => "couponEndTime"}= @coupon.end_time.blank? ? "20xx:00:00" : @coupon.endTimeShow
+    .promote-desc-head 使用说明
+    .promote-desc-context{:id => "couponInstructions"}= @coupon.instructions.blank? ? "暂无使用说明......" : @coupon.instructions
+.col-xs-8.col-xs-12.row
+  .arrow
+  = form_for @coupon, :class => "form-horizontal", :role => "form", :remote => true do |f|
+    %h4 优惠券基础信息
+    .hr.hr-16.hr-dotted
+    - if @coupon.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@coupon.errors.count, "error")} prohibited this coupon from being saved:"
+        %ul
+          - @coupon.errors.full_messages.each do |msg|
+            %li= msg
+    = hidden_field_tag "selectProductHash", @selectProductHashStr
+    .form-group
+      = f.label t(:title, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :title, :class => "col-sm-5"
+    .form-group
+      = f.label t(:quantity, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :quantity, :class => "col-sm-5"
+        张
+    .form-group
+      = f.label t(:value, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :value, :class => "col-sm-5"
+        元
+    %h4 基本规则
+    .hr.hr-16.hr-dotted
+    .form-group
+      = f.label t(:limit, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :limit, :class => "col-sm-5"
+    .form-group
+      = f.label "", t(:start_time, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :start_time, {:id => "datetimepicker_start_time", :type => "text"}
+      :javascript
+        $(function () {
+          $('#datetimepicker_start_time').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm"
+          });
+        });
+    .form-group
+      = f.label "", t(:end_time, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :end_time, {:id => "datetimepicker_end_time", :type => "text"}
+      :javascript
+        $(function () {
+          $('#datetimepicker_end_time').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm"
+          });
+        });
+    .form-group
+      = f.label t(:order_amount, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = radio_button_tag "coupon[order_amount_way]", "0", "0" == @coupon.order_amount_way, class: "order_amount_select"
+        无限制
+        = radio_button_tag "coupon[order_amount_way]", "1", "1" == @coupon.order_amount_way, class: "order_amount_select"
+        满
+        = f.text_field :order_amount
+        元可使用
+    .form-group
+      = f.label t(:use_goods, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = radio_button_tag "coupon[use_goods]", "0", "0" == @coupon.use_goods, class: "cls_use_goods"
+        全店通用
+        = radio_button_tag "coupon[use_goods]", "1", "1" == @coupon.use_goods, class: "cls_use_goods"
+        指定商品
+    .form-group#addProducts{:style => "display: #{"0" == @coupon.use_goods ? "none" : "block"}"}
+      .col-sm-offset-2.col-sm-10
+        %a{:href => "#my-modal", "data-toggle" => "modal", :onclick => "javascript: activityProductArray = [];loadSelectProducts();"}+ 添加商品
+      #selectedProducts.col-sm-offset-2.col-sm-10
+    .form-group
+      = f.label t(:tag, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_field :tag, :class => "col-sm-5"
+        为可使用优惠券的商品打标签
+    .form-group
+      = f.label t(:instructions, scope: "mongoid.attributes.Coupon") + ":", :class => "col-sm-2 control-label no-padding-right"
+      .col-sm-10
+        = f.text_area :instructions, :class => "col-sm-5", :size => "30x1"
+    .form-actions
+      .col-md-offset-3.col-md-9
+        %button{:class => "btn btn-info"}
+          %i{:class => "ace-icon fa fa-check bigger-110"}
+          保存
+        %button{:class => "btn", :type => "reset"}
+          %i{:class => "ace-icon fa fa-undo bigger-110"}
+          重置
+        %a{:class => "btn", "data-href" => coupons_path}
+          %i{:class => "ace-icon fa fa-reply bigger-110"}
+          取消
+.modal.fade{:id => "my-modal", :style => "display: none;", "aria-hidden" => "true", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      #selectProducts.modal-body
+      .modal-footer
+        %button{:class => "btn btn-sm btn-primary pull-left", :id => "sureUse", "data-dismiss" => "modal", :style => "display: none;", :onclick => "sureUse()"} 确定使用
+        %button{"data-dismiss" => "modal", :class => "btn btn-sm btn-danger pull-right"} 关闭
+:javascript
+  $(document).ready(function () {
+    coupons();
+    loadSelectedProducts('1', 'd');
+    loadSelectProducts();
+  });

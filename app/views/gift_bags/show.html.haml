@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Receiver mobile:
+  = @gift_bag.receiver_mobile
+%p
+  %b Sign status:
+  = @gift_bag.sign_status
+%p
+  %b Expir days:
+  = @gift_bag.expir_days
+%p
+  %b Expiry time:
+  = @gift_bag.expiry_time
+%p
+  %b Content:
+  = @gift_bag.content
+%p
+  %b Memo:
+  = @gift_bag.memo
+
+= link_to 'Edit', edit_gift_bag_path(@gift_bag)
+\|
+= link_to 'Back', gift_bags_path

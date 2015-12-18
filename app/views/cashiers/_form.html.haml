@@ -1,0 +1,19 @@
+= form_for(@cashier) do |f|
+  - if @cashier.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@cashier.errors.count, "error")
+        prohibited this cashier from being saved:
+      %ul
+        - @cashier.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :totalPrice
+    %br/
+    = f.text_field :totalPrice
+  .field
+    = f.label :discount
+    %br/
+    = f.text_field :discount
+  .actions
+    = f.submit

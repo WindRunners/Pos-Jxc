@@ -1,0 +1,89 @@
+<%- model_class = Announcement %>
+<p id="notice"><%= notice %></p>
+<div class="page-header">
+  <div style="text_align:center; float: left">
+    <h1><%= model_class.model_name.human %> </h1>
+  </div>
+
+  <div style="text_align:center; float: right">
+    <%= form_tag(search_announcements_path, method: "get") do %>
+        <%= label_tag(:title, '标题') %>
+        <%= text_field_tag(:title) %>
+        <%= label_tag(:status, '状态') %>
+        <%= select_tag(:status, options_for_select([['请选择状态', nil], ['未审核', 0], ['通过', 1], ['不通过', -1]]), :class => 'chosen-container chosen-container-multi', :style => 'width:100px') %>
+        <%= submit_tag('查询') %>
+    <% end %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th><%= model_class.human_attribute_name(:title) %></th>
+    <th><%= model_class.human_attribute_name(:source) %></th>
+    <th><%= model_class.human_attribute_name(:status) %></th>
+    <th>种类</th>
+    <th><%= model_class.human_attribute_name(:read_num) %></th>
+    <th><%= model_class.human_attribute_name(:is_top) %></th>
+    <th><%= model_class.human_attribute_name(:created_at) %></th>
+    <th></th>
+    <th></th>
+    <th>操作</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @announcements.each do |announcement| %>
+      <tr class="odd gradeX">
+        <td><%= link_to announcement.title, announcement_app_show_path(announcement.id) %></td>
+        <td><%= announcement.source %></td>
+        <td id="statusstr">
+          <% if announcement.status == 1 %>
+              通过
+          <% elsif announcement.status == 0 %>
+              待审核
+          <% else
+               announcement.status == -1 %>
+              不通过
+          <% end %>
+        </td>
+        <td><%= announcement.announcement_category.name if announcement.announcement_category.present? %></td>
+        <td><%= announcement.read_num %></td>
+        <td><%= announcement.is_top %></td>
+        <td><%= announcement.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= link_to '详细', announcement, :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '编辑', edit_announcement_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '预览', announcement_app_show_path(announcement.id), :class => 'btn btn-default btn-xs' %></td>
+        <% if announcement.status ==0 || announcement.status ==-1 %>
+            <td><%= link_to '审核通过', announcement_check_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+        <% else %>
+            <td><%= link_to '审核不通过', announcement_check_out_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+        <% end %>
+        <td><%= link_to '删除', announcement, method: :delete, data: {confirm: 'Are you sure?'},
+                        :class => 'btn btn-xs btn-danger' %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+<div id="container">
+  <div style="text_align:center; float: left">
+    <%= link_to '增加单个', new_announcement_path, :class => 'btn btn-primary' %>
+  </div>
+  <div style="text_align:center; float: right">
+    <p>批量添加</p>
+    <%= form_tag({action: :batch}, multipart: true) do %>
+        <p>1:请选择种类：</p>
+        <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }),
+                       :class => 'chosen-container chosen-container-multi', :style => 'width:100px') %>
+        <p>2:请选择正确格式的EXCEL文件：</p>
+        <%= file_field_tag 'excel_data', accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel', id: 'excel_file' %>
+        <%= submit_tag('提交') %>
+    <% end %>
+  </div>
+</div>
+
+<%= paginate @announcements %>

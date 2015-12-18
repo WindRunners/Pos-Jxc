@@ -1,0 +1,4 @@
+%h1= notice.present? ? notice : '新建账号'
+= render 'form'
+
+= link_to '返回', 'javascript:history.back();',class: 'btn btn-default'

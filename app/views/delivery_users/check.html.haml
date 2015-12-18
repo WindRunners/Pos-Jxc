@@ -1,0 +1,40 @@
+%h1 配送员审核
+= render 'detail'
+
+- if current_user.has_role? :SuperAdmin
+  %h1 选择运营商:
+  = paginate @userinfos
+  %table.table.table-striped.table-bordered.table-hover
+    %thead
+      %tr
+        %th 运营商名字
+        %th 地址
+        %th 商店名称
+    %tbody
+      - @userinfos.each do |userinfo|
+        %tr{'onclick'=> "javascript:set_userinfo(\"#{userinfo.id}\",\"#{userinfo.name}\");"}
+          %td= userinfo.name
+          %td= userinfo.address
+          %td= userinfo.shopname
+  %br
+
+= form_for @delivery_user,html: {class: "form-horizontal"},url:"#{delivery_user_path(@delivery_user)}/check_save",method: :post do |f|
+  - if @delivery_user.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@delivery_user.errors.count, "error")} prohibited this delivery_user from being saved:"
+      %ul
+        - @delivery_user.errors.full_messages.each do |msg|
+          %li= msg
+
+  .form-group
+    = f.label :status ,"审核",class: "col-sm-3 control-label no-padding-right"
+    %div.col-sm-9
+      = f.select :status ,[['通过', 1], ['不通过', -1]],class: "form-control"
+  - if current_user.has_role? :SuperAdmin
+    .user-info
+      = f.hidden_field :userinfo_id ,value: "#{@userinfo.id if @userinfo.present?}"
+  .actions
+    = f.submit '保存',onclick: 'return check()',class: 'btn btn-primary'
+
+
+

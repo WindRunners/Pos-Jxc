@@ -1,0 +1,20 @@
+
+%h1 名酒录入
+%p 亲爱的#{current_user.name}，你一共上传了#{@data['total']}款名酒,你今天一共上传了#{@data['today']}款名酒。
+
+%table#example.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th#id{:style=>'display:none'} ID
+      %th 名字
+      %th 种类
+      %th 价格区间
+      %th 浏览次数
+      %th 排序字段
+      %th 状态
+      %th 上传人
+      %th 操作
+
+%br
+
+= link_to '添加名酒', new_wine_path,:class => 'btn btn-primary'

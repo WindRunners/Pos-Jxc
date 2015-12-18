@@ -1,0 +1,17 @@
+zh-CN:
+  mongoid:
+   models:
+     wine: "酒"
+   attributes:
+     wine:
+        id: "ID"
+        category: "类型"
+        name: "名称"
+        description: '描述'
+        price: '价格区间'
+        status: '状态'
+        logo: 'logo图片'
+        hits: '浏览次数'
+        sequence: '排序字段'
+        created_at: '创建时间'
+        ad: '广告语'

@@ -1,0 +1,20 @@
+zh-CN:
+  mongoid:
+    models:
+      Coupon: "优惠券"
+    attributes:
+      Coupon:
+        name: "优惠券"
+        title: "优惠券名称"
+        quantity: "数量"
+        value: "价值(元)"
+        limit: "领取限制"
+        validity_period: "有效期"
+        order_amount: "订单金额"
+        use_goods: "可使用商品"
+        instructions: "使用说明"
+        start_time: "开始时间"
+        end_time: "结束时间"
+        aasm_state: "状态"
+        buy_limit: 使用限制
+        tag: 标签

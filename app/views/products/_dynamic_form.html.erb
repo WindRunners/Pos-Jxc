@@ -1,0 +1,31 @@
+<%- model_class = Product -%>
+<% for category in @pCategories %>
+
+    <% if ProductConfig::DYNAMIC_FIELDS[category.form] %>
+    <dt><strong><%= t(category.title) %>:</strong></dt>
+<% ProductConfig::DYNAMIC_FIELDS[category.form].each do |key, value| %>
+<div class="control-group">
+  <%=  ProductConfig::DYNAMIC_FIELDS[category.form][key]["zh-CN"] %>
+      <div class="controls">
+        <% if value["type"] == "date" %>
+            <%= text_field_tag "product[#{key}]", value=@product[key], 'class' => 'datepicker' %>
+        <% elsif value["type"] == "number" %>
+            <%= number_field_tag "product[#{key}]", value=@product[key], 'class' => 'numeric' %>
+        <% else %>
+            <%= text_field_tag "product[#{key}]", value=@product[key] %>
+        <% end %>
+      </div>
+    </div>
+<% end %>
+<% end %>
+<% end %>
+
+<script>
+    $(document).ready(function() {
+        $(".numeric").bind('input propertychange', function () {
+            $(this).val($(this).val().replace(/[^0-9]/g, ''));
+        });
+    });
+
+</script>
+

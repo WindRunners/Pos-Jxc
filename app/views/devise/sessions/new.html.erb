@@ -1,0 +1,134 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag "rediscss/sessionindex.css"%>
+  <%= javascript_include_tag "registjs/jquery-1.10.2.min.js" %>
+  <%= javascript_include_tag "registjs/jquery.form" %>
+
+</head>
+<body>
+<div class="main">
+  <div class="main_top">
+    <div class="logo"><a href="/"><%= image_tag("logo.png") %></a></div>
+    <div class="main_out">买卖通</div>
+    <div class="main_txt">欢迎登录</div>
+    <%= link_to "免费注册",new_user_registration_path %>
+  </div>
+  <div class="con">
+    <div class="con_left">
+      <%= form_for(User.new, url: user_session_path,:class=>"bl-form bl-formhor") do |f| %>
+          <div class="con_group clearfix">
+            <label for="telphone" class="con_label one" >手机号码:</label>
+            <div class="frm_controls">
+              <input type="text" value="" name="user[mobile]" class="con_input" placeholder="手机号" required data-rule-mobile="true" data-msg-required="请输入手机号" data-msg-mobile="请输入正确格式" />
+            </div>   <!--frm_controls-->
+          </div>     <!--frm_control_group-->
+          <!--手机号-->
+          <!--密码-->
+          <div class="con_group clearfix">
+            <label for="password" class="con_label one">密码 :</label>
+            <div class="frm_controls">
+              <input class="con_input" type="password" name="user[password]" value="" placeholder="请输入密码" required id="password" minlength="6" data-msg-minlength="至少输入6个字符">
+            </div> <!--frm_controls-->
+          </div>     <!--frm_control_group-->
+          <div class="con_group clearfix">
+            <label for="" class="con_label one">验证码：</label>
+            <div class="frm_controls">
+              <input name="_rucaptcha" autocomplete="off" type="text" id="input1" placeholder="必填"><a class="rucaptcha-image-box" href="#"><%= rucaptcha_image_tag(alt: 'Captcha') %></a>
+              <span class="error" style="float: left;margin: 0px"><%= flash[:user_error] %></span>
+            </div>    <!--frm_controls-->
+          </div>     <!--frm_control_group-->
+          <!--验证码-->
+          <div class="frm_controls clearfix">
+            <label class="frm_checkbox_label  one" for="js_agree">
+              <input type="checkbox" id="js_agree" class="frm_checkbox">
+              <span class="lbl_content">三天内自动登录</span>
+
+              <a href="/users/sessions/cheak_mobile" >忘记密码</a>
+            </label>
+            <input type="submit" class="button" value="登录">
+          </div>    <!--frm_controls-->
+      <% end %>
+    </div>
+    <div class="con_right">
+      <div class="con_logo"><%= image_tag("logo.png") %></div>
+      <div class="con_txt">
+        <span  class="con_span">下载手机客户端</span><br/>
+        <span>随时随地管理您的店铺</span>
+      </div>
+      <div class="con_dw"><a href="#" id="con_li">立即下载<%= image_tag("load.png") %></a>
+        <div class="con_xz">
+          <div class="con_xztxt">使用微信扫码，直接下载安装</div>
+          <div class="con_xztxtone">
+            <div class="con_xztxtleft">
+              <div class="con_xzne">IOS版</div>
+              <div class="con_xztne"><%= image_tag("ios.png") %></div>
+              <div class="con_xzte"><a class="con_dwa" href="#" target="_blank">APP Store</a></div>
+            </div>
+            <div class="con_xztxtleft con_xztxtright">
+              <div class="con_xzne">Android版</div>
+              <div class="con_xztne"><%= image_tag("andor.png") %></div>
+              <div class="con_xzte"><a class="con_dwa" href="#" target="_blank">APP Store</a></div>
+            </div>
+          </div>  <!--con_xztxtone-->
+        </div>  <!--con_xz-->
+      </div>
+
+    </div>
+  </div>
+  <div></div>
+  <footer>©maimaitong.com</footer>
+</div>
+
+
+
+</body>
+<script>
+
+    $(function(){
+        $("#new_user").validate({
+            submitHandler: function() {
+                form.submit();
+            }
+        });
+        $(".rucaptcha-image-box").click(function(e){
+            btn = $(e.currentTarget)
+            img = btn.find('img:first')
+            currentSrc = img.attr('src');
+            img.attr('src', currentSrc.split('?')[0] + '?' + (new Date()).getTime())
+            return false
+        });
+    })
+
+    $.validator.setDefaults({
+        errorElement:'span'
+    });
+
+    //配置通用的默认提示语
+    $.extend($.validator.messages, {
+        required: '必填',
+        equalTo: "请再次输入相同的值"
+    });
+    //手机验证规则
+//    jQuery.validator.addMethod("mobile", function (value, element) {
+//        var mobile = /^1[3|4|5|7|8]\d{9}$/;
+//        return this.optional(element) || (mobile.test(value));
+//    }, "手机格式不对");
+
+
+</script>
+
+
+
+</html>

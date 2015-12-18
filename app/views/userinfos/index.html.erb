@@ -1,0 +1,351 @@
+<%- model_class = Userinfo -%>
+<style>
+    html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font: inherit;
+        font-size: 100%;
+        vertical-align: baseline;
+    }
+    .container {
+        zoom: 1;
+        float: left;
+        padding: 0;
+        width: 850px;
+    }
+    .ui-store-board {
+        position: relative;
+        margin-bottom: 15px;
+    }
+    dl {
+        display: block;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+    }
+    .ui-store-board .ui-store-board-logo {
+        float: left;
+        width: 70px;
+        height: 70px;
+    }
+    .ui-store-board .ui-store-board-desc {
+        float: left;
+        margin-left: 20px;
+    }
+    .ui-store-board .ui-store-board-desc ul.icon {
+        position: relative;
+    }
+    ol, ul {
+        list-style: none;
+    }
+    ul.icon>li.active {
+        color: black;
+    }
+    .ui-store-board .ui-store-board-desc ul.icon>li {
+        color: #ccc;
+        position: relative;
+        margin-right: 20px;
+        display: inline-block;
+        float: left;
+    }
+    .ui-store-board .btn-group {
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+    }
+    .ui-overview {
+        background-color: #f8f8f8;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    .ui-overview .overview-group {
+        display: inline-block;
+        height: 61px;
+        text-align: center;
+        min-width: 70px;
+        padding: 0 30px;
+        border-left: 1px dotted #ccc;
+        vertical-align: top;
+    }
+    .ui-overview .overview-group-inner {
+        line-height: 1.4em;
+    }
+    .ui-overview .overview-group-inner>.h4 {
+        display: block;
+        margin-top: 11px;
+        font-size: 22px;
+    }
+    .ui-overview .overview-group-inner>.h5 {
+        display: block;
+        margin-top: 10px;
+        font-size: 12px;
+    }
+    .ui-block-head {
+        position: relative;
+        overflow: visible;
+        height: 40px;
+        padding: 10px;
+        line-height: 20px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        background: #f8f8f8;
+    }.ui-block-head>.block-title {
+         display: inline-block;
+         margin: 0 12px 0 0;
+         padding: 0 0 0 10px;
+         line-height: 20px;
+         font-size: 14px;
+         border-left: 4px solid #f70;
+     }.ui-block-head>.block-link {
+          font-size: 12px;
+          display: inline-block;
+          vertical-align: baseline;
+      }
+
+    .icon_mm li { padding: 30px 5px 0px;margin: 0px; font-size: x-small ;float: left}
+</style>
+
+<div class="container">
+  <div class="ui-store-board">
+    <dl class="clearfix">
+      <dt class="ui-store-board ui-store-board-logo">
+        <img src="/images/avatar.png" width="70px" height="70px">
+      </dt>
+      <dd class="ui-store-board-desc">
+        <h2>买卖通</h2>
+        <ul class="icon_mm">
+          <li class="active" data-index="0"><i class="ace-icon fa fa-check bigger-110 green"></i>实名认证</li>
+          <li class="active" data-index="1"><li class="active" data-index="0"><i class="ace-icon fa fa-check bigger-110 green"></i>
+          担保交易</li>
+          <li class="" data-index="2"><li class="active" data-index="0"><i class="ace-icon fa fa-check bigger-110 green"></i>
+          线下门店</li>
+        </ul>
+      </dd>
+    </dl>
+    <div class="btn-group">
+      <a class="btn btn-success" href="<%= new_product_path %>">发布商品</a>
+      <a class="btn btn-success" data-href="/userinfos/<%= current_user.userinfo_id %>/">修改个人信息</a>
+      <a class="btn" href="">访问店铺</a>
+    </div>
+  </div>
+
+  <div class="ui-overview">
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <span class="h4"><%= @pay_totle %></span>
+        <span class="h5">可用余额</span>
+      </div>
+    </div>
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <span class="h4"><%= @cashing_totle %></span>
+        <span class="h5">提现中金额</span>
+      </div>
+    </div>
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <span class="h4"><%= @cash_totle %></span>
+        <span class="h5">可用现金</span>
+      </div>
+    </div>
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <span class="h4"><%= @integrals_totle %></span>
+        <span class="h5">可用积分</span>
+      </div>
+    </div>
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <a class="h4" href="">2</a>
+        <span class="h5">微页面</span>
+      </div>
+    </div>
+    <div class="overview-group">
+      <div class="overview-group-inner">
+        <a class="h4" href="">76</a>
+        <span class="h5">商品</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui-block-head">
+    <h3 class="block-title">现金管理</h3>
+    <ul class="block-link">
+      <li>
+        <a href="" class="new-window">》</a>
+      </li>
+    </ul>
+  </div>
+  <div class="tabbable">
+
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active">
+        <a href="#order" data-toggle="tab">订单入账</a>
+      </li>
+      <li>
+        <a href="#home" data-toggle="tab">请求中</a>
+      </li>
+      <li>
+        <a href="#profile" data-toggle="tab">余额转积分支出</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane in active" id="order"  >
+        <table id="integrals" class="table table-hover">
+          <thead>
+          <tr>
+            <th><%="订单号"%></th>
+            <th><%="订单状态"%></th>
+            <th><%= "订单类型"%></th>
+            <th><%= "订单金额"%></th>
+            <th><%= "订单时间"%></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @cashOrders.each do | cashOrder| %>
+                  <tr>
+                    <td><%= cashOrder.orderno if cashOrder.orderno %></td>
+                    <td><%= cashOrder.pay_state %></td>
+                    <td><%= cashOrder.pay_type %></td>
+                    <td><%= cashOrder.paycost %></td>
+                    <td><%= cashOrder.pay_type %></td>
+                    <td><%= cashOrder.pay_date.strftime('%Y-%m-%d %H:%M:%S').to_s if cashOrder.pay_date.present? %></td>
+                  </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="home"  >
+        <table id="integrals" class="table table-hover">
+          <thead>
+          <tr>
+            <th><%="取现金额"%></th>
+            <th><%="取现状态"%></th>
+            <th><%= "取现时间"%></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @cashes.each do |cash| %>
+              <% if cash.cash_state==1 %>
+                  <tr>
+                    <td><%= "-#{cash.cash}" %></td>
+                    <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
+                    <td><%= cash.data_show %></td>
+                    <td><%= link_to 'Show', cash %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="profile">
+        <table id="integrals" class="table table-hover">
+          <thead>
+          <tr>
+            <th><%="取现金额"%></th>
+            <th><%="取现状态"%></th>
+            <th><%= "取现时间"%></th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @cashes.each do |cash| %>
+              <% if cash.cash_state == 4 %>
+                  <tr>
+                    <td><%= "-#{cash.cash}" %></td>
+                    <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
+                    <td><%= cash.data_show %></td>
+                    <td><%= link_to 'Show', cash %></td>
+                  </tr>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="ui-block-head">
+    <h3 class="block-title">积分管理</h3>
+    <ul class="block-link">
+      <li>
+        <a href="" class="new-window">》</a>
+      </li>
+    </ul>
+  </div>
+  <div class="tabbable">
+
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active">
+        <a href="#in_tag" data-toggle="tab">入账积分</a>
+      </li>
+      <li>
+        <a href="#out_tag" data-toggle="tab">支出积分</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane in active" id="in_tag"  >
+        <table id="integrals" class="table table-hover">
+          <thead>
+              <tr>
+                  <th><%="积分"%></th>
+                  <th><%="状态"%></th>
+                  <th><%="类型"%></th>
+                  <th><%="操作日期"%></th>
+              </tr>
+          </thead>
+          <tbody>
+          <% @user_integrals.each do |user_integral| %>
+              <% if user_integral.state==1 && user_integral.userinfo_id==current_user.userinfo_id %>
+              <tr>
+                  <td><%= user_integral.integral %></td>
+                  <td><%= user_integral.state_show_str %></td>
+                  <td><%= user_integral.type_show_str %></td>
+                  <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+              </tr>
+              <% end %>
+           <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="out_tag">
+        <table id="integrals" class="table table-hover">
+          <thead>
+          <tr>
+            <th><%="积分"%></th>
+            <th><%="状态"%></th>
+            <th><%="类型"%></th>
+            <th><%="操作日期"%></th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @user_integrals.each do |user_integral| %>
+             <% if user_integral.state == 0 && user_integral.userinfo_id==current_user.userinfo_id %>
+              <tr>
+                <td><%= user_integral.integral %></td>
+                <td><%= user_integral.state_show_str %></td>
+                <td><%= user_integral.type_show_str %></td>
+                <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+              </tr>
+             <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+</div>
+

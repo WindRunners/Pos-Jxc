@@ -1,0 +1,42 @@
+<%- model_class = Product -%>
+
+<div class="row">
+  <div class="col-xs-9">
+    <%= link_to '发布商品',
+                '', 'data-href' => new_product_path,
+                :class => 'btn btn-primary' %>
+  </div>
+  <div class="col-xs-1">
+    <%= select_tag "mobile_category", options_from_collection_for_select(MobileCategory.where(userinfo:current_user.userinfo).order_by(:num => :asc), "id", "title"), include_blank: "所有分组" %>
+  </div>
+  <div class="col-xs-2">
+    <div class="nav-search" id="nav-search">
+      <%= form_tag '/products', method: :get, :class => "form-search", :id => 'searchForm' do %>
+								<span class="input-icon">
+                                  <%= text_field_tag 'searchText', nil, placeholder: '搜索', :class => "nav-search-input" %>
+                  <i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+      <% end %>
+    </div><!-- /.nav-search -->
+  </div>
+</div>
+
+<div class="dataTables_wrapper form-inline no-footer">
+
+  <table class="table table-hover" id="products" data-source="/products.json?state=<%= @state %>" >
+    <thead>
+    <tr>
+      <th>商品</th>
+      <th><%= model_class.human_attribute_name(:price) %></th>
+      <th><%= model_class.human_attribute_name(:stock) %></th>
+      <th><%= model_class.human_attribute_name(:sale_count) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:num) %></th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+</div>

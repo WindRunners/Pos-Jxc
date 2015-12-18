@@ -1,0 +1,46 @@
+zh-CN:
+  mongoid:
+    models:
+      staff: "员工信息"
+    attributes:
+      staff:
+        sid: "员工编号"
+        name: "姓名"
+        mobile: "手机号码"
+        officephone: "办公电话"
+        sex: "性别"
+        birth: "生日"
+        email: "邮箱"
+        mobile: "手机号码"
+        nationality: "民族"
+        wechat: "微信"
+        weibo: "微博"
+        qq: "QQ号"
+        address: "通讯地址"
+        location: "户籍所在地"
+        idcard: "身份证号码"
+        marriage: "婚否"
+        education: "学历"
+        major: "专业"
+        degree: "学位"
+        englishlevel: "英语水平"
+        school: "毕业院校"
+        procreate: "育否"
+        politics: "政治面貌"
+        health: "健康状况"
+        worktime: "工作时间"
+        workage: "工作年限"
+        educationstatus: "教育情况"
+        workstatus: "工作情况"
+        family: "家庭成员"
+        department: "部门"
+        position: "职位"
+        avatar: "头像"
+        idfront: "身份证正面"
+        idreverse: "身份证反面"
+        prophoto: "职称证件"
+        eduphoto: "学历证件"
+        sign: "星座"
+
+
+

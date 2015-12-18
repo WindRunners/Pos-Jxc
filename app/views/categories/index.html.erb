@@ -1,0 +1,94 @@
+<%- model_class = Category -%>
+<div class="page-header">
+  <h1><%= model_class.model_name.human %>（总共<%= @categories.total_count %>条）</h1>
+</div>
+
+<div class="dataTables_wrapper form-inline no-footer">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+        <%= page_entries_info @categories %></div>
+    </div>
+    <div class="col-xs-6">
+      <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+        <ul class="pagination">
+          <li class="paginate_button previous disabled" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_previous">
+            <%= paginate @categories %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <%= form_tag categories_path, method: 'get' do %>
+    标题<%= text_field_tag(:title)%>
+      <%= submit_tag('搜索')%>
+  <% end %>
+  <br>
+
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:title) %></th>
+      <th><%= model_class.human_attribute_name(:form) %></th>
+      <th><%= t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @categories.each do |category| %>
+        <tr>
+          <td><%= link_to category.title, category_path(category) %></td>
+          <td><%= category.form %></td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <a class="btn btn-xs btn-info" href="<%= edit_category_path(category) %>">
+                <i class="ace-icon fa fa-pencil bigger-130"></i>
+              </a>
+              <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
+                          category_path(category),
+                          :method => :delete,
+                          :data => {:confirm => '你确定删除该商品吗?'},
+                          :class => 'btn btn-xs btn-danger' %>
+              <a class="btn btn-xs btn-info" href="<%= category_achieve_path(category) %>">
+                <i class="ace-icon fa fa-check bigger-130"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+        <%= page_entries_info @categories %></div>
+    </div>
+    <div class="col-xs-6">
+      <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+        <ul class="pagination">
+          <li class="paginate_button previous disabled" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_previous">
+            <%= paginate @categories %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_category_path,
+            :class => 'btn btn-primary' %>
+
+<%= link_to '同步所有类别',
+            category_achieve_path(:all),
+            :class => 'btn btn-primary' %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        categories();
+    });
+</script>
+

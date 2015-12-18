@@ -1,0 +1,23 @@
+%h1 配送员列表
+
+%table.table
+  %thead
+    %tr
+      %th 真实姓名
+      %th 手机号
+      %th 创建时间
+      %th op
+  %tbody
+    - @delivery_users.each do |delivery_user|
+      %tr
+        %td= delivery_user.real_name
+        %td= delivery_user.mobile
+        %td= delivery_user.created_at
+        -if Store.find(params[:store_id]).delivery_user_ids.include?(delivery_user.id)
+          %td= link_to '删除', store_reduce_delivery_user_path(:id=>delivery_user.id), :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+        -else
+          %td= link_to '增加', store_add_delivery_user_path(:id=>delivery_user.id),:class => 'btn btn-minier btn-primary'
+%br
+
+-if @delivery_users.count > 1
+  = paginate @delivery_users

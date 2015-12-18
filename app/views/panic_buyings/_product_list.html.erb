@@ -1,0 +1,63 @@
+<script type="text/javascript">
+  function form_submit(id){
+      $('#quantity').attr('value',$('#panic_quantity_'+id).val());
+      $('#price').attr('value',$('#panic_price_'+id).val());
+      $('#product_id').attr('value',id);
+
+      $('#form_id').submit();
+  }
+</script>
+
+<form id="form_id" action="<%= panic_buying_add_product_url(@panic_buying_id) %>" method="post" data-remote="true">
+  <input type="hidden" name="panic_quantity" id="quantity"/>
+  <input type="hidden" name="panic_price" id="price"/>
+  <input type="hidden" name="product_id" id="product_id"/>
+</form>
+
+
+<div class="modal-header">
+  <button type="button" class="close " data-dismiss="modal" aria-hidden="true">
+    <i class="ace-icon fa fa-times icon-only"></i></button>
+  <h4 class="blue bigger">未参加秒杀活动商品列表</h4>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th style="text-align: center">缩略图</th>
+        <th style="text-align: center">名称</th>
+        <th style="text-align: center;width: 10%">库存</th>
+        <th style="text-align: center;width: 10%">秒杀数</th>
+        <th style="text-align: center;width: 10%">零售价</th>
+        <th style="text-align: center;width: 10%">活动数</th>
+        <th style="text-align: center">操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @products.each do |product| %>
+          <tr>
+            <td style="text-align: center"><img width="30" height="30" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"></td>
+            <td style=""><%= product.title %></td>
+            <td style="text-align: center"><%= product.stock %></td>
+            <td style="text-align: center"><input type="text" style="width: 100%" id="<%= "panic_quantity_#{product.id}" %>" value="<%= product.panic_quantity %>"></td>
+            <td style="text-align: center"><%= product.price %></td>
+            <td style="text-align: center"><input type="text" style="width: 100%" id="<%= "panic_price_#{product.id}" %>" value="<%= product.panic_price %>"></td>
+            <td style="text-align: center">
+              <button class="btn btn-xs btn-info" onclick="form_submit('<%= product.id %>');">参与</button>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-footer no-margin-top">
+  <button data-dismiss="modal" class="btn btn-sm btn-danger pull-left">
+    <i class="ace-icon fa fa-times"></i>
+    取&nbsp;消
+  </button>
+  <%= paginate @products, :theme => 'modal_pagination',:window => 2 %>
+</div>

@@ -1,0 +1,110 @@
+<%- model_class = Product -%>
+<div class="skin_gray">
+  <div class="container">
+
+    <div class="col-sm-10">
+      <div class="col-sm-5">
+
+
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <img src="<%= RestConfig::PRODUCT_SERVER + @product.main %>" class="img-responsive center-block" width='320px' height='320px'/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-7">
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <div style="height: 450px">
+                  <h1 class="center"><%= @product.title %></h1>
+                  <hr/>
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:qrcode) %>:</strong></dt>
+                    <dd><%= @product.qrcode %></dd>
+                  </dl>
+
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:brand)) %>:</strong></dt>
+                    <dd><%= @product.brand %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:specification)) %>:</strong></dt>
+                    <dd><%= @product.specification %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:origin)) %>:</strong></dt>
+                    <dd><%= @product.origin %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:manufacturer) %>:</strong></dt>
+                    <dd><%= @product.manufacturer %></dd>
+                  </dl>
+                </div>
+
+                <% if @product.exists? current_user then %>
+                    <span class="btn btn-lg disabled">已添加到店铺</span>
+                <% else %>
+                    <span id='added' class="btn btn-lg disabled" style="display: none">已添加到店铺</span>
+
+                    <a id="add_online" , href="#modal-form" , data-toggle="modal" , class='btn btn-success btn-xlg' onclick="fill_product('');">上架到店铺</a>
+                    <%= button_to '添加到仓库', product_rack_path(@product, 'js'), :method => 'post', :class => 'btn btn-warning btn-xlg', :remote => true, :id => 'add_offline', :onclick => "adding_to_offline();" %>
+                <% end %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-12 widget-container-col ui-sortable">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-12 tab-color-blue" id="myTab4">
+            <li class="active">
+              <a data-toggle="tab" href="#home4">图文详情</a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home4" class="tab-pane in active">
+              <img src="<%= RestConfig::PRODUCT_SERVER + @product.desc %>" class="img-responsive center-block"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="col-sm-2 center">
+      <h3>热卖商品</h3>
+      <% @top_products.each do |product| %>
+          <%= render :partial => 'warehouse_product', :locals => {:product => product} %>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<%= render 'online_modal_form' %>
+
+<script>
+  function adding_to_offline() {
+    gon.state = 'offline';
+    $("#add_offline").val('添加到仓库...');
+  }
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag "application", :media => "all"%>
+  <%= javascript_include_tag "application"%>
+  <%= javascript_include_tag "registjs/jquery.form" %>
+  <style>
+   span.error{height:12px; font-size:12px; font-family:"微软雅黑"; color:#C00;  line-height:12px; margin-left:2px; margin-top:8px;}
+  </style>
+ </head>
+ <body style="width: 100%">
+<div style="width: 100%;">
+  <%= form_tag(controller: "userinfo_orders",action: "binduserinfo",method: "post",class: "bl-form bl-formhor") %>
+  <input type="hidden" name="check_user", value="true" />
+  <% if flash[:error].present? %>
+      <div class="alert alert-warning" data-dismiss="alert">
+        <a href="#" class="close" data-dismiss="alert">
+          &times;
+        </a>
+        <div style="width: 300px;margin: 0px auto">
+        <strong>警告！</strong><%= flash[:error] %>.</div>
+      </div>
+  <% end %>
+  <div id="legend" style="margin: 0 auto;width: 240px;padding-top:20px">
+  <legend class="">填写要绑定的商户信息</legend>
+</div>
+<hr style="border: 1px grey solid">
+<div style="margin: 0 auto;width: 280px;">
+       <fieldset>
+         <div class="control-group">
+           <label class="control-label" for="input01">经营者姓名</label>
+           <div class="controls">
+             <input placeholder="注册买卖通的经营者姓名" name="user_name" class="input-lg col-10" type="text" required data-rule-user_name="true" data-msg-required="请输入经营者姓名">
+           </div>
+         </div>
+         <br>
+         <div class="control-group">
+           <label class="control-label" for="input01">商户手机</label>
+           <div class="controls">
+             <input placeholder="即买卖通登录账户" class="input-lg col-10" name="user_mobile" type="text" required data-rule-mobile="true" data-msg-required="请输入手机号" data-msg-mobile="请输入正确格式">
+           </div>
+         </div>
+         <br>
+         <div class="control-group">
+           <div class="controls">
+             <button class="btn btn-info btn-lg ">获取短信验证码</button>
+           </div>
+         </div>
+       </fieldset>
+
+  </div>
+</div>
+ </body>
+<script>
+    $(function(){
+        $("#new_user").validate({
+            submitHandler: function() {
+                form.submit();
+            }
+        })
+    })
+    $.validator.setDefaults({
+        errorElement:'span'
+    });
+    //配置通用的默认提示语
+    $.extend($.validator.messages, {
+        required: '必填',
+        equalTo: "请再次输入相同的值"
+    });
+    //手机验证规则
+    jQuery.validator.addMethod("mobile", function (value, element) {
+        var mobile = /^1[3|4|5|7|8]\d{9}$/;
+        return this.optional(element) || (mobile.test(value));
+    }, "手机格式不对");
+</script>
+ </html>

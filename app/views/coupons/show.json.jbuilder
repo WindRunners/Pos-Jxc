@@ -1,0 +1,1 @@
+json.extract! @coupon, :userinfo_id, :id, :title, :quantity, :value, :limit, :start_time, :end_time, :order_amount_way, :order_amount, :use_goods, :instructions, :buy_limit, :aasm_state, :tag, :product_ids, :full_reduction_ids, :receive_count, :updated_at

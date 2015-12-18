@@ -1,0 +1,65 @@
+%p#notice= notice
+
+%p
+  %b= t(:title, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.title
+%p
+  %b= t(:quantity, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.quantity
+%p
+  %b= t(:value, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.value
+%p
+  %b= t(:limit, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.limit
+%p
+  %b= t(:start_time, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.startTimeShow
+%p
+  %b= t(:end_time, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.endTimeShow
+%p
+  %b= t(:order_amount, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.order_amount
+%p
+  %b= t(:use_goods, scope: "mongoid.attributes.Coupon") + ":"
+  = "0" == @coupon.use_goods ? "全店能用" : "指定商品"
+  - if "1" == @coupon.use_goods
+    %table{:class => "table table-striped table-bordered table-hover", :id => "selectedProductsTable"}
+      %thead
+        %tr
+          %th= t(:thumbnail, scope: "mongoid.attributes.product")
+          %th= t(:qrcode, scope: "mongoid.attributes.product")
+          %th= t(:title, scope: "mongoid.attributes.product")
+          %th= t(:purchasePrice, scope: "mongoid.attributes.product")
+          %th= t(:price, scope: "mongoid.attributes.product")
+          %th= t(:stock, scope: "mongoid.attributes.product")
+          %th= t(:integral, scope: "mongoid.attributes.product")
+      %tbody
+        - @coupon.products.each do |product|
+          %tr{:class => "cls_#{product.id}"}
+            %td
+              %img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+            %td= product.qrcode
+            %td= product.title
+            %td= format("%.2f", product.purchasePrice).to_f
+            %td= format("%.2f", product.price).to_f
+            %td= product.stock
+            %td= product.integral
+%p
+  %b= t(:buy_limit, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.buy_limit ? "仅原价购买商品时可用" : "不限制"
+%p
+  %b= t(:instructions, scope: "mongoid.attributes.Coupon") + ":"
+  = @coupon.instructions
+%p
+  %b= t(:tag, scope: "mongoid.attributes.Coupon")
+  = @coupon.tag
+
+= link_to 'Edit', edit_coupon_path(@coupon)
+\|
+= link_to 'Back', coupons_path
+:javascript
+  $(document).ready(function () {
+    $("#selectedProductsTable").DataTable(dataTableParams)
+  })

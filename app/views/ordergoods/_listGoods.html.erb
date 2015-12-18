@@ -1,0 +1,76 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Ordergoods</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>product</th>
+      <th>quantity</th>
+      <th>price</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ordergoods.each do |ordergood| %>
+      <tr>
+        <td><%= ordergood.product %></td>
+        <td><%= ordergood.quantity %></td>
+        <td><%= ordergood.price %></td>
+        <td><%= link_to 'Show', ordergood %></td>
+        <td><%= link_to 'Edit', edit_ordergood_path(ordergood) %></td>
+        <td><%= link_to 'Destroy', ordergood, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ordergood', new_ordergood_path %>
+
+
+<%= f.fields_for :ordergoods do |ordergoods_form| %>
+    <% @order.ordergoods.each do |ordergood| %>
+        <tr>
+          <td><%= ordergood.product.qrcode %></td>
+          <td><%= ordergood.product.name %></td>
+          <% if @order.orderstatus == "1" && @order.modifymark == "1" %>
+              <td>
+                <div style="width: 100px;" class="ace-spinner touch-spinner">
+                  <div class="input-group">
+                    <div class="spinner-buttons input-group-btn">
+
+                      <%= ordergoods_form.text_field :quantity,:id => ordergood.id %>
+                      <button type="button" class="btn spinner-down btn-xs btn-danger" onclick="changeQuantity('<%= ordergood.id %>')">
+                        <i class="icon-minus smaller-75"></i></button>
+                    </div>
+                    <span id="transmark"></span></div>
+                </div>
+              </td>
+          <% else %>
+              <td><%= ordergood.quantity %></td>
+          <% end %>
+          <td><%= ordergood.price %></td>
+        </tr>
+    <% end %>
+<% end %>
+
+
+
+<%= form_for @order do |f| %>
+    <%= f.fields_for :ordergoods do |ordergoods_form| %>
+        <li>
+          <%= fields_for :product do |product_form| %>
+              <%= product_form.text_field :qrcode %>
+              <%= product_form.text_field :name %>
+          <% end %>
+          <%= ordergoods_form.text_field :quantity %>
+          <%= ordergoods_form.text_field :price %>
+        </li>
+    <% end %>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

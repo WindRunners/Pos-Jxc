@@ -1,0 +1,41 @@
+%h1 下级管理
+
+%table.table
+  %thead
+    %tr
+      %th 名称
+      %th 上级
+      %th 下级数量
+      %th 酒庄数量
+      %th
+      %th
+      %th
+
+  %tbody
+    - @children.each do |region|
+      %tr
+        %td= region.name
+        %td= region.parent.name
+        %td= region.children.count
+        %td= eval region.descendants_and_self.map{|c|c.chateaus.count}.join('+')
+        %td= link_to '下级管理', region_children_path(region)
+        %td= link_to '编辑', edit_region_path(region)
+        %td= link_to '删除', region, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+
+= form_tag('add_children', method: 'post') do
+  .field
+    = label_tag(:children, '增加下级')
+    %br 名称
+    = text_area_tag(:name)
+  .actions
+    = submit_tag '保存',:class => 'btn btn-yellow'
+
+%br
+= paginate @children
+
+%br
+= link_to '主页', regions_path
+

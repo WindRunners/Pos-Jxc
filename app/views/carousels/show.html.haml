@@ -1,0 +1,39 @@
+%p#notice= notice
+
+%p
+  %b= t(:area)
+  = @carousel.area
+%p
+  %b= t(:start_time)
+  = @carousel.start_time
+%p
+  %b= t(:end_time)
+  = @carousel.end_time
+%p
+  %b= t(:url)
+  = @carousel.url
+
+
+.row
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4{:class => "widget-title lighter smaller"}轮播图片
+    .widget-body
+      .widget-main.padding-8
+        %ul{:class => "ace-thumbnails clearfix", :id => "carouselAssets"}
+          = render @carousel.carouselAssets.select(&:persisted?)
+
+        = form_tag carousel_upload_path(@carousel), method: "post", id: "upload_carouse_asset" do
+          %span{:class => "btn btn-success fileinput-button"}
+            %i{:class => "glyphicon glyphicon-plus"}
+            %span 上传轮播图
+            %input{:type => "file", :name => "carousel[carouselAsset]", :multiple => ""}
+        %script{:id => "template-upload-origin", :type => "text/x-tmpl"}
+          .upload
+            {%=o.name%}
+            .progress
+              .bar{:style => "width: 0%"}
+
+= link_to '修改',"" ,"data-href"=>edit_carousel_path(@carousel),:calss=>"btn btn-info"
+\|
+= link_to '返回', "" ,"data-href"=>carousels_path,:calss=>"btn btn-primary"

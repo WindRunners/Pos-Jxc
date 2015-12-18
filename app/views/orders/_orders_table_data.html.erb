@@ -1,0 +1,145 @@
+<br/>
+<table id="" class="table no-padding">
+  <thead>
+      <tr>
+        <th  colspan="2" width="28%">商品</th>
+        <th style="text-align: center" width="8%">单价/规格</th>
+        <th style="text-align: center" width="4%">数量</th>
+        <th style="text-align: center" width="15%">
+          收货地址
+        </th>
+        <th style="text-align: center" width="15%">
+          下单时间
+        </th>
+        <th style="text-align: center" width="15%">
+          订单状态
+        </th>
+        <th style="text-align: center" width="15%">
+          实付金额
+        </th>
+      </tr>
+  </thead>
+</table>
+<% def format_encryption(str) %>
+    <%   return str[0,str.length / 2] + "*" * (str.length % 2 == 0 ? str.length / 2 : str.length / 2 + 1) %>
+<% end %>
+<% @orders.each do |order| %>
+    <% workflow_state = order.workflow_state.to_sym %>
+    <div class="widget-box">
+      <div class="widget-header">
+        <div class="row">
+          <div class="col-xs-10">
+            <h4>
+              <span>订单号: <a href="<%= "##{order_path(order.id)}" %>" data-url="<%= order_path(order.id) %>"><%= order.orderno %></a> </span>
+            </h4>
+          </div>
+          <div class="col-xs-2" style="text-align: right">
+            <div class="hidden-sm hidden-xs action-buttons">
+              <h4>
+                <% if :paid == workflow_state %>
+                    <%= link_to raw('<i class="ace-icon">接&nbsp;&nbsp;单</i>'), "##{order_receive_order_path(order.id)}?tab=#{params[:workflow_state]}",
+                                                                                :class => "btn btn-minier btn-warning"%>&nbsp;
+                <% elsif :distribution == workflow_state %>
+                    <%= link_to raw('<i class="ace-icon">配送完成</i>'), "##{order_distribution_completed_path(order.id)}?tab=#{params[:workflow_state]}",
+                                                                        :class => "btn btn-minier btn-success"%>&nbsp;
+                <% end %>
+                <%= link_to '查看详情',
+                            "##{order_path(order.id)}?tab=#{params[:workflow_state]}", 'data-url' => order_path(order.id),
+                            :class => 'btn btn-minier btn-info' %>&nbsp;
+
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main no-padding">
+          <table id="" class="table table-bordered">
+            <tbody>
+            <tr>
+              <td width="40%" style="padding-top: 0;padding-bottom: 0">
+                <table id="" class="table no-padding">
+                  <tbody>
+                  <% order.ordergoods.each do |ordergood| %>
+                      <tr>
+                        <td>
+                          <a href="#<%= product_path(ordergood.product_id) %>"><img class="img-responsive" src="<%= RestConfig::IMG_SERVER + ordergood.avatar_url %>" height="60px" width="60px"></a>
+                        </td>
+                        <td>
+                          <p><a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></p>
+                          <p><%= ordergood.qrcode %></p>
+                        </td>
+                        <td align="center" width="20%">
+                          <p><%= ordergood.price %></p>
+                          <p>(<%= ordergood.specification %>)</p>
+                        </td>
+                        <td align="center" width="10%">
+                          <%= ordergood.quantity %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </td>
+              <td  rowspan="<%= order.ordergoods.size %>" width="15%">
+                <% if :paid == workflow_state || :distribution == workflow_state%>
+                    <p><%= order.address %></p>
+                <% else %>
+                    <p><%= format_encryption(order.address) %></p>
+                <% end %>
+              </td>
+              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
+                <% time = order.created_at %>
+                <p><%= time.strftime("%Y-%m-%d") %></p>
+                <p><%= time.strftime("%H:%M:%S") %></p>
+              </td>
+              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
+                <% if :generation == workflow_state %>
+                    待付款
+                <% elsif :paid == workflow_state %>
+                    待接单
+                <% elsif :distribution == workflow_state %>
+                    配送中
+                <% elsif :receive == workflow_state %>
+                    配送完成
+                <% elsif :cancelled == workflow_state %>
+                    已取消
+                <% elsif :completed == workflow_state %>
+                    已完成
+                <% end %>
+              </td>
+              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
+                <p><%=number_to_currency(order.paycost,  :unit=>"￥")%></p>
+                <% if 0 == order.paymode %>
+                    <p><span style="color: #F60">(货到付款)</span></p>
+                <% end %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <br/>
+<% end %>
+<div class="form-actions" style="padding: 10px;">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="dataTables_info" role="status" aria-live="polite">
+        <%= page_entries_info @orders, :entry_name => '订单' %>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+        <ul class="pagination">
+          <li class="paginate_button previous disabled" aria-controls="dynamic-table" tabindex="0" id="dynamic-table_previous">
+            <%= paginate @orders,:theme => 'ajax_pagination' %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<% def format_encryption(str) %>
+    <%   return str[0,str.length / 2] + "*" * (str.length % 2 == 0 ? str.length / 2 : str.length / 2 + 1) %>
+<% end %>

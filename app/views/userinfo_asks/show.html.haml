@@ -1,0 +1,23 @@
+%p#notice= notice
+
+%p
+  %b Shopname:
+  = @userinfo_ask.shopname
+%p
+  %b Approver:
+  = @userinfo_ask.approver
+%p
+  %b Pdistance state:
+  = @userinfo_ask.date_show
+%p
+  %b Pdistance ask:
+  = @userinfo_ask.pdistance_ask
+%p
+  %b Ask date:
+  = @userinfo_ask.ask_date
+%p
+  %b Rqe date:
+  = @userinfo_ask.rqe_date
+
+
+= link_to 'Back',"","data-href"=> userinfo_asks_path

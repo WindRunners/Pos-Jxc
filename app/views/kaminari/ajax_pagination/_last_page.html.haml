@@ -1,0 +1,2 @@
+%li
+  = link_to_unless current_page.last?, raw(t 'views.pagination.last'), "javascript:void(0);", :remote => remote,:onclick => "ajax_pagination(#{total_pages})"

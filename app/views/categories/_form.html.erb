@@ -1,0 +1,174 @@
+<%= form_for @category, :html => {:class => 'form-horizontal category'} do |f| %>
+  <% if @category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
+
+      <ul>
+      <% @category.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+
+    <div class="form-group">
+      <label class = 'col-sm-3 control-label no-padding-right'>父类别</label>
+      <div class="col-sm-3" style="display:inline-flex" id="select-parent-category">
+        <% @rootCategory = Category.first %>
+        <input type="hidden" id="rootID" value="<%= @rootCategory.id %>">
+        <% @subCategories = Category.where(:parent_id => @rootCategory.id) %>
+        <% if @subCategories.length <= 0 %>
+        <%= f.select :_parent_id , [[Category.first.title,Category.first.id]],{:selected => @category.parent_id},{:class => 'select1 tag-input-style'}%>
+        <% end %>
+        <%= f.select :_parent_id , @subCategories.reverse.map { |s| [s.title, s.id] }, {:selected => @category.parent_id,:prompt => "==根类=="}, {:class => 'select2 tag-input-style'} %>
+
+        <%= f.hidden_field :parent_id%>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <%= f.label :title, :class => 'col-sm-3 control-label no-padding-right' %>
+      <div class="col-sm-3">
+        <%= f.text_field :title, :class => 'form-control' %>
+      </div>
+    </div>
+
+    <div class="space-4"></div>
+
+    <div class="form-group">
+      <%= f.label :form, class:'col-sm-3 control-label no-padding-right' %>
+      <div class="col-sm-3">
+      <%= f.text_field :form, class:'form-control' %>
+      </div>
+    </div>
+
+    <div class="space-4"></div>
+
+    <div class="form-group">
+      <%= f.label :desc, class:'col-sm-3 control-label no-padding-right' %>
+      <div class="col-sm-3">
+      <%= f.text_field :desc, class:'form-control' %>
+      </div>
+    </div>
+
+
+    <div class="widget-box">
+      <div class="widget-header">
+        <h4 class="widget-title">添加字段</h4>
+      </div>
+
+      <div class="widget-body">
+        <div class="widget-main">
+            <input id="name" name="name" type="text" class="input-small" placeholder="字段名称">
+            <input type="text" class="input-small" placeholder="英文名称">
+
+            类型:<select id="type" ><option value="text">文本</option><option value="integer">整数</option><option value="date">日期</option></select>
+
+            <button id="add" type="button" class="btn btn-info btn-sm">
+              <i class="ace-icon fa fa-key bigger-110"></i>添加
+            </button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <%= f.label :field %><br>
+      <%= f.text_area :field, :class=>"autosize-transition form-control", :style=>"overflow: hidden; word-wrap: break-word; resize: horizontal; height: 200px;" %>
+    </div>
+
+
+    <div class="clearfix form-actions">
+      <div class="col-md-offset-4 col-md-9">
+        <button class="btn btn-info" id="save_form" type="submit">
+          <i class="ace-icon fa fa-check bigger-110"></i>
+          保存
+        </button>
+
+        &nbsp; &nbsp; &nbsp;
+        <a class="btn" href="<%= categories_path %>">
+          <i class="ace-icon fa fa-return bigger-110"></i>
+          返回
+        </a>
+      </div>
+    </div>
+<% end %>
+
+
+<script>
+    $(document).ready(function () {
+        parentCategory();
+
+        $('#add').click(function () {
+            var name = $('#name');
+            var ename = $('#ename');
+            var type = $('#type');
+
+            var field = $('#type_field')
+            var str = "\r\n" + "  " + ename.val() + ":";
+            str += "\r\n" + "    zh-CN: " + name.val();
+            str += "\r\n" + "    type: " + type.val();
+            field.val(field.val() + str)
+
+            name.val('')
+            ename.val('')
+        });
+
+        $('.select2.tag-input-style').change(function(){
+            choseCategory(this);
+        });
+
+
+        $('.tag-input-style').change(function(){
+            parentCategory();
+        });
+
+    });
+
+        function choseCategory(obj){
+            $("#select-parent-category").children('.select3').remove();
+            var categoryID = $(obj).children('option:checked').val();
+            $.post('findChildren',{"category_id":categoryID},function(childrenInfo){
+                if(childrenInfo.length > 0){
+                    var optionHtml = "<option>==子类==</option>";
+                    $(childrenInfo).each(function(){
+                        optionHtml += "<option value="+this._id+">"+this.title+"</option>";
+                    });
+
+                    var selectHtml = "<select class='select3 tag-input-style' name='category[_parent_id]' id='category_parent_id' onchange='parentCategory()'>"
+                            +optionHtml+"</select>";
+                    $("#select-parent-category").append(selectHtml);
+                }
+            });
+
+        }
+
+        function parentCategory(){
+            var select1Val = $('.select1').children('option').val();
+            var select2Val = $('.select2').children('option:checked').val();
+            var select3Val = $('.select3').children('option:checked').val();
+
+            var parentID;
+
+            if(select1Val != '' && select1Val != undefined){
+                parentID = select1Val;
+            }
+
+            if(select2Val != '' && select2Val != undefined && select2Val != "==根类=="){
+                parentID = select2Val;
+            }
+
+            if(select3Val != '' && select3Val != undefined && select3Val != "==子类=="){
+                parentID = select3Val;
+            }
+
+            if(parentID == '' || parentID == undefined){
+                parentID = $('#rootID').val();
+            }
+
+            $('#category_parent_id').val(parentID);
+        }
+
+</script>

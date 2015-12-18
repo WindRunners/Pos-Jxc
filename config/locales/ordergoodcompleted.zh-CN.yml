@@ -1,0 +1,14 @@
+zh-CN:
+  mongoid:
+    models:
+      ordergoodcompleted: "订单商品"
+    attributes:
+      ordergoodcompleted:
+        qrcode: "条码"
+        specification: "产品规格"
+        title: "品名"
+        price: "单价"
+        integral: "积分"
+        quantity: '数量'
+        avatar_url: "商品缩略图"
+        is_gift: "是否赠品"

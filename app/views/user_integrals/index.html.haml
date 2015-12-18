@@ -1,0 +1,28 @@
+%p.text-uppercase
+  %strong
+    当前可转余额:
+    \#{@pay_totle} (兑换比例1:100)&nbsp;&nbsp;&nbsp;
+    %strong
+      当前总积分:
+      \#{@integrals_totle}<?p>
+
+%br
+= form_for @user_integral,remote: "true" do |f|
+  = hidden_field_tag "user_integral[state]","1"
+  = hidden_field_tag "user_integral[type]","3"
+  = f.label "请输入转换的金额："
+  = f.text_field :cash
+  %button{:name => "subject", :type => "submit", :class=>"btn btn-info"} 提交
+
+%br
+.tabbable#divProducts
+  %ul{:id => "myTab", :class => "nav nav-tabs"}
+    %li{:class => "active"}
+      %a{:href => "#", "data-toggle" => "tab", :onclick => "intagralStateChange(1)"}入账积分
+    %li
+      %a{:href => "#", "data-toggle" => "tab", :onclick => "intagralStateChange(2)"}支付积分
+  .tab-content
+    .tab-pane.in.active
+      = render 'list'
+
+

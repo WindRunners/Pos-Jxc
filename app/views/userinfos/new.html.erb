@@ -1,0 +1,26 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"></script>
+
+
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag "rediscss/registx.css" %>
+
+</head>
+<body>
+<%= render 'form'%>
+</body>
+</html>
+

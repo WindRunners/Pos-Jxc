@@ -1,0 +1,19 @@
+zh-CN:
+  mongoid:
+    models:
+      FullReduction: "满减"
+    attributes:
+      FullReduction:
+        avatar: "图片"
+        name: "活动名称"
+        validity_time: "有效时间"
+        start_time: "开始时间"
+        end_time: "结束时间"
+        quota: "满额"
+        reduction: "减免金额"
+        integral: "赠送积分"
+        preferential_way: "优惠方式"
+        aasm_state: "状态"
+        tag: "标签"
+        purchase_quantity: "购买数量"
+        gifts_quantity: "赠送数量"

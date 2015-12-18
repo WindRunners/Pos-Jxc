@@ -1,0 +1,23 @@
+%div= File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.scss")
+-if File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.scss") || File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.css")
+  = stylesheet_link_tag controller_name, :media => "all"
+
+-if File.exists?("#{Rails.root}/app/assets/javascripts/#{controller_name}.coffee") || File.exists?("#{Rails.root}/app/assets/javascripts/#{controller_name}.js")
+  = javascript_include_tag controller_name
+
+= yield
+
+:javascript
+  var scripts = [null, null]
+  $('.page-content-area').ace_ajax('loadScripts', scripts, function() {
+  //inline scripts related to this page
+  });
+
+  $('a').each(function(){
+    if ($(this).attr('data-href') !== undefined) {
+      var href = $(this).attr('data-href');
+      console.log('application.html.haml---' + href);
+      $(this).attr('data-url', href);
+      $(this).attr('href', '#' + href);
+    }
+  })

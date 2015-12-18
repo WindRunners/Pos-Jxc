@@ -1,0 +1,16 @@
+%p
+%table{:class => "table-center table table-striped table-bordered table-hover", :id => "integrals", "data-source" => "#{user_integrals_url(format: "json")}"}
+  %thead
+    %tr
+      %th= "积分"
+      %th= "状态"
+      %th= "类型"
+      %th= "操作日期"
+      %th
+      - if policy(:user).isAdmin?
+        %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+:javascript
+  $(document).ready(function () {
+      userIntegralsIndex();
+  });

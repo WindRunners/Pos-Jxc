@@ -1,0 +1,79 @@
+<div class="col-sm-12">
+<%= link_to '新建', new_category_path, :class=>'btn btn-lg btn-success' %>
+<%= link_to '编辑', "/categories", id: 'edit', :class=>'btn btn-lg btn-warn', method: :get %>
+<%= link_to '删除', "/categories", id: 'delete', :class=>'btn btn-lg btn-warn', method: :delete, data: { confirm: 'Are you sure?' } %>
+</div>
+
+<br>
+
+
+<div class="col-sm-6">
+<div class="widget-box widget-color-blue2">
+  <div class="widget-header">
+    <h4 class="widget-title lighter smaller">类别列表</h4>
+  </div>
+
+  <div class="widget-body">
+    <div class="widget-main padding-8">
+      <ul id="treeview" class="tree"></ul>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+    $(function() {
+        //construct the data source object to be used by tree
+        var remoteUrl = '/categories/';
+
+        var remoteDateSource = function(options, callback) {
+            var parent_id = null
+            if( !('text' in options || 'type' in options) ){
+                parent_id = '0';//load first level data
+            }
+            else if('type' in options && options['type'] == 'folder') {//it has children
+                if ('additionalParameters' in options) {
+                    parent_id = options.additionalParameters[0].id
+                }
+            }
+
+            if(parent_id !== null) {
+                $.ajax({
+                    url: remoteUrl + parent_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success : function(response) {
+                        callback({ data: response.data })
+                    },
+                    error: function(response) {
+                        //console.log(response);
+                    }
+                })
+            }
+        }
+
+        $('#treeview').ace_tree({
+            dataSource: remoteDateSource ,
+            loadingHTML: '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+            'open-icon' : 'ace-icon tree-minus',
+            'close-icon' : 'ace-icon tree-plus',
+            'selectable' : true,
+            'folderSelect' : true,
+            multiSelect: false,
+            'selected-icon' : 'ace-icon fa fa-check',
+            'unselected-icon' : 'ace-icon fa fa-times',
+            cacheItems: true
+        });
+
+        $('#treeview').on('selected.fu.tree', function (event, data) {
+           $('#delete').attr("href", "/categories/" + data.selected[0].id)
+           $('#edit').attr("href", "/categories/" + data.selected[0].id + "/edit")
+        })
+
+    });
+</script>

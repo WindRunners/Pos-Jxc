@@ -1,0 +1,28 @@
+zh-CN:
+  mongoid:
+    models:
+      product: "商品"
+    attributes:
+      product:
+        mobile_category: '商品分组'
+        thumbnail: "缩略图"
+        name: "名称"
+        qrcode: "条形码"
+        purchasePrice: "进价"
+        price: "零售价"
+        title: "标题"
+        description: '描述'
+        state: '当前状态'
+        integral: "积分"
+        stock: "库存"
+        state: '当前状态'
+        brand: '品&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;牌'
+        specification: '产品规格'
+        origin: '产&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地'
+        manufacturer: '生产厂家'
+        tags: '标签'
+        panic_quantity: '活动数量'
+        panic_price: '活动价格'
+        sale_count: '总销量'
+        created_at: '创建时间'
+        num: '序号'

@@ -1,0 +1,134 @@
+- model_class = Cashier
+.page-header
+  %h1 POS收银台
+%table.table
+  %tbody
+    %tr
+      %td
+        = form_tag "/products/se.json", method: :post, remote: true, id: "qrcode_search" do
+          %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
+          = label_tag(:qrcode, "商品编号/条形码")
+          = text_field_tag(:qrcode)
+          = submit_tag("搜索")
+      %td
+        = form_tag "/cashiers/checkCustomer.json", method: :post, remote: true, id: "check_customer_search" do
+          %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
+          = hidden_field_tag(:customerId)
+          = label_tag(:mobile, "会员号：")
+          = text_field_tag(:mobile)
+          = submit_tag("检查")
+      %td
+        %label 积分：
+        %label#integral 0
+      %td{:align => "right"}
+        %label 小票流水号：
+        %label 20150123123123
+%table#cashierTable.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 编号/条形码
+      %th 品名
+      %th 单价
+      %th 折扣率％
+      %th 数量
+      %th 金额
+      %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+%table.table
+  %tr
+    %td#tdCalculation{:rowspan => "4"}
+      #divTotalPrice
+        共：¥
+        %span#totalPrice 0.00
+      #divDiscount
+        折扣：¥
+        %span 0
+      #divProductQuantity
+        商品数量：
+        %span#productQuantity 0
+    %td 应收：
+    %td
+      %input#receivablesMoney{:disabled => "disabled", :type => "text", :value => "0.00"}/
+    %td
+  %tr
+    %td 实收：
+    %td
+      %input#realMoney{:type => "number"}/
+  %tr
+    %td 找零：
+    %td
+      %input#change{:disabled => "disabled", :type => "text", :value => "0.00"}/
+  %tr
+    %td
+      %button{:onclick => "clearing(false)"} 结算
+    %td
+      %button#btnClearing{:onclick => "clearing(true)"} 结算并打印
+        
+      %button{:onclick => "clearTable()"} 清空
+#divSmallTicket
+  %table#tableSmallTicket
+    %thead
+      %tr
+        %td{:colspan => "3"}
+          %img{:height => "100", :src => "#", :width => "100%"}/
+      %tr
+        %td{:colspan => "3"} 流水号：20151010
+      %tr
+        %td{:colspan => "3"} 会员卡号：18536781288
+      %tr
+        %td{:colspan => "3"}
+          结账日期：
+          %span#spanClearing
+      %tr
+        %td{:colspan => "3"} 收银员：李寻欢
+      %tr
+        %th.smallTicketName 名称
+        %th 数量
+        %th 单价
+      %tr
+        %td.tdSeparate{:colspan => "3"} =============================
+    %tbody
+    %tfoot
+      %tr
+        %td.tdSeparate{:colspan => "3"} =============================
+      %tr
+        %td 合计：
+        %td#tdProductQuantity
+        %td
+          %span.spanReceivablesMoney> 0.00
+          元
+      %tr
+        %td{:align => "right", :colspan => "3"}
+          应收：
+          %span.spanReceivablesMoney> 0.00
+          元
+        %td
+      %tr
+        %td{:align => "right", :colspan => "3"}
+          实收：
+          %span#spanRealMoney> 0.00
+          元
+        %td
+      %tr
+        %td{:align => "right", :colspan => "3"}
+          找零：
+          %span#spanChange> 0.00
+          元
+        %td
+%span{:style => "position: fixed; right: 10px; bottom: 10px;"}
+  #pop{:style => "display:none;"}
+    #popHead
+      %a#popClose{:title => "关闭"} 关闭
+      %h2 温馨提示
+    #popContent
+      %dl
+        %dt#popTitle
+          %a{:href => "http://yanue.info/", :target => "_blank"} 这里是参数
+        %dd#popIntro 这里是内容简介
+      %p#popMore
+        %a#popMoreLink{:href => "http://yanue.info/", :target => "_blank"} 查看 »
+/ 右下角pop弹窗 end
+:javascript
+  $(document).ready(function () {
+      cashiers();
+  });

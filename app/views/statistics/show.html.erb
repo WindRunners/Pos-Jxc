@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Qrcode:</strong>
+  <%= @statistic.qrcode %>
+</p>
+
+<p>
+  <strong>ProductName:</strong>
+  <%= @statistic.productName %>
+</p>
+
+<p>
+  <strong>Purchaseprice:</strong>
+  <%= @statistic.purchasePrice %>
+</p>
+
+<p>
+  <strong>Retailprice:</strong>
+  <%= @statistic.retailPrice %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @statistic.quantity %>
+</p>
+
+<p>
+  <strong>RetailDate:</strong>
+  <%= @statistic.retailDate %>
+</p>
+
+<%= link_to 'Edit', edit_statistic_path(@statistic) %> |
+<%= link_to 'Back', statistics_path %>

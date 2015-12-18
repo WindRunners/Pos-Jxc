@@ -1,0 +1,20 @@
+
+= link_to raw("新建优惠券"),'',"data-href"=> new_coupon_path, :class => "btn btn-primary"
+
+
+%p
+%table{:class => "table-center table table-striped table-bordered table-hover", :id => "coupons", "data-source" => "#{coupons_url(format: "json")}"}
+  %thead
+    %tr
+      %th= t(:title, scope: "mongoid.attributes.Coupon")
+      %th= t(:value, scope: "mongoid.attributes.Coupon")
+      %th= t(:limit, scope: "mongoid.attributes.Coupon")
+      %th= t(:validity_period, scope: "mongoid.attributes.Coupon")
+      %th 领取人/次
+      %th 已使用
+      %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+:javascript
+  $(document).ready(function () {
+      couponsIndex();
+  });

@@ -1,0 +1,46 @@
+%h1 区域管理
+
+%table.table
+  %thead
+    %tr
+      %th 名字
+      %th 上级
+      %th 下级数量
+      %th 酒庄数量
+      %th
+      %th
+      %th
+      %th
+      %th
+
+  %tbody
+    - @regions.each do |region|
+      %tr
+        %td= region.name
+        %td= region.parent.name
+        %td= region.children.count
+        %td= eval region.descendants_and_self.map{|c|c.chateaus.count}.join('+')
+        %td= link_to '下级管理', region_children_path(region)
+        %td= link_to '编辑', edit_region_path(region)
+        %td= link_to '删除', region, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= paginate @regions
+
+
+
+%button.btn.btn-primary{"data-target" => "#exampleModal", "data-toggle" => "modal", "data-whatever" => "@mdo", :type => "button"} 新建产地
+
+#exampleModal.modal.fade{"aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#exampleModalLabel.modal-title 新建产地
+      .modal-body
+        = render 'form'
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭
+        %button.btn.btn-primary{:type => "submit",'onclick'=>'from_submit()'} 保存

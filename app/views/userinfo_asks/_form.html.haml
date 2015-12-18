@@ -1,0 +1,28 @@
+= form_for @userinfo_ask do |f|
+  - if @userinfo_ask.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@userinfo_ask.errors.count, "error")} prohibited this userinfo_ask from being saved:"
+      %ul
+        - @userinfo_ask.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :shopname
+    = f.text_field :shopname
+  .field
+    = f.label :approver
+    = f.text_field :approver
+  .field
+    = f.label :pdistance_state
+    = f.text_field :pdistance_state
+  .field
+    = f.label :pdistance_ask
+    = f.text_field :pdistance_ask
+  .field
+    = f.label :ask_date
+    = f.text_field :ask_date
+  .field
+    = f.label :rqe_date
+    = f.text_field :rqe_date
+  .actions
+    = f.submit 'Save'

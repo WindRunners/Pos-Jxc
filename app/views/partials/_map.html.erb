@@ -1,0 +1,99 @@
+<style type="text/css">
+      #l-map{height:200px;width:760px;}
+      #r-result{width:100%;}</style>
+<div id="r-result" style="margin: 0px auto;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入:<input type="text" id="suggestId" size="20" value="百度" style="width:150px;" /></div>
+<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+<div id="l-map"></div>
+<script type="text/javascript">
+
+    var map = new BMap.Map("l-map");
+    var pt = new BMap.Point(116.404, 39.915);
+    map.centerAndZoom(pt, 15);
+
+    //IP定位城市
+    function myFun(result){
+        var cityName = result.name;
+        map.setCenter(cityName);
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
+
+    //单击获取点击的经纬度
+    map.addEventListener("click",function(e) {
+
+        var newPointLng = e.point.lng;
+        var newPoingLat = e.point.lat;
+
+        var pt = new BMap.Point(newPointLng, newPoingLat);//测试点
+        var c = new BMap.Point(newPointLng, newPoingLat); //圆心
+        var circle = new BMap.Circle(c, 50);//测试圆
+        var result = BMapLib.GeoUtils.isPointInCircle(pt, circle);
+        if(result == true){
+           // alert("抱歉你周围已经有商户注册！");
+
+        }
+        else {
+            alert("您可以注册！")
+        }
+
+
+//演示：将点与圆形添加到地图上
+        map.clearOverlays();
+        map.centerAndZoom(c, 18);
+        var mkr = new BMap.Marker(pt);
+        map.addOverlay(mkr);
+        map.addOverlay(circle);
+        mkr.setAnimation(BMAP_ANIMATION_BOUNCE);
+        //map.openInfoWindow(infoWindow,c); //开启信息窗口
+
+    });
+    //输入框：详细地址定位
+      var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+                           {"input" : "suggestId"
+                               ,"location" : map
+                            });
+
+     ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+     var str = "";
+     var _value = e.fromitem.value;
+     var value = "";
+     if (e.fromitem.index > -1) {
+     value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+     }
+     str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+     value = "";
+     if (e.toitem.index > -1) {
+     _value = e.toitem.value;
+     value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+     }
+     str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+     G("searchResultPanel").innerHTML = str;
+     });
+
+     var myValue;
+     ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+     var _value = e.item.value;
+     myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+     G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+     setPlace();
+     });
+
+     function setPlace(){
+     // map.clearOverlays();    //清除地图上所有覆盖物
+     function myFun(){
+     var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+     map.centerAndZoom(pp, 18);
+     map.addOverlay(new BMap.Marker(pp));    //添加标注
+     }
+     var local = new BMap.LocalSearch(map, { //智能搜索
+     onSearchComplete: myFun
+     });
+     local.search(myValue);
+     }
+
+
+
+    map.enableScrollWheelZoom();//开启滚动缩放
+    map.enableContinuousZoom();//开启缩放平滑
+</script>

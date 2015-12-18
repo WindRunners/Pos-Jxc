@@ -1,0 +1,13 @@
+<%- model_class = Product -%>
+
+<% for category in @pCategories %>
+<% if ProductConfig::DYNAMIC_FIELDS[category.form] %>
+        <dt><strong><%= t(category.title) %>:</strong></dt>
+<% ProductConfig::DYNAMIC_FIELDS[category.form].each do |field, value| %>
+<dl class="dl-horizontal">
+  <dt><strong><%=  ProductConfig::DYNAMIC_FIELDS[category.form][field]["zh-CN"] %>:</strong></dt>
+  <dd><%= @product[field] %></dd>
+</dl>
+<% end %>
+<% end %>
+<% end %>

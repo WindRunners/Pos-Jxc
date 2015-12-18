@@ -1,0 +1,12 @@
+zh-CN:
+  mongoid:
+    models:
+      family_members: "家庭成员"
+    attributes:
+      family_members:
+        name: "姓名"
+        relationship: "关系"
+        age: "年龄"
+        phone: "手机"
+        company: "单位"
+        birth: "生日"

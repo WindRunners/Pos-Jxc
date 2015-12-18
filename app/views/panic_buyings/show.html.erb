@@ -1,0 +1,168 @@
+<script>
+
+    $(function () {
+        $('#product_modal').on('shown.bs.modal', function () {
+            getTable(1);
+        })
+    });
+
+
+    function getTable(page) {
+        $.get('<%= product_list_panic_buyings_path %>', {id : '<%= @panic_buying.id%>' ,page : page}, function (data, status) {
+            if (status == 'success') {
+                $('#data_table').html(data);
+            } else {
+                ;
+            }
+        });
+    }
+
+
+
+    function editProduct(product_id) {
+        $('#singlemodal').modal('show');
+        $.get('<%= panic_buying_product_path(@panic_buying.id)%>', {id : product_id}, function (data, status) {
+            if (status == 'success') {
+                $('#product').html(data);
+            } else {
+                ;
+            }
+        });
+    }
+
+
+</script>
+
+
+<div class="row" style="padding-left: 80px;padding-right: 80px;">
+  <div class="col-xs-2"></div>
+  <div class="col-xs-8 pricing-box">
+    <div class="widget-box widget-color-orange" style="height: 80%">
+      <div class="widget-header">
+        <a href="#<%= panic_buyings_path %>" class="close"><i class="ace-icon glyphicon glyphicon-remove"></i></a>
+        <h5 class="widget-title bigger lighter"><%= @panic_buying.beginTime %> - <%= @panic_buying.endTime %>秒杀商品</h5>
+      </div>
+
+      <div class="widget-body">
+        <div class="widget-main" style="padding-left: 5%; padding-right: 5%">
+          <ul class="list-unstyled spaced2">
+            <li style="background-color: #e7e7e7">
+              <div class="row" style="text-align: center;font-size: 120%;">
+                  <div class="col-xs-3">
+                    商品名称
+                  </div>
+                  <div class="col-xs-2">
+                    零售价
+                  </div>
+                  <div class="col-xs-2">
+                    活动价
+                  </div>
+                <% if 1 == @panic_buying.state %>
+                    <div class="col-xs-5">
+                      已完成
+                    </div>
+                <% else%>
+                    <div class="col-xs-1">
+                      库存
+                    </div>
+                    <div class="col-xs-2">
+                      活动数量
+                    </div>
+                    <div class="col-xs-2">
+                      操作
+                    </div>
+                <% end %>
+              </div>
+            </li>
+          <% @products.each do |product| %>
+            <li>
+              <div class="row" style="text-align: center;">
+                <div class="col-xs-3" style="text-align: left">
+                  <a href="#<%= product_path(product.id)%>"><i class="ace-icon fa fa-check green"></i><%= product.title %></a>
+                </div>
+                <div class="col-xs-2">
+                  <%= product.price %>
+                </div>
+                <div class="col-xs-2">
+                  <span class="label label-danger label-white middle"><%= product.panic_price %></span>
+                </div>
+                <% if 1 == @panic_buying.state %>
+                    <div class="col-xs-5">
+                      <% totalquantity = product.panic_quantity + product.panic_sale_count%>
+                      <% totalquantity > 0 ? compled = product.panic_sale_count * 100 / totalquantity : compled = 0 %>
+                      <p>已售出<%= product.panic_sale_count %>件，剩余<%= product.panic_quantity %>件</p>
+                      <div data-percent="已售出<%= compled %>%" class="progress progress-default progress-striped active pos-rel">
+                        <div style="width:<%= compled %>%" class="progress-bar progress-bar-danger"></div>
+                      </div>
+                    </div>
+                <% else%>
+                    <div class="col-xs-1">
+                      <%= product.stock %>
+                    </div>
+                    <div class="col-xs-2">
+                      <span class="label label-danger label-white middle"><%= product.panic_quantity %></span>
+                    </div>
+                    <div class="col-xs-2">
+                      <div class="hidden-sm hidden-xs action-buttons">
+                        <a href="javascript:void(0);" onclick="editProduct('<%= product.id%>')" class="green">
+                          <i class="ace-icon fa fa-pencil bigger-130"></i>
+                        </a>
+                        <%= link_to raw('<i class="ace-icon fa fa-trash-o bigger-130"></i>'),
+                                        "##{panic_buying_remove_product_path(@panic_buying)}?product_id=#{product.id}",
+                                        :class=>"red" %>
+                        </a>
+                      </div>
+                    </div>
+                <% end %>
+
+              </div>
+            </li>
+          <% end %>
+          </ul>
+
+          <hr>
+          <div class="price">
+            <% if 0 == @panic_buying.state %>
+                未开始
+            <% elsif 1 == @panic_buying.state %>
+                <span class="label  label-warning">进行中</span>
+            <% elsif 2 == @panic_buying.state %>
+                已结束
+            <% end %>
+          </div>
+        </div>
+
+        <div>
+          <a data-toggle="modal" class="btn btn-block btn-warning" role="button" href="#product_modal">
+            <i class="ace-icon fa fa-shopping-cart bigger-110"></i>
+            <span>新增商品</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-2"></div>
+
+
+  <div tabindex="-1" class="modal fade" id="product_modal" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content"  id="data_table">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="singlemodal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" id="product">
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+  </div>
+
+
+</div>
+
+
+

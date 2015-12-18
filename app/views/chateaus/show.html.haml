@@ -1,0 +1,54 @@
+%p#notice= notice
+
+%p
+  %b 酒庄名称:
+  = @chateau.name
+%p
+  %b 主人:
+  = @chateau.owner
+%p
+  %b 所在地区:
+  = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
+%p
+  %b 地址:
+  = @chateau.address
+%p
+  %b 联系电话:
+  = @chateau.phone
+%p
+  %b 酒庄网址:
+  = @chateau.urls
+%p
+  %b 酒庄标签:
+  %p
+  - @chateau.chateau_marks.each do |mark|
+    =mark.name
+    %b :
+    =mark.value
+    %p
+%p
+  %b 酒庄logo图片:
+  - if @chateau.logo.present?
+    = image_tag(@chateau.logo,size: '300x150')
+%p
+  %b 浏览次数:
+  = @chateau.hits
+%p
+  %b 排序字段:
+  = @chateau.sequence
+%p
+  %b 轮播图:
+  - if @chateau.pictures.present?
+    -@chateau.pictures.each do |x|
+      = image_tag(x.pic)
+%p
+  %b 酒庄介绍:
+#container{:style=>"padding:2% 4%; font-family:SimHei;"}
+  = markdown @chateau.chateau_introduce['introduce']
+%p
+  %b 图片地址数组:
+  = @chateau.pic_path.count
+
+= link_to '编辑', edit_chateau_path(@chateau)
+\|
+= link_to '返回', chateaus_path

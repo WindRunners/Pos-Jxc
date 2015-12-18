@@ -1,0 +1,26 @@
+%br
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th= "店名"
+      %th= "审批人"
+      %th= "审批状态"
+      %th= "配送距离"
+      %th= "请求时间"
+      %th= "成功时间"
+      %th
+
+  %tbody
+    - @userinfo_asks.each do |userinfo_ask|
+      %tr
+        %td= userinfo_ask.shopname
+        %td= userinfo_ask.approver
+        %td= userinfo_ask.date_show
+        %td= userinfo_ask.pdistance_ask
+        %td= userinfo_ask.ask_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= userinfo_ask.rqe_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  userinfo_ask.rqe_date.present?
+        %td= link_to '显示','',"data-href"=>userinfo_ask_path(userinfo_ask),:class=>"btn btn-xs btn-info"
+        /%td= link_to 'Destroy', userinfo_ask, :method => :delete, :data => { :confirm => 'Are you sure?' }
+%br
+

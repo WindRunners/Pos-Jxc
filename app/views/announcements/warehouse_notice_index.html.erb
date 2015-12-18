@@ -1,0 +1,33 @@
+<%- model_class = Announcement %>
+<p id="notice"><%= notice %></p>
+<div class="page-header">
+  <div style="text_align:center; float: left">
+    <h1>公告板</h1>
+  </div>
+</div>
+
+<div class="container">
+  <table class="table table-hover">
+    <% @notices.each do |notice| %>
+        <tr>
+          <td width="10%" class="center">
+            <img src="/images/avatar.png" class="msg-photo" alt="Alex's Avatar" height="50" width="50px"/>
+          </td>
+          <td width="90%">
+            <div>
+												<span class="msg-body">
+													<span class="msg-title">
+														<h4><a target="_blank" href="<%= RestConfig::PRODUCT_SERVER %>notices/<%= notice.id %>/app_show"><%= notice.title %></a></h4>
+													</span>
+<br/>
+													<span class="msg-time">
+														<i class="ace-icon fa fa-clock-o"></i>
+														<span>管理员 发表于 <%= time_ago_in_words notice.created_at %>前</span>
+													</span>
+												</span>
+            </div>
+          </td>
+        </tr>
+    <% end %>
+  </table>
+</div>

@@ -1,0 +1,23 @@
+zh-CN:
+  mongoid:
+   models:
+     announcement: "公告"
+   attributes:
+     announcement:
+        id: "ID"
+        title: "标题"
+        author: "作者"
+        crtime: "创建时间"
+        description: "描述"
+        content: "内容"
+        state: "状态"
+        read_num: "点击量"
+        is_top: "置顶"
+        reader: "阅读者"
+        status: "审核状态"
+        created_at: "创建时间"
+        source: "来源"
+
+
+
+

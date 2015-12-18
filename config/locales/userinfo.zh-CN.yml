@@ -1,0 +1,13 @@
+zh-CN:
+  mongoid:
+    models:
+      userinfo: ""
+    attributes:
+      userinfo:
+        name: "运营者姓名"
+        idnumber: "身份证号码"
+        address: "地址"
+        shopname: "商店名称"
+        location: "经纬度"
+        integral: "积分"
+        pdistance: "配送距离"

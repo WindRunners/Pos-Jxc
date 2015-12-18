@@ -1,0 +1,44 @@
+%li{:id => "asset#{carousel_asset.id}"}
+  %a{"data-rel" => "colorbox", :title => "轮播图片", :class => "cboxElement", :href => "#{carousel_asset.asset.url}"}
+    = image_tag(carousel_asset.asset.url, size: "150x150")
+
+  .tools.tools-bottom
+    = link_to raw('<i class="ace-icon fa fa-download"></i>'), carousel_downloadAsset_path(carousel_asset)
+    = link_to raw('<i class="ace-icon fa fa-trash"></i>'),
+                    carousel_destroyAsset_path(carousel_asset),
+                    :method => :delete,
+                    :remote => true,
+                    :data => {:confirm => t('.confirm', :default => '你确定删除该图片吗?')}
+
+  %p
+    %small
+      = number_to_human_size(carousel_asset.asset.size)
+:javascript
+  jQuery(function ($) {
+      var $overflow = '';
+      var colorbox_params = {
+          rel: 'colorbox',
+          reposition: true,
+          scalePhotos: true,
+          scrolling: false,
+          previous: '<i class="ace-icon fa fa-arrow-left"></i>',
+          next: '<i class="ace-icon fa fa-arrow-right"></i>',
+          close: '&times;',
+          current: '{current} of {total}',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          onOpen: function () {
+              $overflow = document.body.style.overflow;
+              document.body.style.overflow = 'hidden';
+          },
+          onClosed: function () {
+              document.body.style.overflow = $overflow;
+          },
+          onComplete: function () {
+              $.colorbox.resize();
+          }
+      };
+
+      $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+
+  })

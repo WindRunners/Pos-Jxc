@@ -1,0 +1,10 @@
+= form_for @splash do |f|
+  - if @splash.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@splash.errors.count, "error")} prohibited this splash from being saved:"
+      %ul
+        - @splash.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

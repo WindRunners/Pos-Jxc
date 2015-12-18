@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b 显示时间:
+  = @splash.stop_seconds
+%p
+  %b 开始时间:
+  = @splash.start_time
+%p
+  %b 结束时间:
+  = @splash.end_time
+%p
+  %b 闪屏图片:
+  = @splash.splash_screen_img
+= if @splash.splash_screen_img.present?
+  .asset
+    %p
+      = image_tag("http://10.99.99.206"+@splash.splash_screen_img, size: "100x100", alt: "Edit Entry")
+%br
+  %br
+    %br
+= link_to '修改', edit_splash_path(@splash)
+\|
+= link_to '返回', splashes_path

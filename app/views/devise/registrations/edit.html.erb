@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag "rediscss/regisindex" %>
+
+  <%= javascript_include_tag "application" %>
+
+</head>
+
+<body>
+<!--header-->
+
+<div class="header">
+  <div class="hbox">
+    <%= image_tag("img01.png") %>
+  </div>
+</div>
+
+<!--内容-->
+<div class="zz">
+  <div class="nav">
+    <div class="na01">
+      <div class="na0101">1、基本信息</div>
+    </div>
+    <div class="na02">
+      <div class="na0201">2、邮箱激活</div>
+    </div>
+    <div class="na03">
+      <div class="na0301">3、信息登记</div>
+    </div>
+    <div class="na04">
+      <div class="na0401">4、审核</div>
+    </div>
+  </div>
+  <%= form_for(@user, url:{action: "edit"}) do  |f| %>
+      <!--左侧-->
+      <div class="mm">
+        <div class="mm01"><span style=" color:#f61f1f;">！</span>每个手机号只能申请一个账号</div>
+        <div class="mm02">
+          <div class="mm0201">手 机 号 ：</div>
+          <%= f.text_field :mobile, autofocus: true, :class =>"mm0202" %>
+        </div>
+        <% if @user.errors[:mobile].any? %>
+            <div class="mm03" style="color: red">手机号<%= @user.errors[:mobile][0] %></div>
+        <% else %>
+            <div class="mm03">作为登录号</div>
+        <% end %>
+        <div class="mm04">
+          <div class="mm0401" id="smscode">验  证 码&nbsp;：</div>
+          <input class="mm0402">
+          <div class="mm0403">
+            <button type="button" id="sendsms">获取验证码</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </div>
+        </div>
+        <div class="mm05">
+          <div class="mm0201">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码 ：</div>
+          <%= f.password_field :password, autocomplete: "off",:class =>"mm0202" %>
+        </div>
+        <% if @user.errors[:password].any? %>
+            <div class="mm03" style="color: red">密码<%= @user.errors[:password][0] %></div>
+        <% else %>
+            <div class="mm03">密码最低为6位，字母、数字或英文符号！</div> <% end %>
+        <div class="mm06">
+          <div class="mm0601">确认密码：</div>
+          <%= f.password_field :password_confirmation, autocomplete: "off",:class =>"mm0202" %>
+        </div>
+        <div class="mm03">请再次输入密码</div>
+        <div class="mm07">
+          <div class="mm0201">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱 ：</div>
+          <%= f.text_field :email, autofocus: true, :class =>"mm0202" %>
+        </div>
+        <% if @user.errors[:email].any? %>
+            <div class="mm03" style="color: red">邮箱<%= @user.errors[:email][0] %></div>
+        <% else %>
+            <div class="mm03">作为联系邮箱</div><% end %>
+
+      </div>
+
+      <div class="nn">
+        <div class="nn01" >
+          <a href="<%= new_user_session_path %>"> 以有账号？<span style="color:#20c8ff;">直接登录</span></a>
+        </div>
+
+        <div class="nnxy">
+          <p style=" border: 1px solid gainsboro;width: 380px; height: 460px"></p>
+          <div class="nn02">
+            <input class="nn0201" value="" name="user[agree]" id="user_agree" type="checkbox">我同意并准守该协议
+          </div>
+          <div class="nn03">
+            <%= f.submit "注册",:id=>"nn03bt",:disabled=>"disabled"%>
+  <% end %>
+          </div>
+        </div>
+      </div>
+</div>
+
+<!--footer-->
+<div class="footer">
+  <div class="ftbox">
+    <div class="ft01">
+      <a href="">关于我们</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">服务协议</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">运营规范</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">辟谣中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">客服中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">联系邮箱</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">侵权投诉</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft02">
+      <a>Copyright<span style="font-family:'Arial';">&copy;</span>2015-2020  @#. All  Rights  Reserved.</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<script>
+    $("#user_agree").click(function(){
+        if($("#user_agree").is(':checked')){
+            $("#nn03bt").removeAttr("disabled");
+            $('#nn03bt').css("cursor", "pointer");
+        }else{
+            $('#nn03bt').attr('disabled',"true")
+            $("#nn03bt").removeAttr("style");
+        }
+    });
+
+    $("#sendsms").click(function(){
+        var x = 99999;
+        var y = 0;
+        var rand = parseInt(Math.random() * (x - y + 1) + y);
+        $.ajax({
+            type: "post",
+            url: "http://www.nit.com:3000/api/v1/user/verifycode",
+            data: {mobile:$("#user_mobile").val(),code:rand},
+            dataType: "json",
+            success:function(date){
+                if($(".mm0402").val() == rand.toString){
+                    console.info($(".mm0402").val);
+                }else{
+                    alert(rand);
+                }
+            }
+        });
+    })
+
+    $("#nn03bt").onsubmit(function(){
+        if ($(".mm0402").val() == "" || $("#user_mobile").val() ==""){
+            return false
+        }
+
+    })
+
+    $("#user_mobile").focus(function(){
+
+
+    })
+
+
+</script>
+
+

@@ -1,0 +1,99 @@
+%h1= notice.present? ? notice : '礼包详细'
+
+%dl.dl-horizontal
+  %dt
+    礼包名称:
+  %dd
+    = @import_bag.name
+  %dt
+    业务人员:
+  %dd
+    = @import_bag.business_user
+  %dt
+    业务人员手机号:
+  %dd
+    = @import_bag.business_mobile
+  %dt
+    发送者注册账号:
+  %dd
+    = @import_bag.sender_mobile
+  %dt
+    过期天数:
+  %dd
+    = @import_bag.expiry_days
+  %dt
+    备注:
+  %dd
+    = @import_bag.memo
+  %dt
+    审核状态:
+  %dd
+    - if !@import_bag['workflow_state'].present?
+      待发起
+    - elsif @import_bag['workflow_state'] == 'new'
+      待修改
+    - elsif @import_bag['workflow_state'] == 'first_check'
+      一级审核中……
+    - elsif @import_bag['workflow_state'] == 'second_check'
+      二级审核中……
+    - elsif @import_bag['workflow_state'] == 'passed'
+      审核通过
+    - elsif @import_bag['workflow_state'] == 'canceled'
+      已作废
+    - else
+      无效状态
+
+%h1 商品列表
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 缩略图
+      %th 商品名称
+      %th 类型
+      %th 数量
+  %tbody
+    - @product_list.each do |product|
+      %tr#bag_product_tr
+        %td
+          %img{'src'=>"#{RestConfig::IMG_SERVER}#{product.avatar_url}",'class'=>"product_avatar"}
+        %td #{product.title}
+        %td #{product.mobile_category_name}
+        %td
+          #{product.count}
+%h1 审核过程
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 任务
+      %th 处理结果
+      %th 备注
+      %th 时间
+  %tbody
+    - @work_flow_tracks.each do |track|
+      %tr#bag_product_tr
+        %td #{ImportBag.get_state_text(track.state)}
+        %td #{ImportBag.get_event_text(track.event)}
+        %td #{track.memo}
+        %td #{track.created_at.to_s(:db)}
+%div.row
+  %div.col-xs-6
+    %div#dynamic-table_info.dataTables_info
+      = page_entries_info @work_flow_tracks, :entry_name => '审核过程'
+  %div.col-xs-6
+    %div#dynamic-table_paginate.dataTables_info.dataTables_paginate.paging_simple_numbers
+      = paginate @work_flow_tracks
+/修改
+- if policy(@import_bag).update?
+  = link_to '修改', edit_import_bag_path(@import_bag),class: 'btn btn-default'
+/当前用户可以返回管理列表
+- if @import_bag['user_id'] == current_user.id
+  = link_to '返回管理列表', import_bags_path,class: 'btn btn-default'
+/返回审核列表
+- if policy(@import_bag).hasFirstCheckRole? || policy(@import_bag).hasSecondCheckRole?
+  = link_to '返回审核列表', "#{import_bags_path}/workflow/deal_list",class: 'btn btn-default'
+- if policy(@import_bag).start?
+  = link_to '发起审核',"javascript:showWfDealModel('start','#{@import_bag.id}')",:class => 'btn btn-default'
+- if policy(@import_bag).deal_list?
+  = link_to '处理',"javascript:showWfDealModel('#{@import_bag.current_state.name.to_s}','#{@import_bag.id}')",:class => 'btn btn-default'
+
+= render 'modal'

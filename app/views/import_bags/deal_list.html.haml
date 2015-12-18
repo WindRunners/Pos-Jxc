@@ -1,0 +1,18 @@
+%h1 待处理礼包列表
+
+%form#search-scope.form-inline
+  .form-group
+    %label{"for"=>"name"} 名称:
+    %input#name.form-control{'placeholder'=>'名称'}
+  .form-group
+    %label{"for"=>"name"} 业务员:
+    %input#name.form-control{'placeholder'=>'业务员'}
+  .form-group
+    %label{"for"=>"name"} 送礼人:
+    %input#name.form-control{'placeholder'=>'送礼人'}
+  %a.btn.btn-primary.btn-sm{'href'=>'javascript:search'} 搜索
+
+= render 'tablelist'
+
+%br
+= render 'modal'

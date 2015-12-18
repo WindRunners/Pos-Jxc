@@ -1,0 +1,62 @@
+-#%p
+-#  %b 手机号:
+-#  = @delivery_user.mobile
+-#%p
+-#  %b 真实名:
+-#  = @delivery_user.real_name
+-#%p
+-#  %b 用户描述:
+-#  = @delivery_user.user_desc
+-#%p
+-#  %b 工作状态:
+-#  = @delivery_user.work_status==1? '在岗' :'离岗'
+-#%p
+-#  %b 审核状态:
+-#  - if @delivery_user.status==0
+-#    待审核
+-#  - elsif @delivery_user.status==1
+-#    通过
+-#  - else
+-#    不通过
+-#%p
+-#  %b 位置:
+-#  = @delivery_user.position
+
+.panel.panel-default
+  .panel-heading
+    %h3 详细
+  %table.table
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 手机号:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @delivery_user.mobile
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 真实名:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @delivery_user.real_name
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 用户描述:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @delivery_user.user_desc
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 工作状态:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @delivery_user.work_status==1? '在岗' :'离岗'
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 审核状态:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        - if @delivery_user.status==0
+          待审核
+        - elsif @delivery_user.status==1
+          通过
+        - else
+          不通过
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 位置:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @delivery_user.position
+    - if current_user.has_role? :SuperAdmin
+      %tr
+        %td.col-sm-2{"style"=>"text-align:right"} 运营商:
+        %td#delivery_user_userinfo_name.col-sm-8{"style"=>"text-align:left"}
+          = "#{@userinfo.name if @userinfo.present?}"

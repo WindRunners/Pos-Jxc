@@ -1,0 +1,47 @@
+<%- model_clss = Announcement %>
+Announcement
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:title) %>:</strong>
+  <%= @announcement.title %>
+</p>
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:author) %>:</strong>
+  <%= @announcement.author %>
+</p>
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:description) %>:</strong>
+  <%= @announcement.description %>
+</p>
+
+  <strong><%= model_clss.human_attribute_name(:read_num) %>:</strong>
+  <%= @announcement.read_num %>
+</p>
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:content) %>:</strong>
+  <%= @announcement.content %>
+</p>
+
+<div class="page-header">
+  <strong><%= model_clss.human_attribute_name(:status) %>:</strong>
+  <%= @announcement.status %>
+</div>
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:is_top) %>:</strong>
+  <%= @announcement.is_top %>
+</p>
+
+<p>
+  <strong><%= model_clss.human_attribute_name(:reader) %>:</strong>
+  <%= @announcement.reader %>
+</p>
+
+<%= button_to('已阅',announcement_path,method: :get,params:{show:true})%>|
+<%= link_to '通过', announcement_check_path(@announcement), :class => 'btn btn-default btn-xs' %>|
+<%= link_to '不通过', announcement_check_out_path(@announcement), :class => 'btn btn-default btn-xs' %>|
+<%= link_to '修改', edit_announcement_path(@announcement),:class => 'btn btn-default' %> |
+<%= link_to '返回', announcements_path,:class => 'btn btn-default' %>

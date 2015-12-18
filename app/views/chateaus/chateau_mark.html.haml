@@ -1,0 +1,32 @@
+%h1 酒庄标签管理
+%table.table
+  %thead
+    %tr
+      %th 标签名称
+      %th 标签属性
+      %th 删除标签
+  %tbody
+    = @chateau_marks.each do |mark|
+      %tr
+        %td= mark.name
+        %td= mark.value
+        %td= link_to '删除', chateau_chateau_mark_reduce_path(:chateau_make_id => mark.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+
+
+
+= form_tag('chateau_mark_add', method: 'post') do
+  .field
+    = label_tag(:mark, '增加标签')
+    %br 标签名称
+    = select_tag :name, options_for_select([['酒庄等级', '酒庄等级'], ['种植面积', '种植面积'], ['红葡萄', '红葡萄'],
+    ['白葡萄', '白葡萄'], ['采摘方式', '采摘方式'], ['种植品种', '种植品种'], ['平均树龄', '平均树龄'], ['优质年份', '优质年份'],
+    ['产区产量', '产区产量'], ['香气', '香气'], ['熟成时间', '熟成时间'], ['土壤类型', '土壤类型']], 1)
+    %br 标签属性
+    = text_area_tag(:value)
+  .actions
+    = submit_tag '保存',:class => 'btn btn-yellow'
+
+%br
+%br
+%br
+= link_to '酒庄主页', chateaus_path

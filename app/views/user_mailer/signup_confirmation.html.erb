@@ -1,0 +1,27 @@
+<div style="background-color:#ECECEC; padding: 35px;">
+  <table cellpadding="0" align="center" style="width: 600px; margin: 0px auto; text-align: left; position: relative; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; font-size: 14px; font-family:微软雅黑, 黑体; line-height: 1.5; box-shadow: rgb(153, 153, 153) 0px 0px 5px; border-collapse: collapse; background-position: initial initial; background-repeat: initial initial;background:#fff;">
+    <tbody>
+    <tr>
+      <th valign="middle" style="height: 25px; line-height: 25px; padding: 15px 35px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #C46200; background-color: #FEA138; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px;">
+        <font face="微软雅黑" size="5" style="color: rgb(255, 255, 255); ">商超app!</font>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <div style="padding:25px 35px 40px; background-color:#fff;">
+          <h2 style="margin: 5px 0px; "><font color="#333333" style="line-height: 20px; "><font style="line-height: 22px; " size="4">亲爱的 <%= @user.name %>：</font></font></h2>
+          <p>首先感谢您加入商超app！
+            请您在发表言论时，遵守当地法律法规。
+            商超app，聚天下。
+            如果您有什么疑问可以联系管理员。</p>
+          <p>感谢注册！<%= link_to "点击这里完成验证",@url %>并激活账号.</p>
+          <p align="left"> 如果以上链接无法点击，请将"<%= @url%>"地址复制到你的浏览器(如IE)的地址栏进入商超平台。 （该链接在48小时内有效，48小时后需要重新注册）</p>
+          <p align="right">商超app! 官方团队</p>
+          <p align="right">商超app</p>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

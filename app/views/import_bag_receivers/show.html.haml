@@ -1,0 +1,15 @@
+%h1= notice.present? ? notice : '目标账号详细'
+
+%dl.dl-horizontal
+  %dt
+    账号:
+  %dd
+    = @import_bag_receiver.receiver_mobile
+  %dt
+    备注:
+  %dd
+    = @import_bag_receiver.memo
+- if policy(@import_bag).update?
+  = link_to '修改', edit_import_bag_receiver_path(@import_bag_receiver),class: 'btn btn-default'
+
+= link_to '返回列表', import_bag_import_bag_receivers_path(@import_bag),class: 'btn btn-default'

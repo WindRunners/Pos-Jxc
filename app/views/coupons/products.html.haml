@@ -1,0 +1,23 @@
+%table{:class => "table table-striped table-bordered table-hover", :id => "selectedProductsTable"}
+  %thead
+    %tr
+      %th= t(:thumbnail, scope: "mongoid.attributes.product")
+      %th= t(:title, scope: "mongoid.attributes.product")
+      %th= t(:price, scope: "mongoid.attributes.product")
+      %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+    - @products.each do |product|
+      %tr{:class => "cls_#{product.id}"}
+        %td
+          %img.product-img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+        %td= product.title
+        %td= format("%.2f", product.price).to_f
+        %td
+          %button{:type => "button", :class => "btn btn-primary", :onclick => "loadSelectedProducts('#{product.id}', 'd')"}删除
+:javascript
+  var scripts = [null, null]
+    $('#selectedProducts').ace_ajax('loadScripts', scripts, function() {
+      $(document).ready(function() {
+        $("#selectedProductsTable").DataTable(dataTableParams)
+      });
+  });

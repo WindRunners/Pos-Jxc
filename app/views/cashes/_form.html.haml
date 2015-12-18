@@ -1,0 +1,23 @@
+= form_for @cash,:html => {:class => 'form-horizontal category'}, remote: true do |f|
+  = hidden_field_tag "cash[cash_req_date]"
+  = hidden_field_tag "cheack_cash","true"
+  - if flash[:error].present?
+    #error_explanation
+      %ul
+        %li= flash[:error]
+
+  .form-group
+    = f.label "现金", :class => 'col-sm-3 control-label no-padding-right'
+    .col-sm-3
+      = f.text_field :cash, :class => 'form-control'
+
+  .clearfix.form-actions
+    .col-md-offset-4.col-md-9
+      %button#save_form.btn.btn-info{:type => "submit"}
+        %i.ace-icon.fa.fa-check.bigger-110
+        创建
+      \&nbsp; &nbsp; &nbsp;
+      %a.btn{"data-href" => cashes_path}
+        %i.ace-icon.fa.fa-return.bigger-110
+        返回
+

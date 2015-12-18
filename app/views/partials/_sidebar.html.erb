@@ -1,0 +1,383 @@
+<!-- #section:basics/sidebar -->
+<div id="sidebar" class="sidebar responsive">
+  <script type="text/javascript">
+    try {
+      ace.settings.check('sidebar', 'fixed')
+    } catch (e) {
+    }
+  </script>
+
+  <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+      <button class="btn btn-success">
+        <i class="ace-icon fa fa-signal"></i>
+      </button>
+
+      <a class="btn btn-info" data-href="<%= warehouse_index_products_path %>">
+        <i class="ace-icon fa fa-pencil bigger-130"></i>
+      </a>
+
+      <!-- #section:basics/sidebar.layout.shortcuts -->
+      <button class="btn btn-warning">
+        <i class="ace-icon fa fa-users"></i>
+      </button>
+
+      <button class="btn btn-danger">
+        <i class="ace-icon fa fa-cogs"></i>
+      </button>
+
+      <!-- /section:basics/sidebar.layout.shortcuts -->
+    </div>
+
+    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+      <span class="btn btn-success"></span>
+
+      <span class="btn btn-info"></span>
+
+      <span class="btn btn-warning"></span>
+
+      <span class="btn btn-danger"></span>
+    </div>
+  </div><!-- /.sidebar-shortcuts -->
+
+  <ul class="nav nav-list">
+    <li class="active">
+      <a href="index.html">
+        <i class="menu-icon fa fa-tachometer"></i>
+        <span class="menu-text"> 仪表盘 </span>
+      </a>
+
+      <b class="arrow"></b>
+    </li>
+
+    <li class="open">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+							<span class="menu-text">
+								商品库
+							</span>
+
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+
+      <ul class="submenu">
+
+
+        <li class="">
+          <a data-href="<%= products_path(:state => 'online') %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            出售中的商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= products_path(:state => 'restocking') %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            已售罄的商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= products_path(:state => 'alarm') %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            库存告警商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= products_path(:state => 'offline') %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            仓库中的商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= mobile_categories_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            商品分组
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+
+    <% if policy(:user).isAdmin? %>
+
+        <li class="">
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-list"></i>
+            <span class="menu-text"> 用户管理 </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+          </a>
+
+          <b class="arrow"></b>
+
+          <ul class="submenu">
+            <li class="">
+              <a data-href="<%= admin_users_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                用户
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+          </ul>
+        </li>
+    <% end %>
+
+
+
+
+    <li class="">
+      <a data-href="<%= cashiers_path %>">
+        <i class="menu-icon fa fa-list-alt"></i>
+        <span class="menu-text">POS收银</span>
+      </a>
+
+      <b class="arrow"></b>
+    </li>
+
+
+    <li class="">
+      <a data-href="<%= orders_path(:workflow_state => "all") %>" >
+        <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">
+                订单管理
+            </span>
+      </a>
+      <b class="arrow"></b>
+    </li>
+
+    <li class="open">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+        <span class="menu-text">数据中心</span>
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+      <ul class="submenu">
+
+        <li class="">
+          <a data-href="<%= statistics_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            统计
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= statistic_products_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            商品统计
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= statistic_orders_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            订单统计
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+    <li class="open">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+        <span class="menu-text">系统设置</span>
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+      <ul class="submenu">
+
+        <li class="">
+          <a data-href="<%= userinfos_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            用户信息
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= carousels_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            轮播广告设置
+          </a>
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= cashes_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            现金管理
+          </a>
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= user_integrals_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            积分管理
+          </a>
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= userinfo_asks_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            申请消息反馈纪录
+          </a>
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+    <li class="">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+        <span class="menu-text">公告</span>
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+      <ul class="submenu">
+
+        <li class="">
+          <a href="<%= announcements_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            公告管理
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a href="<%= announcement_categories_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            公告种类管理
+          </a>
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+    <li class="open">
+
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-pencil-square-o"></i>
+        <span class="menu-text">营销活动</span>
+
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+
+      <ul class="submenu">
+        <li class="">
+          <a data-href="<%= "#{full_reductions_path}?preferential_way=1" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            满减现金
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{full_reductions_path}?preferential_way=5" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            满赠商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{full_reductions_path}?preferential_way=2" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            满送积分
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{full_reductions_path}?preferential_way=3" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            满送优惠卷
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= coupons_path %> ">
+            <i class="menu-icon fa fa-caret-right"></i>
+            优惠卷
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{full_reductions_path}?preferential_way=4" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            买赠
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= panic_buyings_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            秒杀
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{promotion_discounts_path}?type=1" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            促销
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= "#{promotion_discounts_path}?type=0" %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            打折
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
+  </ul><!-- /.nav-list -->
+
+  <!-- #section:basics/sidebar.layout.minimize -->
+  <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+    <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+  </div>
+
+  <!-- /section:basics/sidebar.layout.minimize -->
+  <script type="text/javascript">
+    try {
+      ace.settings.check('sidebar', 'collapsed')
+    } catch (e) {
+    }
+  </script>
+</div>
+
+<!-- /section:basics/sidebar -->

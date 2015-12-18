@@ -1,0 +1,1 @@
+json.extract! @userinfo,:id,:location,:location_data,:approver,:busp,:h_lowestprice,:h_fright, :footp,:healthp, :taxp, :orgp, :idpf, :idpb, :name, :address, :shopname,:integral, :lng, :lat, :fright,:lowestprice, :pdistance, :start_business,:end_business, :city, :created_at, :updated_at

@@ -1,0 +1,58 @@
+@charset "utf-8";
+*{ margin:0; padding:0; font-family:"微软雅黑";}
+.main{ width:660px; margin:0 auto;}
+.main .main_top{ padding:40px 0 6px; overflow:hidden; border-bottom:1px solid #dddddd;}
+.main .main_top .logo,.main .main_top .main_out,.main .main_top .main_txt{float:left; line-height:50px; color:#333333}
+.main .main_top{ padding:px 0;}
+.main .main_top .logo{ width:42px;}
+.main .main_top .logo img{ width:100%;}
+.main .main_top .main_out{ padding:0 10px; font-size:24px; font-weight:bold; border-right:1px solid #dddddd;}
+.main .main_top .main_txt{ padding:0 10px; font-size:18px; }
+.main .main_top a{ color:#fd4638; display:block; float:right; padding-right:10px; text-decoration:none; font-size:14px;line-height:50px;}
+em{ color:#C00;padding-top: 11px; font-family:"微软雅黑";}
+span.error{height:12px; font-size:12px; font-family:"微软雅黑";  line-height:12px; margin-left:10px; margin-top:8px;}
+/**/
+.con,#con2,.con3{ padding:30px 20px; overflow:hidden; margin: 0px auto}
+.con .con_left{ float:left; font-size:14px; line-height:40px; color:#333333;}
+.con .con_left .con_group{ overflow:hidden; margin-bottom:14px;}
+.con_label{ float:left; text-align:right; width:90px; margin-right:10px;}
+.frm_controls{ float:right;width:202px;margin-right:60px; overflow:hidden;}
+input.con_input{ width:200px; height:38px; border:1px solid #dddddd;}
+input#input1{ width:92px; margin-right:20px; height:38px; float:left;}
+input.unchanged{ float:left;  height:38px; line-height:38px; width:80px; text-align:center;}
+span.lbl_content{ color:#666666; font-size:12px;}
+label a{ color:#fd473a; text-decoration:none; float:right; font-size:12px;}
+.con .con_right{ float:right; width:160px; height:210px; padding:20px; background-color:#efefef;}
+.con .con_right .con_logo{ width:96px; margin:0 auto; margin-bottom:20px;}
+.con .con_right .con_logo img{ width:100%;}
+.con .con_right .con_txt{ color:#666666; line-height:24px; font-size:14px; text-align:center; margin-bottom:8px;}
+.con .con_right .con_txt .con_span{ font-weight:bold; font-size:16px;}
+.con .con_right .con_dw{ position:relative; background-color:#fd4638;border-radius:6px 6px; border:1px solid #fd4638;}
+.con .con_right .con_dw a#con_li{ position:relative; display:block; height:30px; text-decoration:none; line-height:30px; width:160px; text-align:center;  color:#FFF; font-size:16px; font-weight:bold;}
+.con .con_right .con_dw a img{ display:block; position:relative; left:20px; top:-24px;}
+.con .con_right .con_dw:hover .con_xz{ display:block;}
+#telphonen{background-color: #eee;}
+.con_xz{ display:none; z-index:999; position:absolute; left:-300px; top:-124px; width:280px; background:url(../images/regis/juju.png) no-repeat; background-size:100% 100%;padding:20px; background-origin:border-box;}
+.con_xztxt{text-align:center; font-size:18px; margin:0 30px 10px 0; font-weight:bold; padding:6px 0; line-height:30px; border-bottom:1px solid #e3e3e3; color:#3b3c3e;}
+.con .con_right .con_dw:hover .con_xz{ display:block;}
+.con_xztxtone{ width:280px; overflow:hidden;font-size:18px; font-weight:bold; padding:2px 0 4px; line-height:30px;}
+.con_xztxtleft{ width:120px; float:left; margin-right:20px;}
+.con_xzne{text-align:center; font-size:16px;}
+.con_xztxtleft img{ width:100%; cursor:pointer;}
+.con_xzte a.con_dwa{ width:110px; text-align:center; display:block; color:#5d5e59; border:none; background-color:#FFF; font-size:14px; font-weight:normal; text-decoration:underline;}
+
+/**/
+
+footer{ color:#999999; font-size:14px; font-family:arial; line-height:24px; text-decoration:none; padding:16px 0; border-top:1px solid #dddddd; text-align:center;}
+
+input#input2{ width:138px; margin-right:15px; margin-left: 6px; height:38px; float:left; margin-bottom:20px;}
+input.unchanged01{ float:right;  height:38px; line-height:38px; width:90px; text-align:center;}
+
+.con_grou{ width:440px; margin:0 auto; overflow:hidden;}
+.con_grou .label{ width:180px; float:left;height:40px; text-align:right; line-height:40px; float:left;}
+.input{ width:240px; float:right;  height:38px; border:1px solid #dddddd; margin-bottom:10px; padding:0 6px;}
+.frm_control{width:244x; overflow:hidden; margin-bottom:4px;}
+.select{}
+.frm_control input.button01{ width:240px; overflow:hidden;margin-left: 280px; line-height:38px; text-align:center; color:#FFF; background-color:#00d0d0; border-radius:6px 6px; font-size:14px; margin-top:10px !important; font-weight:bold; border:1px solid #00d0d0;}
+input.button{ width:200px; line-height:38px; text-align:center; color:#FFF; background-color:#00d0d0; border-radius:6px 6px; font-size:14px; margin-top:10px !important; font-weight:bold; border:1px solid #00d0d0;}
+.clear{ clear:both;}

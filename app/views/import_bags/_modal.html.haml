@@ -1,0 +1,19 @@
+/模态框
+.modal.fade.bs-example-modal-lg#workflowDealModal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}
+  .modal-dialog{'role'=>'document'}
+    .modal-content
+      .modal-header
+        %button.close{'data-dismiss'=>'modal','aria-label'=>'Close'}
+          %span{'aria-hidden'=>'true'} ×
+        %h4.modal-title Model title
+      .modal-body
+        %form.form#workflowDealForm{'method'=>'post','accept-charset'=>'UTF-8','action'=>'/import_bags/workflow/deal'}
+          %input#state{"type"=>"hidden","name"=>"state","value"=>""}
+          %input#state{"type"=>"hidden","name"=>"id","value"=>""}
+          %input#event{"type"=>"hidden","name"=>"event","value"=>""}
+          .form-group
+            %label.control-label{'for'=>'memo'} 备注:
+            %textarea#memo.form-control{'rows'=>'3','placeholder'=>'审核说明','name'=>'memo'}
+    .modal-footer
+      %button#common_btn_model.btn.btn-primary{'onclick'=>'add_select_product()','style'=>'display:none'} 确定
+      %button#close_btn_model.btn.btn-default{'data-dismiss'=>'modal','style'=>'display:none'} 关闭

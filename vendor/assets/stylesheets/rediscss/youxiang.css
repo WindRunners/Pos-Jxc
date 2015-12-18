@@ -1,0 +1,21 @@
+@charset "utf-8";
+/*重置*/
+*{ margin:0px; padding:0px; font-family:"微软雅黑";}
+html,body{ width:100%; min-width:1140px;}
+/*注册*/
+#zhuce{ width:100%; height:45px; line-height:45px; text-align:center; color:#000; font-size:18px;  background:#FFF; margin-bottom:50px; border-bottom:1px solid #d8d8d8;}
+#zhuce .zhuce{ width:25%; float:left;}
+#zhuce .zhuce_yx{ width:25%; background:url(../images/jiantou_02.png) no-repeat;}
+#zhuce .zhuce_xin{ background:url(../images/daohang_02.png) no-repeat; background-size:100% 100%; color:#FFF;}
+/*内容*/
+.con{ padding-top:160px; font-size:18px;}
+.con,.con .main{ width:1106px; margin:0 auto; background:#fff; font-size:14px; line-height:26px;}
+.con .main .main_left{ float:left; padding-left:30px;}
+.con .main .main_left .yx_img{background-image: url("../images/youxiang.png");width: 45px;height: 45px}
+.con .main .main_right{ float:left; margin-left:20px;}
+
+.con .main .main_right a.button{ width:106px; height:34px; text-align:center; line-height:34px; color:#FFF; text-decoration:none; margin-bottom:60px; background:#44b549; display:block; color:#FFF; font-size:16px;}
+.con .main .main_right .main_txt{ margin-bottom:0px !important; color:#ccc; display:block; font-size:16px;}
+.con .main .main_right .txt{ font-family:'Arial'; letter-spacing:1px; color:#44b549; font-size:16px;}
+.con .main .main_right  p strong{ font-size:16px;}
+.con .main .main_right  p strong a{ color:#37bddc; text-decoration:none; font-family:"微软雅黑";font-size:16px;}

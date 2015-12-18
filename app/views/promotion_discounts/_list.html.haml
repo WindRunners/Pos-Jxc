@@ -1,0 +1,14 @@
+= link_to raw("新建活动"), '', "data-href" => "#{new_promotion_discount_path}?type=#{@type}", :class => "btn btn-primary"
+%p
+%table{:class => "table-center table table-striped table-bordered table-hover", :id => "promotion_discounts", "data-source" => "#{promotion_discounts_url(format: "json")}?type=#{@type}"}
+  %thead
+    %tr
+      %th= t(:title, scope: "mongoid.attributes.PromotionDiscount")
+      %th= t(:validity_time, scope: "mongoid.attributes.PromotionDiscount")
+      %th= t(:aasm_state, scope: "mongoid.attributes.PromotionDiscount")
+      %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+:javascript
+  $(document).ready(function () {
+      PromotionDiscountsIndex();
+  });

@@ -1,0 +1,332 @@
+<% workflow_state = @order.workflow_state.to_sym %>
+<% def format_encryption(str) %>
+    <% return str[0, str.length / 2] + "*" * (str.length % 2 == 0 ? str.length / 2 : str.length / 2 + 1) %>
+<% end %>
+<br/>
+<div class="row" style="padding-left: 80px;padding-right: 80px">
+  <table id="" class="table table-bordered">
+    <tbody>
+    <tr>
+      <td style="padding: 3%">
+        <div>
+          <ul class="steps">
+
+            <% if :generation == workflow_state %>
+                <% states = 2 %>
+            <% elsif :paid == workflow_state %>
+                <% states = 3 %>
+            <% elsif :distribution == workflow_state %>
+                <% states = 4 %>
+            <% elsif :receive == workflow_state %>
+                <% states = 5 %>
+            <% elsif :completed == workflow_state %>
+                <% states = 6 %>
+            <% else %>
+                <% states = 0 %>
+            <% end %>
+
+
+            <% if 1 == states %>
+                <li class="active" data-step="1">
+            <% elsif 1 < states %>
+                <li class="complete" data-step="1">
+            <% else %>
+                <li data-step="1">
+            <% end %>
+            <span class="step">1</span>
+            <span class="title">下单</span>
+            </li>
+
+            <% if 2 == states %>
+                <li class="active" data-step="2">
+            <% elsif 2 < states %>
+                <li class="complete" data-step="2">
+            <% else %>
+                <li data-step="2">
+            <% end %>
+            <span class="step">2</span>
+            <span class="title">付款</span>
+            </li>
+
+            <% if 3 == states %>
+                <li class="active" data-step="3">
+            <% elsif 3 < states %>
+                <li class="complete" data-step="3">
+            <% else %>
+                <li data-step="3">
+            <% end %>
+            <span class="step">3</span>
+            <span class="title">接单</span>
+            </li>
+
+            <% if 4 == states %>
+                <li class="active" data-step="4">
+            <% elsif 4 < states %>
+                <li class="complete" data-step="4">
+            <% else %>
+                <li data-step="4">
+            <% end %>
+            <span class="step">4</span>
+            <span class="title">发货</span>
+            </li>
+
+            <% if 5 == states %>
+                <li class="active" data-step="5">
+            <% elsif 5 < states %>
+                <li class="complete" data-step="5">
+            <% else %>
+                <li data-step="5">
+            <% end %>
+            <span class="step">5</span>
+            <span class="title">完成</span>
+            </li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <table id="" class="table table-bordered">
+    <tbody>
+    <tr>
+      <td width="40%" style="padding: 3%">
+        <table id="" style="width: 100%;table-layout: fixed">
+          <tbody>
+          <tr>
+            <td width="30%">
+              <p><h4>订单信息</h4></p>
+            </td>
+            <td align="right">
+              <p><h5>担保交易</h5></p>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              <p>订单编号：</p>
+            </td>
+            <td>
+              <p><%= @order.orderno %></p>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              <p>付款方式：</p>
+            </td>
+            <td>
+              <% if 1 == @order.paymode %>
+                  <p>支付宝</p>
+              <% elsif 2 == @order.paymode %>
+                  <p>微信</p>
+              <% else %>
+                  <p><span style="color: #F60">货到付款</span></p>
+              <% end %>
+            </td>
+          </tr>
+
+          <% if :distribution == workflow_state %>
+              <tr>
+                <td align="">
+                  <p>买家：</p>
+                </td>
+                <td>
+
+                  <p><%= @order.consignee %></p>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <div class="hr hr-18 dotted hr-double"></div>
+                </td>
+              </tr>
+              <tr>
+                <td align="">
+                  <p>联系方式：</p>
+                </td>
+                <td>
+                  <p><%= @order.telephone %></p>
+                </td>
+              </tr>
+              <tr>
+                <td align="">
+                  <p>收货信息：</p>
+                </td>
+                <td style="word-wrap:break-word;">
+                  <p><%= @order.address %></p>
+                </td>
+              </tr>
+          <% else %>
+              <tr>
+                <td align="">
+                  <p>买家：</p>
+                </td>
+                <td>
+                  <p><%= format_encryption(@order.consignee) %></p>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <div class="hr hr-18 dotted hr-double"></div>
+                </td>
+              </tr>
+              <tr>
+                <td align="">
+                  <p>联系方式：</p>
+                </td>
+                <td>
+                  <p><%= format_encryption(@order.telephone) %></p>
+                </td>
+              </tr>
+              <tr>
+                <td align="">
+                  <p>收货信息：</p>
+                </td>
+                <td style="word-wrap:break-word;">
+                  <p><%= format_encryption(@order.address) %></p>
+                </td>
+              </tr>
+
+          <% end %>
+          <tr>
+            <td align="">
+              <p>买家留言：</p>
+            </td>
+            <td>
+              <p><%= @order.remarks %></p>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+      <td style="padding: 3%">
+        <table id="" style="width: 100%;table-layout: fixed">
+          <tbody>
+          <tr>
+            <td width="10%">
+              <span data-original-title="Popover on hover" class="help-button" data-rel="popover" data-trigger="hover" data-placement="left" data-content="More details." title="">?</span>
+            </td>
+            <td>
+              <% if :generation == workflow_state %>
+                  <p><h4>订单状态：待付款</h4></p>
+              <% elsif :paid == workflow_state %>
+                  <p><h4>订单状态：待接单</h4></p>
+              <% elsif :distribution == workflow_state %>
+                  <p><h4>订单状态：配送中</h4></p>
+              <% elsif :receive == workflow_state %>
+                  <p><h4>订单状态：配送完成</h4></p>
+              <% elsif :cancelled == workflow_state %>
+                  <p><h4>订单状态：已取消</h4></p>
+              <% elsif :completed == workflow_state %>
+                  <p><h4>订单状态：已完成</h4></p>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              &nbsp;
+            </td>
+            <td align="">
+              <p>如买家未在规定时间内付款，订单将按照设置逾期自动关闭；</p>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              &nbsp;
+            </td>
+            <td align="">
+              <div class="hidden-sm hidden-xs action-buttons">
+                <p>
+                  <% if :paid == workflow_state %>
+                      <a data-href="<%= "#{order_receive_order_path(@order.id)}?tab=#{params[:tab]}" %>" class="btn btn-sm btn-warning"><i class="ace-icon">接&nbsp;&nbsp;单</i></a>
+                      &nbsp;
+                  <% elsif :distribution == workflow_state %>
+                      <a data-href="<%= "#{order_distribution_completed_path(@order.id)}?tab=#{params[:tab]}" %>" class="btn btn-sm btn-success"><i class="ace-icon">配送完成</i></a>
+                      &nbsp;
+                  <% end %>
+                  <a data-href="<%= orders_path(:workflow_state => params[:tab]) %>" class="btn btn-sm btn-info"><i class="ace-icon">返&nbsp;回</i></a>
+                </p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <br/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <br/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <br/>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <div class="hr hr-18 dotted hr-double"></div>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              &nbsp;
+            </td>
+            <td align="">
+              <p><span style="color: #F60">温馨提醒：</span></p>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              &nbsp;
+            </td>
+            <td align="">
+              <p>请务必等待订单状态变更为“买家已付款，等待卖家发货”后再进行发货。</p>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <%- model_good_class = Ordergood -%>
+  <div class="widget-box">
+    <div class="widget-main no-padding">
+      <table id="" class="table " style="width: 100%">
+        <thead>
+        <tr>
+          <th style="text-align: center"></th>
+          <th style="text-align: center"> <%= model_good_class.human_attribute_name(:title) %></th>
+          <th style="text-align: center"> <%= model_good_class.human_attribute_name(:specification) %></th>
+          <th style="text-align: center"> <%= model_good_class.human_attribute_name(:quantity) %></th>
+          <th style="text-align: center"> <%= model_good_class.human_attribute_name(:price) %></th>
+          <th style="text-align: center"> <%= model_good_class.human_attribute_name(:is_gift) %></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @order.ordergoods.each do |ordergood| %>
+            <tr>
+              <td style="text-align: center">
+                <img src="<%= RestConfig::IMG_SERVER + ordergood.avatar_url %>" height="60px" width="60px">
+              </td>
+              <td style="text-align: center">
+                <a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></td>
+              <td style="text-align: center"><%= ordergood.specification %></td>
+              <td style="text-align: center"><%= ordergood.quantity %></td>
+              <td style="text-align: center"><%= ordergood.price %></td>
+              <td style="text-align: center">
+                <% if ordergood.is_gift %>
+                    <span class="label label-danger">赠</span>
+                <% end %>
+              </td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <div class="message-footer clearfix" style="text-align: right">
+        应收总价：<span style="color: #55bd47"> <%= number_to_currency(@order.paycost, :unit => "￥") %></span>
+      </div>
+    </div>
+  </div>
+</div>

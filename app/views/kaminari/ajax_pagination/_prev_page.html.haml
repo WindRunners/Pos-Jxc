@@ -1,0 +1,2 @@
+%li
+  = link_to_unless current_page.first?, raw(t 'views.pagination.previous'), "javascript:void(0);", :rel => 'prev', :remote => remote, :onclick => "ajax_pagination(#{current_page - 1})"

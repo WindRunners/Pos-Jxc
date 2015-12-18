@@ -1,0 +1,50 @@
+
+%h1 名酒关联
+
+
+%table.table#resultTable
+  %thead
+    %tr
+      %th 名字
+      %th 种类
+      %th 价格区间
+      %th 浏览次数
+      %th 创建时间
+      %th 状态
+      %th 解除关联
+
+  %tbody
+    -  @data['wines'].each do |w|
+      %tr
+        %td= w.name
+        %td= w.category
+        %td= w.price
+        %td= w.hits
+        %td= w.created_at
+        %td= w.status
+        %td= link_to '解除关联',chateau_resolve_wine_path(:wine_id =>w.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+%br
+%input{"type"=>"hidden","name"=>"btn_chateau_name","id"=>"btn_chateau_id","value"=>@data['chateau'].id}
+
+
+%button.btn.btn-primary{"data-target" => "#exampleModal", "data-toggle" => "modal", "data-whatever" => "@mdo", :type => "button"} 关联名酒
+
+#exampleModal.modal.fade{"aria-labelledby" => "exampleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog{:role => "document"}
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4#exampleModalLabel.modal-title 名酒列表
+      .modal-body
+        = render 'wines'
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭
+        %button.btn.btn-primary{:type => "submit",'onclick'=>'from_submit()'} 关联
+
+
+
+:javascript
+
+
+

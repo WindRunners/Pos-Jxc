@@ -1,0 +1,41 @@
+<div id="page">
+  <% if flash[:alert] %>
+      <p class="flash-error"><%= flash[:alert] %></p>
+  <% end %>
+  <% if flash[:notice] %>
+      <p class="flash-notice"><%= flash[:notice] %></p>
+  <% end %>
+  <%= yield %>
+</div>
+
+<div class="widget-box">
+  <div class="widget-header">
+    <h4 class="widget-title">请输入条形码</h4>
+  </div>
+
+  <div class="widget-body">
+    <div class="widget-main">
+      <%= form_tag '/products', method: :post, :class => "form-search", remote:true do %>
+
+          <%= text_field_tag 'qrcode', nil, placeholder: '请输入条形码', :class => "col-sm-3" %>
+
+          <button id="add" type="submit" class="btn btn-info btn-sm">
+            <i class="ace-icon fa fa-search bigger-110"></i>查询
+          </button>
+
+          <%= link_to '添加测试数据',
+                      demo_products_path,
+                      :data => {:confirm => '你确定添加测试数据吗？'},
+                      :class => 'btn btn-info btn-sm' %>
+
+          <%= link_to '从市场选商品',
+                      '', 'data-href' => warehouse_index_products_path,
+                      :class => 'btn btn-info btn-sm' %>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+

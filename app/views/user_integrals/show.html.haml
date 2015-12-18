@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Integral:
+  = @user_integral.integral
+%p
+  %b State:
+  = @user_integral.state
+%p
+  %b Type:
+  = @user_integral.type
+
+= link_to 'Edit', edit_user_integral_path(@user_integral)
+\|
+= link_to 'Back', user_integrals_path

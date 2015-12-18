@@ -1,0 +1,42 @@
+.dataTables_wrapper.form-inline.no-footer{:id => "selectProducts"}
+  .row
+    .col-xs-6
+      .dataTables_info{:id => "dynamic-table_info", :role => "status", "aria-live" => "polite"}
+        = page_entries_info @products
+    .col-xs-6
+      .dataTables_paginate.paging_simple_numbers{:id => "dynamic-table_paginate"}
+        %ul{:class => "pagination"}
+          %li{:class => "paginate_button previous disabled", "aria-controls" => "dynamic-table", :tabindex => "0", :id => "dynamic-table_previous"}
+            = paginate @products
+  %table{:class => "table table-striped table-bordered table-hover"}
+    %thead
+      %tr
+        %th= check_box_tag "selectAll"
+        %th 缩略图
+        %th qrcode
+        %th title
+        %th purchasePrice
+        %th price
+        %th stock
+        %th integral
+    %tbody
+      - @products.each do |product|
+        %tr
+          %td= check_box_tag "product_id", product.id
+          %td
+            %img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+          %td= product.qrcode
+          %td= product.title
+          %td= product.purchasePrice
+          %td= product.price
+          %td= product.stock
+          %td= product.integral
+  .row
+    .col-xs-6
+      .dataTables_info{:id => "dynamic-table_info", :role => "status", "aria-live" => "polite"}
+        = page_entries_info @products
+    .col-xs-6
+      .dataTables_paginate.paging_simple_numbers{:id => "dynamic-table_paginate"}
+        %ul{:class => "pagination"}
+          %li{:class => "paginate_button previous disabled", "aria-controls" => "dynamic-table", :tabindex => "0", :id => "dynamic-table_previous"}
+            = paginate @products

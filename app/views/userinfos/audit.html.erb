@@ -1,0 +1,103 @@
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"></script>
+
+
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag "rediscss/regissh.css" %>
+
+</head>
+<body>
+<!--header-->
+<div class="header">
+  <div class="hbox">
+    <%= image_tag("img01.png") %><div class="ahb">
+    <div class="ahb01"></div>
+    <div class="ahb02">
+      <div class="ahb0201"><%= current_user.mobile %></div>
+      <%= image_tag ("img15.png"),:class=>"ahb0202" %>
+      <div class="ahb0203"><%= link_to raw("<i class='qq_close'></i>退出"), destroy_user_session_path, :method=>'delete' %></div>
+    </div>
+  </div>
+
+  </div>
+
+</div>
+<!--内容-->
+<div class="zz">
+  <div class="nav">
+    <div class="na01">
+      <div class="na0101">1、基本信息</div>
+    </div>
+    <div class="na02">
+      <div class="na0201">2、邮箱激活</div>
+    </div>
+    <div class="na03">
+      <div class="na0301">3、信息登记</div>
+    </div>
+    <div class="na04">
+      <div class="na0401">4、审核</div>
+    </div>
+  </div>
+
+  <div class="nr">
+    <div class="nr01">
+      <div class="nr0101">
+        <%= image_tag("img05.png") %>
+      </div>
+      <div class="nr0102">审核中 . . .</div>
+    </div>
+    <div class="nr02">对不起，你提交的信息正在审核中，我们会在24小时内以邮件方式发到你的邮箱中，请注意查收！</div>
+  </div>
+</div>
+
+<!--footer-->
+<div class="footer">
+  <div class="ftbox">
+    <div class="ft01">
+      <a href="">关于我们</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">服务协议</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">运营规范</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">辟谣中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">客服中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">联系邮箱</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">侵权投诉</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft02">
+      <a>Copyright<span style="font-family:'Arial';">&copy;</span>2012-2015  tencent. All  Rights  Reserved.</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

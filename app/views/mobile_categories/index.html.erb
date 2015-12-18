@@ -1,0 +1,48 @@
+<%- model_class = MobileCategory -%>
+
+<%= link_to '新建商品分组',
+            '', 'data-href'=>new_mobile_category_path,
+            :class => 'btn btn-primary' %>
+
+<div class="dataTables_wrapper form-inline no-footer">
+
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:title) %></th>
+      <th>商品数</th>
+      <th><%= model_class.human_attribute_name(:num) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @categories.each do |category| %>
+        <tr>
+          <td><%= best_in_place category, :title %></td>
+          <td><%= category.product_count %></td>
+          <td><%= best_in_place category, :num %></td>
+          <td><%= category.created_at %></td>
+          <td>
+            <div class="hidden-sm hidden-xs action-buttons">
+              <a class="btn btn-xs btn-info" data-href="<%= edit_mobile_category_path(category) %>">
+                <i class="ace-icon fa fa-pencil bigger-130"></i>
+              </a>
+
+              <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
+                          mobile_category_path(category),
+                          :method => :delete,
+                          :remote => true,
+                          :data => {:confirm => '你确定删除该商品吗?'},
+                          :class => 'btn btn-xs btn-danger' %>
+
+
+            </div>
+          </td>
+        </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+</div>
+

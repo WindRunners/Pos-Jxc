@@ -1,0 +1,71 @@
+// Place all the styles related to the cashiers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#divTotalPrice
+{
+  height: 100px;
+  font-weight: 900;
+  font-size: 60px;
+}
+
+#divDiscount
+{
+  padding-left: 200px;
+  font-size: 25px;
+  font-weight: 300;
+}
+
+#tdCalculation
+{
+  width: 70%;
+  background-color: #1E90FF;
+}
+
+#divProductQuantity
+{
+  font-weight: 300;
+  font-size: 35px;
+}
+
+.smallTicketName
+{
+  width: 40mm;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+#divSmallTicket
+{
+  display: none;
+}
+
+#tableSmallTicket
+{
+  border: none;
+  overflow: hidden;
+  width: 62mm;
+
+  tr
+  {
+    width: 62mm;
+  }
+
+  th, td
+  {
+    height: 30px !important;
+  }
+}
+
+.tdSeparate
+{
+  width: 62mm;
+  white-space: nowrap;
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.footer-index
+{
+  z-index: 1 !important;
+}

@@ -1,0 +1,45 @@
+@charset "utf-8";
+/*重置*/
+*{ margin:0px; padding:0px; font-family:"微软雅黑";}
+html,body{ width:100%; min-width:1140px;}
+/*注册*/
+#zhuce{ width:100%; height:45px; line-height:45px; text-align:center; color:#000; font-size:18px;  background:#FFF; margin-bottom:50px; border-bottom:1px solid #d8d8d8;}
+#zhuce .zhuce{ width:25%; float:left;}
+#zhuce .zhuce_yx{ width:25%; background:url(../images/jiantou_02.png) no-repeat;}
+#zhuce .zhuce_xin{ background:url(../images/daohang_02.png) no-repeat; background-size:100% 100%; color:#FFF;}
+/*内容*/
+.main{ width:1102px; margin:0 auto; background:#fff;}
+.main p{ font-size:14px; margin-bottom:46px;}
+.main .con_gys{ width:340px; height:514px; border:2px solid #f0f0f0; padding-top:30px; background:#fff; float:left;}
+.main .con_cen{ margin:0px 20px;}
+.main .con_gys h2{ width:340px; text-align:center; line-height:40px; margin-bottom:20px;}
+.main .con_gys h2.gongying{ background:url(../images/gongying.jpg) no-repeat 90px 6px;}
+.main .con_gys h2.jingxiao{background:url(../images/jingxiao.jpg) no-repeat 90px 6px;}
+.main .con_gys h2.geren{background:url(../images/geren.jpg) no-repeat 90px 6px;}
+.main .con_gys .txt{ width:284px; height:406px; margin:0 auto;}
+.main .con_gys .txt .txt_zi{ width:284px; height:406px; font-size:14px; line-height:22px;}
+.main .con_gys .txt .txt_zi p{ width:284px; height:124px;}
+.main .con_gys .txt .txt_zi .txt_zi_shi{ width:274px; height:32px; text-align:right; line-height:32px;border-bottom:2px solid #f0f0f0; padding-right:16px;}
+
+.main .con_gys .txt .txt_zi .txt_zi_rong{ width:284px; height:226px; }
+.main .con_gys a.xuan{ background:#fbfbfb; height:47px; text-align:right; width:308px; display:block; line-height:47px; padding-right:32px; font-weight:bold; text-decoration:none; color:#000;}
+
+
+/*按钮---弹框*/
+
+/*弹窗*/
+.shadow{ background:#000000; opacity:0.4; position:absolute; z-index:1; display:none;}
+.alert{ background:#fff; width:700px; height:400px; position:absolute; z-index:2; display:none; margin-top:200px;}
+/*温馨提示*/
+.alert .alert_wx{ width:670px; height:50px; line-height:50px; padding:0px 15px; font-size:16px; background-color:#f2f3f8; color:#666;}
+.alert .alert_wx .close{ float:right; font-size:20px;}
+/*警告内容*/
+.alert .alert_main{ width:340px; height:60px; padding:110px 180px;}
+.alert .alert_main .alert_main_left{ float:left; width:50px; font-size:50px;}
+.alert .alert_main .alert_main_right{font-size:16px; float:right; width:270px; padding-left:20px; line-height:30px;}
+.alert .alert_main .alert_main_right p{  font-weight:bold;}
+.alert .alert_main .alert_main_right span{ color:#ccc; font-size:14px;}
+/*弹框按钮*/
+.alert .alert_botton{ width:228px; height:40px; padding:15px 236px; margin:0 auto; background:#f2f3f8;}
+.alert .alert_botton a.alert_botton_que{ width:106px; height:40px; line-height:40px; font-size:16px; background-color:#44b549;  text-decoration:none; color:#FFF; text-align:center; display:block; float:left;}
+.alert .alert_botton a.alert_botton_qux{font-size:16px; margin-left:14px; border:1px solid #ccc; height:38px; width:106px; line-height:38px; background-color:#fff; text-decoration:none; color:#000;  text-align:center; display:block; float:left;}

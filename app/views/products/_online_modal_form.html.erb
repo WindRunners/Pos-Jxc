@@ -1,0 +1,75 @@
+<%- model_class = Product -%>
+
+<div id="modal-form" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_tag('', id:'rack_form', remote: true) do %>
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="blue bigger">请完善商品上架信息</h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-5">
+                <div class="space"></div>
+
+                <img id="product_avatar" width="245px" height="245px" class="img-responsive center-block"/>
+              </div>
+
+              <div class="col-xs-12 col-sm-7">
+                <div class="form-group">
+                  <label id="product_title" for="form-field-select-3"></label>
+                </div>
+
+
+                <div class="form-group horizontal">
+                  <label for="form-field-username"><%= model_class.human_attribute_name(:purchasePrice) %>:</label>
+                  <%= number_field_tag 'purchasePrice' %>
+                </div>
+
+                <div class="form-group horizontal">
+                  <label for="form-field-username"><%= model_class.human_attribute_name(:price) %>:</label>
+                  <%= number_field_tag 'price' %>
+                </div>
+
+                <div class="form-group horizontal">
+                  <label for="form-field-username"><%= model_class.human_attribute_name(:stock) %>:</label>
+                  <%= number_field_tag 'stock' %>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-sm" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              取消
+            </button>
+
+            <button class="btn btn-sm btn-primary" type="submit">
+              <i class="ace-icon fa fa-check"></i>
+              上架
+            </button>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("#rack_form").validate({
+    rules: {
+      "purchasePrice": {required:true,min:0.01},
+      "price": {required:true,min:0.01},
+      "stock": {required:true,min:1},
+    },
+    messages: {
+      "purchasePrice": "进价必须大于0",
+      "price": "进价必须大于0",
+      "stock": "库存必须大于0"
+    }
+  })
+</script>

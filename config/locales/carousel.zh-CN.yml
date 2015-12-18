@@ -1,0 +1,10 @@
+zh-CN:
+  mongoid:
+   models:
+     carousel: "公告"
+   attributes:
+     carousel:
+       area: "名字"
+       start_time: "开始时间"
+       end_time: "结束时间"
+       url: "连接"

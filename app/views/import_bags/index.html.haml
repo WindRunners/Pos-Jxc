@@ -1,0 +1,31 @@
+%h1 礼包列表
+
+%form#search-scope.form-inline
+  .form-group
+    %label{"for"=>"name"} 名称:
+    %input#name.form-control{'placeholder'=>'名称'}
+  .form-group
+    %label{"for"=>"business_user"} 业务员:
+    %input#business_user.form-control{'placeholder'=>'业务员'}
+  .form-group
+    %label{"for"=>"sender_mobile"} 送礼人:
+    %input#sender_mobile.form-control{'placeholder'=>'送礼人'}
+  .form-group
+    %label{"for"=>"workflow_state"} 状态:
+    %select#workflow_state.form-control
+      %option{value:'default'} --请选择--
+      %option{value:''} 未发起
+      %option{value:'new'} 未通过
+      %option{value:'first_check'} 一级审核
+      %option{value:'second_check'} 二级审核
+      %option{value:'passed'} 审核通过
+      %option{value:'canceled'} 作废
+
+  %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+
+= render 'tablelist'
+%br
+
+= link_to '新建礼包', new_import_bag_path,class: 'btn btn-default'
+
+= render 'modal'

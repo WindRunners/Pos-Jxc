@@ -1,0 +1,69 @@
+<div class="main_out">
+  <div style="height: 300px">
+    <div class="row align-top">
+      <a target="_blank" data-href="<%= product_warehouse_show_path(product) %>">
+        <img src="<%= RestConfig::PRODUCT_SERVER + product.main %>" width="245px" height="245px" class="img-responsive center-block"/>
+      </a>
+    </div>
+
+    <div class="row center" style="padding: 0px 20px 0px 20px">
+      <%= product.title %>
+    </div>
+  </div>
+
+  <div class="row" style="padding:10px;" >
+    <div class="col-xs-6 align-left">
+      <%= image_tag('/images/star.png') %>
+    </div>
+    <div class="col-xs-6 align-right">
+      <% if product.exists? current_user %>
+          <%= image_tag('/images/exist.png') %>
+      <% else %>
+          <%= image_tag('/images/add.png', id: "#{product.id}_tag") %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="main_txt01 center">
+    <div class="row" style="margin-bottom:15px;padding: 8px 20px 0px 20px ">
+      <%= product.title %>
+    </div>
+
+    <% if product.exists? current_user %>
+        <div id="<%= product.id %>_added" class="main_added">已添加到店铺</div>
+    <% else %>
+      <div id="<%= product.id %>_added" class="main_added" style="display: none">已添加到店铺</div>
+      <div id="<%= product.id %>_rack">
+      <a href="#modal-form", data-toggle = "modal", class='add-btn' onclick="fill_product('<%= product.id %>');" >+上架到店铺</a>
+      <%= button_to '+上架到仓库', product_rack_path(product, 'js'), :method => 'post', :class => 'add-btn', :remote=>true, :onclick => "adding('#{product.id}');" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<script>
+  function adding(id) {
+    $("#" + id + "_rack").hide();
+
+    $("#" + id + "_added").css('display', 'block');
+    $("#" + id + "_added").text('添加中...');
+  }
+
+    function fill_product(id) {
+      gon.state = 'online';
+
+      console.log(gon.products)
+
+      if (id.length) {
+        var product = gon.products[id];
+      } else {
+        var product = gon.product;
+      }
+
+      $("#rack_form").attr('action', '/products/'+product.id+'/rack');
+      $("#product_avatar").attr('src', "<%= RestConfig::PRODUCT_SERVER%>" + product.main);
+      $("#product_title").text(product.title)
+    }
+
+</script>

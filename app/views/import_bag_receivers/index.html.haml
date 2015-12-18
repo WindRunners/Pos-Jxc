@@ -1,0 +1,51 @@
+%h1= notice.present? ? notice : '目标账号列表'
+
+%form#search-scope.form-inline
+  .form-group
+    %label{"for"=>"mobile"} 手机号码:
+    %input#mobile.form-control{'placeholder'=>'手机号码'}
+  %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 目标账号
+      %th 备注
+      %th
+  %tbody
+    - @import_bag_receivers.each do |import_bag_receiver|
+      %tr
+        %td= import_bag_receiver.receiver_mobile
+        %td= import_bag_receiver.memo
+        %td
+          = link_to '详细', import_bag_receiver, :class => 'btn btn-minier btn-yellow'
+          - if policy(@import_bag).update?
+            = link_to '修改', edit_import_bag_receiver_path(import_bag_receiver),:class => 'btn btn-minier btn-primary'
+          - if policy(@import_bag).update?
+            = link_to '删除', import_bag_receiver, :method => :delete, :data => { :confirm => '删除后不可恢复,确定删除当前账号吗?' },:class => 'btn btn-minier btn-danger'
+%div.row
+  %div.col-xs-6
+    %div#dynamic-table_info.dataTables_info
+      = page_entries_info @import_bag_receivers, :entry_name => '目标账号'
+  %div.col-xs-6
+    %div#dynamic-table_paginate.dataTables_info.dataTables_paginate.paging_simple_numbers
+      = paginate @import_bag_receivers
+%br
+
+- if policy(@import_bag).update?
+  = link_to '新建', new_import_bag_import_bag_receiver_path(@import_bag),class: 'btn btn-default'
+
+- if policy(@import_bag).update?
+  %br
+  %h1 批量导入礼包
+  = form_tag({action: :batch}, multipart: true) do
+    = file_field_tag 'excel_data',accept:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
+    = submit_tag '批量导入' ,class: 'btn btn-default',onclick: 'return batch_import_check()'
+%br
+- if policy(@import_bag).start?
+  = link_to '发起审核',"javascript:showWfDealModel('start','#{@import_bag.id}')",:class => 'btn btn-default'
+= link_to '礼包详细', @import_bag, :class => 'btn btn-default'
+= link_to '返回礼包列表', import_bags_path,class: 'btn btn-default'
+= link_to '下载模板', "/import_bags/import_bag_receivers/down_templ",class: 'btn btn-default'
+
+= render 'import_bags/modal'

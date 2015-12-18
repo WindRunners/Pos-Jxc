@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>领劵中心</title>
+<%= stylesheet_link_tag "application", :media => "all" %>
+<%= javascript_include_tag "application" %>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    function receiveCoupon(id, platform)
+    {
+        if("android" == platform)
+        {
+            Android.receiveCoupon(id);
+        }
+        else if("ios" == platform)
+        {
+            var url= "myapp:&func=receiveCoupon&product_id=" + id;
+            document.location = url;
+        }
+    }
+</script>
+<style>
+
+body{ margin:0; font-family:"微软雅黑"}
+.container{ padding:0; background-color:#fffad9; width:100%;}
+/*.container .miaosha{  text-align:center; border-bottom:solid 1px #979190;line-height:60px; margin-top:0; margin-bottom:0; background-color:#e0e0e0;}*/ 
+.container #aa{ margin-bottom:20px;}
+.container #aa img{ width:100%;}
+.container .juan{ padding:0 2%;}
+.container .juan01{ background:url(/images/coupon/youhui01.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .juan02{ background:url(/images/coupon/youhui02.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .juan03{ background:url(/images/coupon/youhui03.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .juan .juan_img .img_img{ margin:10px; border-radius:5px; border:1px solid #e0e0e0; padding:4px 1%;}
+.container .juan .juan_img .img_img img{ width:100%}
+.container .juan .juan_img span{ display:block; text-align:center; font-size:110%; line-height:150%; color:#585858; padding-bottom:10px;}
+.container .juan .juanjz{ text-align:center;}
+
+.container .juan .juanjz .span_span02{ font-size:180%;}
+.container .juan .juanjz .span_span03{ font-size:400%;}
+
+.container .juan .juansy div.span_span06{ font-size:100%; float: left; line-height:400%; padding-left:9%;}
+.container .juan .juanjz .span_span02_01,.container .juan .juanjz .span_span03_01,.container .juan .juansy div.span_span06_01{ color:#aaaaaa;}
+.container .juan .juanjz .span_span02_02,.container .juan .juanjz .span_span03_02,.container .juan .juansy div.span_span06_02{ color:#ef523f;}
+.container .juan .juanjz .span_span02_03,.container .juan .juanjz .span_span03_03,.container .juan .juansy div.span_span06_03{ color:#ef523f;}
+
+.container .juan .juanjz div.span_span04{ color:#585858;text-align:left; margin-bottom:5%;  font-size:100%; border-radius:10px; text-indent:12px; line-height:150%; width:100%;}
+.container .juan .juanjz div.span_span04_01{ background:#efefef;}
+.container .juan .juanjz div.span_span04_02{ background:#febcb4;}
+.container .juan .juanjz div.span_span04_03{ background:#febcb4;}
+.container .juan .juansy{ padding:30px 0 0; cursor:pointer;}
+.container .juan .juansy div.span_span05{ padding-left:36%; color:#aaaaaa; font-size:80%; line-height:130%; float:left;/* width:16px; border:1px solid #000;*/}
+
+
+.container .juandata{ color:#FFF; font-size:100%; line-height:160%; padding:0 2%; text-indent:1em; margin-bottom:20px;}
+.container .juandata01{background:url(/images/coupon/youhui01_01.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .juandata02{background:url(/images/coupon/youhui02_02.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .juandata03{background:url(/images/coupon/youhui03_03.png) no-repeat; background-origin:content-box; background-size:100% 100%;}
+.container .yhhd{ background-color:#fffad9; background:url(/images/coupon/yhbg.png) no-repeat; background-origin:content-box; background-size:100% 100%; margin:4px 0 24px;}
+.container .yhhd h3{ text-align:center; padding:4px 0; font-size:140%; }
+.container .yhhd ol{padding-bottom:14px;}
+.container .yhhd ol li{ list-style:none; font-size:100%; padding:0 4%; color:#999999;}
+</style>
+</head>
+<body>
+<div class="container">
+	<!--<h3 class="col-xs-12 miaosha">领劵中心</h3>-->
+    <div id="aa">
+		<img src="/images/coupon/youhuijuan.png">
+    </div>
+     <!--未领取-->
+    <% @coupons.each do |coupon| %>
+        <div  class="col-xs-12 yj">
+            <div class="col-xs-12 juan juan03">
+               
+                <div class="col-xs-10 juanjz">
+                    <span class="span_span02 span_span02_03">¥</span><span class="span_span03 span_span03_03"><%= coupon.value %></span>
+                    <% if "1" == coupon.order_amount_way %>
+                        <div class="span_span04 span_span04_03">满<%= coupon.order_amount %>使用</div>
+                    <% else %>
+                        <div class="span_span04 span_span04_03">无限制</div>
+                    <% end %>
+                </div>
+                <div class="col-xs-2 juansy"> 
+                    <div class="span_span05" onclick="receiveCoupon('<%= coupon.id %>', '<%= @platform %>')">立<br>即<br>领<br>取</div>
+                    <div class="span_span06 span_span06_03"> > </div>
+                </div>
+            </div>
+            <div class="col-xs-12 juandata juandata03">
+                <%= "#{coupon.startTimeShow}--#{coupon.endTimeShow}" %>
+            </div>
+        </div> <!--col-xs-12 yj-->
+    <% end %>
+	<!--结束——未领取-->
+    <div  class="col-xs-12 yhhd">
+    	<h3  class="col-xs-12">活动规则</h3>
+        <ol  class="col-xs-12">
+            <li>1.优惠券/卡不予兑换现金；</li>
+            <li>2.每笔订单限使用一张优惠券/卡，满足优惠券使用条件方可使用；</li>
+            <li>3.请在规定时间内使用；</li>
+            <li>4. 预售、团购、秒杀以及其他标识不可用优惠券的商品，不可使用优惠券支付；</li>
+            <li>5.优惠券不可转让或赠与；</li>
+            <li>6. 取消订单，优惠券会退回您的用户中心；</li>
+            <li>7.优惠券体现形式包括但不限于满减券、满赠券、代金券、礼券等；</li>
+            <li>8. 本次活动最终解释权归XXX所有。</li>
+        </ol>
+    </div>
+</div>
+
+
+
+</body>
+</html>

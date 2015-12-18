@@ -1,0 +1,25 @@
+%h1 工作汇总
+
+%table.table
+  %thead
+    %tr
+      %th 姓名
+      %th 上传总数量
+      %th 已审核总数量
+      %th 今日上传数量
+      %th 今日已审核数量
+
+  %tbody
+    -  @work_array.each do |w|
+      %tr
+        %td= w['user_name']
+        %td= w['pass_chateau']
+        %td= w['pass_check']
+        %td= w['today_chateau']
+        %td= w['today_check']
+
+
+
+
+
+= link_to '返回主页', chateaus_path,:class=>'btn'

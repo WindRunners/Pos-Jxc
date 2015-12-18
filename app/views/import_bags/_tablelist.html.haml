@@ -1,0 +1,56 @@
+/礼包列表
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 名称
+      %th 业务员
+      %th 业务员手机号
+      %th 送礼人
+      %th 过期天数
+      %th 状态
+      %th
+
+  %tbody
+    - @import_bags.each do |import_bag|
+      %tr
+        %td= import_bag.name
+        %td= import_bag.business_user
+        %td= import_bag.business_mobile
+        %td= import_bag.sender_mobile
+        %td= import_bag.expiry_days
+        %td
+          - if !import_bag['workflow_state'].present?
+            未发起
+          - elsif import_bag['workflow_state'] == 'new'
+            待发起
+          - elsif import_bag['workflow_state'] == 'first_check'
+            一级审核中……
+          - elsif import_bag['workflow_state'] == 'second_check'
+            二级审核中……
+          - elsif import_bag['workflow_state'] == 'passed'
+            审核通过
+          - elsif import_bag['workflow_state'] == 'canceled'
+            已作废
+          - else
+            无效状态
+        %td
+          = link_to '详细', import_bag, :class => 'btn btn-minier btn-yellow'
+          = link_to '目标人员', import_bag_import_bag_receivers_path(import_bag), :class => 'btn btn-minier btn-yellow'
+          - if import_bag.current_state.to_s == 'passed'
+            = link_to '认领情况', " /gift_bags/#{import_bag.id}/index", :class => 'btn btn-minier btn-yellow'
+          - if policy(import_bag).update?
+            = link_to '修改', edit_import_bag_path(import_bag),:class => 'btn btn-minier btn-primary'
+          - if policy(import_bag).destroy?
+            = link_to '删除', import_bag
+          - if policy(import_bag).start?
+            = link_to '发起审核',"javascript:showWfDealModel('start','#{import_bag.id}')",:class => 'btn btn-minier btn-primary'
+          - if policy(import_bag).deal_list?
+            = link_to '处理',"javascript:showWfDealModel('#{import_bag.current_state.name.to_s}','#{import_bag.id}')",:class => 'btn btn-minier btn-primary'
+
+%div.row
+  %div.col-xs-6
+    %div#dynamic-table_info.dataTables_info
+      = page_entries_info @import_bags, :entry_name => '礼包'
+  %div.col-xs-6
+    %div#dynamic-table_paginate.dataTables_info.dataTables_paginate.paging_simple_numbers
+      = paginate @import_bags

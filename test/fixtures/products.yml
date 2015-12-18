@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  specification: MyString
+  qualityday: MyString
+  description: MyString
+
+two:
+  title: MyString
+  specification: MyString
+  qualityday: MyString
+  description: MyString

@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %strong Totalprice:
+  = @cashier.totalPrice
+%p
+  %strong Discount:
+  = @cashier.discount
+= link_to 'Edit', edit_cashier_path(@cashier)
+|
+= link_to 'Back', cashiers_path

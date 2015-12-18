@@ -1,0 +1,21 @@
+%h1 闪屏列表
+
+%table
+  %thead
+    %tr
+      %th 显示时间
+      %th 开始时间
+      %th 结束时间
+      %th
+      %th
+      %th
+
+  %tbody
+    - @splashes.each do |splash|
+      %tr
+        %td= splash.stop_seconds
+        %td= splash.start_time
+        %td= splash.end_time
+
+
+%br

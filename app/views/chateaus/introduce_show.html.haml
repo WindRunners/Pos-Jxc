@@ -1,0 +1,50 @@
+-#-if current_user.present?
+-#  -if current_user.has_role?(:admin)
+-#    .key{:style => "float:left;"}
+-#      %b 审核:
+-#    .key{:style => "float:right;"}
+-#      - if @chateau.status ==0 || @chateau.status ==-1
+-#        %td= link_to '审核通过', chateau_check_path(@chateau)
+-#      - else
+-#        %td= link_to '审核不通过', chateau_check_out_path(@chateau)
+.container{:style => "padding:2% 4%; font-family:SimHei;"}
+  #content{:style => "font-size:280%;line-height:160%; color:#282828; border-top:0px solid #d6d6d6;"}
+    .name{:style => "text-align:center;"}
+      =@data['chateau'].name
+    %HR
+    .Properties
+      %p
+        %b 主人:
+      = @chateau.owner
+      %p
+        %b 所在地区:
+        = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+      %p
+        %b 地址:
+        = @chateau.address
+      %p
+        %b 联系电话:
+        = @chateau.phone
+      %p
+        %b 酒庄网址:
+        = @chateau.urls
+      %p
+        %b 酒庄logo图片:
+        - if @chateau.logo.present?
+          - image_tag(@chateau.logo,size: '300x150')
+      %p
+        %b 轮播图:
+        - if @chateau.pictures.present?
+          -@chateau.pictures.each do |x|
+            = image_tag(x.pic,size: '320x240')
+    %HR
+    %br
+    - @data['mark'].each do |m|
+      - m.each do |k,v|
+        .key{:style => "float:left;"}
+          = k + ':'
+        .value{:style => "float:right;"}
+          = v
+        %br
+    %HR
+    = markdown  @data['introduce']

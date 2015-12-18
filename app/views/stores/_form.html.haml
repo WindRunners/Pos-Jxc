@@ -1,0 +1,202 @@
+= form_for @store do |f|
+  - if @store.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
+      %ul
+        - @store.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :门店名称
+    = f.text_field :name
+  .field
+    = f.label :门店管理者
+    = f.text_field :manager
+  .field
+    = f.label :门店描述
+    = f.text_field :describe
+  .field
+    = f.label :门店类型
+    = f.radio_button(:type, 1)
+    = f.label(:type, '实体门店')
+    = f.radio_button(:type, 0)
+    = f.label(:type, '虚拟门店')
+  .field
+    = f.label :门店经度
+    = f.text_field :longitude,{:id => 'longitude'}
+  .field
+    = f.label :门店纬度
+    = f.text_field :latitude,{:id => 'latitude'}
+  .field
+    = f.label :门店位置
+    = f.text_field :position,{:id => 'position'}
+
+    #map{style:'width:630px;height:230px;border:1px solid gray'}
+
+  .field
+    = f.label :身份证正面照片
+    -if @store.bp.present?
+      = image_tag(@store.idpf.url, size: '200x200')
+    = f.file_field :idpf,{:id => 'store_idpf'}
+
+  .field
+    = f.label :身份证反面照片
+    -if @store.bp.present?
+      = image_tag(@store.idpb.url, size: "200x200")
+    = f.file_field :idpb,{:id => 'store_idpb'}
+
+  .field
+    = f.label :营业执照照片
+    -if @store.bp.present?
+      = image_tag(@store.bp.url, size: '200x200')
+    = f.file_field :bp,{:id => 'store_bp'}
+
+  .actions
+    = f.submit '保存',:class => 'btn btn-yellow'
+
+:javascript
+      $("#store_idpf").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img0").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#store_idpb").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img1").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+
+        $("#store_bp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img1").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+
+
+    var map = new BMap.Map("map");//初始化地图
+    map.addControl(new BMap.NavigationControl());  //初始化地图控件
+    //map.addControl(new BMap.ScaleControl());
+    //map.addControl(new BMap.OverviewMapControl());
+    map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+    map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+    map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+    //map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+    //map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
+
+    var point=new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
+
+    var gc = new BMap.Geocoder();//地址解析类
+    //关键字查询
+    function serbtn(){
+      var addrs = document.getElementById("position").value;
+      var local = new BMap.LocalSearch(
+        map,{renderOptions:{map: map, panel:"txtPanel"},
+          pageCapacity:12}
+      );
+      DomReady.local.search(addrs);
+        alert(point);
+    }
+    //关键字查询
+    function map_search(){
+      var myKeys = document.getElementById("userinfo_address").value;
+      var index = 0;
+      var myGeo = new BMap.Geocoder();
+      myGeo.getPoint(add, function(point){
+        if (point) {
+          document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+      var address = new BMap.Point(point.lng, point.lat);
+      addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+    }
+    }, "合肥市");
+    }
+
+    //添加标记点击监听
+    map.addEventListener("click", function(e){
+
+      var circle = new BMap.Circle(e.point,100,
+        {fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+      map.addOverlay(circle);
+      gc.getLocation(e.point, function(rs){
+        showLocationInfo(e.point, rs);
+      });
+
+    });
+
+    //ip定位城市
+    function myFun(result){
+      var cityName = result.name;
+      map.setCenter(cityName);
+
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
+
+    //显示地址信息窗口
+    function showLocationInfo(pt, rs){
+      var marker = new BMap.Marker(pt); //初始化地图标记
+      map.centerAndZoom(pt, 18); //设置中心点坐标和地图级别
+      map.addOverlay(marker); //将标记添加到地图中
+
+      var opts = {
+        width : 250,     //信息窗口宽度
+        height: 100,     //信息窗口高度
+        title : ""  //信息窗口标题
+      }
+      var z = 2
+      var addComp = rs.addressComponents;
+      var adds =  addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber ;
+      var addr = "当前标记地址：" + addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber + "<br/>";
+      addr += "纬度: " + pt.lat + ", " + "经度：" + pt.lng;
+      //alert(addr);
+      var infoWindow = new BMap.InfoWindow(addr, opts);  //创建信息窗口对象
+      marker.openInfoWindow(infoWindow);
+      $("#position").val(adds);
+      $("#longitude").val(pt.lng);
+      $("#latitude").val(pt.lat);
+    }

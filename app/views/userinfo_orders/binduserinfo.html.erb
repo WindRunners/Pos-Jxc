@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag "application", :media => "all"%>
+  <%= javascript_include_tag "application"%>
+  <style>
+      #jumbotron_bg{
+          background-image:url(/images/bd_bg01.png);
+          filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+          -moz-background-size:100% 100%;
+          background-size:100% 100%;
+      }
+  </style>
+</head>
+<body style="width: 100%">
+<div style="width: 100%;">
+  <div id="legend" style="margin: 0 auto;width: 240px;padding-top:20px">
+    <legend class="">填写要绑定的商户信息</legend>
+  </div>
+  <hr style="border: 1px grey solid">
+  <div style="margin: 0 auto;width: 280px;">
+    <div class="jumbotron" id="jumbotron_bg">
+      <div class="container" align="center">
+        <h1>操作&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功!!!</h1>
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

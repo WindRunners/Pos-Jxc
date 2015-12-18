@@ -1,0 +1,10 @@
+= form_for @carou do |f|
+  - if @carou.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@carou.errors.count, "error")} prohibited this carou from being saved:"
+      %ul
+        - @carou.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

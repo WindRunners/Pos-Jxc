@@ -1,0 +1,63 @@
+<%= form_for @announcement, :html => {:class => "form-horizontal product", multipart: true} do |f| %>
+    <% if @announcement.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@announcement.errors.count, "error") %> prohibited this announcement from being saved:</h2>
+
+          <ul>
+            <% @announcement.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }),
+                   :class => 'chosen-container chosen-container-multi', :style => 'width:100px', :name => "announcement[announcement_category_id]") %>
+
+    <div class="field">
+      <%= f.label :title %><br>
+      <%= f.text_field :title %>
+    </div>
+
+    <!--
+    <% if @announcement.avatar.present? %>-->
+        <!--<%= image_tag(@announcement.avatar.url, size: '200x200') %>-->
+        <!--
+    <% end %>-->
+
+    <!--<p>-->
+    <!--<%= f.file_field :avatar %>-->
+    <!--</p>-->
+
+    <div class="field">
+      <%= f.label :description %><br>
+      <%= f.text_field :description %>
+    </div>
+
+    <div class="field">
+      <%= f.label :is_top %><br>
+      <%= f.check_box :is_top %>
+    </div>
+
+    <div class="field">
+      <%= f.label :content %><br>
+      <%= f.text_area :content, :class => "tinymce", :rows => 40, :cols => 120 %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+<!--引入TinyMCE富文本编辑器-->
+<script type="text/javascript">
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        height: 500,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    });
+</script>

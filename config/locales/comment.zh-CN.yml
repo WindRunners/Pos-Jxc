@@ -1,0 +1,7 @@
+zh-CN:
+  mongoid:
+    models:
+      comment: "评论"
+    attributes:
+      comment:
+        content: "内容"

@@ -1,0 +1,9 @@
+zh-CN:
+  mongoid:
+   models:
+     announcement_category: "公告种类"
+   attributes:
+     announcement_category:
+        id: "ID"
+        name: "名字"
+        description: "描述"

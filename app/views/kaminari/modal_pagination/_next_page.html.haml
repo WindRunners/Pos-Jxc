@@ -1,0 +1,2 @@
+%li
+  = link_to_unless current_page.last?, raw('<i class="ace-icon fa fa-angle-double-right"></i>'), "javascript:void(0);", :rel => 'next', :remote => remote, :onclick => "getTable(#{current_page + 1})"

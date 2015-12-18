@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b 名称:
+  = @region.name
+
+= link_to '编辑', edit_region_path(@region)
+\|
+= link_to '返回', regions_path

@@ -1,0 +1,132 @@
+
+= form_for @chateau do |f|
+  - if @chateau.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@chateau.errors.count, "error")} prohibited this chateau from being saved:"
+      %ul
+        - @chateau.errors.full_messages.each do |msg|
+          %li= msg
+  .field
+    = f.label :category
+    = f.select :category, options_for_select([['红酒酒庄', 1], ['白酒酒厂', 2]], 1)
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :owner
+    = f.text_field :owner
+
+  - if @chateau.region.present?
+    = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
+  .field#region_select
+    = f.label :region
+    = f.select :region,options_for_select(Region.root.children.all.map { |c| [c.name, c.id] }.insert(0,["--请选择--","0"]))
+  .field
+    = f.label :address
+    = f.text_field :address
+  .field
+    = f.label :phone
+    = f.text_field :phone
+  .field
+    = f.label :urls
+    = f.text_field :urls
+  .field
+    = f.label :logo
+    - if @chateau.logo.present?
+      = image_tag(@chateau.logo,size: '300x150')
+    = f.file_field :logo
+  .field
+    = f.label :hits
+    = f.text_field :hits
+  .field
+    = f.label :sequence
+    = f.text_field :sequence
+
+  %p
+    %b 素材图:
+    - if @chateau.pictures.present?
+      -@chateau.pictures.where(:type=>2).each do |x|
+        = image_tag(x.pic.url,size: '320x240')
+
+  = f.fields_for :chateau_introduce do |i|
+    = i.label :详细介绍
+    - if params[:action] == 'edit'
+      = i.text_area :introduce,:class => "tinymce", :rows => 40, :cols => 120,:value=>"#{@chateau.chateau_introduce.introduce}"
+    - else
+      = i.text_area :introduce, :class => "tinymce", :rows => 40, :cols => 120
+  %input{"type"=>"hidden","id"=>"chateau_region_hidden","name"=>"chateau[region]","value"=>""}
+  .actions
+    = f.submit '保存',onclick: 'return save_check()'
+
+
+:javascript
+
+
+  $(function () {
+
+    $("#chateau_region").change(function () {
+      get_region(0)
+    });
+  })
+
+  function save_check() {
+
+    $("#region_select select").removeAttr("name");//移除下拉框name属性
+    var val = $("#region_select select:last").val();
+    if(val=="0"){
+      val = $("#region_select select:last").prev().val();
+    }
+    $("#chateau_region_hidden").val(val);
+
+
+    if(val==undefined || val=="" || val=="0"){
+      alert("请选择产地！")
+      return false;
+    }
+
+    return true;
+  }
+
+  function get_region(i) {
+
+    var selectEm = i == 0 ? "#region_select option:selected" : "#region_select" + i + " option:selected";
+
+    var region = jQuery(selectEm).val();
+
+    var p_select = i == 0 ? "#chateau_region" : "#region_select" + i;
+    $(p_select).nextAll().remove();//移除后代元素
+
+    if (region == "0") return;
+
+    $.ajax({
+      url: "/regions/" + region + "/get_children", type: "post", dataType: "json", success: function (data) {
+
+        if (data.length == 0) return;
+
+        var appendSelectHtml = "<select id='region_select" + (i + 1) + "' onchange='javascript:get_region(" + (i + 1) + ");'>";
+        appendSelectHtml += "<option value='0'>--请选择--</option>";
+        $(data).each(function () {
+          appendSelectHtml += "<option value='" + this.id + "'>" + this.name + "</option>";
+        });
+        appendSelectHtml += "</select>";
+        $("#region_select").append(appendSelectHtml);//追加元素
+      }
+    });
+
+    //$("#region_select select").removeAttr("name");//移除下拉框name属性
+    //$("#region_select select:last").attr("name","");//获取最后一个下拉框设置name属性
+  }
+
+
+  tinymce.init({
+    selector: 'textarea.tinymce',
+    height: 500,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table contextmenu paste code'
+    ],
+    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+  });
+
+

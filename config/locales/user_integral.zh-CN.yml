@@ -1,0 +1,11 @@
+zh-CN:
+  mongoid:
+    models:
+      UserIntegral: "现金管理"
+    attributes:
+      UserIntegral:
+        order_no: "订单号"
+        integral: "积分"
+        state: "状态"
+        type: "类型"
+        integral_date: "操作日期"

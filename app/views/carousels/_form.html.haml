@@ -1,0 +1,54 @@
+= form_for @carousel,:html => {:class => 'form-horizontal category'}, remote: true do |f|
+  - if flash[:error].present?
+    #error_explanation
+      %ul
+        %li= flash[:error]
+
+  .form-group
+    = f.label :area, :class => 'col-sm-3 control-label no-padding-right'
+    .col-sm-4
+      = f.text_field :area, :class => 'form-control'
+
+  .form-group
+    = f.label :start_time, :class => 'col-sm-3 control-label no-padding-right'
+    .col-sm-4
+      = f.text_field :start_time, :class => 'form-control'
+
+  .form-group
+    = f.label :end_time, :class => 'col-sm-3 control-label no-padding-right'
+    .col-sm-4
+      = f.text_field :end_time, :class => 'form-control'
+
+  .form-group
+    = f.label :url, :class => 'col-sm-3 control-label no-padding-right'
+    .col-sm-4
+      = f.text_field :url, :class => 'form-control'
+
+  .clearfix.form-actions
+    .col-md-offset-4.col-md-9
+      %button#save_form.btn.btn-info{:type => "submit"}
+        %i.ace-icon.fa.fa-check.bigger-110
+        创建
+      \&nbsp; &nbsp; &nbsp;
+      %a.btn{"data-href" => carousels_path}
+        %i.ace-icon.fa.fa-return.bigger-110
+        返回
+:javascript
+        $(function () {
+          $('#carousel_start_time').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm",
+            showClose: true
+          });
+        });
+
+:javascript
+        $(function () {
+          $('#carousel_end_time').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm",
+            showClose: true
+          });
+        });

@@ -1,0 +1,46 @@
+%table{:class => "table", :style => "margin-bottom: 0px", "ng-app" => "orderStatis"}
+	%tr
+		%td{:style => "width: 300px;"}
+			%span{:class => "input-daterange input-group", :style => "display: inline;"}
+				%input{:type => "text", :name => "retailDateRang", :id => "retailDateRang", :style => "width: 200px;"}
+			%button.btn.btn-xs.btn-info{:type => "button", :onclick => "loadProductsStatistic(true);"} 筛选
+		%td{:style => "line-height: 35px; vertical-align: middle;"}
+			%span 快速查看:
+			= link_to "最新7天", "javascript:void(0)", :class => "btn btn-xs btn-info", :onclick => "changeDate(7)"
+			= link_to "最新30天", "javascript:void(0)", :class => "btn btn-xs btn-info", :onclick => "changeDate(30)"
+			= link_to "最新90天", "javascript:void(0)", :class => "btn btn-xs btn-info", :onclick => "changeDate(90)"
+%h1 商品统计
+#products-statistic
+:javascript
+	function loadProductsStatistic(params)
+	{
+		if(params)
+		{
+			$("#products-statistic").load("#{statisticData_products_path}?retailDateRang=" + encodeURI($('#retailDateRang').val()));
+		}
+		else
+		{
+			$("#products-statistic").load("#{statisticData_products_path}");
+		}
+	}
+
+	function changeDate(num)
+	{
+		var today = new Date();
+		var startDate = new Date();
+		var endDate = new Date();
+		startDate.setDate(today.getDate() - Number(num));
+		endDate.setDate(today.getDate() - 1);
+		$("#retailDateRang").val(startDate.format("yyyy-MM-dd") + " - " + endDate.format("yyyy-MM-dd"));
+	}
+
+	$(document).ready(function () {
+		loadProductsStatistic();
+
+		$('#retailDateRang').daterangepicker({
+			autoApply: true,
+			locale: {
+				format: "YYYY-MM-DD"
+			}
+		});
+	});

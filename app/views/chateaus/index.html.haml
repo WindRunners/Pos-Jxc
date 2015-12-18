@@ -1,0 +1,71 @@
+- model_class = Chateau
+%h1= model_class.model_name.human  + '列表'
+
+
+#container
+  %div{:style => "text_align:center; float: left"}
+    = form_tag(search_chateaus_path, method: "get") do
+      = label_tag(:name, '名字')
+      = text_field_tag(:name)
+      = label_tag(:status, '状态')
+      = select_tag(:status, options_for_select([['请选择状态', nil], ['未审核', 0], ['通过', 1], ['不通过', -1]]))
+      = submit_tag('查询')
+
+  %div{:style => "text_align:center; float: right"}
+    %p 亲爱的#{current_user.name}，你一共上传了#{@data['user_count']}个酒庄,你今天已经上传了#{@data['today_count']}个酒庄，共#{@data['count']}个酒庄。
+
+%table.table
+  %thead
+    %tr
+      %th= model_class.human_attribute_name(:name)
+      %th= model_class.human_attribute_name(:owner)
+      %th= model_class.human_attribute_name(:region)
+      %th= model_class.human_attribute_name(:hits)
+      %th= model_class.human_attribute_name(:sequence)
+      -if current_user.has_role?(:admin)
+        %th  审核状态
+      %th= model_class.human_attribute_name(:created_at)
+      %th  上传人
+      %th{:colspan => "6"} op
+
+  %tbody
+    -  @data['chateaus'].each do |chateau|
+      %tr
+        %td#show= link_to chateau.name, chateau_introduce_show_path(chateau.id)
+        %td= chateau.owner
+        %td= chateau.region.ancestors_and_self.map{|c|c.name}.drop(1) if chateau.region.present?
+        %td= chateau.hits
+        %td= chateau.sequence
+        %th
+          - if chateau.status == 1
+            通过
+          - elsif chateau.status == 0
+            待审核
+          - else chateau.status == -1
+            不通过
+        %td= chateau.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s if chateau.created_at.present?
+        %td= chateau.user.name if chateau.user.present?
+        %td= link_to '详细', chateau
+        %td= link_to '编辑', edit_chateau_path(chateau)
+        -if current_user.has_role?(:admin)
+          - if chateau.status ==0 || chateau.status ==-1
+            %td= link_to '审核通过', chateau_check_path(chateau)
+          - else
+            %td= link_to '审核不通过', chateau_check_out_path(chateau)
+        %td= link_to '标签管理', chateau_chateau_mark_path(chateau)
+        %td= link_to '轮播图管理', chateau_turn_picture_path(chateau)
+        %td= link_to '关联名酒', chateau_wines_path(chateau)
+        %td= link_to '删除', chateau, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+%div{:style => "float: left"}
+  = link_to '新建酒庄', new_chateau_path,:class=>'btn btn-sm btn-success'
+
+%div{:style => "float: right"}
+  = link_to '主页', chateaus_path,:class=>'btn btn-primary'
+= paginate @data['chateaus']
+
+%div{:style => "text_align:center;clear:both;"}
+  -if current_user.has_role?(:admin)
+    = link_to '工作汇总', workload_chateaus_path,:class=>'btn btn-primary'

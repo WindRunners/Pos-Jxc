@@ -1,0 +1,20 @@
+zh-CN:
+  mongoid:
+    models:
+      order: "订单"
+    attributes:
+      order:
+        orderno: "订单号码"
+        ordertype: "订单类型"
+        paymode: "支付方式"
+        orderstatus: "订单状态"
+        modifymark: "修改标志"
+        consignee: "收货人"
+        address: '收货地址'
+        telephone: "联系方式"
+        useintegral: '使用积分'
+        totalcost: "总费用"
+        goodsvalue: '总货值'
+        fright: '运费'
+        paycost: '支付费用'
+        updated_at: "日期"

@@ -1,0 +1,20 @@
+zh-CN:
+  mongoid:
+   models:
+     chateau: "酒庄"
+   attributes:
+     chateau:
+        id: "ID"
+        category: "类型"
+        name: "名称"
+        owner: '主人'
+        region: '产地'
+        address: '详细地址'
+        phone: '联系电话'
+        urls: '网址'
+        logo: 'logo图片'
+        pic_path: '图片地址数组'
+        hits: '浏览次数'
+        sequence: '排序字段'
+        created_at: '创建时间'
+        ad: '广告'

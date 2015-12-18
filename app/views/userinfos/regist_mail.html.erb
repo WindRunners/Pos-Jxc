@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
+
+  <title><%= content_for?(:title) ? yield(:title) : "Lark" %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag "rediscss/regismail" %>
+
+  <%= javascript_include_tag "application" %>
+
+</head>
+<body>
+<!--header-->
+<div class="header">
+  <div class="hbox">
+    <%= image_tag ("img01.png") %>
+    <% if current_user.present?  %>
+    <div class="ahb">
+    <div class="ahb01"></div>
+    <div class="ahb02">
+      <div class="ahb0201"><%= current_user.mobile %></div>
+      <%= image_tag ("img15.png"),:class=>"ahb0202" %>
+      <div class="ahb0203"><%= link_to raw("<i class='qq_close'></i>退出"), destroy_user_session_path, :method=>'delete' %></div>
+    </div>
+  </div>
+    <% end %>
+  </div>
+</div>
+
+<!--内容-->
+<div class="zz">
+  <div class="nav">
+    <div class="na01">
+      <div class="na0101">1、基本信息</div>
+    </div>
+    <div class="na02">
+      <div class="na0201">2、邮箱激活</div>
+    </div>
+    <div class="na03">
+      <div class="na0301">3、信息登记</div>
+    </div>
+    <div class="na04">
+      <div class="na0401">4、审核</div>
+    </div>
+  </div>
+
+  <div class="nr">
+    <div class="nr01">
+      <img src="images/img10.png">
+      <div class="rr">
+        <div class="rr01">激活账号</div>
+
+        <div class="rr02">感谢注册！确认邮件已发送至你的注册邮箱：<span id="email"><% if @current_user.email.present?  %>
+              <%= @current_user.email %><% end %></span>.请进入邮箱查看邮件，并激活账号。</div>
+      </div>
+    </div>
+    <div class="nr02">
+      <a href="" id="gotoemail" target="_blank">登录邮箱</a>
+    </div>
+
+    <div class="nr03">没有收到邮件？</div>
+
+    <div class="nr04">
+      <div class="nr0401"> 1、请检查邮箱地址是否正确，你可以返回</div>
+      <a class="nr0402" href="">重新填写</a>
+    </div>
+
+    <div class="nr05">2、检查你的邮件垃圾箱</div>
+    <div class="nr04">
+      <div class="nr0401"> 3、若仍未收到确认，请尝试</div>
+      <a class="nr0402" href="">重新发送</a>
+    </div>
+
+  </div>
+</div>
+
+<!--footer-->
+<div class="footer">
+  <div class="ftbox">
+    <div class="ft01">
+      <a href="">关于我们</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">服务协议</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">运营规范</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">辟谣中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">客服中心</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">联系邮箱</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft01">
+      <a href="">侵权投诉</a>
+      <%= image_tag("img06.png") %>
+    </div>
+    <div class="ft02">
+      <a>Copyright<span style="font-family:'Arial';">&copy;</span>2012-2015  tencent. All  Rights  Reserved.</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+<script>
+    $("#gotoemail").click(function () {
+        var uurl = $("#email").text();
+        console.info(uurl);
+        uurl = gotoEmail(uurl);
+        if (uurl != "") {
+            $("#gotoemail").attr("href", "https://"+uurl);
+            $("#gotoemail")[0].click();
+        } else {
+            alert("抱歉!未找到对应的邮箱登录地址，请自己登录邮箱查看邮件！");
+        }
+    });
+    function gotoEmail($mail) {
+        $t = $mail.split('@')[1];
+        $t = $t.toLowerCase();
+        if ($t == '163.com') {
+            return 'mail.163.com';
+        } else if ($t == 'vip.163.com') {
+            return 'vip.163.com';
+        } else if ($t == '126.com') {
+            return 'mail.126.com';
+        } else if ($t == 'qq.com' || $t == 'vip.qq.com' || $t == 'foxmail.com') {
+            return 'mail.qq.com';
+        } else if ($t == 'gmail.com') {
+            return 'mail.google.com';
+        } else if ($t == 'sohu.com') {
+            return 'mail.sohu.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'vip.sina.com') {
+            return 'vip.sina.com';
+        } else if ($t == 'sina.com.cn' || $t == 'sina.com') {
+            return 'mail.sina.com.cn';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yahoo.com.cn' || $t == 'yahoo.cn') {
+            return 'mail.cn.yahoo.com';
+        } else if ($t == 'tom.com') {
+            return 'mail.tom.com';
+        } else if ($t == 'yeah.net') {
+            return 'www.yeah.net';
+        } else if ($t == '21cn.com') {
+            return 'mail.21cn.com';
+        } else if ($t == 'hotmail.com') {
+            return 'www.hotmail.com';
+        } else if ($t == 'sogou.com') {
+            return 'mail.sogou.com';
+        } else if ($t == '188.com') {
+            return 'www.188.com';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else if ($t == '189.cn') {
+            return 'webmail15.189.cn/webmail';
+        } else if ($t == 'wo.com.cn') {
+            return 'mail.wo.com.cn/smsmail';
+        } else if ($t == '139.com') {
+            return 'mail.10086.cn';
+        } else {
+            return '';
+        }
+    };
+</script>
+
+

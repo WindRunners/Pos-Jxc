@@ -1,0 +1,105 @@
+<%= form_for @product, remote:true do |f| %>
+
+    <% if @product.errors.any? %>
+        <div id="error_expl" class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title">请查看以下问题:</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+              <% @product.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+    <% end %>
+
+    <div class="col-sm-8">
+      <div class="col-sm-5">
+
+
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <img src="<%= RestConfig::PRODUCT_SERVER + @product.main_url %>" class="img-responsive center-block" width='320px' height='320px'/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-7">
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <div style="height: 450px">
+
+                  <div class="form-group">
+                    <%= f.label :mobile_category, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.collection_select :mobile_category_id, MobileCategory.all, :id, :title, :prompt => "请选择APP显示的类别", :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <hr/>
+                  <div class="form-group">
+                    <%= f.label :title, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :title, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :purchasePrice, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :purchasePrice, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :price, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :price, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :stock, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :stock, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :integral, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :integral, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :num, :class => 'col-sm-3 control-label no-padding-right' %>
+                    <div class="col-sm-6">
+                      <%= f.text_field :num, :class => 'form-control' %>
+                    </div>
+                  </div>
+
+                </div>
+
+                <%= link_to t('.back', :default => t("helpers.links.back")),
+                            '', 'data-href' => product_path(@product), :class => 'btn btn-default btn-xlg' %>
+
+                <%= f.submit '保存', :class => 'btn btn-primary btn-xlg' %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

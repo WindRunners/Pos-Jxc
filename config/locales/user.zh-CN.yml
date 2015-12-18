@@ -1,0 +1,16 @@
+zh-CN:
+  mongoid:
+    models:
+      user: "用户"
+    attributes:
+      user:
+        name: "姓名"
+        mobile: "手机号码"
+        email: "邮箱"
+        password: "密码"
+        password_confirmation: "密码确认"
+        admin: "级别"
+        remember_me: "记住我"
+        address: "地址"
+        shopname: "店铺名称"
+        takecode: "验证码"

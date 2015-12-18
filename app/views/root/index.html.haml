@@ -1,0 +1,78 @@
+!!!
+%html{:lang => "en", 'ng-app' => 'lark'}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:charset => "utf-8"}/
+    %title= content_for?(:title) ? yield(:title) : "Lark"
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
+    = csrf_meta_tags
+    = stylesheet_link_tag "application", :media => "all"
+    = javascript_include_tag "application"
+
+
+    /[if lte IE 9]
+      <haml_loud> stylesheet_link_tag &quot;ace/ace-part2.css&quot; </haml_loud>
+    /[if lte IE 9]
+      <haml_loud> stylesheet_link_tag &quot;ace/ace-ie.css&quot; </haml_loud>
+    / ace settings handler
+    = javascript_include_tag "ace/ace-extra.js"
+    / HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries
+    /[if lte IE 8]
+      <haml_loud> javascript_include_tag &quot;ace/html5shiv.js&quot; </haml_loud>
+      <haml_loud> javascript_include_tag &quot;ace/respond.js&quot; </haml_loud>
+  %body.no-skin
+    = render 'partials/navbar'
+    #main-container.main-container
+      = render 'partials/sidebar'
+      .main-content
+        .main-content-inner
+          = render 'partials/breadcrumbs'
+          .page-content
+            / PAGE CONTENT BEGINS
+            .page-content-area{'data-ajax-content' => true}
+              = yield
+      / PAGE CONTENT ENDS
+      / /.page-content
+      / /.main-content
+
+      %a#btn-scroll-up.btn-scroll-up.btn.btn-sm.btn-inverse{:href => "#"}
+        %i.ace-icon.fa.fa-angle-double-up.icon-only.bigger-110
+    / /.main-container
+    / basic scripts
+    / page specific plugin scripts
+    /[if lte IE 8]
+      <haml_loud> javascript_include_tag &quot;/theme/ace/js/excanvas.min.js&quot; </haml_loud>
+%html
+  :javascript
+    $(document).ready(function(){
+        ahoy.trackAll();
+
+        $('.datepicker').datepicker({
+            language: 'zh-CN',
+            format: "yyyy-mm-dd",
+            autoclose: true
+        });
+
+        /* Activating Best In Place */
+        jQuery(".best_in_place").best_in_place();
+    });
+
+    $('.page-content-area').ace_ajax({
+      content_url: function(hash) {
+        //hash is the value from document url hash
+
+
+        if (hash.indexOf('|hash') > -1) {
+          hash = hash.substr(0, hash.indexOf('|hash'));
+        }
+
+        console.log(hash);
+
+        //take "url" param and return the relevant url to load
+        return hash;
+      },
+      default_url: '/mobile_categories'
+      ,
+      loading_icon: "fa-cog fa-2x blue"
+    });

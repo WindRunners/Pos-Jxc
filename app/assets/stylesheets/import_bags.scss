@@ -1,0 +1,21 @@
+// Place all the styles related to the ImportBags controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+table.dataTable tbody tr.selected {
+  background-color: #b0bed9;
+}
+
+.dataTables_scrollHead{
+  width:100%;
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner{
+  width:100%;
+}
+
+.product_avatar{
+  width:60px;
+  height:60px;
+}

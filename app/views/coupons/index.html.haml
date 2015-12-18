@@ -1,0 +1,15 @@
+.tabbable{:id => "divProducts"}
+  %ul{:id => "myTab", :class => "nav nav-tabs"}
+    %li{:class => "active"}
+      %a{:href => "#", "data-toggle" => "tab", :onclick => "aasmStateChange()"}所有优惠券
+    %li
+      %a.btn.btn-info{:href => "#", "data-toggle" => "tab", :onclick => "aasmStateChange('noBeging')"}未开始
+    %li
+      %a.btn.btn-success{:href => "#", "data-toggle" => "tab", :onclick => "aasmStateChange('beging')"}进行中
+    %li
+      %a.btn.btn-inverse{:href => "#", "data-toggle" => "tab", :onclick => "aasmStateChange('end')"}已结束
+    %li
+      %a.btn{:href => "#", "data-toggle" => "tab", :onclick => "aasmStateChange('invalided')"}已失效
+  .tab-content
+    .tab-pane.in.active
+      = render 'list'

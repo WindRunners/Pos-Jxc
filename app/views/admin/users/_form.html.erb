@@ -1,0 +1,81 @@
+<%= form_for [:admin, @user], :html => { :class => "form-horizontal user", multipart: true } do |f| %>
+
+<input type="hidden" name="user[step]" value="3">
+    <% if @user.errors.any? %>
+        <div id="error_expl" class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h3>
+          </div>
+          <div class="panel-body">
+            <ul>
+              <% @user.errors.full_messages.each do |msg| %>
+                  <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+    <% end %>
+
+    <% if @user.avatar.present? %>
+
+        <div class="asset">
+          <p>
+            <%= image_tag(@user.avatar.url, size: "100x100", alt: "Edit Entry") %>
+          </p>
+          <p><small><%= number_to_human_size(@user.avatar.size) %>
+          </small></p>
+        </div>
+    <% end %>
+    <div class="control-group">
+      <%= f.label :name, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :name, :class => 'form-control' %>
+      </div>
+      <%= f.error_span(@user[:name]) %>
+    </div>
+
+    <div class="control-group">
+      <%= f.label :mobile, :class => 'control-label' %>
+      <div class="controls">
+        <%= f.text_field :mobile, :class => 'form-control' %>
+      </div>
+      <%= f.error_span(@user[:mobile]) %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password %>
+      <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
+      <% end %><br />
+      <%= f.password_field :password, autocomplete: "off" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    </div>
+    <% if current_user.has_role? :admin %>
+    <div class="field">
+      <%= f.label :email %><br />
+      <%= f.text_field :email, autofocus: true %>
+    </div>
+    <table width = 700px>
+      <tr>
+    <dt><strong>权限:</strong></dt>
+      </tr><tr>
+    <% @roles.each do |role| %>
+        <td>
+          <%= t(role.name) %> <%= check_box_tag "user[roles][]", role.name, @user.roles.include?(role) %>
+        </td>
+    <% end %>
+      </tr>
+    </table>
+    <% end %>
+
+
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                admin_users_path, :class => 'btn btn-default' %>
+
+<% end %>

@@ -1,0 +1,114 @@
+<script>
+    $(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            state = $(e.target).attr('name');
+            getTable(state);
+        });
+
+    });
+
+    $(document).ready(function() {
+        getTable('');
+    });
+
+
+    function getTable(state){
+        $.get('<%= panic_table_panic_buyings_path%>',{state:state},function(data,status){
+            if(status == 'success'){
+                $('#state_'+state).html(data);
+            }else{
+                ;
+            }
+        });
+    }
+
+
+</script>
+
+
+<div class="row" style="padding-left: 80px;padding-right: 80px">
+  <ul class="nav nav-tabs" id="myTab">
+    <% if "" == @state %>
+        <li class="active">
+    <% else %>
+        <li class="">
+    <% end %>
+      <a name="" data-toggle="tab" href="#state_">
+        全部
+      </a>
+    </li>
+
+    <% if 0 == @state%>
+        <li class="active">
+    <% else %>
+        <li class="">
+    <% end %>
+      <a name="0" data-toggle="tab" href="#state_0">
+        未开始
+      </a>
+    </li>
+
+    <% if 1 == @state%>
+        <li class="active">
+    <% else %>
+        <li class="">
+    <% end %>
+      <a name="1" data-toggle="tab" href="#state_1">
+        进行中
+      </a>
+    </li>
+
+    <% if 2 == @state%>
+        <li class="active">
+    <% else %>
+        <li class="">
+    <% end %>
+      <a name="2" data-toggle="tab" href="#state_2">
+        已结束
+      </a>
+    </li>
+  </ul>
+
+  <br/>
+  <div id="tab_content" class="tab-content no-border no-padding">
+
+    <% if "" == @state %>
+        <div id="state_" class="tab-pane active">
+
+        </div>
+    <% else %>
+        <div id="state_" class="tab-pane">
+        </div>
+    <% end %>
+
+    <% if 0 == @state %>
+        <div id="state_0" class="tab-pane active">
+
+        </div>
+    <% else %>
+        <div id="state_0" class="tab-pane">
+        </div>
+    <% end %>
+
+    <% if 1 == @state %>
+        <div id="state_1" class="tab-pane active">
+
+        </div>
+    <% else %>
+        <div id="state_1" class="tab-pane">
+        </div>
+    <% end %>
+
+    <% if 2 == @state %>
+        <div id="state_2" class="tab-pane active">
+
+        </div>
+    <% else %>
+        <div id="state_2" class="tab-pane">
+        </div>
+    <% end %>
+  </div>
+
+</div>
+
+

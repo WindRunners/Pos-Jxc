@@ -1,0 +1,45 @@
+%h1 酒轮播图管理
+
+%table.table
+  %thead
+    %tr
+      %th 酒名称
+      %th 酒轮播图
+      %th 删除图片
+  %tbody
+    - @turn_picture.each do |picture|
+      %tr
+        %td= picture.wine.name
+        %td= image_tag(picture.pic.url,size: '300x160')
+        %td= link_to '删除', wine_turn_picture_reduce_path(:picture_id=>picture.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+%br
+%HR{:SIZE => '5', :color => '#987cb9', :width => '100%'}
+  .pic_box{:style => "width:80%"}
+    .local_pic{:style => "width: 40%;float: left"}
+      = form_for @picture = Picture.new,url: {action: 'turn_picture_add'} do |f|
+        .field
+          = f.label :图片类型
+          = f.select :type, options_for_select([['轮播图', 1]],1)
+        %br
+        .field
+          = f.label :增加本地轮播图
+        %br
+          = f.file_field :pic
+        .actions
+          = f.submit '保存',:class => 'btn btn-yellow'
+
+    .inter_pic{:style => "width:40%;float: right"}
+      = form_tag('turn_picture_urls', method: 'post') do
+        .field
+          = label_tag :图片类型
+          = select_tag :type, options_for_select([['轮播图', 1]], 1)
+        .field
+          = label_tag(:urls, '增加网络轮播图')
+          %br
+          = text_area_tag(:urls,'请输入有效的图片地址，以换行分割。',:size => '60*20')
+        .actions
+          = submit_tag '保存',:class => 'btn btn-yellow'
+  %div{:style => 'clear:both'}
+%HR{:SIZE => '5', :color => '#987cb9', :width => '100%'}
+.link_from
+  = link_to '名酒主页', wines_path,:class => 'btn'

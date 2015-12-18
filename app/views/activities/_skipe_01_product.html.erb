@@ -1,0 +1,46 @@
+<% @products.each do |product| %>
+    <% totalquantity = product.panic_quantity + product.panic_sale_count%>
+    <div class="col-xs-4">
+      <%= image_tag RestConfig::IMG_SERVER + product.avatar_url %>
+    </div>
+    <div class="col-xs-8">
+      <div class="col-xs-12 lt"><span style="font-size:100%; color:#424758; font-weight:bold;"><%= product.title %></span><span style=" font-size:80%; color:#a8a8a8;"><%= product.specification %></span></div>
+      <div class="ll">
+        <div class="col-xs-4 ll01">
+          <span style="font-size:110%; line-height:26px; color:#ef533f; font-weight:bold;">¥<%= product.panic_price %></span>
+        </div>
+        <div class="col-xs-8 ll02">
+          <% if 1 == @panic_buying.state %>
+              <% if product.panic_quantity > 0%>
+                  <button class="btn04" type="button" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">去抢购</button>
+              <% else %>
+                  <button class="btn04" type="button" style="background-color:#e0e0e0; color:#aaaaaa;">已抢完</button>
+              <% end %>
+          <% else%>
+              <button class="btn05" type="button" style="background-color:#56acfc; color:#ffffff; border:solid 1px #56acfc;">提醒我</button>
+          <% end %>
+        </div>
+      </div>
+      <div class="mm">
+        <div class="col-xs-4 mm01">
+          <span style="font-size:80%; text-decoration:line-through; color:#a8a8a8; line-height:12px;">¥<%= product.price %></span>
+        </div>
+        <div class="col-xs-8 mm02">
+          <% if 1 == @panic_buying.state %>
+              <% compled =  product.panic_sale_count * 100 / totalquantity %>
+              <% if product.panic_quantity > 0%>
+                  <div class="yt">已售<%= compled %>%</div>
+                  <div class="ys">
+                    <div class="ys01" style="width:<%= compled %>%;"></div>
+                  </div>
+              <% else %>
+                  <div class="yss">
+                    <div class="ys02"><%= totalquantity %>件已抢光</div>
+                  </div>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class=" col-xs-12 aee"></div>
+<% end %>

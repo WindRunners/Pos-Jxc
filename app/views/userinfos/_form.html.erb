@@ -1,0 +1,537 @@
+<%= render "step1" %>
+    <div class="zxc02">
+      <!--header-->
+      <div class="header">
+        <div class="hbox">
+          <%= image_tag ("img01.png"),:class=>"hb03" %>
+          <div class="hb">
+            <div class="ahb01"></div>
+            <div class="hb02">
+              <div class="hb0201"><%= current_user.name %></div>
+              <%= image_tag ("img15.png"),:class=>"hb0202" %>
+              <div class="hb0203"><%= link_to raw("<i class='qq_close'></i>退出"), destroy_user_session_path, :method=>'delete' %></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!--内容-->
+      <div class="zz">
+        <div class="nav">
+          <div class="na01">
+            <div class="na0101">1、基本信息</div>
+          </div>
+          <div class="na02">
+            <div class="na0201">2、邮箱激活</div>
+          </div>
+          <div class="na03">
+            <div class="na0301">3、信息登记</div>
+          </div>
+          <div class="na04">
+            <div class="na0401">4、审核</div>
+          </div>
+        </div>
+
+        <div class="ee"></div>
+
+        <div class="ff">为了更好的保障你和广大用户的合法权益，请你认真填写以下登记信息。</div>
+        <div class="gg">
+          <a>1.运营者身份证</a>
+          <a>2.运营商营业执照</a>
+          <a>3.税务登记证</a>
+          <a>4.组织机构代码证</a>
+          <a>5.食品流通许可证</a>
+          <a>6.卫生许可证</a>
+        </div>
+        <div class="hh">请确认你的九酷网账号主体类型属于经销商，并请按照对应的类别进行信息登记。</div>
+        <div class="jj"></div>
+        <div class="kk">请先填写运营者有关信息</div>
+        <%= form_for(@userinfo) do |f| %>
+            <div class="ll">
+              <div class="ll01">运营者身份证姓名</div>
+              <%= f.text_field :name%>
+            </div>
+            <div class="mm">请填写运营者的姓名，如果名字包含分隔号"."请勿省略。</div>
+
+            <div class="nn">
+              <div class="nn01">运营者身份证号</div>
+              <%= f.text_field :idnumber%>
+            </div>
+            <div class="mm">请输入运营者的身份证号码，带有字母的要大写。</div>
+
+            <div class="qq">
+              <div class="qq01">运营者身份证件（正面）</div>
+              <div class="qq02">请提交中华人民共和国居民身份证，无居民身份证的内地居民可提交《临时居民身份证》。格式要求：支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            </div>
+            <div class="btnbox">
+              <%= f.file_field :idpf%>
+              <div class="dc">
+                <img src="" id="img0" style="width:100%;">
+              </div>
+
+            </div>
+            <div class="qq">
+              <div class="qq01">运营者身份证件（反面）</div>
+              <div class="qq02">请提交中华人民共和国居民身份证，无居民身份证的内地居民可提交《临时居民身份证》。格式要求：支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            </div>
+            <div class="btnbox">
+
+              <%= f.file_field :idpb%>
+              <div class="dc">
+                <img src="" id="img1" style="width:100%;">
+              </div>
+
+
+            </div>
+
+            <div class="ss">
+              <div class="ss01">运营商营业执照</div>
+              <div class="ss02">营业执照证件必须在有效期范围内。</div>
+            </div>
+            <div class="ss03">格式要求：原件照片、扫描件或复印件加盖企业公章后的扫描件。</div>
+            <div class="ss04">支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            <div class="btnbox">
+
+              <%= f.file_field :busp%>
+              <div class="dc">
+                <img src="" id="img2" style="width:100%">
+              </div>
+
+
+            </div>
+
+            <div class="ss">
+              <div class="bb01">税务登记证</div>
+              <div class="ss02">请上传原件照片、扫描件或复印件加盖企业公章后的扫描件。</div>
+            </div>
+            <div class="ss03">格式要求：支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            <div class="btnbox">
+
+              <%= f.file_field :taxp%>
+              <div class="dc">
+                <img src="" id="img3" style="width:100%">
+              </div>
+
+            </div>
+
+            <div class="ss">
+              <div class="ss01">组织机构代码证</div>
+              <div class="ss02">组织机构代码证必须在有效期范围内。</div>
+            </div>
+            <div class="ss03">格式要求：原件照片、扫描件或复印件加盖企业公章后的扫描件,支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            <div class="btnbox">
+
+              <%= f.file_field :orgp%>
+              <div class="dc">
+                <img src="" id="img4" style="width:100%">
+              </div>
+
+            </div>
+
+            <div class="ss">
+              <div class="ss01">食品流通许可证</div>
+              <div class="ss02">食品流通许可证必须在有效期范围内。</div>
+            </div>
+            <div class="ss03">格式要求：原件照片、扫描件或复印件加盖企业公章后的扫描件,支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            <div class="btnbox">
+
+              <%= f.file_field :footp%>
+              <div class="dc">
+                <img src="" id="img5" style="width:100%">
+              </div>
+
+            </div>
+
+            <div class="ss">
+              <div class="bb01">卫生许可证</div>
+              <div class="ss02">卫生许可证必须在有效期范围内。</div>
+            </div>
+            <div class="ss03">格式要求：原件照片、扫描件或复印件加盖企业公章后的扫描件,支持.jpg.jpeg.bmp.gif.png格式照片，大小不超过2M。</div>
+            <div class="btnbox">
+              <%= f.file_field :healthp%>
+              <div class="dc">
+                <img src="" id="img6" style="width:100%">
+              </div>
+            </div>
+
+            <div class="cc"></div>
+
+            <div class="yy">
+              <div class="yy01">
+                <div class="yy0101">
+                  <div>您的地址信息</div>
+                  <%= image_tag("img34.png") %>
+                </div>
+                <div class="yy0103">
+                  <div>店面名称：</div>
+                  <%= f.text_field :shopname%>
+                </div>
+                <div class="yy0104"><span style="color:#fa4141">!</span> 需与营业执照上的名称完全一致，信息审核成功后，店面名称不可修改。</div>
+
+                <div class="yy0105">
+                  <div>地址：</div>
+                  <%= f.text_field :address,:placeholder=>""%><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="searchMap" onclick="map_search()" value="查询" style="float: right;margin-right: 2px">
+                </div>
+                <div class="yy0106"><span style="color:#fa4141">!</span>可以手动输入，也可在地图中点击查找</div>
+                <input type="hidden" id="userinfo_lng" name="userinfo[lng]" >
+                <input type="hidden" id="userinfo_lat" name="userinfo[lat]" >
+                <input type="hidden" id="userinfo_province" name="userinfo[province]" >
+                <input type="hidden" id="userinfo_city" name="userinfo[city]" >
+                <input type="hidden" id="userinfo_district" name="userinfo[district]" >
+                <%= f.label "配送距离：", :class => 'control-label' %>
+                <%= radio_button_tag "userinfo[pdistance]", 100,:class=>"redioclick"%>&nbsp;<%= label_tag "userinfo[pdistance]", "100米" %>&nbsp;&nbsp;
+                <%= radio_button_tag "userinfo[pdistance]", 200,:class=>"redioclick" %>&nbsp;<%= label_tag "userinfo[pdistance]", "200米" %>&nbsp;&nbsp;
+                <%= radio_button_tag "userinfo[pdistance]", 500,:class=>"redioclick" %>&nbsp;<%= label_tag "userinfo[pdistance]", "500米" %><br>&nbsp;&nbsp;
+
+              </div>
+              <div class="yy02">
+                <div style="width:630px;height:230px;border:1px solid gray" id="container"></div>
+              </div>
+            </div>
+            <div class="tgr_cs">
+              <%= '推广人' %>:<%= f.text_field :pusher%>&nbsp;&nbsp;&nbsp;<%= "推广人手机" %>:<%= f.text_field :pusher_phone%>
+            </div>
+            <div class="ab"></div>
+            <div class="ac">
+              <input class="ac01" type="button" value="上一步">
+              <%= f.submit "继续" ,:class=>"ac02",:id=>"btnsubmit" %>
+            </div>
+        <% end %>
+        <div class="ae">
+          <div class="ae01">
+            <div class="ae0101">参考示例</div>
+            <%= image_tag ("img39.png"),:class=>"ae0102" %>
+          </div>
+          <div class="ae02">
+            <div class="ae0101">参考示例</div>
+            <%= image_tag ("img40.png"),:class=>"ae0102" %>
+          </div>
+          <div class="ae03">
+            <div class="ae0101">参考示例</div>
+            <%= image_tag ("img41.png"),:class=>"ae0102" %>
+          </div>
+        </div>
+      </div>
+
+      <!--footer-->
+      <div class="footer">
+        <div class="ftbox">
+          <div class="ft01">
+            <a href="">关于我们</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">服务协议</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">运营规范</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">辟谣中心</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">客服中心</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">联系邮箱</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft01">
+            <a href="">侵权投诉</a>
+            <%= image_tag("img06.png") %>
+          </div>
+          <div class="ft02">
+            <a>Copyright<span style="font-family:'Arial';">&copy;</span>2012-2015  tencent. All  Rights  Reserved.</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+<script>
+    $(".all0501").click(function(){
+        $(".att").show();
+    })
+    $(".aww0102").click(function(){
+        $(".att").hide();
+    })
+    $(".abtn02").click(function(){
+        $(".att").hide();
+    })
+
+    $("#userinfo_idpf").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img0").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#userinfo_idpb").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img1").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#userinfo_busp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img2").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#userinfo_taxp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img3").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#userinfo_orgp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img4").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+    $("#userinfo_footp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img4").attr("src", objUrl) ;
+        }
+    }) ;
+
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#userinfo_healthp").change(function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        console.log("objUrl = "+objUrl) ;
+        if (objUrl) {
+            $("#img6").attr("src", objUrl) ;
+        }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $(".abtn01").click(function(){
+        $(".att").hide();
+        $(".zxc01").hide();
+        $(".zxc02").show();
+    })
+
+    $(".ac01").click(function(){
+        $(".zxc02").hide();
+        $(".zxc01").show();
+    })
+</script>
+
+<script type="text/javascript">
+    var map = new BMap.Map("container");//初始化地图
+    map.addControl(new BMap.NavigationControl());  //初始化地图控件
+    //map.addControl(new BMap.ScaleControl());
+    //map.addControl(new BMap.OverviewMapControl());
+    map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+    map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+    map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+    //map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+    //map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
+
+    var point=new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
+
+    var gc = new BMap.Geocoder();//地址解析类
+    //关键字查询
+    var localSearch = new BMap.LocalSearch(map);
+    localSearch.enableAutoViewport();
+    function map_search(){
+        map.clearOverlays();//清空原来的标注
+        var keyword = document.getElementById("userinfo_address").value;
+        localSearch.setSearchCompleteCallback(function (searchResult) {
+            var poi = searchResult.getPoi(0);
+            map.centerAndZoom(poi.point, 15);
+            var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+            map.addOverlay(marker);
+            var content = document.getElementById("text_").value + "<br/><br/>经度：" + poi.point.lng + "<br/>纬度：" + poi.point.lat;
+            var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+            marker.addEventListener("click", function () { this.openInfoWindow(infoWindow); });
+            // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        });
+        localSearch.search(keyword);
+
+//        var index = 0;
+//        var myGeo = new BMap.Geocoder();
+//        myGeo.getPoint(add, function(point){
+//            if (point) {
+//                document.getElementById("result").innerHTML +=  index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+//        var address = new BMap.Point(point.lng, point.lat);
+//        addMarker(address,new BMap.Label(index+":"+add,{offset:new BMap.Size(20,-10)}));
+//    }
+//    }, "合肥市");
+
+    }
+
+    $("#btnubmit").click(function(){
+        var val=$('input:radio[name="userinfo[pdistance]"]:checked').val();
+        var shopName=$("#userinfo_shopname").val();
+        var addrss=$("#userinfo_address").val();
+        if(shopName==null){
+            alert("商店名称没有填!");
+            return false;
+        }else if(addrss==null){
+            alert("地址没有选择!");
+            return false;
+        }else if(val==null){
+            alert("配送距离没有选择!");
+            return false;
+        }else{
+           return true;
+        };
+
+        });
+    $("input").click(function () {
+        if ($(this).attr("checked")) {
+            var val=$('input:radio[name="userinfo[pdistance]"]:checked').val();
+            count=val;
+        }
+    });
+
+    //添加标记点击监听
+    map.addEventListener("click", function(e){
+        map.clearOverlays();//清空原来的标注
+        var circle = new BMap.Circle(e.point,100,
+                {fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        map.addOverlay(circle);
+        gc.getLocation(e.point, function(rs){
+            showLocationInfo(e.point, rs);
+        });
+
+    });
+
+    //ip定位城市
+    function myFun(result){
+        var cityName = result.name;
+        map.setCenter(cityName);
+
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
+
+    //显示地址信息窗口
+    function showLocationInfo(pt, rs){
+        var marker = new BMap.Marker(pt); //初始化地图标记
+        map.centerAndZoom(pt, 18); //设置中心点坐标和地图级别
+        map.addOverlay(marker); //将标记添加到地图中
+
+        var opts = {
+            width : 250,     //信息窗口宽度
+            height: 100,     //信息窗口高度
+            title : ""  //信息窗口标题
+        }
+        var addComp = rs.addressComponents;
+        var adds =  addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber ;
+        var addr = "当前标记地址：" + addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber + "<br/>";
+        addr += "纬度: " + pt.lat + ", " + "经度：" + pt.lng;
+        //alert(addr);
+        var infoWindow = new BMap.InfoWindow(addr, opts);  //创建信息窗口对象
+        marker.openInfoWindow(infoWindow);
+        $("#userinfo_address").val(adds);
+        $("#userinfo_lng").val(pt.lng);
+        $("#userinfo_lat").val(pt.lat);
+        $("#userinfo_province").val(addComp.province);
+        $("#userinfo_city").val(addComp.city);
+        $("#userinfo_district").val(addComp.district);
+    }
+</script>

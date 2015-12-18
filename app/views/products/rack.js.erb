@@ -1,0 +1,29 @@
+$("#rack_form")[0].reset();
+$('#modal-form').modal('hide');
+
+if ($("#<%= @product.id %>_tag").length) {
+  adding('<%= @product.id %>');
+  $("#<%= @product.id %>_tag").attr("src", '/images/exist.png');
+  $("#<%= @product.id %>_added").text('已添加到店铺');
+}
+
+if ($("#add_offline").length) {
+  $("#add_offline").hide();
+  $("#add_online").hide();
+  $("#added").css('display', 'block');
+
+  var title = '添加成功';
+  var text = '商品已添加到您的仓库，可以进入 <a target=_blank data-url="<%= products_path(:state => 'offline') %>" href="#<%= products_path(:state => 'offline') %>">商品-仓库中的商品</a> 编辑上架';
+
+  if (gon.state == 'online') {
+    title = '上架成功';
+    text = '商品已上架到您的店铺，赶紧进入 <a target=_blank data-url="<%= products_path(:state => 'online') %>"  href="#<%= products_path(:state => 'online') %>">商品-出售中的商品</a> 推广商品';
+  }
+
+  $.gritter.add({
+    title: title,
+    text: text,
+    time: '3000',
+    class_name: 'gritter-info gritter-light'
+  });
+}

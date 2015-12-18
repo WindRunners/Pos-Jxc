@@ -1,0 +1,14 @@
+= link_to raw("新建活动"), '', "data-href" => "#{new_full_reduction_path}?preferential_way=#{@preferential_way}", :class => "btn btn-primary"
+%p
+%table{:class => "table-center table table-striped table-bordered table-hover", :id => "full_reductions", "data-source" => "#{full_reductions_url(format: "json")}?preferential_way=#{@preferential_way}"}
+  %thead
+    %tr
+      %th= t(:name, scope: "mongoid.attributes.FullReduction")
+      %th= t(:validity_time, scope: "mongoid.attributes.FullReduction")
+      %th= t(:aasm_state, scope: "mongoid.attributes.FullReduction")
+      %th= t '.actions', :default => t("helpers.actions")
+  %tbody
+:javascript
+  $(document).ready(function () {
+      fullReductionsIndex();
+  });

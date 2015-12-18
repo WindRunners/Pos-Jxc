@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %b 申请现金:
+  = @cash.cash
+
+%p
+  %b 申请时间:
+  = @cash.cash_req_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+
+= link_to 'Back', cashes_path

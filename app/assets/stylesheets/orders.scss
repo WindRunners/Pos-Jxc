@@ -1,0 +1,28 @@
+// Place all the styles related to the orders controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.pic-user
+{
+  height: 68px;
+  width: 240px;
+  background-image: url("/images/statistic/user.png");
+  background-repeat: no-repeat;
+}
+
+.pic-order
+{
+  margin-left: 20px;
+  height: 68px;
+  width: 200px;
+  background-image: url("/images/statistic/order.png");
+  background-repeat: no-repeat;
+}
+
+.pic-pay
+{
+  margin-left: 40px;
+  height: 68px;
+  width: 160px;
+  background-image: url("/images/statistic/pay.png");
+  background-repeat: no-repeat;
+}

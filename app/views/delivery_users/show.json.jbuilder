@@ -1,0 +1,1 @@
+json.extract! @delivery_user, :id, :real_name, :user_desc, :generate, :scaffold, :DeliveryUser, :real_name, :user_desc, :work_status, :mobile, :login_type, :status, :position, :created_at, :updated_at

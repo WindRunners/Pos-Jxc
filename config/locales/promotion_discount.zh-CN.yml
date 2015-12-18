@@ -1,0 +1,18 @@
+zh-CN:
+  mongoid:
+    models:
+      PromotionDiscount: "促销打折"
+    attributes:
+      PromotionDiscount:
+        avatar: "图片"
+        promotion_title: "促销"
+        discount_title: "打折"
+        title: "标题"
+        type: "类型"
+        discount: "折扣"
+        validity_time: "有效时间"
+        start_time: "开始时间"
+        end_time: "结束时间"
+        aasm_state: "状态"
+        tag: 标签
+        price: 促销价

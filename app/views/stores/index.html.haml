@@ -1,0 +1,39 @@
+%h1 门店列表
+%br
+#widget-box
+  = form_tag search_stores_path, method: :get do
+    = label_tag(:qrcode, "店名")
+    = text_field_tag(:qrcode)
+    = submit_tag("搜索")
+%table.table
+  %thead
+    %tr
+      %th 门店名称
+      %th 门店管理者
+      %th 门店类型
+      %th 门店经度
+      %th 门店纬度
+      %th 门店位置
+      %th 创建时间
+      %th{:colspan => "4"}op
+
+  %tbody
+    - @stores.each do |store|
+      %tr
+        %td= store.name
+        %td= store.manager
+        %td= store.type
+        %td= store.longitude
+        %td= store.latitude
+        %td= store.position
+        %td= store.created_at
+        %td
+          = link_to '详细', store,:class => 'btn btn-minier btn-yellow'
+          = link_to '编辑', edit_store_path(store),:class => 'btn btn-minier btn-primary'
+          = link_to '配送员管理', store_delivery_users_path(store),:class => 'btn btn-minier btn-primary'
+          = link_to '删除', store, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+%br
+-##footer
+= link_to '新建门店', new_store_path,:class => 'btn btn-info'
+%br
+  = paginate @stores

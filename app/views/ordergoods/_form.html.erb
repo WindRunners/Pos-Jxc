@@ -1,0 +1,31 @@
+
+
+<%= form_for(@ordergood) do |f| %>
+    <% if @ordergood.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@ordergood.errors.count, "error") %> prohibited this ordergood from being saved:</h2>
+
+          <ul>
+            <% @ordergood.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+
+    <input id="ordergood[product][id]" name="ordergood[product][id]" type="hidden" value="<%= @ordergood.product.id %>" />
+
+    <div class="field">
+      <%= f.label :数量 %><br>
+      <%= f.text_field :quantity%>
+    </div>
+
+    <div class="field">
+      <%= f.label :单价 %><br>
+      <%= f.text_field :price%>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

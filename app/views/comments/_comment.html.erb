@@ -1,0 +1,14 @@
+<div class="reply clearfix">
+  <div class="body">
+    <div class="heading">
+      <h5 class="name"><%= link_to comment.user, "#" %></h5>
+        <span class="datetime">
+          <%= time_ago_in_words comment.created_at %>前
+        </span>
+      <span>
+        <%= t(comment.previous_state) %>  => <%= t(comment.state) %>
+      </span>
+    </div>
+    <%= markdown comment.content %>
+  </div>
+</div>

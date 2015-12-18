@@ -1,0 +1,2 @@
+%li
+  = link_to_unless current_page.first?, raw(t 'views.pagination.first'), "javascript:void(0);", :remote => remote,:onclick => "ajax_pagination(#{1})"

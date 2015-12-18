@@ -1,0 +1,139 @@
+<%- model_class = Product -%>
+<div class="skin_gray">
+  <div class="container">
+
+    <div class="col-sm-10">
+      <div class="col-sm-5">
+
+
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <img src="<%= RestConfig::PRODUCT_SERVER + @product.main_url %>" class="img-responsive center-block" width='320px' height='320px'/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-7">
+        <div class="row">
+          <div class="widget-box" style="height:518px;background-color:white">
+
+            <div class="widget-body">
+              <div class="widget-main padding-8">
+                <div style="height: 450px">
+                  <h1 class="center"><%= raw("<b>(#{@product.state.name})</b> #{@product.title}") %></h1>
+                  <hr/>
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:mobile_category)) %>:</strong></dt>
+                    <dd><%= @product.mobile_category_name %></dd>
+                  </dl>
+                  <hr/>
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:brand)) %>:</strong></dt>
+                    <dd><%= @product.brand %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:specification)) %>:</strong></dt>
+                    <dd><%= @product.specification %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= raw(model_class.human_attribute_name(:origin)) %>:</strong></dt>
+                    <dd><%= @product.origin %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:manufacturer) %>:</strong></dt>
+                    <dd><%= @product.manufacturer %></dd>
+                  </dl>
+                  <hr/>
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:sale_count) %>:</strong></dt>
+                    <dd><%= @product.sale_count %>件</dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:purchasePrice) %>:</strong></dt>
+                    <dd><%= number_to_currency(@product.purchasePrice, unit: '￥') %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:price) %>:</strong></dt>
+                    <dd><%= number_to_currency(@product.price, unit: '￥') %></dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:integral) %>:</strong></dt>
+                    <dd><%= @product.integral %>分</dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:stock) %>:</strong></dt>
+                    <dd><%= @product.stock %>个</dd>
+                  </dl>
+
+                  <dl class="dl-horizontal">
+                    <dt><strong><%= model_class.human_attribute_name(:num) %>:</strong></dt>
+                    <dd><%= @product.num %></dd>
+                  </dl>
+
+                </div>
+
+                <%= link_to t('.back', :default => t("helpers.links.back")),
+                            '', 'data-href' => products_path(page: cookies[:current_page]), :class => 'btn btn-default btn-xlg' %>
+
+                <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                            '', 'data-href' => edit_product_path(@product), :class => 'btn btn-default btn-xlg' %>
+
+                <!--
+                <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                            product_path(@product),
+                            :method => 'delete',
+                            :data => {:confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
+                            :class => 'btn btn-danger' %>
+                -->
+
+                <%= link_to @product.state.value == 'online' ? '下架' : '上架',
+                            product_state_path(@product), :class => 'btn btn-danger btn-xlg', :remote => true %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-12 widget-container-col ui-sortable">
+        <div class="tabbable">
+          <ul class="nav nav-tabs padding-12 tab-color-blue" id="myTab4">
+            <li class="active">
+              <a data-toggle="tab" href="#home4">图文详情</a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home4" class="tab-pane in active">
+              <img src="<%= RestConfig::PRODUCT_SERVER + @product.desc_url %>" class="img-responsive center-block"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3>热门商品</h3>
+
+    <div class="col-sm-2">
+      <% @top_products.each do |product| %>
+          <%= render :partial => 'product', :locals => {:product => product} %>
+      <% end %>
+    </div>
+  </div>
+</div>
+</div>
+</div>

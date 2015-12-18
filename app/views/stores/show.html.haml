@@ -1,0 +1,48 @@
+%p#notice= notice
+
+%p
+  %b 门店名称:
+  = @store.name
+%p
+  %b 门店管理者:
+  = @store.manager
+%p
+  %b 门店描述:
+  = @store.describe
+%p
+  %b 门店类型:
+  = @store.type
+%p
+  %b 门店经度:
+  = @store.longitude
+%p
+  %b 门店纬度:
+  = @store.latitude
+%p
+  %b 门店位置:
+  = @store.position
+%p
+  %b 创建时间:
+  = @store.created_at
+%p
+%b 身份证正面照片:
+= if @store.idpf.present?
+  .asset
+    = image_tag(@store.idpf.url,size: "300x160")
+%p
+%b 身份证反面照片:
+= if @store.idpf.present?
+  .asset
+    = image_tag(@store.idpb.url,size: "300x160")
+%p
+%b 营业执照照片:
+= if @store.bp.present?
+  .asset
+    = image_tag(@store.bp.url,size: "300x160")
+%p
+= link_to '编辑', edit_store_path(@store),:class => 'btn btn-info'
+\|
+= link_to '返回', stores_path,:class => 'btn btn-info'
+
+
+

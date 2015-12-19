@@ -62,9 +62,8 @@
   = link_to '新建酒庄','', 'data-href' => new_chateau_path,:class=>'btn btn-sm btn-success'
 
 %div{:style => "float: right"}
-  = link_to '主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'
+  -if current_user.has_role?(:admin)
+    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-primary'
 = paginate @data['chateaus']
 
 %div{:style => "text_align:center;clear:both;"}
-  -if current_user.has_role?(:admin)
-    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-primary'

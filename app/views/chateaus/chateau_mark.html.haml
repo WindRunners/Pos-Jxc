@@ -6,7 +6,7 @@
       %th 标签属性
       %th 删除标签
   %tbody
-    = @data['chateau_marks'].each do |mark|
+    - @data['chateau_marks'].each do |mark|
       %tr
         %td= mark.name
         %td= mark.value
@@ -29,4 +29,4 @@
 %br
 %br
 %br
-= link_to '酒庄主页','', 'data-href' => chateaus_path
+  = link_to '返回酒庄主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'

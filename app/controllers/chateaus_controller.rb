@@ -65,7 +65,8 @@ class ChateausController < ApplicationController
     @chateau_introduce.save
     respond_to do |format|
       if @chateau.save
-        format.html { redirect_to @chateau, notice: 'Chateau was successfully created.' }
+        format.js { render_js chateaus_path(@chateau) }
+        # format.html { redirect_to @chateau, notice: 'Chateau was successfully created.' }
         format.json { render :show, status: :created, location: @chateau }
       else
         format.html { render :new }
@@ -96,21 +97,16 @@ class ChateausController < ApplicationController
         a.replace a
       end
     }
-
-    if @chateau.save
-      render_js chateaus_path
-    else
-      render :edit
+    respond_to do |format|
+      if @chateau.update(chateau_params)
+        format.js { render_js chateaus_path(@chateau) }
+        # format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
+        format.json { render :show, status: :ok, location: @chateau }
+      else
+        format.html { render :edit }
+        format.json { render json: @chateau.errors, status: :unprocessable_entity }
+      end
     end
-    # respond_to do |format|
-    #   if @chateau.update(chateau_params)
-    #     format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
-    #     format.json { render :show, status: :ok, location: @chateau }
-    #   else
-    #     format.html { render :edit }
-    #     format.json { render json: @chateau.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # DELETE /chateaus/1
@@ -121,11 +117,11 @@ class ChateausController < ApplicationController
       FileUtils.rm_rf(case_folder)
     end
     @chateau.destroy
-    render_js chateaus_path
-    # respond_to do |format|
-    #   format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
+    respond_to do |format|
+      format.js { render_js chateaus_path }
+      # format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
+      format.json { head :no_content }
+    end
   end
 
   def turn_picture
@@ -143,10 +139,13 @@ class ChateausController < ApplicationController
     @picture.save
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.pictures << @picture
-    if @chateau.save
-      render_js chateaus_path
-    else
-      render :turn_picture
+
+    respond_to do |format|
+      if @chateau.save
+        format.js { render_js chateau_turn_picture_path }
+      else
+        format.html { render :turn_picture }
+      end
     end
   end
 
@@ -155,10 +154,12 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.pictures.delete(@picture)
     @picture.destroy
-    if @chateau.save
-      render_js chateaus_path
-    else
-      render :turn_picture
+    respond_to do |format|
+      if @chateau.save
+        format.js { render_js chateau_turn_picture_path }
+      else
+        format.html { render :turn_picture }
+      end
     end
   end
 
@@ -175,10 +176,15 @@ class ChateausController < ApplicationController
       @picture.save
       @chateau = Chateau.find(params[:chateau_id])
       @chateau.pictures << @picture
-      @chateau.save
-    }
 
-    render_js chateaus_path
+    }
+    respond_to do |format|
+      if @chateau.save
+        format.js { render_js chateau_turn_picture_path }
+      else
+        format.html { render :turn_picture }
+      end
+    end
   end
 
   def introduce_show
@@ -200,8 +206,11 @@ class ChateausController < ApplicationController
 
 
   def chateau_mark
+    @data = {}
     @chateau = Chateau.find(params[:chateau_id])
-    @chateau_marks = @chateau.chateau_marks
+    @data['chateau_marks'] = @chateau.chateau_marks
+    @data['chateau'] =@chateau
+    @data
   end
 
   def chateau_mark_reduce
@@ -210,7 +219,13 @@ class ChateausController < ApplicationController
     @chateau.chateau_marks.delete(@chateau_mark)
     @chateau_mark.destroy
     @chateau.save
-    redirect_to :chateau_chateau_mark
+    respond_to do |format|
+      if @chateau.save
+        format.js { render_js chateau_chateau_mark_path }
+      else
+        format.html { render :chateau_mark }
+      end
+    end
   end
 
   def chateau_mark_add
@@ -221,7 +236,13 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.chateau_marks << @chateau_mark
     @chateau.save
-    redirect_to :chateau_chateau_mark
+    respond_to do |format|
+      if @chateau.save
+        format.js { render_js chateau_chateau_mark_path }
+      else
+        format.html { render :chateau_mark }
+      end
+    end
   end
 
   def search
@@ -240,7 +261,7 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, 1)
-        format.html { redirect_to :back, notice: @chateau.name+'审核通过成功！' }
+        format.html { redirect_to chateaus_url, notice: '审核通过成功！' }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }
@@ -249,11 +270,12 @@ class ChateausController < ApplicationController
     end
   end
 
+
   def check_out
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, -1)
-        format.html { redirect_to :back, notice: @chateau.name + '审核不通过成功！' }
+        format.html { redirect_to chateaus_url, notice: '审核不通过成功！' }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }
@@ -304,7 +326,8 @@ class ChateausController < ApplicationController
     @chateau.wines.delete(@wine)
     respond_to do |format|
       if @chateau.save
-        format.html { redirect_to '/chateaus/'+@chateau.id+'/wines', notice: @chateau.name + '于' + @wine.name + '解除关联成功！' }
+        format.js { render_js chateau_wines_url(@chateau) }
+        # format.html { redirect_to '/chateaus/'+@chateau.id+'/wines', notice: @chateau.name + '于' + @wine.name + '解除关联成功！' }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }

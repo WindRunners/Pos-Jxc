@@ -73,12 +73,11 @@ class AnnouncementsController < ApplicationController
       FileUtils.rm_rf(announcements_path)
     end
     @announcement.destroy
-
-    render_js announcements_url
-    # respond_to do |format|
-    #   # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
+    respond_to do |format|
+      # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
+      format.js { render_js announcements_url, notice: 'Announcement was successfully destroyed.' }
+      format.json { head :no_content }
+    end
   end
 
   def warehouse_notice_index

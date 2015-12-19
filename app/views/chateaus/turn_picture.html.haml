@@ -10,13 +10,13 @@
       %tr
         %td= picture.chateau.name
         %td= image_tag(picture.pic,size: '320x240')
-        %td= link_to '删除', '', 'data-href' =>chateau_turn_picture_reduce_path(:picture_id=>picture.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+        %td= link_to '删除', chateau_turn_picture_reduce_path(:picture_id=>picture.id),:remote=>true,:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 %br
 
   #container
 
     %div{:style => "text_align:center; float: left"}
-      = form_for(:picture,:url => '/chateaus/'+@data['chateau'].id+'/turn_picture_add',remote:true) do |f|
+      = form_for(:picture,:url => '/chateaus/'+@data['chateau'].id+'/turn_picture_add',multipart:true, remote:true) do |f|
         .field
           = f.label :图片类型
           = f.select :type, options_for_select([['轮播图', 1],['素材', 2]], 1)
@@ -38,4 +38,4 @@
           = submit_tag '保存',:class => 'btn btn-yellow'
 
 
-= link_to '酒庄主页','', 'data-href' =>chateaus_path
+  = link_to '主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'

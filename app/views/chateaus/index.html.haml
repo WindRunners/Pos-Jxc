@@ -48,9 +48,9 @@
         %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau)
         -if current_user.has_role?(:admin)
           - if chateau.status ==0 || chateau.status ==-1
-            %td= link_to '审核通过','', 'data-href' => chateau_check_path(chateau)
+            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check'
           - else
-            %td= link_to '审核不通过','', 'data-href' => chateau_check_out_path(chateau)
+            %td= link_to '审核不通过','', 'data-href' =>'/chateaus/'+chateau.id+'/check_out'
         %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau)
         %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(chateau)
         %td= link_to '关联名酒', '', 'data-href' =>chateau_wines_path(chateau)

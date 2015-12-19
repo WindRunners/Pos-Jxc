@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :chateau_comments
   resources :user_integrals
   resources :wines
 

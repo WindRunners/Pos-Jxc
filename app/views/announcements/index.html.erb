@@ -27,7 +27,6 @@
     <th><%= model_class.human_attribute_name(:is_top) %></th>
     <th><%= model_class.human_attribute_name(:created_at) %></th>
     <th></th>
-    <th></th>
     <th>操作</th>
     <th></th>
     <th></th>
@@ -53,13 +52,12 @@
         <td><%= announcement.read_num %></td>
         <td><%= announcement.is_top %></td>
         <td><%= announcement.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= link_to '详细', announcement, :class => 'btn btn-default btn-xs' %></td>
-        <td><%= link_to '编辑', edit_announcement_path(announcement), :class => 'btn btn-default btn-xs' %></td>
-        <td><%= link_to '预览', announcement_app_show_path(announcement.id), :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '详细', '', 'data-href' => '/announcements/'+announcement.id, :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '编辑', '', 'data-href' => '/announcements/'+announcement.id+'/edit', :class => 'btn btn-default btn-xs' %></td>
         <% if announcement.status ==0 || announcement.status ==-1 %>
-            <td><%= link_to '审核通过', announcement_check_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核通过', '', 'data-href' => '/announcements/'+announcement.id+'/check', :class => 'btn btn-default btn-xs' %></td>
         <% else %>
-            <td><%= link_to '审核不通过', announcement_check_out_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核不通过', '', 'data-href' => '/announcements/'+announcement.id+'/check_out', :class => 'btn btn-default btn-xs' %></td>
         <% end %>
         <td><%= link_to '删除', announcement, method: :delete, data: {confirm: 'Are you sure?'},
                         :class => 'btn btn-xs btn-danger' %></td>

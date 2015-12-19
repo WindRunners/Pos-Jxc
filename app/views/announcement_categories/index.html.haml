@@ -11,7 +11,7 @@
 %br
 
 -#= link_to '新建种类', new_announcement_category_path
-= link_to t('.new', :default => t("helpers.links.new")), new_announcement_category_path,:class => 'btn btn-primary'
+= link_to t('.new', :default => t("helpers.links.new")),'', 'data-href' => new_announcement_category_path,:class => 'btn btn-primary'
 
 
 :javascript

@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Content:
+  = @chateau_comment.content
+%p
+  %b Status:
+  = @chateau_comment.status
+%p
+  %b Hits:
+  = @chateau_comment.hits
+
+= link_to 'Edit', edit_chateau_comment_path(@chateau_comment)
+\|
+= link_to 'Back', chateau_comments_path

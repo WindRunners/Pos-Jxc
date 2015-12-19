@@ -1,5 +1,5 @@
 
-%h1= 酒庄列表
+%h1 酒庄管理
 
 #container
   %div{:style => "text_align:center; float: left"}
@@ -16,16 +16,16 @@
 %table.table
   %thead
     %tr
-      %th= model_class.human_attribute_name(:name)
-      %th= model_class.human_attribute_name(:owner)
-      %th= model_class.human_attribute_name(:region)
-      %th= model_class.human_attribute_name(:hits)
-      %th= model_class.human_attribute_name(:sequence)
+      %th 名字
+      %th 主人
+      %th 地区
+      %th 浏览次数
+      %th 排序字段
       -if current_user.has_role?(:admin)
         %th  审核状态
-      %th= model_class.human_attribute_name(:created_at)
+      %th 创建时间
       %th  上传人
-      %th{:colspan => "6"} op
+      %th{:colspan => "7"} op
 
   %tbody
     -  @data['chateaus'].each do |chateau|
@@ -44,17 +44,17 @@
             不通过
         %td= chateau.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s if chateau.created_at.present?
         %td= chateau.user.name if chateau.user.present?
-        %td= link_to '详细', chateau
-        %td= link_to '编辑', edit_chateau_path(chateau)
+        %td= link_to '详细', '', 'data-href' =>chateau_path(chateau)
+        %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau)
         -if current_user.has_role?(:admin)
           - if chateau.status ==0 || chateau.status ==-1
-            %td= link_to '审核通过', chateau_check_path(chateau)
+            %td= link_to '审核通过','', 'data-href' => chateau_check_path(chateau)
           - else
-            %td= link_to '审核不通过', chateau_check_out_path(chateau)
-        %td= link_to '标签管理', chateau_chateau_mark_path(chateau)
-        %td= link_to '轮播图管理', chateau_turn_picture_path(chateau)
-        %td= link_to '关联名酒', chateau_wines_path(chateau)
-        %td= link_to '删除', chateau, :method => :delete, :data => { :confirm => 'Are you sure?' }
+            %td= link_to '审核不通过','', 'data-href' => chateau_check_out_path(chateau)
+        %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau)
+        %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(chateau)
+        %td= link_to '关联名酒', '', 'data-href' =>chateau_wines_path(chateau)
+        %td= link_to '删除', chateau_path(chateau), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 

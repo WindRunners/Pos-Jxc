@@ -26,34 +26,43 @@ class AnnouncementCategoriesController < ApplicationController
   # POST /announcement_categories.json
   def create
     @announcement_category = AnnouncementCategory.new(announcement_category_params)
-
-    respond_to do |format|
-      if @announcement_category.save
-        format.html { redirect_to @announcement_category, notice: 'Announcement category was successfully created.' }
-        format.js
-        format.json { render :show, status: :created, location: @announcement_category }
-      else
-        format.html { render :new }
-        format.js
-        format.json { render json: @announcement_category.errors, status: :unprocessable_entity }
-      end
+    if @announcement_category.save
+      render_js announcement_categories_path
+    else
+      render :new
     end
+    # respond_to do |format|
+    #   if @announcement_category.save
+    #     format.html { redirect_to @announcement_category, notice: 'Announcement category was successfully created.' }
+    #     format.js
+    #     format.json { render :show, status: :created, location: @announcement_category }
+    #   else
+    #     format.html { render :new }
+    #     format.js
+    #     format.json { render json: @announcement_category.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /announcement_categories/1
   # PATCH/PUT /announcement_categories/1.json
   def update
-    respond_to do |format|
-      if @announcement_category.update(announcement_category_params)
-        format.html { redirect_to @announcement_category, notice: 'Announcement category was successfully updated.' }
-        format.js
-        format.json { render :show, status: :ok, location: @announcement_category }
-      else
-        format.html { render :edit }
-        format.js
-        format.json { render json: @announcement_category.errors, status: :unprocessable_entity }
-      end
+    if @announcement_category.update(announcement_category_params)
+      render_js announcement_categories_path
+    else
+      render :new
     end
+    # respond_to do |format|
+    #   if @announcement_category.update(announcement_category_params)
+    #     format.html { redirect_to @announcement_category, notice: 'Announcement category was successfully updated.' }
+    #     format.js
+    #     format.json { render :show, status: :ok, location: @announcement_category }
+    #   else
+    #     format.html { render :edit }
+    #     format.js
+    #     format.json { render json: @announcement_category.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /announcement_categories/1
@@ -65,7 +74,6 @@ class AnnouncementCategoriesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
 
 
   def data_table
@@ -89,13 +97,13 @@ class AnnouncementCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_announcement_category
-      @announcement_category = AnnouncementCategory.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_announcement_category
+    @announcement_category = AnnouncementCategory.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def announcement_category_params
-      params.require(:announcement_category).permit(:description, :name)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def announcement_category_params
+    params.require(:announcement_category).permit(:description, :name)
+  end
 end

@@ -41,3 +41,17 @@ function get_location_href_no_search(){
 function get_rand_num(){
     return Math.floor(Math.random()*1000);
 }
+
+//分页添加ajax
+function pagination_ajax(){
+
+    $(".pagination a").each(function(){
+
+        var href = $(this).attr('href');
+        if(undefined!=href && null!=href){
+            $(this).attr('data-href',href);
+            $(this).attr('data-url',href);
+            $(this).attr('href',"#"+href);
+        }
+    });
+}

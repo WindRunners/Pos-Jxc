@@ -3,12 +3,19 @@
 
 #container
   %div{:style => "text_align:center; float: left"}
-    = form_tag(search_chateaus_path, method: "get") do
-      = label_tag(:name, '名字')
-      = text_field_tag(:name)
-      = label_tag(:status, '状态')
-      = select_tag(:status, options_for_select([['请选择状态', nil], ['未审核', 0], ['通过', 1], ['不通过', -1]]))
-      = submit_tag('查询')
+    %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
+      .form-group
+        %label{"for"=>"name"} 名称:
+        %input#name.form-control{'name'=>'名称'}
+      .form-group
+        %label{"for"=>"status"} 状态:
+        %select#status.form-control
+          %option{value:''} --请选择--
+          %option{value:'0'} 未审核
+          %option{value:'1'} 审核通过
+          %option{value:'-1'} 不通过
+
+      %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
 
   %div{:style => "text_align:center; float: right"}
     %p 亲爱的#{current_user.name}，你一共上传了#{@data['user_count']}个酒庄,你今天已经上传了#{@data['today_count']}个酒庄，共#{@data['count']}个酒庄。
@@ -67,3 +74,4 @@
 = paginate @data['chateaus']
 
 %div{:style => "text_align:center;clear:both;"}
+

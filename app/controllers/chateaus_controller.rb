@@ -5,21 +5,24 @@ class ChateausController < ApplicationController
   # GET /chateaus
   # GET /chateaus.json
   def index
-
     searchParams = {}
-    searchParams['user_id'] = current_user.id
-    @user_chateaus= Chateau.where(searchParams)
+    status_condition=params[:status] || ''
+    name_condition=params[:name] || ''
+    searchParams['status'] = status_condition if status_condition.present?
+    searchParams['name'] = /#{name_condition}/ if name_condition.present?
+    @user_chateaus= Chateau.where(:user_id => current_user.id)
     i = 0
     @user_chateaus.each do |c|
       i +=1 if c.created_at.today?
     end
     @data ={}
-    @data['chateaus'] =Chateau.all.page(params[:page]).order('created_at DESC')
+    @data['chateaus'] =Chateau.where(searchParams).page(params[:page]).order('created_at DESC')
     @data['count'] = Chateau.count
     @data['user_count'] = current_user.chateaus.count
     @data['today_count'] = i
     @data
   end
+
 
   # GET /chateaus/1
   # GET /chateaus/1.json
@@ -65,9 +68,9 @@ class ChateausController < ApplicationController
     @chateau_introduce.save
     respond_to do |format|
       if @chateau.save
-        format.js { render_js chateaus_path(@chateau) }
+        format.js { render_js chateaus_path }
         # format.html { redirect_to @chateau, notice: 'Chateau was successfully created.' }
-        format.json { render :show, status: :created, location: @chateau }
+        # format.json { render :show, status: :created, location: @chateau }
       else
         format.html { render :new }
         format.json { render json: @chateau.errors, status: :unprocessable_entity }
@@ -95,6 +98,7 @@ class ChateausController < ApplicationController
         a.replace 'src="/upload/image/chateaus/' + @chateau.id + '/' + uuid + '.jpg'
       else
         a.replace a
+        a.insert(5, '/')
       end
     }
     respond_to do |format|
@@ -116,6 +120,9 @@ class ChateausController < ApplicationController
     if Dir.exist? case_folder
       FileUtils.rm_rf(case_folder)
     end
+    @chateau.pictures.destroy
+    @chateau.chateau_marks.destroy
+    @chateau.chateau_introduce.destroy
     @chateau.destroy
     respond_to do |format|
       format.js { render_js chateaus_path }
@@ -253,7 +260,11 @@ class ChateausController < ApplicationController
     conditionParams['status'] = status_condition if status_condition.present?
     conditionParams['name'] = /#{name_condition}/ if name_condition.present?
     @data['chateaus'] = Chateau.where(conditionParams).page(params[:page]).order('created_at DESC')
-    render :index
+    # render :index
+    respond_to do |format|
+      # format.html { redirect_to chateaus_url, notice: '审核通过成功！' }
+      format.js { render_js chateaus_path }
+    end
   end
 
 

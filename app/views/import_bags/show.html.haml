@@ -71,10 +71,14 @@
   %tbody
     - @work_flow_tracks.each do |track|
       %tr#bag_product_tr
+        -#%td #{ImportBag.get_state_text(track.state)}
+        -#%td #{ImportBag.get_event_text(track.event)}
+        -#%td #{track.memo}
+        -#%td #{track.created_at.to_s(:db)}
         %td #{ImportBag.get_state_text(track.state)}
         %td #{ImportBag.get_event_text(track.event)}
         %td #{track.memo}
-        %td #{track.created_at.to_s(:db)}
+        %td #{track.created_at}
 %div.row
   %div.col-xs-6
     %div#dynamic-table_info.dataTables_info
@@ -84,13 +88,13 @@
       = paginate @work_flow_tracks
 /修改
 - if policy(@import_bag).update?
-  = link_to '修改', edit_import_bag_path(@import_bag),class: 'btn btn-default'
+  = link_to '修改', '', 'data-href' =>edit_import_bag_path(@import_bag),class: 'btn btn-default'
 /当前用户可以返回管理列表
 - if @import_bag['user_id'] == current_user.id
-  = link_to '返回管理列表', import_bags_path,class: 'btn btn-default'
+  = link_to '返回管理列表', '', 'data-href' =>import_bags_path,class: 'btn btn-default'
 /返回审核列表
 - if policy(@import_bag).hasFirstCheckRole? || policy(@import_bag).hasSecondCheckRole?
-  = link_to '返回审核列表', "#{import_bags_path}/workflow/deal_list",class: 'btn btn-default'
+  = link_to '返回审核列表', '', 'data-href' =>"#{import_bags_path}/workflow/deal_list",class: 'btn btn-default'
 - if policy(@import_bag).start?
   = link_to '发起审核',"javascript:showWfDealModel('start','#{@import_bag.id}')",:class => 'btn btn-default'
 - if policy(@import_bag).deal_list?

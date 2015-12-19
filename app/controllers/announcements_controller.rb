@@ -35,14 +35,19 @@ class AnnouncementsController < ApplicationController
     @announcement.author = current_user.name
     @announcement.read_num = 0
     @announcement.status = 0
-    respond_to do |format|
-      if @announcement.save
-        format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
-        format.json { render :show, status: :created, location: @announcement }
-      else
-        format.html { render :new }
-        format.json { render json: @announcement.errors, status: :unprocessable_entity }
-      end
+    # respond_to do |format|
+    #   if @announcement.save
+    #     format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
+    #     format.json { render :show, status: :created, location: @announcement }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @announcement.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    if @announcement.save
+    render_js announcements_path
+    else
+      render :new
     end
   end
 
@@ -68,10 +73,12 @@ class AnnouncementsController < ApplicationController
       FileUtils.rm_rf(announcements_path)
     end
     @announcement.destroy
-    respond_to do |format|
-      format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+
+    render_js announcements_url
+    # respond_to do |format|
+    #   # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   def warehouse_notice_index

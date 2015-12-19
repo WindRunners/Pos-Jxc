@@ -1,0 +1,25 @@
+%h1 Listing chateau_comments
+
+%table
+  %thead
+    %tr
+      %th Content
+      %th Status
+      %th Hits
+      %th
+      %th
+      %th
+
+  %tbody
+    - @chateau_comments.each do |chateau_comment|
+      %tr
+        %td= chateau_comment.content
+        %td= chateau_comment.status
+        %td= chateau_comment.hits
+        %td= link_to 'Show', chateau_comment
+        %td= link_to 'Edit', edit_chateau_comment_path(chateau_comment)
+        %td= link_to 'Destroy', chateau_comment, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Chateau comment', new_chateau_comment_path

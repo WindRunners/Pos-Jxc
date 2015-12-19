@@ -21,6 +21,7 @@ class Chateau
   has_many :pictures #轮播图片
   has_many :chateau_marks #标签
   has_many :wines #名酒
+  has_many :chateau_comments , :autosave => true#拥有的评论
   belongs_to :region, :autosave => true#所在地区
   belongs_to :user, :autosave => true#上传人
 

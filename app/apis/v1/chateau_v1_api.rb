@@ -90,4 +90,27 @@ class ChateauV1API < Grape::API
     data_array
   end
 
+
+
+
+  desc 'comment'
+
+  params do
+    requires :chateau_id, type: String, desc: 'chateau_id'
+    requires :user_id, type: String, desc: 'user_id'
+    requires :content, type: String, desc: 'content'
+  end
+  post 'comment' do
+    @chateau = Chateau.find(params[:chateau_id])
+    chateau_comment = ChateauComment.new
+    chateau_comment.content = params[:content]
+    @chateau.chateau_comments << chateau_comment
+    if @chateau.save
+      {:success => true}
+    else
+      {:success => false}
+    end
+
+  end
+
 end

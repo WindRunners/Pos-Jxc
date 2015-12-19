@@ -1,0 +1,19 @@
+= form_for @chateau_comment do |f|
+  - if @chateau_comment.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@chateau_comment.errors.count, "error")} prohibited this chateau_comment from being saved:"
+      %ul
+        - @chateau_comment.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :content
+    = f.text_field :content
+  .field
+    = f.label :status
+    = f.number_field :status
+  .field
+    = f.label :hits
+    = f.number_field :hits
+  .actions
+    = f.submit 'Save'

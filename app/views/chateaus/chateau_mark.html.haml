@@ -10,7 +10,7 @@
       %tr
         %td= mark.name
         %td= mark.value
-        %td= link_to '删除', chateau_chateau_mark_reduce_path(:chateau_make_id => mark.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+        %td= link_to '删除','', 'data-href' => chateau_chateau_mark_reduce_path(:chateau_make_id => mark.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 
 
 
@@ -29,4 +29,4 @@
 %br
 %br
 %br
-= link_to '酒庄主页', chateaus_path
+= link_to '酒庄主页','', 'data-href' => chateaus_path

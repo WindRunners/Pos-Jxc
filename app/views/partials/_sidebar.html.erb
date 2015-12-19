@@ -1,10 +1,10 @@
 <!-- #section:basics/sidebar -->
 <div id="sidebar" class="sidebar responsive">
   <script type="text/javascript">
-    try {
-      ace.settings.check('sidebar', 'fixed')
-    } catch (e) {
-    }
+      try {
+          ace.settings.check('sidebar', 'fixed')
+      } catch (e) {
+      }
   </script>
 
   <div class="sidebar-shortcuts" id="sidebar-shortcuts">
@@ -38,7 +38,8 @@
 
       <span class="btn btn-danger"></span>
     </div>
-  </div><!-- /.sidebar-shortcuts -->
+  </div>
+  <!-- /.sidebar-shortcuts -->
 
   <ul class="nav nav-list">
     <li class="active">
@@ -152,7 +153,7 @@
 
 
     <li class="">
-      <a data-href="<%= orders_path(:workflow_state => "all") %>" >
+      <a data-href="<%= orders_path(:workflow_state => "all") %>">
         <i class="menu-icon fa fa-desktop"></i>
             <span class="menu-text">
                 订单管理
@@ -250,9 +251,9 @@
     </li>
 
     <li class="">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-        <span class="menu-text">公告</span>
+      <a data-href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-file-o"></i>
+        <span class="menu-text">小达快讯</span>
         <b class="arrow fa fa-angle-down"></b>
       </a>
 
@@ -260,22 +261,60 @@
       <ul class="submenu">
 
         <li class="">
-          <a href="<%= announcements_path %>">
+          <a data-href="<%= announcements_path %>">
             <i class="menu-icon fa fa-caret-right"></i>
-            公告管理
+            快讯管理
           </a>
 
           <b class="arrow"></b>
         </li>
         <li class="">
-          <a href="<%= announcement_categories_path %>">
+          <a data-href="<%= announcement_categories_path %>">
             <i class="menu-icon fa fa-caret-right"></i>
-            公告种类管理
+            快讯种类管理
           </a>
           <b class="arrow"></b>
         </li>
       </ul>
     </li>
+
+    <li class="">
+      <a data-href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-pencil-square-o"></i>
+        <span class="menu-text">酒江湖</span>
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+      <ul class="submenu">
+
+        <li class="">
+          <a data-href="<%= chateaus_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            酒庄管理
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+        <li class="">
+          <a data-href="<%= regions_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            产地管理
+          </a>
+          <b class="arrow"></b>
+        </li>
+
+        <li class="">
+          <a data-href="<%= wines_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            名酒管理
+          </a>
+          <b class="arrow"></b>
+        </li>
+
+      </ul>
+    </li>
+
 
     <li class="open">
 
@@ -364,6 +403,7 @@
       </ul>
     </li>
 
+<<<<<<< HEAD
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>
@@ -422,6 +462,10 @@
     </li>
 
   </ul><!-- /.nav-list -->
+=======
+  </ul>
+  <!-- /.nav-list -->
+>>>>>>> b227e4920148986cf034067eee3accc19d7698c2
 
   <!-- #section:basics/sidebar.layout.minimize -->
   <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -430,10 +474,10 @@
 
   <!-- /section:basics/sidebar.layout.minimize -->
   <script type="text/javascript">
-    try {
-      ace.settings.check('sidebar', 'collapsed')
-    } catch (e) {
-    }
+      try {
+          ace.settings.check('sidebar', 'collapsed')
+      } catch (e) {
+      }
   </script>
 </div>
 

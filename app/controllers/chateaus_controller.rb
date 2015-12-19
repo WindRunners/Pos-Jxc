@@ -96,16 +96,21 @@ class ChateausController < ApplicationController
         a.replace a
       end
     }
-    @chateau.save
-    respond_to do |format|
-      if @chateau.update(chateau_params)
-        format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
-        format.json { render :show, status: :ok, location: @chateau }
-      else
-        format.html { render :edit }
-        format.json { render json: @chateau.errors, status: :unprocessable_entity }
-      end
+
+    if @chateau.save
+      render_js chateaus_path
+    else
+      render :edit
     end
+    # respond_to do |format|
+    #   if @chateau.update(chateau_params)
+    #     format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @chateau }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @chateau.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /chateaus/1
@@ -116,15 +121,19 @@ class ChateausController < ApplicationController
       FileUtils.rm_rf(case_folder)
     end
     @chateau.destroy
-    respond_to do |format|
-      format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    render_js chateaus_path
+    # respond_to do |format|
+    #   format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   def turn_picture
+    @data = {}
     @chateau = Chateau.find(params[:chateau_id])
-    @turn_picture = @chateau.pictures
+    @data['chateau'] = @chateau
+    @data['turn_picture'] = @chateau.pictures
+    @data
   end
 
   def turn_picture_add
@@ -134,8 +143,11 @@ class ChateausController < ApplicationController
     @picture.save
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.pictures << @picture
-    @chateau.save
-    redirect_to :chateau_turn_picture
+    if @chateau.save
+      render_js chateaus_path
+    else
+      render :turn_picture
+    end
   end
 
   def turn_picture_reduce
@@ -143,8 +155,11 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.pictures.delete(@picture)
     @picture.destroy
-    @chateau.save
-    redirect_to :chateau_turn_picture
+    if @chateau.save
+      render_js chateaus_path
+    else
+      render :turn_picture
+    end
   end
 
   def turn_picture_urls
@@ -162,7 +177,8 @@ class ChateausController < ApplicationController
       @chateau.pictures << @picture
       @chateau.save
     }
-    redirect_to :chateau_turn_picture
+
+    render_js chateaus_path
   end
 
   def introduce_show
@@ -312,13 +328,13 @@ class ChateausController < ApplicationController
     Chateau.all.each do |c|
       if c.pictures.count > 0
         if !Dir.exist? 'public/chateaus/'+ c.name
-        Dir.mkdir('public/chateaus/'+ c.name)
+          Dir.mkdir('public/chateaus/'+ c.name)
         end
         c.pictures.each do |p|
           uuid=SecureRandom.uuid
           open('public/chateaus/'+ c.name + '/' + uuid + '.jpg', 'wb') do |file|
             begin
-            file << open('http://10.99.99.206:81'+p.pic.url).read
+              file << open('http://10.99.99.206:81'+p.pic.url).read
             rescue
             end
           end

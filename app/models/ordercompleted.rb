@@ -4,6 +4,7 @@ class Ordercompleted
   include Mongoid::Timestamps
   include Workflow
   include Mongoid::Geospatial
+  include Mongoid::Attributes::Dynamic
 
   belongs_to :userinfo
   belongs_to :delivery_user
@@ -32,6 +33,9 @@ class Ordercompleted
   field :getcoupons, type: Array, default: [] #获取的优惠券列表
   field :workflow_state  #付款方式
 
+  field :store_id  # 门店id
+  field :distance  # 配送距离
+  field :delivery_user_id #配送员id
 
   workflow do
     state :new do
@@ -161,7 +165,11 @@ class Ordercompleted
                                         :remarks => order.remarks,
                                         :online_paid => order.online_paid,
                                         :getcoupons => order.getcoupons,
-                                        :paymode => order.paymode)
+                                        :paymode => order.paymode,
+                                        :store_id => order.store_id,
+                                        :distance => order.distance,
+                                        :delivery_user_id => order.delivery_user_id
+                                         )
 
     order.ordergoods.each do |ordergood|
       ordercompleted.ordergoodcompleteds.build(:id => ordergood.id,

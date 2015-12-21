@@ -11,7 +11,7 @@ module CityV1APIHelper
       #查询县级的联盟商
       userinfo = Userinfo.where({'province' => province, 'city' => city, 'district' => district}).first
       #查询市级的联盟商
-      userinfo = Userinfo.where({'province' => province, 'city' => city}).first if !userinfo.present?
+      userinfo = Userinfo.where({'province' => province, 'city' => city,'district' => {"$in" => ['',nil]}}).first if !userinfo.present?
       #查询郑州市的联盟商
       userinfo = Userinfo.where({'province' => '河南省', 'city' => '郑州市'}).first if !userinfo.present?
     else

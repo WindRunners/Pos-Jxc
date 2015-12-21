@@ -10,6 +10,7 @@ function search(){
 
     window.location.href = get_location_href_no_search()+"?mobile="+mobile+"&f="+get_rand_num();
     //alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
+    pagination_ajax();
 }
 
 //导入表单提交验证

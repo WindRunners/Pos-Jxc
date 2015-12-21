@@ -76,7 +76,7 @@ $(function(){
         }
     };
 
-
+    pagination_ajax();
 });
 
 

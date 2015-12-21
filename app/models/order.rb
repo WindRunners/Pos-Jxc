@@ -43,6 +43,8 @@ class Order
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
+  field :is_spirit, type: Boolean, default: false #是否酒库订单( 酒库订单取消订单后需要商品需要返回酒库)
+
 
   index({location: "2d"}, {min: -200, max: 200})
 

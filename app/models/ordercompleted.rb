@@ -36,6 +36,7 @@ class Ordercompleted
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
+  field :is_spirit, type: Boolean, default: false #是否酒库订单( 酒库订单取消订单后需要商品需要返回酒库)
 
   workflow do
     state :new do
@@ -168,7 +169,8 @@ class Ordercompleted
                                         :paymode => order.paymode,
                                         :store_id => order.store_id,
                                         :distance => order.distance,
-                                        :delivery_user_id => order.delivery_user_id
+                                        :delivery_user_id => order.delivery_user_id,
+                                        :is_spirit => order.is_spirit
                                          )
 
     order.ordergoods.each do |ordergood|

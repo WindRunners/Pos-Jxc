@@ -33,4 +33,6 @@ $(function(){
             search();
         }
     };
+
+    pagination_ajax();
 });

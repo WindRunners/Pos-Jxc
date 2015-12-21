@@ -1,7 +1,15 @@
 
 $(function () {
     //分页添加AJAX
-    pagination_ajax();
+    $(".pagination a").each(function(){
+
+        var href = $(this).attr('href');
+        if(undefined!=href && null!=href){
+            $(this).attr('data-href',href);
+            $(this).attr('data-url',href);
+            $(this).attr('href',"#"+href);
+        }
+    });
     //TinyMCE
     tinymce.init({
         selector: 'textarea.tinymce',
@@ -98,7 +106,7 @@ function get_region(i) {
 
 
 
-//礼包查询
+//查询
 function search(){
 
     var name = $("#search-scope #name").val();

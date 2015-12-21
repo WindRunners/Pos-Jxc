@@ -51,6 +51,28 @@ class SpiritRoomV1API < Grape::API
       return data if data.class==Hash
       present data, with: Entities::SpiritRoomProduct
     end
+
+
+
+    desc '提酒' do
+      detail '从酒库中提酒'
+    end
+    params do
+      requires :userinfo_id, type: String, desc: '当前小Bid'
+      requires :customer_id, type: String, desc: '小Cid'
+      requires :product_list, type: String, desc: '商品信息{product_id=>count},product_id:商品id,count:数量 eg:{"56582c05c2fb4e1ae1000000":2}'
+      requires :consignee, type: String, desc: '收货人'
+      requires :address, type: String, desc: '收货地址'
+      requires :mobile, type: String, desc: '收货人手机号'
+      optional :longitude, type: Float, desc: '位置纬度'
+      optional :latitude, type: Float, desc: '位置经度'
+      requires :consignee, type: String, desc: '收货人'
+    end
+    post 'take_product' do
+
+      return SpiritRoomV1APIHelper.take_product(current_customerUser,declared(params))
+    end
+
   end
 
 end

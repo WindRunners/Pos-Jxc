@@ -82,7 +82,6 @@
 //= require highcharts.src.js
 //= require chartkick.js
 
-// require angular
 //= require tinymce
 //= require ckeditor-jquery
 

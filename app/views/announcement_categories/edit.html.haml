@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', @announcement_category
+= link_to 'Show','', 'data-href' => announcement_category_path(@announcement_category)
 \|
-= link_to 'Back', announcement_categories_path
+= link_to 'Back','', 'data-href' =>announcement_categories_path

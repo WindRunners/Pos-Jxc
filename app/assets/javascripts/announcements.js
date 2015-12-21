@@ -18,17 +18,17 @@ function check() {
     return true;
 }
 
-//配送员查询
-function search() {
-    //var mobile = $("#search-scope #mobile").val();
-    //var status = $("#search-scope #status").val();
-    //
-    //if(mobile.length>11){
-    //    alert("手机号码不合法!");
-    //    return;
-    //}
-    //window.location.href = window.location.pathname+"?mobile="+mobile+"&status="+status;
-    ////alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
+//查询
+function search(){
+
+    var title = $("#search-scope #title").val();
+    var status = $("#search-scope #status").val();
+    var prefix_url = "?title="+title;
+    if(status != null && status!=undefined){
+        prefix_url+= "&status="+status
+    }
+
+    window.location.href = get_location_href_no_search()+prefix_url+"&f="+get_rand_num();
 }
 
 

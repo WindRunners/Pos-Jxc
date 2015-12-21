@@ -129,7 +129,6 @@ Rails.application.routes.draw do
   post 'announcements/data_table/' => "announcements#data_table"
 
   resources :announcement_categories
-  post 'announcement_categories/data_table/' => "announcement_categories#data_table"
 
 
   resources :pictures do

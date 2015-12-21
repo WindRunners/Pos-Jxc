@@ -98,7 +98,7 @@ function get_region(i) {
 
 
 
-//礼包查询
+//查询
 function search(){
 
     var name = $("#search-scope #name").val();

@@ -6,13 +6,24 @@
   </div>
 
   <div style="text_align:center; float: right">
-    <%= form_tag(search_announcements_path, method: "get") do %>
-        <%= label_tag(:title, '标题') %>
-        <%= text_field_tag(:title) %>
-        <%= label_tag(:status, '状态') %>
-        <%= select_tag(:status, options_for_select([['请选择状态', nil], ['未审核', 0], ['通过', 1], ['不通过', -1]]), :class => 'chosen-container chosen-container-multi', :style => 'width:100px') %>
-        <%= submit_tag('查询') %>
-    <% end %>
+
+    <form id="search-scope" class="form-inline" method="post" data-remote="true" action="/announcements" accept-charset="UTF-8">
+      <div class="form-group">
+        <label for="title">标题:</label>
+        <input id="title" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="status">状态:</label>
+        <select id="status" class="form-control">
+          <option value="" selected="selected">请选择</option>
+          <option value="0">未审核</option>
+          <option value="1">通过</option>
+          <option value="-1">不通过</option>
+        </select>
+      </div>
+      <a class="btn btn-primary btn-sm" href="javascript:search();">搜索</a>
+    </form>
+
   </div>
 </div>
 
@@ -52,14 +63,14 @@
         <td><%= announcement.read_num %></td>
         <td><%= announcement.is_top %></td>
         <td><%= announcement.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= link_to '详细', '', 'data-href' => '/announcements/'+announcement.id, :class => 'btn btn-default btn-xs' %></td>
-        <td><%= link_to '编辑', '', 'data-href' => '/announcements/'+announcement.id+'/edit', :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '详细', "##{announcement_path(announcement)}", 'data-href' => announcement_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '编辑', "##{edit_announcement_path(announcement)}", 'data-href' => edit_announcement_path(announcement), :class => 'btn btn-default btn-xs' %></td>
         <% if announcement.status ==0 || announcement.status ==-1 %>
-            <td><%= link_to '审核通过', '', 'data-href' => '/announcements/'+announcement.id+'/check', :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核通过', "##{announcement_check_path(announcement)}", 'data-href' => announcement_check_path(announcement), :class => 'btn btn-default btn-xs' %></td>
         <% else %>
-            <td><%= link_to '审核不通过', '', 'data-href' => '/announcements/'+announcement.id+'/check_out', :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核不通过', "##{announcement_check_out_path(announcement)}", 'data-href' => announcement_check_out_path(announcement), :class => 'btn btn-default btn-xs' %></td>
         <% end %>
-        <td><%= link_to '删除', announcement, :remote=>true, method: :delete, data: {confirm: 'Are you sure?'},
+        <td><%= link_to '删除', announcement, :remote => true, method: :delete, data: {confirm: 'Are you sure?'},
                         :class => 'btn btn-xs btn-danger' %></td>
       </tr>
   <% end %>
@@ -69,11 +80,11 @@
 <br>
 <div id="container">
   <div style="text_align:center; float: left">
-    <%= link_to '增加单个','', 'data-href' => new_announcement_path, :class => 'btn btn-primary' %>
+    <%= link_to '增加单个', '', 'data-href' => new_announcement_path, :class => 'btn btn-primary' %>
   </div>
   <div style="text_align:center; float: right">
     <p>批量添加</p>
-    <%= form_tag({action: :batch}, multipart: true) do %>
+    <%= form_tag({action: :batch}, remote: true, multipart: true) do %>
         <p>1:请选择种类：</p>
         <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }),
                        :class => 'chosen-container chosen-container-multi', :style => 'width:100px') %>
@@ -85,3 +96,8 @@
 </div>
 
 <%= paginate @announcements %>
+
+
+
+
+

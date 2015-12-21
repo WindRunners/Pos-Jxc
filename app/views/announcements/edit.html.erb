@@ -5,5 +5,5 @@
 
 <%= render :partial => 'form', :locals => { :type => "edit" }  %>
 
-<%= link_to 'Show', @announcement %> |
-<%= link_to 'Back', announcements_path %>
+<%= link_to 'Show', '', 'data-href' =>announcements_path(@announcement) %> |
+<%= link_to 'Back', '', 'data-href' =>announcements_path %>

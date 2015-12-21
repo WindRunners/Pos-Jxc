@@ -49,6 +49,7 @@ gem 'mongoid-geospatial'
 gem 'better_errors'
 gem 'binding_of_caller'
 
+gem 'remotipart'
 
 gem 'responders', '~> 2.0'
 

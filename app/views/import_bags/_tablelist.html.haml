@@ -34,14 +34,14 @@
           - else
             无效状态
         %td
-          = link_to '详细', import_bag, :class => 'btn btn-minier btn-yellow'
-          = link_to '目标人员', import_bag_import_bag_receivers_path(import_bag), :class => 'btn btn-minier btn-yellow'
+          = link_to '详细', '', 'data-href' =>import_bag_path(import_bag), :class => 'btn btn-minier btn-yellow'
+          = link_to '目标人员', '', 'data-href' =>import_bag_import_bag_receivers_path(import_bag), :class => 'btn btn-minier btn-yellow'
           - if import_bag.current_state.to_s == 'passed'
-            = link_to '认领情况', " /gift_bags/#{import_bag.id}/index", :class => 'btn btn-minier btn-yellow'
+            = link_to '认领情况', '', 'data-href' =>" /gift_bags/#{import_bag.id}/index", :class => 'btn btn-minier btn-yellow'
           - if policy(import_bag).update?
-            = link_to '修改', edit_import_bag_path(import_bag),:class => 'btn btn-minier btn-primary'
+            = link_to '修改', '', 'data-href' =>edit_import_bag_path(import_bag),:class => 'btn btn-minier btn-primary'
           - if policy(import_bag).destroy?
-            = link_to '删除', import_bag
+            = link_to '删除',import_bag_receiver_path(import_bag),:method => :delete,:remote => true,:data => { :confirm => '删除后不可恢复,确定删除当前账号吗?' }
           - if policy(import_bag).start?
             = link_to '发起审核',"javascript:showWfDealModel('start','#{import_bag.id}')",:class => 'btn btn-minier btn-primary'
           - if policy(import_bag).deal_list?

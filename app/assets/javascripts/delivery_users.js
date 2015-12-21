@@ -29,7 +29,9 @@ function search(){
         alert("手机号码不合法!");
         return;
     }
-    window.location.href = window.location.pathname+"?mobile="+mobile+"&status="+status;
+
+    window.location.href = get_location_href_no_search()+"?mobile="+mobile+"&status="+status;
+    //window.location.href = window.location.pathname+"?mobile="+mobile+"&status="+status;
     //alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
 }
 

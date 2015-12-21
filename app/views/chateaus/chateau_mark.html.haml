@@ -6,15 +6,15 @@
       %th 标签属性
       %th 删除标签
   %tbody
-    = @chateau_marks.each do |mark|
+    - @data['chateau_marks'].each do |mark|
       %tr
         %td= mark.name
         %td= mark.value
-        %td= link_to '删除','', 'data-href' => chateau_chateau_mark_reduce_path(:chateau_make_id => mark.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+        %td= link_to '删除',chateau_chateau_mark_reduce_path(:chateau_make_id => mark.id),:remote=>true,:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 
 
 
-= form_tag('chateau_mark_add', method: 'post') do
+= form_tag('/chateaus/'+@data['chateau'].id+'/chateau_mark_add', remote:true, method: 'post') do
   .field
     = label_tag(:mark, '增加标签')
     %br 标签名称
@@ -29,4 +29,4 @@
 %br
 %br
 %br
-= link_to '酒庄主页','', 'data-href' => chateaus_path
+  = link_to '返回酒庄主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'

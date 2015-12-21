@@ -32,7 +32,8 @@ class DeliveryUsersController < ApplicationController
 
     respond_to do |format|
       if @delivery_user.save
-        format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully created.' }
+        # format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully created.' }
+        format.js {render_js delivery_user_path(@delivery_user)}
         format.json { render :show, status: :created, location: @delivery_user }
       else
         format.html { render :new }
@@ -46,7 +47,8 @@ class DeliveryUsersController < ApplicationController
   def update
     respond_to do |format|
       if @delivery_user.update(delivery_user_params)
-        format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully updated.' }
+        format.js {render_js delivery_user_path(@delivery_user)}
+        # format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully updated.' }
         format.json { render :show, status: :ok, location: @delivery_user }
       else
         format.html { render :edit }
@@ -73,10 +75,10 @@ class DeliveryUsersController < ApplicationController
 
       if @delivery_user.update(params.require(:delivery_user).permit(:status,:userinfo_id))
         @notice = '审核成功!'
-        format.html { render :show }
+        format.js {render_js delivery_user_path(@delivery_user)}
         format.json { render :show, status: :ok, location: @delivery_user }
       else
-        format.html { render :check }
+        format.js {render_js delivery_user_path(@delivery_user)}
         format.json { render json: @delivery_user.errors, status: :unprocessable_entity }
       end
     end
@@ -88,7 +90,8 @@ class DeliveryUsersController < ApplicationController
   def destroy
     @delivery_user.destroy
     respond_to do |format|
-      format.html { redirect_to delivery_users_url, notice: 'Delivery user was successfully destroyed.' }
+      format.js {render_js delivery_users_url}
+      # format.html { redirect_to delivery_users_url, notice: 'Delivery user was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

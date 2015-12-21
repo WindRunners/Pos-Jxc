@@ -3,3 +3,5 @@ log/*
 spec/*
 tmp/*
 /config/deploy.rb
+public/system/
+public/upload/image/

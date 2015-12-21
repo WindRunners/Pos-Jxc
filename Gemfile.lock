@@ -357,6 +357,7 @@ GEM
       redis (~> 3.0, >= 3.0.4)
     ref (2.0.0)
     referer-parser (0.3.0)
+    remotipart (1.2.1)
     request_store (1.2.1)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
@@ -572,6 +573,7 @@ DEPENDENCIES
   rails-i18n (~> 4.0.5)
   railties
   redcarpet
+  remotipart
   responders (~> 2.0)
   resque
   resque-pool
@@ -603,4 +605,4 @@ DEPENDENCIES
   wx_pay!
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

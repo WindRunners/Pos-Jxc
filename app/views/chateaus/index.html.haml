@@ -3,12 +3,19 @@
 
 #container
   %div{:style => "text_align:center; float: left"}
-    = form_tag(search_chateaus_path, method: "get") do
-      = label_tag(:name, '名字')
-      = text_field_tag(:name)
-      = label_tag(:status, '状态')
-      = select_tag(:status, options_for_select([['请选择状态', nil], ['未审核', 0], ['通过', 1], ['不通过', -1]]))
-      = submit_tag('查询')
+    %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
+      .form-group
+        %label{"for"=>"name"} 名称:
+        %input#name.form-control{'name'=>'名称'}
+      .form-group
+        %label{"for"=>"status"} 状态:
+        %select#status.form-control
+          %option{value:''} --请选择--
+          %option{value:'0'} 未审核
+          %option{value:'1'} 审核通过
+          %option{value:'-1'} 不通过
+
+      %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
 
   %div{:style => "text_align:center; float: right"}
     %p 亲爱的#{current_user.name}，你一共上传了#{@data['user_count']}个酒庄,你今天已经上传了#{@data['today_count']}个酒庄，共#{@data['count']}个酒庄。
@@ -48,9 +55,9 @@
         %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau)
         -if current_user.has_role?(:admin)
           - if chateau.status ==0 || chateau.status ==-1
-            %td= link_to '审核通过','', 'data-href' => chateau_check_path(chateau)
+            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check'
           - else
-            %td= link_to '审核不通过','', 'data-href' => chateau_check_out_path(chateau)
+            %td= link_to '审核不通过','', 'data-href' =>'/chateaus/'+chateau.id+'/check_out'
         %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau)
         %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(chateau)
         %td= link_to '关联名酒', '', 'data-href' =>chateau_wines_path(chateau)
@@ -62,9 +69,9 @@
   = link_to '新建酒庄','', 'data-href' => new_chateau_path,:class=>'btn btn-sm btn-success'
 
 %div{:style => "float: right"}
-  = link_to '主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'
+  -if current_user.has_role?(:admin)
+    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-primary'
 = paginate @data['chateaus']
 
 %div{:style => "text_align:center;clear:both;"}
-  -if current_user.has_role?(:admin)
-    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-primary'
+

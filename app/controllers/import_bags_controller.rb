@@ -56,7 +56,8 @@ class ImportBagsController < ApplicationController
 
     respond_to do |format|
       if @import_bag.save
-        format.html { redirect_to @import_bag, notice: '礼包创建成功!' }
+        format.js {render_js import_bag_path(@import_bag) }
+        # format.html { redirect_to @import_bag, notice: '礼包创建成功!' }
         format.json { render :show, status: :created, location: @import_bag }
       else
         get_post_product_list
@@ -78,7 +79,8 @@ class ImportBagsController < ApplicationController
     @import_bag.user = current_user
     respond_to do |format|
       if @import_bag.update(import_bag_params)
-        format.html { redirect_to @import_bag, notice: '礼包更新成功!' }
+        format.js {render_js import_bag_path(@import_bag) }
+        # format.html { redirect_to @import_bag, notice: '礼包更新成功!' }
         format.json { render :show, status: :ok, location: @import_bag }
       else
         get_post_product_list
@@ -97,7 +99,8 @@ class ImportBagsController < ApplicationController
 
     @import_bag.destroy
     respond_to do |format|
-      format.html { redirect_to import_bags_url, notice: 'Import bag was successfully destroyed.' }
+      format.js {render_js import_bags_path }
+      # format.html { redirect_to import_bags_url, notice: 'Import bag was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -121,7 +124,8 @@ class ImportBagsController < ApplicationController
     tabledata['recordsFiltered'] = totalRows
 
     respond_to do |format|
-      format.html { redirect_to import_bags_url, notice: 'Import bag was successfully destroyed.' }
+      format.js {render_js import_bags_path }
+      # format.html { redirect_to import_bags_url, notice: 'Import bag was successfully destroyed.' }
       format.json { render json: tabledata }
     end
   end
@@ -137,7 +141,10 @@ class ImportBagsController < ApplicationController
     #验证state event 是否合法
 
     if @import_bag.import_bag_receivers.count == 0
-      redirect_to import_bag_import_bag_receivers_path(@import_bag), notice: '请维护礼包收礼人信息!'
+      respond_to do |format|
+        format.js {render_js import_bag_import_bag_receivers_path(@import_bag)}
+      end
+      # redirect_to import_bag_import_bag_receivers_path(@import_bag), notice: '请维护礼包收礼人信息!'
       return
     end
 
@@ -166,7 +173,8 @@ class ImportBagsController < ApplicationController
         end
       end
 
-      format.html { redirect_to @import_bag, notice: '礼包审核发起成功!' }
+      format.js {render_js import_bags_path }
+      # format.html { redirect_to @import_bag, notice: '礼包审核发起成功!' }
       format.json { render :show, status: :ok, location: @import_bag }
     end
   end
@@ -182,7 +190,15 @@ class ImportBagsController < ApplicationController
     states << 'first_check' if policy(@import_bag).hasFirstCheckRole?
     states << 'second_check' if policy(@import_bag).hasSecondCheckRole?
 
-    @import_bags = ImportBag.where(userinfo_id: current_user['userinfo_id']).in(workflow_state: states).page(params[:page])
+    name = params[:name]
+    business_user = params[:business_user]
+    sender_mobile = params[:sender_mobile]
+
+    whereParams = {'userinfo_id'=> current_user['userinfo_id']}
+    whereParams['name'] = /#{name}/ if name.present?
+    whereParams['business_user'] = /#{business_user}/ if business_user.present?
+    whereParams['sender_mobile'] = /#{sender_mobile}/ if sender_mobile.present?
+    @import_bags = ImportBag.where(whereParams).in(workflow_state: states).page(params[:page])
   end
 
 

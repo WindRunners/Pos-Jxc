@@ -133,8 +133,7 @@ function search(){
         prefix_url+= "&workflow_state="+workflow_state
     }
 
-    window.location.href = window.location.pathname+prefix_url;
-    //alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
+    window.location.href = get_location_href_no_search()+prefix_url+"&f="+get_rand_num();
 }
 
 

@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to '详细', @import_bag,class: 'btn btn-default'
+= link_to '详细','', 'data-href' => @import_bag,class: 'btn btn-default'
 
-= link_to '返回', import_bags_path,class: 'btn btn-default'
+= link_to '返回','', 'data-href' => import_bags_path,class: 'btn btn-default'

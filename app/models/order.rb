@@ -40,6 +40,10 @@ class Order
   field :remarks  #备注
   field :workflow_state  #
 
+  field :store_id  # 门店id
+  field :distance  # 配送距离
+  field :delivery_user_id #配送员id
+
   index({location: "2d"}, {min: -200, max: 200})
 
   workflow do

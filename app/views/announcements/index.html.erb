@@ -59,7 +59,7 @@
         <% else %>
             <td><%= link_to '审核不通过', '', 'data-href' => '/announcements/'+announcement.id+'/check_out', :class => 'btn btn-default btn-xs' %></td>
         <% end %>
-        <td><%= link_to '删除', announcement, method: :delete, data: {confirm: 'Are you sure?'},
+        <td><%= link_to '删除', announcement, :remote=>true, method: :delete, data: {confirm: 'Are you sure?'},
                         :class => 'btn btn-xs btn-danger' %></td>
       </tr>
   <% end %>

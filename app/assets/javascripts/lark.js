@@ -24,3 +24,34 @@ angular.module('lark', [])
             $scope.notices = resp;
         });
     });
+
+
+
+
+//获取location的href 包括hash 并且去除?后面的条件
+function get_location_href_no_search(){
+    var l_hash = location.hash;
+    if(l_hash.indexOf("?")!=-1){
+        l_hash=l_hash.substring(0,l_hash.indexOf("?"));
+    }
+    return "http://"+location.host+"/"+l_hash;
+}
+
+//获取随机数
+function get_rand_num(){
+    return Math.floor(Math.random()*1000);
+}
+
+//分页添加ajax
+function pagination_ajax(){
+
+    $(".pagination a").each(function(){
+
+        var href = $(this).attr('href');
+        if(undefined!=href && null!=href){
+            $(this).attr('data-href',href);
+            $(this).attr('data-url',href);
+            $(this).attr('href',"#"+href);
+        }
+    });
+}

@@ -1,4 +1,4 @@
-= form_for @import_bag,html: {class: "form-horizontal"} do |f|
+= form_for @import_bag, remote:true,html: {class: "form-horizontal"} do |f|
   - if @import_bag.errors.any?
     #error_explanation
       %h2= "#{pluralize(@import_bag.errors.count, "error")} prohibited this import_bag from being saved:"

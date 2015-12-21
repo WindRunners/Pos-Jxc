@@ -73,6 +73,7 @@ module DeliveryOrderV1APIHelper
     current_lat = postInfo.latitude #当前位置坐标
 
     order = Order.where({'_id'=>order_id}).first
+    order = Ordercompleted.where({'_id'=>order_id}).first if !order.present?
     return {msg: '当前订单不存在!', flag: 0} if !order.present?
     store = Store.find(order['store_id'])
     order['store_address'] = store.position
@@ -111,7 +112,7 @@ module DeliveryOrderV1APIHelper
 
     page = postInfo['page']
     #包括状态[确认收货,取消的]
-    orders = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).order('created_at desc').skip((page-1)*10).limit(10)
+    orders = Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).order('created_at desc').skip((page-1)*10).limit(10)
     my_his_orders = []
     orders.each do |order|
       store = Store.find(order['store_id'])

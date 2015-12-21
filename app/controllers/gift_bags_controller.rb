@@ -7,12 +7,12 @@ class GiftBagsController < ApplicationController
 
     set_import_bag
 
-    receiver_mobile = params[:receiver_mobile]
+    receiver_mobile = params[:mobile]
     sign_status = params[:sign_status]
 
     whereParams = {}
     whereParams['receiver_mobile'] = /#{receiver_mobile}/ if receiver_mobile.present?
-    whereParams['sign_status'] = #{sign_status} if sign_status.present?
+    whereParams['sign_status'] = sign_status if sign_status.present?
     @gift_bags = @import_bag.gift_bags.where(whereParams).page(params[:page])
   end
 
@@ -37,6 +37,7 @@ class GiftBagsController < ApplicationController
 
     respond_to do |format|
       if @gift_bag.save
+        format.js {render_js import_bag_import_bag_receivers_path}
         format.html { redirect_to @gift_bag, notice: 'Gift bag was successfully created.' }
         format.json { render :show, status: :created, location: @gift_bag }
       else

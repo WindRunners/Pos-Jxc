@@ -5,17 +5,30 @@ class AnnouncementsController < ApplicationController
   # GET /announcements
   # GET /announcements.json
   def index
-    @announcements = Announcement.all.page(params[:page]).order('created_at DESC')
+    status_condition=params[:status] || ''
+    title_condition=params[:title] || ''
+    # category_condition=params[:announcement_category_id] || ''
+    conditionParams = {}
+    conditionParams['status'] = status_condition if status_condition.present?
+    conditionParams['title'] = /#{title_condition}/ if title_condition.present?
+    # conditionParams['announcement_category_id'] = category_condition if category_condition.present?
+    @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
   # GET /announcements/1
   # GET /announcements/1.json
   def show
-    @announcement.update_attribute(:read_num, @announcement.read_num+1)
-    if !@announcement.reader.include?(current_user.id)
-      @announcement.reader << current_user.id
-      @announcement.save
-    end
+    # @announcement.update_attribute(:read_num, @announcement.read_num+1)
+    # @announcement.reader << current_user.id if !@announcement.reader.include?(current_user.id)
+    # if @announcement.save
+    # respond_to do |format|
+    #   format.js { render_js announcement_path(@announcement) }
+    #   format.json { render :show, status: :created, location: @announcement }
+    # end
+    # else
+    #   format.html { render :new }
+    #   format.json { render json: @announcement.errors, status: :unprocessable_entity }
+    # end
   end
 
   # GET /announcements/new
@@ -35,19 +48,15 @@ class AnnouncementsController < ApplicationController
     @announcement.author = current_user.name
     @announcement.read_num = 0
     @announcement.status = 0
-    # respond_to do |format|
-    #   if @announcement.save
-    #     format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
-    #     format.json { render :show, status: :created, location: @announcement }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @announcement.errors, status: :unprocessable_entity }
-    #   end
-    # end
-    if @announcement.save
-    render_js announcements_path
-    else
-      render :new
+    respond_to do |format|
+      if @announcement.save
+        format.js { render_js announcements_path }
+        # format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
+        format.json { render :show, status: :created, location: @announcement }
+      else
+        format.html { render :new }
+        format.json { render json: @announcement.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -56,10 +65,12 @@ class AnnouncementsController < ApplicationController
   def update
     respond_to do |format|
       if @announcement.update(announcement_params)
-        format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
+        format.js { render_js announcements_path }
+        # format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { render :show, status: :ok, location: @announcement }
       else
-        format.html { render :edit }
+        format.js { render_js announcements_path }
+        # format.html { render :edit }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
     end
@@ -68,14 +79,14 @@ class AnnouncementsController < ApplicationController
   # DELETE /announcements/1
   # DELETE /announcements/1.json
   def destroy
-    announcements_path = 'public/upload/image/announcements/'+ @announcement.id
-    if Dir.exist? announcements_path
-      FileUtils.rm_rf(announcements_path)
+    picture_path = 'public/upload/image/announcements/'+ @announcement.id
+    if Dir.exist? picture_path
+      FileUtils.rm_rf(picture_path)
     end
     @announcement.destroy
     respond_to do |format|
+      format.js { render_js announcements_path }
       # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
-      format.js { render_js announcements_url, notice: 'Announcement was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -89,30 +100,30 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     respond_to do |format|
       if @announcement.update_attribute(:status, 1)
-        format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-        format.json { head :no_content }
+        format.js { render_js announcements_path }
+        format.json { render :show, status: :ok, location: @announcement }
       else
+        format.html { render :edit }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
-      format.js
+      format.js { render_js announcements_path }
     end
   end
 
   def check_out
     @announcement = Announcement.find(params[:announcement_id])
+    @announcement.update_attribute(:status, -1)
     respond_to do |format|
-      if @announcement.update_attribute(:status, -1)
-        format.html { redirect_to announcements_url, notice: '审核不通过成功！' }
-        format.json { head :no_content }
-      else
-        format.html { render :index }
-        format.json { render json: @announcement.errors, status: :unprocessable_entity }
-      end
+
+      format.js { render_js announcements_path }
+      # format.html { redirect_to announcements_url, notice: '审核不通过成功！' }
+      format.json { head :no_content }
     end
   end
 
 
   def batch
+    @fwb = ""
     @announcement_category_id = params[:announcement_category_id]
     a = Roo::Spreadsheet.open(params[:excel_data])
     a.each do |x|
@@ -124,26 +135,40 @@ class AnnouncementsController < ApplicationController
       announcement.title = x[0]
       announcement.source = x[2]
       announcement.release_time = x[3]
-      # d = x[1].gsub(/\t/, '  ')
-      #查找图片链接
-      announcement.content = x[1].gsub(/http.*(jpg|png|jpeg)/) { |c|
-        uuid=SecureRandom.uuid
-        announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
-        # 下载
-        open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
-          begin
-            file << open(c).read
-          rescue
+      # 正文排版
+      line = x[1].split ("\n")
+      line.each do |l|
+        l = l.strip
+        if l.size > 0
+          if l.include? "jpg" or l.include? "png" or l.include? "jpeg"
+            pic_div = l.gsub(/http.*(jpg|png|jpeg)/) { |c|
+              uuid=SecureRandom.uuid
+              announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+              # 下载
+              open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
+                begin
+                  file << open(c).read
+                rescue
+                end
+              end
+
+              # # 替换content原图片链接并转化城IMG标签
+              c.replace "<div style = \"width:90%; margin:0 auto;\"><img style='width:100%;' src='/upload/image/announcements/#{b}/#{uuid}.jpg' /></div>"
+            }
+            @fwb << pic_div
+          else
+            l.insert(0, "<p>&nbsp;&nbsp;")
+            l.insert(-1, "</p>")
+            @fwb << l
           end
         end
-
-        # # 替换content原图片链接并转化城IMG标签
-        c.replace "<div style = \"width:90%; margin:0 auto;\"><img style='width:100%;' src='/upload/image/announcements/#{b}/#{uuid}.jpg' /></div>"
-      }
+      end
+      announcement.content = @fwb
+      #保存
       announcement.save
     end
     respond_to do |format|
-      format.html { redirect_to :back, notice: '批量导入成功！' }
+      format.js { render_js announcements_path }
     end
   end
 
@@ -165,25 +190,25 @@ class AnnouncementsController < ApplicationController
   end
 
 
-  def data_table
-    length = params[:length].to_i #页显示记录数
-    start = params[:start].to_i #记录跳过的行数
-
-    searchValue = params[:search][:value] #查询
-    searchParams = {}
-    searchParams['title'] = /#{searchValue}/
-
-    tabledata = {}
-    totalRows = Announcement.count
-    tabledata['data'] = Announcement.where(searchParams).page((start/length)+1).per(length)
-    tabledata['draw'] = params[:draw] #访问的次数
-    tabledata['recordsTotal'] = totalRows
-    tabledata['recordsFiltered'] = totalRows
-
-    respond_to do |format|
-      format.json { render json: tabledata }
-    end
-  end
+  # def data_table
+  #   length = params[:length].to_i #页显示记录数
+  #   start = params[:start].to_i #记录跳过的行数
+  #
+  #   searchValue = params[:search][:value] #查询
+  #   searchParams = {}
+  #   searchParams['title'] = /#{searchValue}/
+  #
+  #   tabledata = {}
+  #   totalRows = Announcement.count
+  #   tabledata['data'] = Announcement.where(searchParams).page((start/length)+1).per(length)
+  #   tabledata['draw'] = params[:draw] #访问的次数
+  #   tabledata['recordsTotal'] = totalRows
+  #   tabledata['recordsFiltered'] = totalRows
+  #
+  #   respond_to do |format|
+  #     format.json { render json: tabledata }
+  #   end
+  # end
 
 
   private

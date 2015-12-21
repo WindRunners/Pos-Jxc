@@ -26,7 +26,7 @@ class Chateau
   belongs_to :user, :autosave => true#上传人
 
   #LOGO图片
-  has_mongoid_attached_file :logo, styles: { thumb: "600x300>" },
+  has_mongoid_attached_file :logo,
                             :default_url => '/missing.png'
   validates_attachment_content_type :logo, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 

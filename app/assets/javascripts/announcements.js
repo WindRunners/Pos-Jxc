@@ -1,10 +1,15 @@
-//设置配送员的运营商属性
-function set_userinfo(userinfo_id, userinfo_name) {
+$(function () {
+    //分页添加AJAX
+    $(".pagination a").each(function(){
 
-    //alert("设置配送员运营商"+userinfo_id);
-    $("#delivery_user_userinfo_id").val(userinfo_id);
-    $("#delivery_user_userinfo_name").html(userinfo_name);
-}
+        var href = $(this).attr('href');
+        if(undefined!=href && null!=href){
+            $(this).attr('data-href',href);
+            $(this).attr('data-url',href);
+            $(this).attr('href',"#"+href);
+        }
+    });
+});
 
 
 //表单验证

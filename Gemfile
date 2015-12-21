@@ -178,4 +178,4 @@ gem 'jwt'
 # gem 'rack-mini-profiler'
 gem 'wisper'
 
-gem 'angularjs-rails'
+#gem 'angularjs-rails'

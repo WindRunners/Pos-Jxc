@@ -46,7 +46,7 @@
     %b 素材图:
     - if @chateau.pictures.present?
       -@chateau.pictures.where(:type=>2).each do |x|
-        = image_tag(x.pic.url,size: '320x240')
+        = image_tag(x.pic,size: '320x240')
 
   = f.fields_for :chateau_introduce do |i|
     = i.label :详细介绍

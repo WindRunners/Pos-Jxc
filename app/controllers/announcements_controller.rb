@@ -86,30 +86,35 @@ class AnnouncementsController < ApplicationController
 
 
   def check
+    # binding.pry
     @announcement = Announcement.find(params[:announcement_id])
-    respond_to do |format|
-      p.pry
-      if @announcement.update_attribute(:status, 1)
-        format.js { render_js announcements_path }
-        format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-        format.json { render :index, status: :ok }
-      else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
-      end
-    end
+    @announcement.update_attribute(:status, 1)
+    redirect_to announcements_url,notice: '审核通过成功！'
+    # respond_to do |format|
+    #   # p.pry
+    #   if @announcement.update_attribute(:status, 1)
+    #     format.js { render_js announcements_path }
+    #     format.html { redirect_to announcements_url, notice: '审核通过成功！' }
+    #     format.json { render :index, status: :ok }
+    #   else
+    #     format.html { redirect_to announcements_url, notice: '审核失败！' }
+    #   end
+    # end
   end
 
   def check_out
     @announcement = Announcement.find(params[:announcement_id])
-    respond_to do |format|
-      if @announcement.update_attribute(:status, -1)
-        format.js { render_js announcements_path }
-        format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-        format.json { render :index, status: :ok }
-      else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
-      end
-    end
+    @announcement.update_attribute(:status, -1)
+    redirect_to announcements_url,notice: '审核不通过成功！'
+    # respond_to do |format|
+    #   if @announcement.update_attribute(:status, -1)
+    #     format.js { render_js announcements_path }
+    #     # format.html { redirect_to announcements_url, notice: '审核通过成功！' }
+    #     format.json { render :index, status: :ok }
+    #   else
+    #     format.html { redirect_to announcements_url, notice: '审核失败！' }
+    #   end
+    # end
   end
 
 

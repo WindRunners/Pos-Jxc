@@ -20,14 +20,15 @@ class AnnouncementsController < ApplicationController
   def show
     # @announcement.update_attribute(:read_num, @announcement.read_num+1)
     # @announcement.reader << current_user.id if !@announcement.reader.include?(current_user.id)
-    # if @announcement.save
+    #
     # respond_to do |format|
-    #   format.js { render_js announcement_path(@announcement) }
-    #   format.json { render :show, status: :created, location: @announcement }
-    # end
-    # else
-    #   format.html { render :new }
-    #   format.json { render json: @announcement.errors, status: :unprocessable_entity }
+    #   if @announcement.save
+    #     format.js { render_js announcement_path }
+    #     format.json { render :show, status: :created, location: @announcement }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @announcement.errors, status: :unprocessable_entity }
+    #   end
     # end
   end
 
@@ -100,33 +101,39 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     respond_to do |format|
       if @announcement.update_attribute(:status, 1)
-        format.js { render_js announcements_path }
-        format.json { render :show, status: :ok, location: @announcement }
+        # format.js { render_js announcements_path }
+        format.html { redirect_to announcements_url, notice: '审核通过成功！' }
+        format.json { head :no_content }
+
       else
         format.html { render :edit }
         format.json { render json: @announcement.errors, status: :unprocessable_entity }
       end
-      format.js { render_js announcements_path }
+      format.js
     end
   end
 
   def check_out
     @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, -1)
     respond_to do |format|
-
-      format.js { render_js announcements_path }
-      # format.html { redirect_to announcements_url, notice: '审核不通过成功！' }
-      format.json { head :no_content }
+      if @announcement.update_attribute(:status, -1)
+        # format.js { render_js announcements_path }
+        format.html { redirect_to announcements_url, notice: '审核不通过成功！' }
+        format.json { head :no_content }
+      else
+        format.html { render :edit }
+        format.json { render json: @announcement.errors, status: :unprocessable_entity }
+      end
+      format.js
     end
   end
 
 
   def batch
-    @fwb = ""
     @announcement_category_id = params[:announcement_category_id]
     a = Roo::Spreadsheet.open(params[:excel_data])
     a.each do |x|
+      @fwb = ""
       #建立模型
       announcement = Announcement.new
       announcement.announcement_category_id = @announcement_category_id

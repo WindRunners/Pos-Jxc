@@ -69,8 +69,8 @@ class ChateausController < ApplicationController
     respond_to do |format|
       if @chateau.save
         format.js { render_js chateaus_path }
-        # format.html { redirect_to @chateau, notice: 'Chateau was successfully created.' }
-        # format.json { render :show, status: :created, location: @chateau }
+        format.html { redirect_to @chateau, notice: 'Chateau was successfully created.' }
+        format.json { render :show, status: :created, location: @chateau }
       else
         format.html { render :new }
         format.json { render json: @chateau.errors, status: :unprocessable_entity }
@@ -104,7 +104,7 @@ class ChateausController < ApplicationController
     respond_to do |format|
       if @chateau.update(chateau_params)
         format.js { render_js chateaus_path(@chateau) }
-        # format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
+        format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
         format.json { render :show, status: :ok, location: @chateau }
       else
         format.html { render :edit }
@@ -126,7 +126,7 @@ class ChateausController < ApplicationController
     @chateau.destroy
     respond_to do |format|
       format.js { render_js chateaus_path }
-      # format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
+      format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

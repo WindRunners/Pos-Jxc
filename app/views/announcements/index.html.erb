@@ -63,12 +63,12 @@
         <td><%= announcement.read_num %></td>
         <td><%= announcement.is_top %></td>
         <td><%= announcement.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
-        <td><%= link_to '详细', '', 'data-href' => announcement_path(:id=>announcement.id.to_s), :class => 'btn btn-default btn-xs' %></td>
-        <td><%= link_to '编辑', "##{edit_announcement_path(announcement)}", 'data-href' => edit_announcement_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+        <td><%= link_to '详细', '', 'data-href' => announcement_path(announcement), :class => 'btn btn-xs btn-primary' %></td>
+        <td><%= link_to '编辑', "##{edit_announcement_path(announcement)}", 'data-href' => edit_announcement_path(announcement), :class => 'btn btn-xs btn-info' %></td>
         <% if announcement.status ==0 || announcement.status ==-1 %>
-            <td><%= link_to '审核通过', "##{announcement_check_path(announcement)}", 'data-href' => announcement_check_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核通过', '', 'data-href' => announcement_check_path(:announcement_id=>announcement.id), :class => 'btn btn-xs btn-pink' %></td>
         <% else %>
-            <td><%= link_to '审核不通过', "##{announcement_check_out_path(announcement)}", 'data-href' => announcement_check_out_path(announcement), :class => 'btn btn-default btn-xs' %></td>
+            <td><%= link_to '审核不通过', '', 'data-href' => announcement_check_out_path(:announcement_id=>announcement.id), :class => 'btn btn-xs btn-warning' %></td>
         <% end %>
         <td><%= link_to '删除', announcement, :remote => true, method: :delete, data: {confirm: 'Are you sure?'},
                         :class => 'btn btn-xs btn-danger' %></td>

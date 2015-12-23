@@ -18,18 +18,6 @@ class AnnouncementsController < ApplicationController
   # GET /announcements/1
   # GET /announcements/1.json
   def show
-    # @announcement.update_attribute(:read_num, @announcement.read_num+1)
-    # @announcement.reader << current_user.id if !@announcement.reader.include?(current_user.id)
-    #
-    # respond_to do |format|
-    #   if @announcement.save
-    #     format.js { render_js announcement_path }
-    #     format.json { render :show, status: :created, location: @announcement }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @announcement.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # GET /announcements/new
@@ -87,7 +75,7 @@ class AnnouncementsController < ApplicationController
     @announcement.destroy
     respond_to do |format|
       format.js { render_js announcements_path }
-      # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
+      format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -100,16 +88,14 @@ class AnnouncementsController < ApplicationController
   def check
     @announcement = Announcement.find(params[:announcement_id])
     respond_to do |format|
+      p.pry
       if @announcement.update_attribute(:status, 1)
-        # format.js { render_js announcements_path }
+        format.js { render_js announcements_path }
         format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-        format.json { head :no_content }
-
+        format.json { render :index, status: :ok }
       else
-        format.html { render :edit }
-        format.json { render json: @announcement.errors, status: :unprocessable_entity }
+        format.html { redirect_to announcements_url, notice: '审核失败！' }
       end
-      format.js
     end
   end
 
@@ -117,14 +103,12 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     respond_to do |format|
       if @announcement.update_attribute(:status, -1)
-        # format.js { render_js announcements_path }
-        format.html { redirect_to announcements_url, notice: '审核不通过成功！' }
-        format.json { head :no_content }
+        format.js { render_js announcements_path }
+        format.html { redirect_to announcements_url, notice: '审核通过成功！' }
+        format.json { render :index, status: :ok }
       else
-        format.html { render :edit }
-        format.json { render json: @announcement.errors, status: :unprocessable_entity }
+        format.html { redirect_to announcements_url, notice: '审核失败！' }
       end
-      format.js
     end
   end
 
@@ -195,27 +179,6 @@ class AnnouncementsController < ApplicationController
     @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
     render :index
   end
-
-
-  # def data_table
-  #   length = params[:length].to_i #页显示记录数
-  #   start = params[:start].to_i #记录跳过的行数
-  #
-  #   searchValue = params[:search][:value] #查询
-  #   searchParams = {}
-  #   searchParams['title'] = /#{searchValue}/
-  #
-  #   tabledata = {}
-  #   totalRows = Announcement.count
-  #   tabledata['data'] = Announcement.where(searchParams).page((start/length)+1).per(length)
-  #   tabledata['draw'] = params[:draw] #访问的次数
-  #   tabledata['recordsTotal'] = totalRows
-  #   tabledata['recordsFiltered'] = totalRows
-  #
-  #   respond_to do |format|
-  #     format.json { render json: tabledata }
-  #   end
-  # end
 
 
   private

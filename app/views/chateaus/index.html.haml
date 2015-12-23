@@ -1,26 +1,40 @@
 
-%h1 酒庄管理
+%div{class:'row',style:'background-color:#6495ED'}
+%div{class:'col-xs-4'}
+%div{class:'col-xs-4'}
+  %h1 酒庄管理
+%div{class:'col-xs-4'}
 
-#container
-  %div{:style => "text_align:center; float: left"}
-    %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
-      .form-group
-        %label{"for"=>"name"} 名称:
-        %input#name.form-control{'name'=>'名称'}
-      .form-group
-        %label{"for"=>"status"} 状态:
-        %select#status.form-control
-          %option{value:''} --请选择--
-          %option{value:'0'} 未审核
-          %option{value:'1'} 审核通过
-          %option{value:'-1'} 不通过
+%div{class:'col-xs-4'}
+%div{class:'row',style:'background-color:#EFF3F8'}
+%div{class:'col-xs-1'}
+  = link_to '新建酒庄','', 'data-href' => new_chateau_path,:class=>'btn btn-sm btn-success'
+%div{class:'col-xs-1'}
+  = link_to '酒庄主页','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-info'
+%div{class:'col-xs-1'}
+  -if current_user.has_role?(:admin)
+    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-xs btn-warning'
+%div{class:'col-xs-5'}
+  %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+    %ul{class:'pagination',style:'padding-top:5px;'}
+      %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+        = paginate @data['chateaus']
+%div{class:'col-xs-4'}
+  %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
+    .form-group
+      %label{"for"=>"name"} 名称:
+      %input#name.form-control{'name'=>'名称'}
+    .form-group
+      %label{"for"=>"status"} 状态:
+      %select#status.form-control
+        %option{value:''} --请选择--
+        %option{value:'0'} 未审核
+        %option{value:'1'} 审核通过
+        %option{value:'-1'} 不通过
+    %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
 
-      %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
-
-  %div{:style => "text_align:center; float: right"}
-    %p 亲爱的#{current_user.name}，你一共上传了#{@data['user_count']}个酒庄,你今天已经上传了#{@data['today_count']}个酒庄，共#{@data['count']}个酒庄。
-
-%table.table
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
   %thead
     %tr
       %th 名字
@@ -32,7 +46,7 @@
         %th  审核状态
       %th 创建时间
       %th  上传人
-      %th{:colspan => "7"} op
+      %th{:colspan => "6"} op
 
   %tbody
     -  @data['chateaus'].each do |chateau|
@@ -51,27 +65,26 @@
             不通过
         %td= chateau.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s if chateau.created_at.present?
         %td= chateau.user.name if chateau.user.present?
-        %td= link_to '详细', '', 'data-href' =>chateau_path(chateau)
-        %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau)
+        %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau),class:'btn btn-xs btn-info'
         -if current_user.has_role?(:admin)
           - if chateau.status ==0 || chateau.status ==-1
-            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check'
+            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check',class:'btn btn-xs btn-Success'
           - else
-            %td= link_to '审核不通过','', 'data-href' =>'/chateaus/'+chateau.id+'/check_out'
-        %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau)
-        %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(chateau)
-        %td= link_to '关联名酒', '', 'data-href' =>chateau_wines_path(chateau)
-        %td= link_to '删除', chateau_path(chateau), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
+            %td= link_to '审核不通过','', 'data-href' =>'/chateaus/'+chateau.id+'/check_out',class:'btn btn-xs btn-warning'
+        %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau),class:'btn btn-xs btn-purple'
+        %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(chateau),class:'btn btn-xs btn-pink'
+        %td= link_to '关联名酒', '', 'data-href' =>chateau_wines_path(chateau),class:'btn btn-xs btn-primary'
+        %td= link_to '删除', chateau_path(chateau), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
+
+
+%div{class:'row',style:'background-color:#EFF3F8'}
+  %div{class:'col-xs-6'}
+    %p 亲爱的#{current_user.name}，你一共上传了#{@data['user_count']}个酒庄,你今天已经上传了#{@data['today_count']}个酒庄，共#{@data['count']}个酒庄。
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @data['chateaus']
 %br
-
-%div{:style => "float: left"}
-  = link_to '新建酒庄','', 'data-href' => new_chateau_path,:class=>'btn btn-sm btn-success'
-
-%div{:style => "float: right"}
-  -if current_user.has_role?(:admin)
-    = link_to '工作汇总','', 'data-href' => workload_chateaus_path,:class=>'btn btn-primary'
-= paginate @data['chateaus']
-
-%div{:style => "text_align:center;clear:both;"}
 

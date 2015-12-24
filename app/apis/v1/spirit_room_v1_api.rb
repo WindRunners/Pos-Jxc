@@ -66,7 +66,6 @@ class SpiritRoomV1API < Grape::API
       requires :mobile, type: String, desc: '收货人手机号'
       optional :longitude, type: Float, desc: '位置纬度'
       optional :latitude, type: Float, desc: '位置经度'
-      requires :consignee, type: String, desc: '收货人'
     end
     post 'take_product' do
 

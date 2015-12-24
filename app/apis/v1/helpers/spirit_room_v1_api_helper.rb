@@ -86,7 +86,7 @@ module SpiritRoomV1APIHelper
     b_product_order_info = {} #商品按小B分割后的订单信息
     b_syn_spirit_product_info = [] #需要同步的酒库商品列表
 
-    #检查库存数量是否足够
+    #俺小B进行提取酒
     product_list.each do |product_id, product_count|
 
       p_count = product_count

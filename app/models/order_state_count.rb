@@ -29,27 +29,32 @@ class OrderStateCount
 
     orders = Order.map_reduce(map, reduce).out(inline: true)
 
-    orders.each do |state_count|
+    begin
+      orders.each do |state_count|
 
-      statecount = state_count["value"]["count"].to_i
+        statecount = state_count["value"]["count"].to_i
 
-      if "generation" == state_count["_id"]
-        orderStateCount.order_generation_count = statecount
+        if "generation" == state_count["_id"]
+          orderStateCount.order_generation_count = statecount
+        end
+
+        if "paid" == state_count["_id"]
+          orderStateCount.order_paid_count = statecount
+        end
+
+        if "distribution" == state_count["_id"]
+          orderStateCount.order_distribution_count = statecount
+        end
+
+        if "receive" == state_count["_id"]
+          orderStateCount.order_receive_count = statecount
+        end
+        orderStateCount.order_all_count = Order.count + Ordercompleted.count
       end
+    rescue
 
-      if "paid" == state_count["_id"]
-        orderStateCount.order_paid_count = statecount
-      end
-
-      if "distribution" == state_count["_id"]
-        orderStateCount.order_distribution_count = statecount
-      end
-
-      if "receive" == state_count["_id"]
-        orderStateCount.order_receive_count = statecount
-      end
-      orderStateCount.order_all_count = Order.count + Ordercompleted.count
     end
+
 
     return orderStateCount
   end

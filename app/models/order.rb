@@ -266,7 +266,7 @@ class Order
 
     if !self.getcoupons.empty?
       #赠送优惠券
-      url = "http://10.99.99.206:82/api/v1/customer/receiveCoupon"
+      url = "#{RestConfig::COUSTOMER_SERVER}api/v1/customer/receiveCoupon"
       headers = {}
       self.getcoupons.each do |coupon_info|
         options = {}

@@ -10,7 +10,7 @@ class Picture
   belongs_to :chateau
   belongs_to :wine
 
-  has_mongoid_attached_file :pic, styles: { thumb: "640x480>" },
+  has_mongoid_attached_file :pic,
                             :default_url => '/missing.png'
   validates_attachment_content_type :pic, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 

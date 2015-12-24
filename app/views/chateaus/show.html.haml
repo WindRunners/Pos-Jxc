@@ -49,6 +49,6 @@
   %b 图片地址数组:
   = @chateau.pic_path.count
 
-= link_to '编辑','', 'data-href' => edit_chateau_path(@chateau)
+= link_to '编辑','', 'data-href' => edit_chateau_path(@chateau),:class=>'btn btn-xs btn-info'
 \|
-= link_to '返回','', 'data-href' => chateaus_path
+= link_to '返回','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-pink'

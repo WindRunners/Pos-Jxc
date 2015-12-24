@@ -4,7 +4,7 @@ class AnnouncementCategoriesController < ApplicationController
   # GET /announcement_categories
   # GET /announcement_categories.json
   def index
-    @announcement_categories = AnnouncementCategory.all
+    @announcement_categories = AnnouncementCategory.all.page(params[:page]).order('created_at DESC')
   end
 
   # GET /announcement_categories/1

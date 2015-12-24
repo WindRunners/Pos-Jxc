@@ -2,6 +2,6 @@
 %script{type:"text/javascript",src:"http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"}
 = render 'form'
 
-= link_to 'Show', @store,:class => 'btn btn-info'
+= link_to 'Show',"##{store_path(@store)}",'data-href' => store_path(@store),:class => 'btn btn-info'
 \|
-= link_to 'Back', stores_path,:class => 'btn btn-info'
+= link_to 'Back',"##{stores_path}",'data-href' => stores_path,:class => 'btn btn-info'

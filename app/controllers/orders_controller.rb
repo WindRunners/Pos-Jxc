@@ -34,7 +34,7 @@ class OrdersController < ApplicationController
 
     @state = "all"
 
-    @order_state_count = OrderStateCount.build_orderStateCount
+    @order_state_count = OrderStateCount.build_orderStateCount(current_user.userinfo.id)
   end
 
 
@@ -75,7 +75,7 @@ class OrdersController < ApplicationController
       @orders = Kaminari.paginate_array(orders, total_count: orders.size).page(params[:page]).per(5)
     end
 
-    @order_state_count = OrderStateCount.build_orderStateCount
+    @order_state_count = OrderStateCount.build_orderStateCount(parm[:userinfo].id)
 
     render :partial => 'orders_table_data', :layout => false
   end

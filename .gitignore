@@ -5,3 +5,4 @@ tmp/*
 /config/deploy.rb
 public/system/
 public/upload/image/
+config/mongoid.yml

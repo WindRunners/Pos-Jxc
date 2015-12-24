@@ -31,7 +31,7 @@
       %p
         %b 酒庄logo图片:
         - if @chateau.logo.present?
-          - image_tag(@chateau.logo,size: '300x150')
+          = image_tag(@chateau.logo,size: '300x150')
       %p
         %b 轮播图:
         - if @chateau.pictures.present?

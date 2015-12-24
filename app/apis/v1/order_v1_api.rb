@@ -137,7 +137,7 @@ class OrderV1API < Grape::API
                           :customer_id => orderjson["customer_id"])
 
         order.online_order(orderjsonback.activities)
-        Time.nowtime =
+        time = Time.now
         order.orderno = time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
 
         if !order.coupon_id.blank?

@@ -19,10 +19,13 @@ class ProductV1API < Grape::API
     requires :id, type: String, desc: '小B的ID'
   end
   get 'addstock' do
-    products = Product.shop_id(params[:id]).where(stock:0)
+    products = Product.shop_id(params[:id]).any_of({:stock.exists => false}, {stock:0})
     p products.size
     for product in products
+      product.integral = 1
       product.stock = Faker::Number.between(1, 10)
+      product.purchasePrice = Faker::Number.between(1, 100)
+      product.price = Faker::Number.between(1, 100)
       product.shop_id(params[:id]).save
     end
 

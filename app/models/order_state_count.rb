@@ -7,7 +7,7 @@ class OrderStateCount
   field :order_distribution_count, type: Integer,default:0
   field :order_receive_count, type: Integer,default:0
 
-  def self.build_orderStateCount
+  def self.build_orderStateCount(userinfo_id)
 
     map = %Q{
       function() {
@@ -27,29 +27,34 @@ class OrderStateCount
 
     orderStateCount = OrderStateCount.new
 
-    orders = Order.map_reduce(map, reduce).out(inline: true)
+    orders = Order.wehre(:userinfo_id => userinfo_id).map_reduce(map, reduce).out(inline: true)
 
-    orders.each do |state_count|
+    begin
+      orders.each do |state_count|
 
-      statecount = state_count["value"]["count"].to_i
+        statecount = state_count["value"]["count"].to_i
 
-      if "generation" == state_count["_id"]
-        orderStateCount.order_generation_count = statecount
+        if "generation" == state_count["_id"]
+          orderStateCount.order_generation_count = statecount
+        end
+
+        if "paid" == state_count["_id"]
+          orderStateCount.order_paid_count = statecount
+        end
+
+        if "distribution" == state_count["_id"]
+          orderStateCount.order_distribution_count = statecount
+        end
+
+        if "receive" == state_count["_id"]
+          orderStateCount.order_receive_count = statecount
+        end
+        orderStateCount.order_all_count = Order.count + Ordercompleted.count
       end
+    rescue
 
-      if "paid" == state_count["_id"]
-        orderStateCount.order_paid_count = statecount
-      end
-
-      if "distribution" == state_count["_id"]
-        orderStateCount.order_distribution_count = statecount
-      end
-
-      if "receive" == state_count["_id"]
-        orderStateCount.order_receive_count = statecount
-      end
-      orderStateCount.order_all_count = Order.count + Ordercompleted.count
     end
+
 
     return orderStateCount
   end

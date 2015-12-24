@@ -7,7 +7,7 @@ class OrderStateCount
   field :order_distribution_count, type: Integer,default:0
   field :order_receive_count, type: Integer,default:0
 
-  def self.build_orderStateCount
+  def self.build_orderStateCount(userinfo_id)
 
     map = %Q{
       function() {
@@ -27,7 +27,7 @@ class OrderStateCount
 
     orderStateCount = OrderStateCount.new
 
-    orders = Order.map_reduce(map, reduce).out(inline: true)
+    orders = Order.wehre(:userinfo_id => userinfo_id).map_reduce(map, reduce).out(inline: true)
 
     begin
       orders.each do |state_count|

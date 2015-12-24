@@ -14,10 +14,16 @@
         %td= delivery_user.mobile
         %td= delivery_user.created_at
         -if Store.find(params[:store_id]).delivery_user_ids.include?(delivery_user.id)
-          %td= link_to '删除', store_reduce_delivery_user_path(:id=>delivery_user.id), :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+          %td= link_to '删除', store_reduce_delivery_user_path(:id=>delivery_user.id),:remote =>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
         -else
-          %td= link_to '增加', store_add_delivery_user_path(:id=>delivery_user.id),:class => 'btn btn-minier btn-primary'
+          %td= link_to '增加', "##{store_add_delivery_user_path(:id=>delivery_user.id)}", 'data-href' =>store_add_delivery_user_path(:id=>delivery_user.id),:class => 'btn btn-minier btn-primary'
 %br
 
--if @delivery_users.count > 1
-  = paginate @delivery_users
+
+= paginate @delivery_users
+
+
+:javascript
+  $(function () {
+    pagination_ajax();
+  }

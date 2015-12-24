@@ -28,7 +28,8 @@ class StoresController < ApplicationController
     @store.userinfo_id = current_user.userinfo.id
     respond_to do |format|
       if @store.save
-        format.html { redirect_to @store, notice: 'Store was successfully created.' }
+        format.js { render_js stores_path }
+        # format.html { redirect_to @store, notice: 'Store was successfully created.' }
         format.json { render :show, status: :created, location: @store }
       else
         format.html { render :new }
@@ -46,7 +47,8 @@ class StoresController < ApplicationController
   def update
     respond_to do |format|
       if @store.update(store_params)
-        format.html { redirect_to @store, notice: 'Store was successfully updated.' }
+        format.js { render_js stores_path }
+        # format.html { redirect_to @store, notice: 'Store was successfully updated.' }
         format.json { render :show, status: :ok, location: @store }
       else
         format.html { render :edit }
@@ -60,6 +62,7 @@ class StoresController < ApplicationController
   def destroy
     @store.destroy
     respond_to do |format|
+      format.js { render_js stores_path }
       format.html { redirect_to stores_url, notice: 'Store was successfully destroyed.' }
       format.json { head :no_content }
     end

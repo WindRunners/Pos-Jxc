@@ -52,6 +52,30 @@ class AnnouncementsController < ApplicationController
   # PATCH/PUT /announcements/1
   # PATCH/PUT /announcements/1.json
   def update
+    binding.pry
+    i = params[:content]
+    @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
+      if !a.include? 'upload/image/announcements'
+        c = a[5, a.length]
+        uuid=SecureRandom.uuid
+        # 下载
+        open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+          begin
+            file << open(c).read
+            announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+              # 替换content原图片链接并转化城IMG标签
+          rescue
+          end
+        end
+        a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+      else
+        a.replace a
+        a.insert(5, '/')
+      end
+    }
+
+
+    announcement_params = {"title"=>params[:title], "description"=>params[:description], "is_top"=>params[:is_top], "content"=>i}
     respond_to do |format|
       if @announcement.update(announcement_params)
         format.js { render_js announcements_path }
@@ -88,33 +112,33 @@ class AnnouncementsController < ApplicationController
   def check
     # binding.pry
     @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, 1)
-    redirect_to announcements_url,notice: '审核通过成功！'
-    # respond_to do |format|
-    #   # p.pry
-    #   if @announcement.update_attribute(:status, 1)
-    #     format.js { render_js announcements_path }
-    #     format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-    #     format.json { render :index, status: :ok }
-    #   else
-    #     format.html { redirect_to announcements_url, notice: '审核失败！' }
-    #   end
-    # end
+    # @announcement.update_attribute(:status, 1)
+    # render_js announcements_path(page:params[:page]),notice: '审核通过成功！'
+    respond_to do |format|
+      # p.pry
+      if @announcement.update_attribute(:status, 1)
+        # format.js { render_js announcements_path(page:params[:page]) }
+        format.html { redirect_to announcements_path(page:params[:page]), notice: '审核通过成功！' }
+        format.json { render :index, status: :ok }
+      else
+        format.html { redirect_to announcements_url, notice: '审核失败！' }
+      end
+    end
   end
 
   def check_out
     @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, -1)
-    redirect_to announcements_url,notice: '审核不通过成功！'
-    # respond_to do |format|
-    #   if @announcement.update_attribute(:status, -1)
-    #     format.js { render_js announcements_path }
-    #     # format.html { redirect_to announcements_url, notice: '审核通过成功！' }
-    #     format.json { render :index, status: :ok }
-    #   else
-    #     format.html { redirect_to announcements_url, notice: '审核失败！' }
-    #   end
-    # end
+    # @announcement.update_attribute(:status, -1)
+    # render_js announcements_path(page:params[:page]),notice: '审核不通过成功！'
+    respond_to do |format|
+      if @announcement.update_attribute(:status, -1)
+        # format.js { render_js announcements_path(page:params[:page]) }
+        format.html { redirect_to announcements_path(page:params[:page]), notice: '审核不通过成功！' }
+        format.json { render :index, status: :ok }
+      else
+        format.html { redirect_to announcements_url, notice: '审核失败！' }
+      end
+    end
   end
 
 

@@ -1,6 +1,7 @@
 %h1 创建门店
 
 %script{type:"text/javascript",src:"http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"}
+-#%script{type:"text/javascript",src:"http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"}
 = render 'form'
 
-= link_to '返回', stores_path,:class => 'btn btn-info'
+= link_to '返回',"##{stores_path}",'data-href' => stores_path,:class => 'btn btn-info'

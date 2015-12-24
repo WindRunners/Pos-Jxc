@@ -28,12 +28,15 @@
         %td= store.position
         %td= store.created_at
         %td
-          = link_to '详细', store,:class => 'btn btn-minier btn-yellow'
-          = link_to '编辑', edit_store_path(store),:class => 'btn btn-minier btn-primary'
-          = link_to '配送员管理', store_delivery_users_path(store),:class => 'btn btn-minier btn-primary'
-          = link_to '删除', store, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+          = link_to '详细',"##{store_path(store)}",'data-href' => store_path(store),:class => 'btn btn-minier btn-yellow'
+          = link_to '编辑',"##{edit_store_path(store)}",'data-href' => edit_store_path(store),:class => 'btn btn-minier btn-primary'
+          = link_to '配送员管理',"##{store_delivery_users_path(store)}",'data-href' => store_delivery_users_path(store),:class => 'btn btn-minier btn-primary'
+          = link_to '删除', store_path(store), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 %br
--##footer
-= link_to '新建门店', new_store_path,:class => 'btn btn-info'
-%br
-  = paginate @stores
+= link_to '新建门店',"##{new_store_path}",'data-href' =>new_store_path,:class => 'btn btn-info'
+= paginate @stores
+:javascript
+  $(function () {
+    pagination_ajax();
+  }
+

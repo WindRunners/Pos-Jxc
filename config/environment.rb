@@ -16,5 +16,9 @@ module RestConfig
   COUSTOMER_SERVER = 'http://jyd.ibuluo.me:3000/'
 end
 
+module AHOY
+  LOGGER = Fluent::Logger::FluentLogger.new("elephant", host: ENV["FLUENTD_HOST"] || "localhost", port: ENV["FLUENTD_PORT"] || 24224)
+end
+
 # Initialize the Rails application.
 Rails.application.initialize!

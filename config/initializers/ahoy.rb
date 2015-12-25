@@ -8,10 +8,11 @@ class Ahoy::Store < Ahoy::Stores::FluentdStore
   end
 
   def exclude?
-    ENV["RAILS_ENV"] == "test" or ENV["RAILS_ENV"] == "development"
+    ENV["RAILS_ENV"] != "production"
   end
 
   def logger
-    @logger ||= Fluent::Logger::FluentLogger.new("elephant", host: ENV["FLUENTD_HOST"] || "localhost", port: ENV["FLUENTD_PORT"] || 24224)
+    @logger ||= AHOY::LOGGER
   end
+  
 end

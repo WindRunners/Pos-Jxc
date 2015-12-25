@@ -129,8 +129,7 @@ class OrdersController < ApplicationController
 
 
   def order_state_count
-
-    render json: OrderStateCount.build_orderStateCount
+    render json: OrderStateCount.build_orderStateCount(current_user.userinfo.id)
   end
 
   # DELETE /orders/1

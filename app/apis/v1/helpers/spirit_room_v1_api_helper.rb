@@ -73,6 +73,8 @@ module SpiritRoomV1APIHelper
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
     return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
 
+    return {msg: '密码输入错误,请重新输入', flag: 3} if !spiritRoom.authenticate(postInfo.password)
+
     #获取酒库商品信息
     product_info = SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom)
     product_list = JSON.parse(postInfo.product_list.to_s)
@@ -84,7 +86,7 @@ module SpiritRoomV1APIHelper
     end
 
     b_product_order_info = {} #商品按小B分割后的订单信息
-    b_syn_spirit_product_info = [] #需要同步的酒库商品列表
+    b_syn_spirit_product_info = {} #需要同步的酒库商品列表
 
     #俺小B进行提取酒
     product_list.each do |product_id, product_count|
@@ -94,8 +96,9 @@ module SpiritRoomV1APIHelper
       spirit_product_list = SpiritRoomProduct.where({:spirit_room_id => spiritRoom.id, :count.gt => 0, 'product_id' => product_id})
       spirit_product_list.each do |spirit_product|
 
+        userinfo_id = spirit_product['userinfo_id'].to_s
+
         break if p_count==0 #商品数量为零时跳出循环
-        reduce_count = 0 #减少的数量
         if spirit_product.count > p_count
           reduce_count = p_count
         else
@@ -105,11 +108,22 @@ module SpiritRoomV1APIHelper
         p_count -= reduce_count
 
         #单位的订单信息
-        order_info = b_product_order_info[spirit_product['userinfo_id']].present? ? b_product_order_info[spirit_product['userinfo_id']] : {}
-        syn_spirit_product_list = b_syn_spirit_product_info[spirit_product['userinfo_id']].present? ? b_syn_spirit_product_info[spirit_product['userinfo_id']] : []
+        order_info = {}
+        syn_product_list = []
+        if b_product_order_info[userinfo_id].present?
+          order_info = b_product_order_info[userinfo_id]
+        else
+          b_product_order_info[userinfo_id] = order_info
+        end
+
+        if b_syn_spirit_product_info[userinfo_id].present?
+          syn_product_list = b_syn_spirit_product_info[userinfo_id]
+        else
+          b_syn_spirit_product_info[userinfo_id] = syn_product_list
+        end
 
         order_info[product_id] = reduce_count
-        syn_spirit_product_list << spirit_product
+        syn_product_list << spirit_product
       end
     end
 
@@ -119,7 +133,7 @@ module SpiritRoomV1APIHelper
 
       #按指定小B生成订单
       result = SpiritRoomV1APIHelper.create_spirit_order(customerUser, userinfo_id, product_info, postInfo)
-      if result['flag'] == 1
+      if result[:flag] == 1
         b_syn_spirit_product_info[userinfo_id].each do |spirit_product|
           spirit_product.save!
         end
@@ -169,9 +183,8 @@ module SpiritRoomV1APIHelper
                       :address => address,
                       :location => [longitude, latitude],
                       :paymode => 3,
-                      :remarks => orderjson["remarks"],
-                      :userinfo => userinfo_id,
-                      :customer_id => customerUser['_id'].to_s)
+                      :userinfo_id => BSON::ObjectId(userinfo_id),
+                      :customer_id => customerUser.id)
     order.orderno = SpiritRoomV1APIHelper.create_orderno
 
 
@@ -179,7 +192,7 @@ module SpiritRoomV1APIHelper
     ordergoods_list = []
     product_info.each do |product_id, product_count|
 
-      product = Product.shop_id(product_id).find(product_id)
+      product = Product.shop_id(userinfo_id).find(BSON::ObjectId(product_id))
       ordergood = Ordergood.new(:product_id => product['_id'].to_s,
                                 :specification => product.specification,
                                 :qrcode => product.qrcode,
@@ -192,9 +205,9 @@ module SpiritRoomV1APIHelper
     order.ordergoods = ordergoods_list
 
     if order.spirit_order_creat!
-      {msg: '订单创建成功!', flag: 1, data: order.orderno}
+      return {msg: '订单创建成功!', flag: 1, data: order.orderno}
     else
-      {msg: '订单创建失败!', flag: 0, data: order.orderno}
+      return {msg: '订单创建失败!', flag: 0, data: order.orderno}
     end
   end
 
@@ -203,7 +216,6 @@ module SpiritRoomV1APIHelper
     time = Time.now
     return time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
   end
-
 
 
 end

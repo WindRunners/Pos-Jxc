@@ -55,11 +55,12 @@ class SpiritRoomV1API < Grape::API
 
 
     desc '提酒' do
-      detail '从酒库中提酒'
+      detail '酒库中提酒 {flag:{0:失败,1:成功,2:酒库未开通,3:密码错误},msg:提信息}'
     end
     params do
       requires :userinfo_id, type: String, desc: '当前小Bid'
       requires :customer_id, type: String, desc: '小Cid'
+      requires :password, type: String, desc: '密码'
       requires :product_list, type: String, desc: '商品信息{product_id=>count},product_id:商品id,count:数量 eg:{"56582c05c2fb4e1ae1000000":2}'
       requires :consignee, type: String, desc: '收货人'
       requires :address, type: String, desc: '收货地址'

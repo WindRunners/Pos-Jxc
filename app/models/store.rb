@@ -45,10 +45,6 @@ class Store
 
   before_save :add_jpg_url
 
-  def self.search(qrcode)
-    where(name: /#{qrcode}/)
-  end
-
 
   def add_jpg_url
     self.idf_url = idpf.url

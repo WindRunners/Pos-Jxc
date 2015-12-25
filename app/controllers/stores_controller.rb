@@ -4,7 +4,12 @@ class StoresController < ApplicationController
   # GET /stores
   # GET /stores.json
   def index
-    @stores = Store.where(userinfo_id: current_user.userinfo.id).page(params[:page]).order('created_at DESC')
+
+    name_condition=params[:name] || ''
+    conditionParams = {}
+    conditionParams['name'] = name_condition if name_condition.present?
+    conditionParams['userinfo_id'] = current_user.userinfo.id if current_user.present?
+    @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
   # GET /stores/1
@@ -75,7 +80,6 @@ class StoresController < ApplicationController
 
   def add_delivery_user
     # 配送员增加
-    @delivery_users = DeliveryUser.all
     @du = DeliveryUser.find(params[:id])
     @store = Store.find(params[:store_id])
     @store.delivery_users << @du
@@ -85,17 +89,14 @@ class StoresController < ApplicationController
 
   def reduce_delivery_user
     # 配送员移除
-    @delivery_users = DeliveryUser.all
     @du = DeliveryUser.find(params[:id])
     @store = Store.find(params[:store_id])
     @store.delivery_users.delete(@du)
     @store.save
-    redirect_to store_delivery_users_url
-  end
-
-  def search
-    @stores = Store.search(params[:qrcode]).page(params[:page]).order('created_at DESC')
-    render :index
+    # binding.pry
+    respond_to do |format|
+      format.js { render_js store_delivery_users_url }
+    end
   end
 
 
@@ -107,6 +108,6 @@ class StoresController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def store_params
-    params.require(:store).permit(:name, :manager, :describe, :longitude, :latitude, :position, :idpf, :idpb, :bp, :type, :qrcode)
+    params.require(:store).permit(:name, :manager, :describe, :longitude, :latitude, :position, :idpf, :idpb, :bp, :type)
   end
 end

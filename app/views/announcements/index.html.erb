@@ -90,7 +90,7 @@
                        :class => 'chosen-container chosen-container-multi', :style => 'width:100px') %>
         <p>2:请选择正确格式的EXCEL文件：</p>
         <%= file_field_tag 'excel_data', accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel', id: 'excel_file' %>
-        <%= submit_tag('提交') %>
+        <%= submit_tag('提交',onclick: 'return submit_form()') %>
     <% end %>
   </div>
 </div>

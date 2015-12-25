@@ -7,11 +7,9 @@ class AnnouncementsController < ApplicationController
   def index
     status_condition=params[:status] || ''
     title_condition=params[:title] || ''
-    # category_condition=params[:announcement_category_id] || ''
     conditionParams = {}
     conditionParams['status'] = status_condition if status_condition.present?
     conditionParams['title'] = /#{title_condition}/ if title_condition.present?
-    # conditionParams['announcement_category_id'] = category_condition if category_condition.present?
     @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
@@ -52,8 +50,9 @@ class AnnouncementsController < ApplicationController
   # PATCH/PUT /announcements/1
   # PATCH/PUT /announcements/1.json
   def update
-    binding.pry
-    i = params[:content]
+    i =params[:announcement]['content']
+    @announcement.title = params[:announcement]['title']
+    @announcement.is_top = params[:announcement]['is_top']
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
       if !a.include? 'upload/image/announcements'
         c = a[5, a.length]
@@ -73,11 +72,8 @@ class AnnouncementsController < ApplicationController
         a.insert(5, '/')
       end
     }
-
-
-    announcement_params = {"title"=>params[:title], "description"=>params[:description], "is_top"=>params[:is_top], "content"=>i}
     respond_to do |format|
-      if @announcement.update(announcement_params)
+      if @announcement.save
         format.js { render_js announcements_path }
         # format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { render :show, status: :ok, location: @announcement }
@@ -115,7 +111,6 @@ class AnnouncementsController < ApplicationController
     # @announcement.update_attribute(:status, 1)
     # render_js announcements_path(page:params[:page]),notice: '审核通过成功！'
     respond_to do |format|
-      # p.pry
       if @announcement.update_attribute(:status, 1)
         # format.js { render_js announcements_path(page:params[:page]) }
         format.html { redirect_to announcements_path(page:params[:page]), notice: '审核通过成功！' }
@@ -177,7 +172,7 @@ class AnnouncementsController < ApplicationController
             }
             @fwb << pic_div
           else
-            l.insert(0, "<p>&nbsp;&nbsp;")
+            l.insert(0, "<p>&nbsp;&nbsp;&nbsp;&nbsp;")
             l.insert(-1, "</p>")
             @fwb << l
           end
@@ -197,17 +192,6 @@ class AnnouncementsController < ApplicationController
     render :layout => nil
   end
 
-  def search
-    status_condition=params[:status] || ''
-    title_condition=params[:title] || ''
-    # category_condition=params[:announcement_category_id] || ''
-    conditionParams = {}
-    conditionParams['status'] = status_condition if status_condition.present?
-    conditionParams['title'] = /#{title_condition}/ if title_condition.present?
-    # conditionParams['announcement_category_id'] = category_condition if category_condition.present?
-    @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
-    render :index
-  end
 
 
   private

@@ -12,20 +12,9 @@ $(function () {
 });
 
 
-//表单验证
-function check() {
-
-    var userinfoid = $("#delivery_user_userinfo_id");
-    if (userinfoid.length > 0 && (userinfoid.val() == undefined || userinfoid.val() == "")) {
-        alert("请选择配送员运营商!");
-        return false;
-    }
-    return true;
-}
 
 //查询
 function search(){
-
     var title = $("#search-scope #title").val();
     var status = $("#search-scope #status").val();
     var prefix_url = "?title="+title;
@@ -39,12 +28,6 @@ function search(){
 
 //jquery 初始化函数
 $(function () {
-
-    //表格选中事件监听
-    $('.table tr').click(function () {
-        $(this).addClass("info").siblings().removeClass("info");
-    });
-
 
     //键盘enter事件
     document.onkeydown = function (event) {
@@ -62,11 +45,11 @@ $(function () {
 });
 
 
+
 function submit_form() {
-    var excel_file = $('#excel_file');
+    var excel_file = $('#excel_data');
     if (excel_file.val() == "" || excel_file.val() == undefined) {
         alert('请选择文件');
         return false;
     }
 }
-

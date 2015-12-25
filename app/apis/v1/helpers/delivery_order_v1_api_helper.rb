@@ -72,8 +72,14 @@ module DeliveryOrderV1APIHelper
     current_lng = postInfo.longitude #当前位置坐标
     current_lat = postInfo.latitude #当前位置坐标
 
+    isEnd = false
     order = Order.where({'_id'=>order_id}).first
-    order = Ordercompleted.where({'_id'=>order_id}).first if !order.present?
+
+    if !order.present?
+      isEnd = true
+      order = Ordercompleted.where({'_id'=>order_id}).first
+    end
+
     return {msg: '当前订单不存在!', flag: 0} if !order.present?
     store = Store.find(order['store_id'])
     order['store_address'] = store.position
@@ -87,8 +93,16 @@ module DeliveryOrderV1APIHelper
     product_track = OrderTrack.where({'order_id'=>order_id,'state'=> 'distribution'}).first
     order['take_product_imgs'] = product_track.present? ? product_track.img_urls : []
 
+    #收货人经纬度
+    order['consignee_longitude'] = order.location[1]
+    order['consignee_latitude'] = order.location[0]
+
+    #门店经纬度
+    order['store_longitude'] = store.location[0]
+    order['store_latitude'] = store.location[1]
+
     #获取商品
-    order['ordergoods'] = order.ordergoods
+    order['ordergoods'] = isEnd ? order.ordergoodcompleteds : order.ordergoods
     order
   end
 

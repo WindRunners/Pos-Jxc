@@ -9,6 +9,7 @@ class Ordercompleted
   belongs_to :userinfo
   belongs_to :delivery_user
   has_many :ordergoodcompleteds,:autosave => true
+  has_many :order_tracks
 
   field :customer_id                 #个人用户ID
   field :orderno, type: String      #订单号码

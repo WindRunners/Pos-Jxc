@@ -30,7 +30,7 @@ class PaymentV1API < Grape::API
     if order.paymode == 1 #支付宝
       params[:total_fee] = 0.01
       params[:subject] = '商品主题'
-      params[:notify_url] = "http://www.nit.cn:4000/orders/#{order.id}/alipay_notify"
+      params[:notify_url] = "http://jyd.ibuluo.me:4000/orders/#{order.id}/alipay_notify"
 
       Rails.logger.info params
 
@@ -45,7 +45,7 @@ class PaymentV1API < Grape::API
       params[:total_fee] = 1
       params[:spbill_create_ip] = request.ip
       params[:trade_type] = 'APP' # could be "JSAPI", "NATIVE" or "APP",
-      params[:notify_url] = "http://www.nit.cn:4000/orders/#{order.id}/wx_notify"
+      params[:notify_url] = "http://jyd.ibuluo.me:4000/orders/#{order.id}/wx_notify"
 
       Rails.logger.info params
 

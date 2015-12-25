@@ -64,7 +64,7 @@ class OrderV1API < Grape::API
   end
   get 'generate_order' do
 
-    url = 'http://10.99.99.206:82/api/v1/customer/registration'
+    url = "#{RestConfig::COUSTOMER_SERVER}/v1/customer/registration"
 
     options = {}
 

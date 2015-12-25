@@ -139,7 +139,7 @@ class ImportBagReceiversController < ApplicationController
 
   def down_templ
 
-    io = File.open("public/upload/import_bag_receivers/template.xlsx")
+    io = File.open("public/template/import_bag_receivers/template.xlsx")
     io.binmode
     send_data(io.read,:filename => "导入模板.xlsx",:disposition => 'attachment')
     io.close

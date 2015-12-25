@@ -35,7 +35,7 @@ class Order
   field :profit,type: Float, default: 0.00     #利润
   field :fright,type: Float, default: 0.00         #运费
   field :paycost,type: Float, default: 0.00  #支付金额
-  field :paymode,type: Integer  #支付方式 0-货到付款 1-支付宝 2-微信支付
+  field :paymode,type: Integer  #支付方式 0-货到付款 1-支付宝 2-微信支付 3-酒库提酒
   field :online_paid, type: Integer, default: 0 #线上支付 0-未付款 1-已付款 2-已退款
   field :remarks  #备注
   field :workflow_state  #
@@ -43,7 +43,6 @@ class Order
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
-  field :is_spirit, type: Boolean, default: false #是否酒库订单( 酒库订单取消订单后需要商品需要返回酒库)
 
 
   index({location: "2d"}, {min: -200, max: 200})
@@ -53,6 +52,7 @@ class Order
       event :online_order_creat, :transitions_to => :generation
       event :line_order_creat, :transitions_to => :completed
       event :unpaid, :transitions_to => :paid
+      event :spirit_order_creat, :transitions_to => :paid
     end
 
     # 待付款

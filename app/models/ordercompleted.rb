@@ -9,6 +9,7 @@ class Ordercompleted
   belongs_to :userinfo
   belongs_to :delivery_user
   has_many :ordergoodcompleteds,:autosave => true
+  has_many :order_tracks
 
   field :customer_id                 #个人用户ID
   field :orderno, type: String      #订单号码
@@ -28,7 +29,7 @@ class Ordercompleted
   field :fright,type: Float, default: 0.00         #运费
   field :paycost,type: Float, default: 0.00  #支付金额
   field :paymode,type: Integer  #支付方式
-  field :online_paid, type: Integer, default: 0 #线上支付 0-未付款 1-已付款 2-已退款
+  field :online_paid, type: Integer, default: 0 #线上支付 0-未付款 1-已付款 2-已退款 3-酒库提酒
   field :remarks  #备注
   field :getcoupons, type: Array, default: [] #获取的优惠券列表
   field :workflow_state  #付款方式
@@ -36,7 +37,6 @@ class Ordercompleted
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
-  field :is_spirit, type: Boolean, default: false #是否酒库订单( 酒库订单取消订单后需要商品需要返回酒库)
 
   workflow do
     state :new do

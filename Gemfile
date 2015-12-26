@@ -179,3 +179,5 @@ gem 'jwt'
 gem 'wisper'
 
 gem 'angularjs-rails'
+
+gem 'rb-readline'

@@ -14,5 +14,5 @@ class Ahoy::Store < Ahoy::Stores::FluentdStore
   def logger
     @logger ||= AHOY::LOGGER
   end
-  
+
 end

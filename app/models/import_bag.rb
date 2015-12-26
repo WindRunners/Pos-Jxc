@@ -93,12 +93,6 @@ class ImportBag
   def pass(current_user,memo)
 
     save_work_flow_track current_user,memo,'pass'
-
-    #二级审核通过,发送礼包
-    if self.current_state.present? && self.current_state == "second_check"
-      #发送导入礼包
-      ImportBagsHelper.sendImportBags(self)
-    end
   end
 
 
@@ -140,6 +134,15 @@ class ImportBag
       end
     rescue
       errors.add(:sender_mobile, "送礼人必须为酒运达会员,而且需开通酒库功能,请进行修改!")
+    end
+  end
+
+  after_save do
+
+    #二级审核通过,发送礼包
+    if self.current_state.present? && self.current_state.name.to_s == "passed"
+      #发送导入礼包
+      ImportBagsHelper.sendImportBags(self)
     end
   end
 

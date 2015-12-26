@@ -90,5 +90,6 @@
 
 //= require util.js
 
+//= require angular
 
 //= require lark.js

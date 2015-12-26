@@ -169,8 +169,7 @@ class Ordercompleted
                                         :paymode => order.paymode,
                                         :store_id => order.store_id,
                                         :distance => order.distance,
-                                        :delivery_user_id => order.delivery_user_id,
-                                        :is_spirit => order.is_spirit
+                                        :delivery_user_id => order.delivery_user_id
                                          )
 
     order.ordergoods.each do |ordergood|

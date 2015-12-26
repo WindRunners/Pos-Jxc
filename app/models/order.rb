@@ -231,6 +231,8 @@ class Order
   #确认收货
   def commit_order(auto)
 
+    self.userinfo.integral -= self.goodsvalue.round
+
     #本单购买总积分
     integral_order = 0
     self.ordergoods.each do |ordergood|

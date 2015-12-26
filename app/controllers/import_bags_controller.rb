@@ -49,13 +49,18 @@ class ImportBagsController < ApplicationController
   # POST /import_bags.json
   def create
 
+    puts "礼包创建1"
+
     @import_bag = ImportBag.new(import_bag_params)
     @import_bag.product_list = get_product_list
     @import_bag.userinfo = current_user.userinfo
     @import_bag.user = current_user
 
+    puts "礼包创建2"
+
     respond_to do |format|
       if @import_bag.save
+        puts "礼包创建3"
         format.js {render_js import_bag_path(@import_bag) }
         # format.html { redirect_to @import_bag, notice: '礼包创建成功!' }
         format.json { render :show, status: :created, location: @import_bag }

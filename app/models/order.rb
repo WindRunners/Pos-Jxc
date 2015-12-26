@@ -432,6 +432,14 @@ class Order
       #设置订单门店
       self.subscribe(Store.new)
       broadcast(:set_order_store,self.id)
+
+    elsif workflow_state == 'cancelled' #取消订单
+
+      if self.paymode == 3 #酒库提酒
+        #退换酒库商品
+        subscribe(SpiritRoom.new)
+        broadcast(:back_spiritroom_product,self.id)
+      end
     end
 
   end

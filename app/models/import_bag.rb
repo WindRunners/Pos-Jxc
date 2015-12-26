@@ -131,6 +131,8 @@ class ImportBag
     begin
 
       customer = Customer.find_by_mobile(self.sender_mobile)
+
+      puts "小C为#{customer},手机号为：#{self.sender_mobile}"
       if !customer.present?
         errors.add(:sender_mobile, "送礼人必须为酒运达会员,而且需开通酒库功能,请进行修改!")
       else

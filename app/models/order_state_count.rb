@@ -27,7 +27,7 @@ class OrderStateCount
 
     orderStateCount = OrderStateCount.new
 
-    orders = Order.wehre(:userinfo_id => userinfo_id).map_reduce(map, reduce).out(inline: true)
+    orders = Order.where(:userinfo_id => userinfo_id).map_reduce(map, reduce).out(inline: true)
 
     begin
       orders.each do |state_count|

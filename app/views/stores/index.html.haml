@@ -38,8 +38,4 @@
           = link_to '删除', store_path(store), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 %br
 = paginate @stores
-:javascript
-  $(function () {
-    pagination_ajax();
-  }
 

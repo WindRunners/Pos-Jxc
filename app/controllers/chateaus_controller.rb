@@ -272,7 +272,8 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, 1)
-        format.html { redirect_to chateaus_url, notice: '审核通过成功！' }
+        @chateau = Chateau.where(:status=>0).first
+        format.html { redirect_to chateau_path(@chateau), notice: '审核通过成功！' }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }
@@ -286,7 +287,8 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, -1)
-        format.html { redirect_to chateaus_url, notice: '审核不通过成功！' }
+        @chateau = Chateau.where(:status=>0).first
+        format.html { redirect_to chateau_path(@chateau), notice: '审核不通过成功！' }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }

@@ -1,3 +1,26 @@
+//jquery 初始化函数
+$(function () {
+    //键盘enter事件
+    document.onkeydown = function (event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if (e && e.keyCode == 27) { // 按 Esc
+            //要做的事情
+        }
+        if (e && e.keyCode == 113) { // 按 F2
+            //要做的事情
+        }
+        if (e && e.keyCode == 13) { // enter 键
+            search();
+        }
+    };
+    pagination_ajax();
+
+});
+
+
+
+
+
 var map = new BMap.Map("store-map");//初始化地图
 map.addControl(new BMap.NavigationControl());  //初始化地图控件
 map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
@@ -85,21 +108,3 @@ function search(){
     var prefix_url = "?name="+name;
     window.location.href = get_location_href_no_search()+prefix_url+"&f="+get_rand_num();
 }
-
-
-//jquery 初始化函数
-$(function () {
-    //键盘enter事件
-    document.onkeydown = function (event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e && e.keyCode == 27) { // 按 Esc
-            //要做的事情
-        }
-        if (e && e.keyCode == 113) { // 按 F2
-            //要做的事情
-        }
-        if (e && e.keyCode == 13) { // enter 键
-            search();
-        }
-    };
-});

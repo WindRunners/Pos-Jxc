@@ -1,6 +1,16 @@
-%h1 配送员列表
+%div{class:'row',style:'background-color:#EFF3F8'}
+%div{class:'col-xs-2'}
+  -#= link_to '配送员列表','','data-href' =>store_delivery_users_path(params[:store_id]),:class => 'btn btn-info'
+%div{class:'col-xs-7'}
+  = paginate @delivery_users
+%div{class:'col-xs-3'}
+  %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>stores_path,'data-remote'=>'true'}
+    .form-group
+      %label 配送员姓名:
+      %input#name.form-control{'name'=>'名称'}
+    %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
 
-%table.table
+%table.table.table-striped.table-bordered.table-hover
   %thead
     %tr
       %th 真实姓名
@@ -19,11 +29,11 @@
           %td= link_to '增加', "##{store_add_delivery_user_path(:id=>delivery_user.id)}", 'data-href' =>store_add_delivery_user_path(:id=>delivery_user.id),:class => 'btn btn-minier btn-primary'
 %br
 
-
-= paginate @delivery_users
-
-
-:javascript
-  $(function () {
-    pagination_ajax();
-  }
+%div{class:'row',style:'background-color:#EFF3F8'}
+  %div{class:'col-xs-5'}
+    = link_to '返回门店',"##{stores_path}",'data-href' =>stores_path,:class => 'btn btn-info'
+  %div{class:'col-xs-7'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @delivery_users

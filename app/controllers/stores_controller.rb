@@ -74,8 +74,12 @@ class StoresController < ApplicationController
   end
 
   def delivery_users
+    binding.pry
     # 门店自主选择配送员
-    @delivery_users = DeliveryUser.all.page(params[:page]).order('created_at DESC')
+    name_condition=params[:name] || ''
+    conditionParams = {}
+    conditionParams['real_name'] = /#{name_condition}/ if name_condition.present?
+    @delivery_users = DeliveryUser.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
   def add_delivery_user

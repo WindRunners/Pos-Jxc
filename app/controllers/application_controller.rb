@@ -58,11 +58,12 @@ class ApplicationController < ActionController::Base
   end
 
   def set_navbar
-    @notices = Warehouse::Notice.all
+    # @notices = Warehouse::Notice.all
   end
 
   def render_js(path, options={})
-    render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
+    # location.reload() ;
+    render :text => "location.hash = '##{path}|hash#{rand(1000)}';"
   end
 
 end

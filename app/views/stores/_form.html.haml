@@ -4,7 +4,7 @@
     max-width: none;
   }
 
-= form_for @store,:remote =>true do |f|
+= form_for @store, remote:true do |f|
   - if @store.errors.any?
     #error_explanation
       %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
@@ -58,5 +58,3 @@
 
   .actions
     = f.submit '保存',:class => 'btn btn-yellow'
-
-:javascript

@@ -53,7 +53,6 @@ class SpiritRoomV1API < Grape::API
     end
 
 
-
     desc '提酒' do
       detail '酒库中提酒 {flag:{0:失败,1:成功,2:酒库未开通,3:密码错误},msg:提信息}'
     end
@@ -72,6 +71,48 @@ class SpiritRoomV1API < Grape::API
 
       return SpiritRoomV1APIHelper.take_product(current_customerUser,declared(params))
     end
+
+
+
+    desc '修改酒库密码 ' do
+      detail '修改酒库密码 {flag:{1:成功,0:失败},msg:提信息'
+    end
+    params do
+      requires :customer_id, type: String, desc: '小Cid'
+      requires :old_password, type: String, desc: '旧密码'
+      requires :new_password, type: String, desc: '新密码'
+    end
+    post 'update_pwd' do
+
+      return SpiritRoomV1APIHelper.update_pwd(current_customerUser, declared(params))
+    end
+
+
+    desc '重置酒库密码 ' do
+      detail '修改酒库密码 {flag:{1:成功,0:失败},msg:提信息'
+    end
+    params do
+      requires :customer_id, type: String, desc: '小Cid'
+      requires :verifycode, type: String, desc: '手机验证码'
+      requires :new_password, type: String, desc: '新密码'
+    end
+    post 'reset_pwd' do
+
+      return SpiritRoomV1APIHelper.reset_pwd(current_customerUser, declared(params))
+    end
+
+
+    desc '获取重置酒库密码验证码' do
+      detail '获取重置酒库密码验证码{flag:{1:成功,0:失败},msg:提信息'
+    end
+    params do
+      requires :customer_id, type: String, desc: '小Cid'
+    end
+    post 'get_reset_pwd_verifycode' do
+
+      return SpiritRoomV1APIHelper.get_reset_pwd_verifycode(current_customerUser)
+    end
+
 
   end
 

@@ -20,7 +20,7 @@ class SpiritRoom
   #退换酒库商品
   def back_spiritroom_product(order_id)
     order = Order.find(order_id)
-    ordergoods = Order.ordergoods #订单商品
+    ordergoods = order.ordergoods #订单商品
     spiritRoom = SpiritRoom.where({'customer_id' => order['customer_id']}).first
     userinfo_id = order['userinfo_id'].to_s #小Bid
 
@@ -30,11 +30,11 @@ class SpiritRoom
         product = Product.shop_id(userinfo_id).where(id: product_id).first #商品
 
         if spiritRoomProduct.present?
-          spiritRoomProduct.count += v['count'] #累加
+          spiritRoomProduct.count += ordergood.quantity #累加
         else
           spiritRoomProduct = SpiritRoomProduct.new
           spiritRoomProduct['product_id'] = product_id
-          spiritRoomProduct.count = v['count']
+          spiritRoomProduct.count = ordergood.quantity
           spiritRoomProduct['userinfo_id'] = userinfo_id
           spiritRoomProduct.spirit_room = spiritRoom.id
           spiritRoomProduct['mobile_category_name'] = product.category_name

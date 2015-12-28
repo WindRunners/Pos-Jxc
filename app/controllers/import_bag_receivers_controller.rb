@@ -130,9 +130,9 @@ class ImportBagReceiversController < ApplicationController
 
     #批量插入
     batchResult = ImportBagReceiver.collection.insert_many(import_bag_receivers) if !import_bag_receivers.empty?
-
+    p import_bag_import_bag_receivers_path(@import_bag)
     respond_to do |format|
-      format.js {render_js import_bag_import_bag_receivers_path}
+      format.js {render_js import_bag_import_bag_receivers_path(@import_bag)}
       # format.html { redirect_to :back, notice: "批量导入成功#{batchResult.as_json["results"]["n"]}条！" }
     end
   end

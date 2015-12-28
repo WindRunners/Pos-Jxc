@@ -52,12 +52,22 @@ class ProductV1API < Grape::API
   end
   params do
     requires :id, type: String, desc: '小B的ID'
+    optional :conditions, type: String, desc: '条件JSON字符串 eg{"brand":["茅台","五粮液"],"specification":["1*6","1*3"]}'
   end
   get 'list' do
 
-    products = Product.shop_id(params[:id]).all.order_by(:category_name => :desc)
+    where_params = {}
+    conditions = params[:conditions]
+    if conditions.present?
+      condition_data = JSON.parse(conditions)
+      condition_data.each do |k,v|
+        where_params[k] = {'$in' => v}
+      end
+    end
 
-    products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) }
+    products = Product.shop_id(params[:id]).where(where_params).order_by(:category_name => :desc)
+    Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
+    # products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) } #遍历递增曝光量太耗时
 
     present products, with: Entities::Product
   end
@@ -245,4 +255,30 @@ class ProductV1API < Grape::API
     end
     resultGroupInfo
   end
+
+
+  desc '商品查询条件' do
+    success Entities::ProductCondition
+  end
+  params do
+    requires :id, type: String, desc: '小B的ID'
+  end
+  get 'condition' do
+
+    userinfo_id = params[:id]
+    condition = []
+    condition << ProductCondition.new({'type'=>"brand",'name'=>'品牌'})
+    condition << ProductCondition.new({'type'=>"specification",'name'=>'规格'})
+    condition << ProductCondition.new({'type'=>"origin",'name'=>'来源'})
+    condition << ProductCondition.new({'type'=>"manufacturer",'name'=>'厂商'})
+    condition.each_index do |i|
+      #查询小B下面的条件
+      c = condition[i]
+      c['data'] = Dictionary.where({'userinfo_id' => userinfo_id, 'type' => 'product', 'subtype' => c['type']})
+      condition.delete_at(i) if !c['data'].present?
+    end
+    present condition, with: Entities::ProductCondition
+  end
+
+
 end

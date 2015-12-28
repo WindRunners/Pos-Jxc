@@ -1,7 +1,12 @@
 module SpiritRoomV1APIHelper
 
+  RESET_PWD_VERIFYCODE_PREFIX = "spiritRoomResetPwd" #定义配送员注册验证码前缀
+  EXPIRY_TIMES = 60000 #验证码失效时间10分钟
+
   #酒库创建
   def SpiritRoomV1APIHelper.create(customerUser, password)
+
+    return {msg: '密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(password)
 
     spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
     return {msg: '酒库已经开通,请查看!', flag: 0} if spiritRoom.present?
@@ -144,6 +149,84 @@ module SpiritRoomV1APIHelper
   end
 
 
+  #酒库修改密码
+  def SpiritRoomV1APIHelper.update_pwd(customerUser, postInfo)
+    old_pwd = postInfo['old_password']
+    new_pwd = postInfo['new_password']
+
+    return {msg: '旧密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(old_pwd)
+    return {msg: '新密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(new_pwd)
+
+    spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
+    return {msg: '当前用户为开通酒库!', flag: 0} if !spiritRoom.present?
+
+    return {msg: '旧密码输入错误,请重新输入', flag: 0} if !spiritRoom.authenticate(old_pwd)
+
+    spiritRoom.password = new_pwd.to_s
+    if spiritRoom.save!
+      return {msg: '酒库密码修改成功!', flag: 1}
+    else
+      return {msg: '酒库密码修改失败!', flag: 0}
+    end
+
+  end
+
+
+  #酒库重置密码
+  def SpiritRoomV1APIHelper.reset_pwd(customerUser, postInfo)
+    verifycode = postInfo['verifycode']
+    new_pwd = postInfo['new_password']
+
+    return {msg: '新密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(new_pwd)
+
+    spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
+    return {msg: '当前用户为开通酒库!', flag: 0} if !spiritRoom.present?
+
+    #验证码验证
+    verifycode2 = VerifyCode.where(key: "#{RESET_PWD_VERIFYCODE_PREFIX}_#{customerUser.mobile}").first #获取验证码
+    if !verifycode2.present?
+      return {msg: '验证码不存在,请重新获取', flag: 0}
+    elsif verifycode2.code != verifycode #验证码不一致
+      return {msg: '验证码错误,请重新输入', flag: 0}
+    elsif Time.now - verifycode2["updated_at"] > EXPIRY_TIMES #有效期一分钟
+      return {msg: '验证码失效,请重新获取', flag: 0}
+    end
+
+    spiritRoom.password = new_pwd.to_s
+    if spiritRoom.save!
+      verifycode2.delete #销毁验证码
+      {msg: '酒库密码修改成功!', flag: 1}
+    else
+      {msg: '酒库密码修改失败!', flag: 1}
+    end
+  end
+
+
+  #获取酒库重置密码验证码
+  def SpiritRoomV1APIHelper.get_reset_pwd_verifycode(customerUser)
+
+    mobile = customerUser.mobile
+
+    veriycode = SpiritRoomV1APIHelper.create_veriycode #生成验证码
+    veriycode2 = VerifyCode.where(key: "#{RESET_PWD_VERIFYCODE_PREFIX}_#{mobile}").first #获取配送员注册验证码
+
+    if veriycode2.present?
+      veriycode2.code = veriycode
+    else
+      veriycode2 = VerifyCode.new(key: "#{RESET_PWD_VERIFYCODE_PREFIX}_#{mobile}", code: veriycode)
+    end
+
+    #更新验证码
+    veriycode2.save
+    ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
+
+    # 通用接口
+    ChinaSMS.to mobile, '【酒运达】您的酒库重置密码验证码是' + veriycode
+    {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
+  end
+
+
+
   private
   #获取酒库的商品信息{product_id:count}
   def SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom)
@@ -215,6 +298,22 @@ module SpiritRoomV1APIHelper
   def SpiritRoomV1APIHelper.create_orderno
     time = Time.now
     return time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
+  end
+
+
+  def SpiritRoomV1APIHelper.pwd_regex(pwd)
+
+    pwd.present? && !pwd.match(/^\d{6}$/).nil?
+  end
+
+  #创建验证码
+  def SpiritRoomV1APIHelper.create_veriycode
+
+    code = ''
+    for i in 0..5
+      code.concat(rand(9).to_s)
+    end
+    return code
   end
 
 

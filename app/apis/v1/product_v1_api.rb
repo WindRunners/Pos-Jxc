@@ -263,7 +263,7 @@ class ProductV1API < Grape::API
   params do
     requires :id, type: String, desc: '小B的ID'
   end
-  get 'condition' do
+  post 'condition' do
 
     userinfo_id = params[:id]
     condition = []

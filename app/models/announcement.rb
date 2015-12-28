@@ -7,6 +7,7 @@ class Announcement
   belongs_to :user
   belongs_to :state
   belongs_to :announcement_category
+  has_many :chateau_comments
 
 
   field :title, type: String #标题
@@ -36,5 +37,8 @@ class Announcement
     elsif self.status == -1
       p '不通过'
     end
+  end
+  def created_time
+    created_at.strftime("%Y%m%d%H%M%S")
   end
 end

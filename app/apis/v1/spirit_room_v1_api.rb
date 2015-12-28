@@ -89,7 +89,7 @@ class SpiritRoomV1API < Grape::API
 
 
     desc '重置酒库密码 ' do
-      detail '修改酒库密码 {flag:{1:成功,0:失败},msg:提信息'
+      detail '重置酒库密码 {flag:{1:成功,0:失败},msg:提信息'
     end
     params do
       requires :customer_id, type: String, desc: '小Cid'

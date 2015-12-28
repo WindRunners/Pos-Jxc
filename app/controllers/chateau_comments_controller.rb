@@ -61,6 +61,24 @@ class ChateauCommentsController < ApplicationController
     end
   end
 
+
+
+
+  def add_comment
+    @chateau_comment = ChateauComment.new(chateau_comment_params)
+    if @chateau_comment.save
+      return {"flag":"1","message":"保存成功！"}
+    else
+      return {"flag":"0","message":"保存失败！"}
+    end
+
+  end
+
+
+  def add_hits
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chateau_comment

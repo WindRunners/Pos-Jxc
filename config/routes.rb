@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
-  resources :chateau_comments
+  resources :chateau_comments do
+    post 'add_comment'
+  end
   resources :user_integrals
   resources :wines
 

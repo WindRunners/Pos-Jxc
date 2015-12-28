@@ -112,8 +112,13 @@ class AnnouncementsController < ApplicationController
     # render_js announcements_path(page:params[:page]),notice: '审核通过成功！'
     respond_to do |format|
       if @announcement.update_attribute(:status, 1)
-        format.js { render_js announcements_path+"?page="+page.to_s }
-        # format.html { redirect_to announcements_path+"?page="+page, notice: '审核通过成功！' }
+        # format.js { render_js announcements_path+"?page="+page.to_s }
+        @announcement =Announcement.where(:status=> 0).first
+        if @announcement.present?
+          format.html { redirect_to announcement_path(:id =>@announcement.id), notice: '审核不通过成功！' }
+        else
+          format.js { render_js announcements_path  }
+        end
         format.json { render :index, status: :ok }
       else
         format.html { redirect_to announcements_url, notice: '审核失败！' }
@@ -128,8 +133,13 @@ class AnnouncementsController < ApplicationController
     # render_js announcements_path(page:params[:page]),notice: '审核不通过成功！'
     respond_to do |format|
       if @announcement.update_attribute(:status, -1)
-        format.js { render_js announcements_path+"?page="+page.to_s  }
-        # format.html { redirect_to announcements_path(page:params[:page]), notice: '审核不通过成功！' }
+        # format.js { render_js announcements_path+"?page="+page.to_s  }
+        @announcement =Announcement.where(:status=> 0).first
+        if @announcement.present?
+          format.html { redirect_to announcement_path(:id =>@announcement.id), notice: '审核不通过成功！' }
+        else
+          format.js { render_js announcements_path  }
+        end
         format.json { render :index, status: :ok }
       else
         format.html { redirect_to announcements_url, notice: '审核失败！' }

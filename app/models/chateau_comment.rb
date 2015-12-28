@@ -8,4 +8,5 @@ class ChateauComment
   belongs_to :user
   belongs_to :chateau, :autosave => true#属于酒庄
   belongs_to :wine
+  belongs_to :announcement
 end

@@ -1,0 +1,120 @@
+
+#a_body {
+    color: #282828;
+    font-family: SimHei;
+
+}
+
+#a_top {
+    padding: 2% 4%;
+    height: 200px;
+}
+
+#a_title {
+    height: 100px;
+    font-size: 400%;
+    text-align: center;
+}
+
+#h_footer {
+    height: 100px;
+    font-size: 300%;
+}
+
+#a_source {
+    float: left;
+}
+
+#a_time {
+    float: right;
+}
+
+#announcement_content {
+    padding: 2% 4%;
+    font-size: 280%;
+    line-height: 160%;
+    border-top: 1px solid #d6d6d6;
+}
+
+#announcement_comments {
+    width: 100%;
+    font-size: 280%;
+}
+
+#comment_title {
+    background-color:#BECAD1;
+}
+
+#comment_list {
+    /*background-color:blue;*/
+}
+
+#comment_body {
+    height: 300px;
+}
+
+#c_left {
+    height: 300px;
+    width: 20%;
+    float: left;
+
+}
+
+#u_avatar {
+    height: 200px;
+    width: 200px;
+}
+
+#c_right {
+    border-top: 2px solid #d6d6d6;
+    margin: 0;
+    height: 300px;
+    width: 80%;
+    float: right;
+}
+
+#c_top {
+    height: 100px;
+}
+
+#u_info {
+    width: 60%;
+    float: left;
+    text-align: left;
+}
+
+#u_name {
+    height: 50px;
+
+}
+
+#c_time {
+    height: 50px;
+}
+
+#c_op {
+    width: 20%;
+    height: 100px;
+    float: right;
+    text-align: center;
+
+}
+
+
+.btn_hits{
+    float: left;
+}
+#p_hits{
+    float: right;
+}
+
+#c_content {
+    height: 200px;
+}
+
+hr {
+    height: 2px;
+    border: none;
+    border-top: 1px solid #555555;
+}
+

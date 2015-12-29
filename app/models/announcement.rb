@@ -23,6 +23,7 @@ class Announcement
   field :sequence, type: Integer, default: 0 #排序字段
   field :news_url, type: String #链接
   field :source, type: String #来源
+  field :customer_ids,type: Array,default: [] #收藏用户
 
   has_mongoid_attached_file :avatar,
                             :default_url => '/missing.png'

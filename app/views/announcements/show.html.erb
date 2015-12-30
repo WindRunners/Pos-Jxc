@@ -1,46 +1,34 @@
-<%- model_clss = Announcement %>
-快讯详细
+<div class="row">
+  <div class="col-xs-12">
 
-<p>
-  <strong><%= model_clss.human_attribute_name(:title) %>:</strong>
-  <%= @announcement.title %>
-</p>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 ">
+        <%= markdown @announcement.content %>
+      </div>
 
-<p>
-  <strong><%= model_clss.human_attribute_name(:author) %>:</strong>
-  <%= @announcement.author %>
-</p>
+      <div class="col-xs-12 col-sm-6 widget-container-col ui-sortable">
+        <div class="widget-box ui-sortable-handle">
 
-<p>
-  <strong><%= model_clss.human_attribute_name(:description) %>:</strong>
-  <%= @announcement.description %>
-</p>
+          <div class="widget-header widget-header-large">
+            <h4 class="widget-title">Big Header</h4>
+          </div>
 
-  <strong><%= model_clss.human_attribute_name(:read_num) %>:</strong>
-  <%= @announcement.read_num %>
-</p>
 
-<p>
-  <strong><%= model_clss.human_attribute_name(:content) %>:</strong>
-  <%= @announcement.content %>
-</p>
+          <div class="widget-body">
+            <div class="widget-main">
+              <%= link_to '通过', '', 'data-href' => next_check_announcements_path(:announcement_id => @announcement.id, :status => @announcement.status), :class => 'btn btn-default btn-xs' %>
+              |
+              <%= link_to '不通过', '', 'data-href' => next_check_out_announcements_path(:announcement_id => @announcement.id, :status => @announcement.status), :class => 'btn btn-default btn-xs' %>
+              |
+              <%= link_to '修改', '', 'data-href' => edit_announcement_path(@announcement), :class => 'btn btn-default' %>
+              |
+              <%= link_to '返回', '', 'data-href' => announcements_path, :class => 'btn btn-default' %>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="page-header">
-  <strong><%= model_clss.human_attribute_name(:status) %>:</strong>
-  <%= @announcement.status %>
+  </div>
 </div>
-
-<p>
-  <strong><%= model_clss.human_attribute_name(:is_top) %>:</strong>
-  <%= @announcement.is_top %>
-</p>
-
-<p>
-  <strong><%= model_clss.human_attribute_name(:reader) %>:</strong>
-  <%= @announcement.reader %>
-</p>
-
-<%= link_to '通过', '', 'data-href' =>announcement_check_path(@announcement), :class => 'btn btn-default btn-xs' %>|
-<%= link_to '不通过', '', 'data-href' =>announcement_check_out_path(@announcement), :class => 'btn btn-default btn-xs' %>|
-<%= link_to '修改', '', 'data-href' =>edit_announcement_path(@announcement),:class => 'btn btn-default' %> |
-<%= link_to '返回', '', 'data-href' =>announcements_path,:class => 'btn btn-default' %>

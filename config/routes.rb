@@ -120,12 +120,12 @@ Rails.application.routes.draw do
     get 'check_out'
     post 'batch', :on => :collection
     get 'app_show'
-    get 'search', :on => :collection
 
     get 'warehouse_notice_index', :on => :collection
-
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
   end
-  post 'announcements/data_table/' => "announcements#data_table"
 
   resources :announcement_categories
 

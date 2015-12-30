@@ -74,7 +74,6 @@ class StoresController < ApplicationController
   end
 
   def delivery_users
-    binding.pry
     # 门店自主选择配送员
     name_condition=params[:name] || ''
     conditionParams = {}
@@ -97,7 +96,6 @@ class StoresController < ApplicationController
     @store = Store.find(params[:store_id])
     @store.delivery_users.delete(@du)
     @store.save
-    # binding.pry
     respond_to do |format|
       format.js { render_js store_delivery_users_url }
     end

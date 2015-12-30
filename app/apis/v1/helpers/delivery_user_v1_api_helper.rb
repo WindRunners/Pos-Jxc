@@ -89,7 +89,7 @@ module DeliveryUserV1APIHelper
       ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
 
       # 通用接口
-      ChinaSMS.to mobile, "【酒运达】您的配送员登录验证码是#{veriycode}"
+      ChinaSMS.to mobile, "【酒运达】您的登录验证码是#{veriycode}"
       {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
     rescue Exception => e #异常捕获
       puts e.message

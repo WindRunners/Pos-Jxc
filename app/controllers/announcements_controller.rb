@@ -105,45 +105,60 @@ class AnnouncementsController < ApplicationController
   end
 
 
-  def check
-    page = params[:page]
-    @announcement = Announcement.find(params[:announcement_id])
-    # @announcement.update_attribute(:status, 1)
-    # render_js announcements_path(page:params[:page]),notice: '审核通过成功！'
+  def batch_check
+    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
     respond_to do |format|
-      if @announcement.update_attribute(:status, 1)
-        # format.js { render_js announcements_path+"?page="+page.to_s }
-        @announcement =Announcement.where(:status=> 0).first
-        if @announcement.present?
-          format.html { redirect_to announcement_path(:id =>@announcement.id), notice: '审核不通过成功！' }
-        else
-          format.js { render_js announcements_path  }
-        end
-        format.json { render :index, status: :ok }
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
       else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
+        format.html { redirect_to announcements_path }
       end
     end
   end
 
-  def check_out
-    page = params[:page]
+
+  def next_check
     @announcement = Announcement.find(params[:announcement_id])
-    # @announcement.update_attribute(:status, -1)
-    # render_js announcements_path(page:params[:page]),notice: '审核不通过成功！'
+    @announcement.update_attribute(:status, 1)
+    @announcement.save
+    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
     respond_to do |format|
-      if @announcement.update_attribute(:status, -1)
-        # format.js { render_js announcements_path+"?page="+page.to_s  }
-        @announcement =Announcement.where(:status=> 0).first
-        if @announcement.present?
-          format.html { redirect_to announcement_path(:id =>@announcement.id), notice: '审核不通过成功！' }
-        else
-          format.js { render_js announcements_path  }
-        end
-        format.json { render :index, status: :ok }
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
       else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
+        format.html { redirect_to announcements_path }
       end
+    end
+
+  end
+  def next_check_out
+    @announcement = Announcement.find(params[:announcement_id])
+    @announcement.update_attribute(:status, -1)
+    @announcement.save
+    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    respond_to do |format|
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
+      else
+        format.html { redirect_to announcements_path }
+      end
+    end
+  end
+
+
+  def check
+    @announcement = Announcement.find(params[:announcement_id])
+    @announcement.update_attribute(:status, 1)
+    respond_to do |format|
+      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核通过成功！' }
+    end
+  end
+
+  def check_out
+    @announcement = Announcement.find(params[:announcement_id])
+    @announcement.update_attribute(:status, -1)
+    respond_to do |format|
+      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核不通过成功！' }
     end
   end
 
@@ -202,7 +217,6 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     render :layout => nil
   end
-
 
 
   private

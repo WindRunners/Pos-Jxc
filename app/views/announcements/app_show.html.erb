@@ -2,70 +2,132 @@
 
 
 <head>
-  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
-  
+
+  <%= javascript_include_tag "http://libs.baidu.com/jquery/2.0.0/jquery.js" %>
+  <%= stylesheet_link_tag 'announcements' %>
+
+  <script>
+      function add_comment() {
+          $.ajax({
+              type: "POST",
+              url: "/chateau_comments/add_comment",
+              data: {
+                  content: $("#textarea_content").val(),
+                  user_id: $("#input_user_id").val(),
+                  announcement_id: $("#input_announcement_id").val()
+              },
+              dataType: "json",
+              success: function (data) {
+                  alert(JSON.stringify(data));
+                  location.reload();
+              }
+          });
+      }
+      ;
+
+      function hit(a) {
+
+          $.ajax({
+              type: "POST",
+              url: "/chateau_comments/hit",
+              data: {
+                  chateau_comment_id: $("#input_chateau_comment_id" + a).val()
+              },
+              dataType: "json",
+              success: function (data) {
+                  var hits = parseInt($("#input_chateau_comment_hits" + a).val()) + 1;
+                  $("#p_hits" + a).html(hits + "");
+                  $("#btn_hits" + a).attr("disabled", true);
+              }
+          });
+
+      }
+      ;
+
+  </script>
+
 </head>
 <body>
 
-<div class="row" style="padding:2% 4%; font-family:SimHei;color:#282828; ">
-  <div class="col-xs-12">
-    <div class="widget-header widget-header-large" style="text-align: center;font-size:400%;">
-      <p><%= @announcement.title %></p>
+<div id="a_body">
+  <div class="col-xs-12" id="a_top">
+    <div id="a_title">
+      <%= @announcement.title %>
     </div>
-    <div class="col-xs-6" style="font-size:280%;text-align: left;">
-      <% if @announcement.source.present? %>
-          <P><%= @announcement.source %></P>
-      <% else %>
-          <P>来源：小达快讯</P>
-      <% end %>
-    </div>
-    <div class="col-xs-6" style="font-size:280%;text-align: right;"><p><%= @announcement.created_at %></p></div>
-    <div class="widget-body">
-      <div id="announcement_content" class="" style="font-size:280%;line-height:160%; border-top:1px solid #d6d6d6;">
-        <%= markdown @announcement.content %>
-      </div>
-    </div>
-  </div>
-  <div id="announcement_comments" class="row" style="font-size:280%;">
-    <% if @announcement.chateau_comments.present? %>
-        <%= @announcement.chateau_comments.each do |c| %>
-            <div class="widget-box">
-              <div class="widget-header">
-                <% if c.user.present? %>
-                    <P><%= c.user.userinfo.name %></P>
-                <% else %>
-                    <P>无名人士</P>
-                <% end %>
-              </div>
-              <div class="widget-body">
-                <% if c.content.present? %>
-                    <P><%= c.content %></P>
-                <% else %>
-                    <P>content</P>
-                <% end %>
-              </div>
-              <div class="widget-footer">
-                <% if c.hits.present? %>
-                    <P><%= c.hits %></P>
-                <% else %>
-                    <P>hits</P>
-                <% end %>
-
-                <% if c.created_at.present? %>
-                    <P><%= c.created_at %></P>
-                <% else %>
-                    <P>created_at</P>
-                <% end %>
-              </div>
-            </div>
-
+    <!--a_title结束-->
+    <div id="h_footer">
+      <div class="col-xs-6" id="a_source">
+        <% if @announcement.source.present? %>
+            <%= @announcement.source %>
+        <% else %>
+            来源：小达快讯
         <% end %>
-    <% else %>
-        <button onclick="add_comment();">暂无评论，点击抢沙发。</button>
-        <input type="text" id="input_content" value="1111111"/>
-    <% end %>
+      </div>
+
+      <div class="col-xs-6" id="a_time"><%= @announcement.created_at.to_s[5,11] %></div>
+    </div>
   </div>
+  <!--a_top-->
+  <div class="widget-body" id="announcement_content">
+    <%= markdown @announcement.content %>
+  </div>
+  <!--announcement_content结束-->
+
+  <% if @announcement.chateau_comments.present? %>
+      <div class="row" id="announcement_comments">
+        <div id="comment_title">
+          评论列表(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
+        </div>
+        <div id="comment_list">
+          <% if @announcement.chateau_comments.present? %>
+              <%- @announcement.chateau_comments.each do |c| %>
+                  <div class="" id="comment_body">
+                    <div class="" id="c_left">
+                      <div class="" id="u_avatar"><%= image_tag('avatar.png', :size => "120x120") %></div>
+                      <!--u_avatar-->
+                    </div>
+                    <!--c_lift-->
+                    <div class="" id="c_right">
+                      <div class="" id="c_top">
+                        <div class="" id="u_info">
+                          <div class="" id="u_name">游泳全靠浪
+                          </div>
+                          <!--u_name-->
+                          <div class="" id="c_time"><%= c.created_at.to_s[5, 11] %>
+                          </div>
+                          <!--c_time-->
+                        </div>
+                        <!--u_info-->
+                        <div class="" id="c_op">
+                          <div class="" id="op_hit">
+                            <button class="btn_hits" id="btn_hits<%= c.id.to_s %>" onclick="hit('<%= c.id.to_s %>')">
+                              <%= image_tag('avatar.png', :size => "40x40") %></button>
+                            <p id="p_hits<%= c.id.to_s %>"><%= c.hits %></p></div>
+                          <input id="input_chateau_comment_id<%= c.id.to_s %>" type="hidden" value="<%= c.id %>">
+                          <input id="input_chateau_comment_hits<%= c.id.to_s %>" type="hidden" value="<%= c.hits.to_s %>">
+                          <!--op_hit-->
+                        </div>
+                        <!--c_op-->
+                      </div>
+                      <!--c_top-->
+                      <div class="" id="c_content"><%= c.content %></div>
+                      <!--c_content-->
+                    </div>
+                    <!--c_right-->
+                  </div>
+                  <!--comment_body-->
+              <% end %>
+          <% end %>
+        </div>
+        <!--comment_list结束-->
+
+      </div>
+  <% end %>
+
 </div>
+<!--a_body结束-->
 </body>
 
 </html>
+
+

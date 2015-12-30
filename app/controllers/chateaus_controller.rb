@@ -268,11 +268,27 @@ class ChateausController < ApplicationController
   end
 
 
+
+  def check_init
+    @chateau = Chateau.where(:status=>0).order('created_at DESC').first
+    respond_to do |format|
+      if @chateau.update_attribute(:status, -1)
+        @chateau = Chateau.where(:status=>0).order('created_at DESC').first
+        format.html { redirect_to chateau_path(@chateau), notice: '审核不通过成功！' }
+        format.json { head :no_content }
+      else
+        format.json { render json: @chateau.errors, status: :unprocessable_entity }
+      end
+      format.js
+    end
+  end
+
+
   def check
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, 1)
-        @chateau = Chateau.where(:status=>0).first
+        @chateau = Chateau.where(:status=>0).order('created_at DESC').first
         format.html { redirect_to chateau_path(@chateau), notice: '审核通过成功！' }
         format.json { head :no_content }
       else
@@ -287,7 +303,7 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     respond_to do |format|
       if @chateau.update_attribute(:status, -1)
-        @chateau = Chateau.where(:status=>0).first
+        @chateau = Chateau.where(:status=>0).order('created_at DESC').first
         format.html { redirect_to chateau_path(@chateau), notice: '审核不通过成功！' }
         format.json { head :no_content }
       else

@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :chateau_comments do
-    post 'add_comment'
-  end
   resources :user_integrals
   resources :wines
 
@@ -123,12 +120,12 @@ Rails.application.routes.draw do
     get 'check_out'
     post 'batch', :on => :collection
     get 'app_show'
-    get 'search', :on => :collection
 
     get 'warehouse_notice_index', :on => :collection
-
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
   end
-  post 'announcements/data_table/' => "announcements#data_table"
 
   resources :announcement_categories
 
@@ -239,6 +236,11 @@ Rails.application.routes.draw do
   end
   resources :chateau_marks
 
+
+  resources :chateau_comments do
+  end
+  post 'chateau_comments/add_comment'=> 'chateau_comments#add_comment'
+  post 'chateau_comments/hit'=> 'chateau_comments#hit'
   resources :regions do
     get 'children'
     post 'add_children'

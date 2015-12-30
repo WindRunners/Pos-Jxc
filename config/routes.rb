@@ -233,6 +233,9 @@ Rails.application.routes.draw do
     post 'relate_wine'
     delete 'resolve_wine'
     get 'ex_pic',:on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
   end
   resources :chateau_marks
 

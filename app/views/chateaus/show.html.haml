@@ -63,7 +63,12 @@
     = markdown  @chateau.chateau_introduce.introduce
   .widget-box.widget-color-blue2
     .widget-header
-      %h4.widget-title.lighter.smaller 审核
+      %h4.widget-title.lighter.smaller 审核:
+      当前状态：
+      =@chateau.status_str
+      最后修改时间：
+      =@chateau.updated_at.to_s
+      %br
     .widget-body
       .widget-main.padding-8
         %form#comment-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
@@ -72,9 +77,9 @@
             %textarea#form-field-8.autosize-transition.form-control{:placeholder => "Default Text"}
         .div.padding-8
           -if current_user.has_role? :admin
-            = link_to '通过','', 'data-href' => chateau_check_path(@chateau),:class=>'btn btn-xs btn-info'
+            = link_to '通过','', 'data-href' => next_check_chateaus_path(:chateau_id=>@chateau.id,:status=>@chateau.status),:class=>'btn btn-xs btn-info'
             \|
-            = link_to '驳回','', 'data-href' => chateau_check_out_path(@chateau),:class=>'btn btn-xs btn-info'
+            = link_to '驳回','', 'data-href' => next_check_chateaus_path(:chateau_id=>@chateau.id,:status=>@chateau.status),:class=>'btn btn-xs btn-info'
             \|
           = link_to '编辑','', 'data-href' => edit_chateau_path(@chateau),:class=>'btn btn-xs btn-info'
           \|

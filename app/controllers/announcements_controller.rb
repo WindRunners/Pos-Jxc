@@ -118,10 +118,10 @@ class AnnouncementsController < ApplicationController
 
 
   def next_check
-    @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, 1)
-    @announcement.save
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    announcement= Announcement.find(params[:announcement_id])
+    announcement.status = 1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -131,11 +131,12 @@ class AnnouncementsController < ApplicationController
     end
 
   end
+
   def next_check_out
-    @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, -1)
-    @announcement.save
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    announcement = Announcement.find(params[:announcement_id])
+    announcement.status = -1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }

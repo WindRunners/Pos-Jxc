@@ -23,7 +23,7 @@ class Announcement
   field :sequence, type: Integer, default: 0 #排序字段
   field :news_url, type: String #链接
   field :source, type: String #来源
-  field :customer_ids,type: Array,default: [] #收藏用户
+  field :customer_ids, type: Array, default: [] #收藏用户
 
   has_mongoid_attached_file :avatar,
                             :default_url => '/missing.png'
@@ -32,13 +32,23 @@ class Announcement
 
   def status_str
     if self.status == 1
-     p '通过'
+      p '通过'
     elsif self.status == 0
-     p '待审核'
+      p '待审核'
     elsif self.status == -1
       p '不通过'
     end
   end
+
+
+  def is_top_str
+    if self.is_top == 0
+      p '不置顶'
+    else
+      p '置顶'
+    end
+  end
+
   def created_time
     created_at.strftime("%Y%m%d%H%M%S")
   end

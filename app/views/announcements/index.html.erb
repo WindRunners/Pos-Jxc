@@ -27,9 +27,9 @@
   </div>
   <div style="">
     <%= link_to '快讯主页', '', 'data-href' => announcements_path, :class => 'btn btn-primary' %>
-    <%= link_to '批量审核', '', 'data-href' => batch_check_announcements_path(:status=>0), :class => 'btn btn-primary' %>
-    <%= link_to '不通过重审', '', 'data-href' => batch_check_announcements_path(:status=>-1), :class => 'btn btn-primary' %>
-    <%= link_to '通过重审', '', 'data-href' => batch_check_announcements_path(:status=>1), :class => 'btn btn-primary' %>
+    <%= link_to '批量审核', '', 'data-href' => batch_check_announcements_path(:status=>0), :class => 'btn btn-pink' %>
+    <%= link_to '不通过重审', '', 'data-href' => batch_check_announcements_path(:status=>-1), :class => 'btn btn-warning' %>
+    <%= link_to '通过重审', '', 'data-href' => batch_check_announcements_path(:status=>1), :class => 'btn btn-success btn-xs' %>
   </div>
 </div>
 

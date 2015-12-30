@@ -47,7 +47,7 @@ $(function () {
 
 
 function submit_form() {
-    var excel_file = $('#excel_data');
+    var excel_file = $('#excel_file_id');
     if (excel_file.val() == "" || excel_file.val() == undefined) {
         alert('请选择文件');
         return false;

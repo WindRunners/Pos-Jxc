@@ -166,7 +166,7 @@ class AnnouncementsController < ApplicationController
 
   def batch
     @announcement_category_id = params[:announcement_category_id]
-    a = Roo::Spreadsheet.open(params[:excel_data])
+    a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
       @fwb = ""
       #建立模型

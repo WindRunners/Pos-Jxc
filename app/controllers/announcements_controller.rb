@@ -7,7 +7,9 @@ class AnnouncementsController < ApplicationController
   def index
     status_condition=params[:status] || ''
     title_condition=params[:title] || ''
+    category_condition =params[:announcement_category_id] || ''
     conditionParams = {}
+    conditionParams['announcement_category_id'] = category_condition if category_condition.present?
     conditionParams['status'] = status_condition if status_condition.present?
     conditionParams['title'] = /#{title_condition}/ if title_condition.present?
     @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')

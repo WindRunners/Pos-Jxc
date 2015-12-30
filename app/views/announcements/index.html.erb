@@ -21,10 +21,7 @@
   </div>
 
 
-  <div class="col-xs-2">
-  </div>
-
-  <div class="col-xs-4">
+  <div class="col-xs-6">
     <form id="search-scope" class="form-inline" method="post" data-remote="true" action="/announcements" accept-charset="UTF-8">
       <div class="form-group">
         <label for="title">标题:</label>
@@ -39,6 +36,12 @@
           <option value="-1">不通过</option>
         </select>
       </div>
+
+      <div class="form-group">
+        <label for="status">种类:</label>
+        <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }.insert(0,["--请选择--","0"])),:id=>"category") %>
+      </div>
+
       <a class="btn btn-primary btn-sm" href="javascript:search();">搜索</a>
     </form>
 

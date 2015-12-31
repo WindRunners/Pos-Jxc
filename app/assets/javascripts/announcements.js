@@ -1,28 +1,32 @@
 $(function () {
     //分页添加AJAX
-    $(".pagination a").each(function(){
+    $(".pagination a").each(function () {
 
         var href = $(this).attr('href');
-        if(undefined!=href && null!=href){
-            $(this).attr('data-href',href);
-            $(this).attr('data-url',href);
-            $(this).attr('href',"#"+href);
+        if (undefined != href && null != href) {
+            $(this).attr('data-href', href);
+            $(this).attr('data-url', href);
+            $(this).attr('href', "#" + href);
         }
     });
 });
 
 
-
 //查询
-function search(){
+function search() {
     var title = $("#search-scope #title").val();
     var status = $("#search-scope #status").val();
-    var prefix_url = "?title="+title;
-    if(status != null && status!=undefined){
-        prefix_url+= "&status="+status
+    var announcement_category_id = $("#search-scope #category").val();
+    var prefix_url = "?title=" + title;
+    if (status != null && status != undefined) {
+        prefix_url += "&status=" + status
+    }
+    ;
+    if (announcement_category_id != null && announcement_category_id != undefined && announcement_category_id != 0) {
+        prefix_url += "&announcement_category_id=" + announcement_category_id
     }
 
-    window.location.href = get_location_href_no_search()+prefix_url+"&f="+get_rand_num();
+    window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
 }
 
 
@@ -45,9 +49,8 @@ $(function () {
 });
 
 
-
 function submit_form() {
-    var excel_file = $('#excel_data');
+    var excel_file = $('#excel_file_id');
     if (excel_file.val() == "" || excel_file.val() == undefined) {
         alert('请选择文件');
         return false;

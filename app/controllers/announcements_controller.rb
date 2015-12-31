@@ -7,7 +7,9 @@ class AnnouncementsController < ApplicationController
   def index
     status_condition=params[:status] || ''
     title_condition=params[:title] || ''
+    category_condition =params[:announcement_category_id] || ''
     conditionParams = {}
+    conditionParams['announcement_category_id'] = category_condition if category_condition.present?
     conditionParams['status'] = status_condition if status_condition.present?
     conditionParams['title'] = /#{title_condition}/ if title_condition.present?
     @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
@@ -118,10 +120,10 @@ class AnnouncementsController < ApplicationController
 
 
   def next_check
-    @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, 1)
-    @announcement.save
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    announcement= Announcement.find(params[:announcement_id])
+    announcement.status = 1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -131,11 +133,12 @@ class AnnouncementsController < ApplicationController
     end
 
   end
+
   def next_check_out
-    @announcement = Announcement.find(params[:announcement_id])
-    @announcement.update_attribute(:status, -1)
-    @announcement.save
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    announcement = Announcement.find(params[:announcement_id])
+    announcement.status = -1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -165,7 +168,7 @@ class AnnouncementsController < ApplicationController
 
   def batch
     @announcement_category_id = params[:announcement_category_id]
-    a = Roo::Spreadsheet.open(params[:excel_data])
+    a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
       @fwb = ""
       #建立模型

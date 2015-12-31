@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   resources :delivery_users
   get 'delivery_users/:id/check' => "delivery_users#check"
   post 'delivery_users/:id/check_save' => "delivery_users#check_save"
+  get 'delivery_users/:id/store_index' => "delivery_users#store_index"
+  post 'delivery_users/:id/store_save' => "delivery_users#store_save"
+
 
   get 'activities/skipe_one_index/:id/:platform' => 'activities#skipe_one_index'
   get 'activities/skipe_one_search'

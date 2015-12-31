@@ -1,0 +1,18 @@
+%h1 门店设置
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 运营商名字
+      %th 地址
+      %th 商店名称
+  %tbody
+    - @stores.each do |store|
+      %tr
+        %td= store.name
+        %td= store.manager
+        %td= store.type
+%br
+
+
+

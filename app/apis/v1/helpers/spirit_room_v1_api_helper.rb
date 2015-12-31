@@ -221,7 +221,7 @@ module SpiritRoomV1APIHelper
     ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
 
     # 通用接口
-    ChinaSMS.to mobile, '【酒运达】您的酒库重置密码验证码是' + veriycode
+    ChinaSMS.to mobile, '【酒运达】您的酒库密码重置验证码是' + veriycode
     {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
   end
 

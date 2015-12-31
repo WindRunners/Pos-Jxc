@@ -2,6 +2,6 @@
 
 = render 'form'
 .col-sm-9
-  = link_to 'Show', @wine
+  = link_to 'Show', '', 'data-href' =>wine_path(@wine)
   \|
-  = link_to 'Back', wines_path
+  = link_to 'Back', '', 'data-href' =>wines_path

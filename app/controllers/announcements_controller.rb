@@ -37,6 +37,22 @@ class AnnouncementsController < ApplicationController
     @announcement.author = current_user.name
     @announcement.read_num = 0
     @announcement.status = 0
+    Dir.mkdir('public/upload/image/announcements/'+ @announcement.id.to_s)
+    i =params[:announcement]['content']
+    @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
+        c = a[5, a.length]
+        uuid=SecureRandom.uuid
+        # 下载
+        open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+          begin
+            file << open(c).read
+            @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+              # 替换content原图片链接并转化城IMG标签
+          rescue
+          end
+        end
+        a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+    }
     respond_to do |format|
       if @announcement.save
         format.js { render_js announcements_path }
@@ -221,6 +237,24 @@ class AnnouncementsController < ApplicationController
     render :layout => nil
   end
 
+
+  def stow
+    # binding.pry
+    @announcement = Announcement.find(params[:announcement_id])
+    data ={}
+    respond_to do |format|
+      if !@announcement.customer_ids.include? params[:customer_id]
+        @announcement.save
+        data['flag'] = 1
+        data['message'] = '收藏成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '收藏失败！你已经收藏过了哦'
+      end
+      format.json { render json: data }
+    end
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

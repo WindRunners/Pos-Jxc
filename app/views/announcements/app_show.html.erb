@@ -1,9 +1,16 @@
+<!doctype html>
 <html>
 
 
 <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <meta charset="utf-8"/>
 
-  <%= javascript_include_tag "http://libs.baidu.com/jquery/2.0.0/jquery.js" %>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--<%= stylesheet_link_tag "application", :media => "all" %>-->
+
+  <%= javascript_include_tag "application"%>
   <%= stylesheet_link_tag 'announcements' %>
 
   <script>
@@ -44,6 +51,26 @@
       }
       ;
 
+
+
+//      function stow() {
+//          var customer_id = $("#customer_id").val();
+//          var announcement_id= $("#announcement_id").val();
+//          $.ajax({
+//              type: "POST",
+//              url: "/announcements/stow",
+//              data: {announcement_id: announcement_id,customer_id:customer_id},
+//              dataType: "json",
+//              success: function (data) {
+//                  var stows = parseInt($("#p_stows").text()) + 1;
+//                  $("#p_stows" + a).html(stows + "");
+//                  $("#btn_stow" + a).attr("disabled", true);
+//              }
+//          });
+//
+//      }
+//      ;
+
   </script>
 
 </head>
@@ -68,7 +95,8 @@
     </div>
   </div>
   <!--a_top-->
-  <div class="widget-body" id="announcement_content">
+  <div style = "height:10px; margin-top:-1px;clear: both;overflow:hidden;"> </div >
+<div class="widget-body" id="announcement_content">
     <%= markdown @announcement.content %>
   </div>
   <!--announcement_content结束-->
@@ -77,6 +105,9 @@
       <div class="row" id="announcement_comments">
         <div id="comment_title">
           评论列表(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
+
+          <!--<button class="btn_stow" id="btn_stows" onclick="stow()"></button>-->
+          <!--<p id="p_stows"><%=@announcement.customer_ids.count  %></p>-->
         </div>
         <div id="comment_list">
           <% if @announcement.chateau_comments.present? %>
@@ -126,6 +157,12 @@
 
 </div>
 <!--a_body结束-->
+
+
+
+
+<!--<input id="customer_id" type="hidden" value="567d20a1e1382376bc000000">-->
+<!--<input id="announcement_id" type="hidden" value="<%= @announcement.id %>">-->
 </body>
 
 </html>

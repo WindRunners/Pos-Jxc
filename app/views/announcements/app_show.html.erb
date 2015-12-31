@@ -107,7 +107,7 @@
           评论列表(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
 
           <!--<button class="btn_stow" id="btn_stows" onclick="stow()"></button>-->
-          <!--<p id="p_stows"><%=@announcement.customer_ids.count  %></p>-->
+          <!--<p id="p_stows"></p>-->
         </div>
         <div id="comment_list">
           <% if @announcement.chateau_comments.present? %>
@@ -162,7 +162,7 @@
 
 
 <!--<input id="customer_id" type="hidden" value="567d20a1e1382376bc000000">-->
-<!--<input id="announcement_id" type="hidden" value="<%= @announcement.id %>">-->
+<!--<input id="announcement_id" type="hidden" value="">-->
 </body>
 
 </html>

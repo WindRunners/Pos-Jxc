@@ -236,8 +236,8 @@ Rails.application.routes.draw do
     get 'search', :on => :collection
     get 'wines'
     get 'workload', :on => :collection
-    post 'relate_wine'
-    delete 'resolve_wine'
+    post 'relate_wine', :on => :collection
+    delete 'resolve_wine', :on => :collection
     get 'ex_pic',:on => :collection
     get 'batch_check', :on => :collection
     get 'next_check', :on => :collection

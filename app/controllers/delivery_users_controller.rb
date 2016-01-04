@@ -14,6 +14,7 @@ class DeliveryUsersController < ApplicationController
   # GET /delivery_users/1
   # GET /delivery_users/1.json
   def show
+    @userinfo = Userinfo.where(_id: @delivery_user['userinfo_id']).first if current_user.has_role? :SuperAdmin
   end
 
   # GET /delivery_users/new

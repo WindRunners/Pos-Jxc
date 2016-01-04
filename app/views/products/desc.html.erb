@@ -20,7 +20,7 @@
 </div>
 
 <div class="container">
-  <img src="<%= RestConfig::PRODUCT_SERVER + @product.main_url %>" class="center-block" style="width:55%"/>
+  <img src="<%= @product.main %>" class="center-block" style="width:55%"/>
 </div>
 
 <div class="mod-productDetail">
@@ -59,7 +59,7 @@
 
 <% if @product.desc_url.present? %>
 <div class="row ">
-  <img src="<%= RestConfig::PRODUCT_SERVER + @product.desc_url %>" class="img-responsive center-block"/>
+  <img src="<%= @product.desc %>" class="img-responsive center-block"/>
 </div>
 <% end %>
 

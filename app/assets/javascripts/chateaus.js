@@ -49,6 +49,7 @@ var from_submit = function () {
     var chateau_id = $('#btn_chateau_id').val();
     var table = $('#wines_table').DataTable();
     var wine_id = table.row('.selected').data();
+    //alert(JSON.stringify(wine_id));
     $.ajax({
 
         type: "post",

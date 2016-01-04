@@ -9,22 +9,22 @@
 
   <div class="sidebar-shortcuts" id="sidebar-shortcuts">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-      <button class="btn btn-success">
-        <i class="ace-icon fa fa-signal"></i>
-      </button>
+      <a class="btn btn-success" data-href="<%= warehouse_index_products_path %>" >
+        <i class="ace-icon fa fa-qrcode"></i>
+      </a>
 
-      <a class="btn btn-info" data-href="<%= warehouse_index_products_path %>">
-        <i class="ace-icon fa fa-pencil bigger-130"></i>
+      <a data-href="<%= statistics_path %>" class="btn btn-info">
+        <i class="ace-icon fa fa-bar-chart"></i>
       </a>
 
       <!-- #section:basics/sidebar.layout.shortcuts -->
-      <button class="btn btn-warning">
-        <i class="ace-icon fa fa-users"></i>
-      </button>
+      <a data-href="<%= coupons_path %>" class="btn btn-warning">
+        <i class="ace-icon fa fa-gift"></i>
+      </a>
 
-      <button class="btn btn-danger">
-        <i class="ace-icon fa fa-cogs"></i>
-      </button>
+      <a data-href="<%= userinfos_path %>" class="btn btn-danger">
+        <i class="ace-icon fa fa-cog"></i>
+      </a>
 
       <!-- /section:basics/sidebar.layout.shortcuts -->
     </div>
@@ -65,6 +65,14 @@
 
       <ul class="submenu">
 
+        <li class="">
+          <a data-href="<%= new_product_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            上架商品
+          </a>
+
+          <b class="arrow"></b>
+        </li>
 
         <li class="">
           <a data-href="<%= products_path(:state => 'online') %>">
@@ -236,7 +244,7 @@
 
       </ul>
     </li>
-
+    <% if current_user.has_role?(:xiaoda_kuaixun||:admin) %>
     <li class="open">
       <a data-href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-file-o"></i>
@@ -264,7 +272,8 @@
         </li>
       </ul>
     </li>
-
+        <% end %>
+    <% if current_user.has_role?(:jiu_world||:admin) %>
     <li class="open">
       <a data-href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-pencil-square-o"></i>
@@ -302,7 +311,7 @@
       </ul>
     </li>
 
-
+        <% end %>
 
 
     <li class="open">
@@ -420,7 +429,7 @@
         </li>
       </ul>
     </li>
-
+    <% if current_user.has_role?(:business||:admin) %>
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>
@@ -448,7 +457,7 @@
         </li>
       </ul>
     </li>
-
+        <% end %>
   </ul><!-- /.nav-list -->
   </ul>
   <!-- /.nav-list -->

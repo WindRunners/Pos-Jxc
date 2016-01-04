@@ -14,6 +14,8 @@ module RestConfig
   PRODUCT_SERVER = ENV["PHOTO_HOST"] || 'http://pic.ibuluo.me:3001/'
 
   CUSTOMER_SERVER = ENV["CUSTOMER_HOST"] || 'http://jyd.ibuluo.me:3000/'
+
+  OA_SERVER = 'http://www.ibuluo.me:9090/'
 end
 
 module AHOY

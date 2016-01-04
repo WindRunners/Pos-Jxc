@@ -71,119 +71,86 @@ scheduler.cron '*/1 * * * *' do
 end
 
 
-scheduler.cron '40 03 * * *' do
-  splashes = Splash.splashCache
-  if SpalashScreenAsset.all.present?
-    @spalashScreenAssets=SpalashScreenAsset.all
-    if  File::directory?( "public/upload/image/splash_screen/splash_screen_assets/" )
-      p '-=-='
-      Net::HTTP.start("10.99.99.206") { |http|
-        resp = http.get("/#{splashes[0].splash_screen_img}")
-        p splashes[0].splash_screen_img
-        open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-          file.write(resp.body) }
-      }
-      @spalashScreenAssets[0].update("img_path"=>splashes[0].splash_screen_img)
-      @spalashScreenAssets[0].update("seconds"=>splashes[0].stop_seconds)
-      p '-=-='
-    else
-      FileUtils.makedirs("public/upload/image/splash_screen/splash_screen_assets/")
-      Net::HTTP.start("10.99.99.206") { |http|
-        resp = http.get("/#{splashes[0].splash_screen_img}")
-        open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-          file.write(resp.body) }
-      }
-      @spalashScreenAssets[0].update("img_path"=>splashes[0].splash_screen_img)
-      @spalashScreenAssets[0].update("seconds"=>splashes[0].stop_seconds)
-    end
-  else
-    @spalashScreenAsset=SpalashScreenAsset.new
-    if  File::directory?( "public/upload/image/splash_screen/splash_screen_assets/" )
-      p '-=-='
-      Net::HTTP.start("10.99.99.206") { |http|
-        resp = http.get("/#{splashes[0].splash_screen_img}")
-        p splashes[0].splash_screen_img
-        open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-          file.write(resp.body) }
-      }
-      @spalashScreenAsset.update("img_path"=>splashes[0].splash_screen_img)
-      @spalashScreenAsset.update("seconds"=>splashes[0].stop_seconds)
-      p '-=-='
-    else
-      FileUtils.makedirs("public/upload/image/splash_screen/splash_screen_assets/")
-      Net::HTTP.start("10.99.99.206") { |http|
-        resp = http.get("/#{splashes[0].splash_screen_img}")
-        open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-          file.write(resp.body) }
-      }
-      @spalashScreenAsset.update("img_path"=>splashes[0].splash_screen_img)
-      @spalashScreenAsset.update("seconds"=>splashes[0].stop_seconds)
-    end
+#从OA获取闪屏广告
+scheduler.cron '*/60 * * * *' do
+#scheduler.cron '40 03 * * *' do
+  url = RestConfig::OA_SERVER + 'api/v1/ads/splash_screen?type=JYD'
+
+
+  headers = {}
+  headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
+
+
+  response = RestClient.get(url, headers)
+
+
+  json = JSON.parse(response.body)
+
+  begin
+    splash = Splash.find(json['id'])
+    splash.destroy
+  rescue
   end
-  puts "自动抓取抓取成功"
+
+  avatar = RestConfig::OA_SERVER + json.delete('avatar')
+
+  splash = Splash.new(json)
+
+  splash.avatar = avatar
+
+  if splash.save
+    Rails.logger.info "#{splash.id} has been saved."
+    {success: "#{splash.id} has been saved."}
+  else
+    Rails.logger.info splash.errors
+    error!({"message" => splash.errors}, 202)
+  end
+
+  Rails.logger.info "自动抓取闪屏广告成功"
 end
 
-scheduler.cron '30 03 * * *' do
-    carous = Carou.carouCache
+#从OA获取轮播图
+
+scheduler.cron '*/60 * * * *' do
+#scheduler.cron '40 03 * * *' do
+
+  url = RestConfig::OA_SERVER + 'api/v1/ads/carousels?type=JYD'
+
+
+  headers = {}
+  headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
+
+
+  response = RestClient.get(url, headers)
+
+
+  array = JSON.parse(response.body)
+
+  array.each do |json|
+
     begin
-      carouselAssets=CarouselAsset.all
-      if carous[0].present?
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{carous[0].img1}")
-          open("public/#{carous[0].img1.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body)
-          }
-        }
-        carouselAssets[0].update("img1_path"=>carous[0].img1)
-
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{carous[0].img2}")
-          open("public/#{carous[0].img2.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body)
-          }
-        }
-        carouselAssets.update("img2_path"=>carous[0].img2)
-      end
+      carousel = Carousel.find(json['id'])
+      carousel.destroy
     rescue
-      carouselAsset=CarouselAsset.new
-      if File:: directory?("public/upload/image/carousel/carousel_assets/")
-        if carous[0].present?
-          Net::HTTP.start("10.99.99.206") { |http|
-            resp = http.get("/#{carous[0].img1}")
-            open("public/#{carous[0].img1.split(".")[0]+".png"}", "wb") { |file|
-              file.write(resp.body)
-            }
-          }
-          carouselAsset.update("img1_path"=>carous[0].img1)
-
-          Net::HTTP.start("10.99.99.206") { |http|
-            resp = http.get("/#{carous[0].img2}")
-            open("public/#{carous[0].img2.split(".")[0]+".png"}", "wb") { |file|
-              file.write(resp.body)
-            }
-          }
-          carouselAsset.update("img2_path"=>carous[0].img2)
-        end
-      else
-        FileUtils.makedirs("public/upload/image/carousel/carousel_assets/")
-        if carous[0].present?
-          Net::HTTP.start("10.99.99.206") { |http|
-            resp = http.get("/#{carous[0].img1}")
-            open("public/#{carous[0].img1.split(".")[0]+".png"}", "wb") { |file|
-              file.write(resp.body)
-            }
-          }
-          carouselAsset.update("img1_path"=>carous[0].img1)
-          Net::HTTP.start("10.99.99.206") { |http|
-            resp = http.get("/#{carous[0].img2}")
-            open("public/#{carous[0].img2.split(".")[0]+".png"}", "wb") { |file|
-              file.write(resp.body)
-            }
-          }
-          carouselAssets.update("img2_path"=>carous[0].img2)
-        end
-      end
     end
+
+    avatar = RestConfig::OA_SERVER + json.delete('avatar')
+
+    carousel = Carousel.new(json)
+
+    carousel.avatar = avatar
+
+    if carousel.save
+      Rails.logger.info "#{carousel.id} has been saved."
+      {success: "#{carousel.id} has been saved."}
+    else
+      Rails.logger.info carousel.errors
+      error!({"message" => carousel.errors}, 202)
+    end
+  end
+
+
+  Rails.logger.info "自动抓取轮播图成功"
 end
 
 

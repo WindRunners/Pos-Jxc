@@ -5,18 +5,44 @@
     %tr
       %th 姓名
       %th 上传总数量
-      %th 已审核总数量
+      %th 已审核通过总数量
       %th 今日上传数量
-      %th 今日已审核数量
+      %th 今日已审核通过数量
 
   %tbody
-    -  @work_array.each do |w|
+    -  @data['work_array'].each do |w|
       %tr
         %td= w['user_name']
         %td= w['pass_chateau']
         %td= w['pass_check']
         %td= w['today_chateau']
         %td= w['today_check']
+%h1 审核未通过列表
+%table.table
+  %thead
+    %tr
+      %th 酒庄名称
+      %th 当前审核状态
+      %th 创建时间
+      %th 最后修改时间
+      %th 上传者
+      %th 基本信息
+      %th 标签
+      %th 轮播图
+      %th 删除
+
+  %tbody
+    -  @data['chateaus'].each do |c|
+      %tr
+        %td= c.name
+        %td= c.status_str
+        %td= c.created_at
+        %td= c.updated_at
+        %td= c.user.name
+        %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(c),class:'btn btn-xs btn-info'
+        %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(c),class:'btn btn-xs btn-purple'
+        %td= link_to '轮播图管理', '', 'data-href' =>chateau_turn_picture_path(c),class:'btn btn-xs btn-pink'
+        %td= link_to '删除', chateau_path(c), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
 
 

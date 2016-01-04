@@ -11,8 +11,6 @@ class ApplicationController < ActionController::Base
 
    # before_action :authenticate_userinfo
 
-  before_action :set_navbar
-
   after_filter :track_action
 
   rescue_from ::Exception, with: :error_occurred
@@ -57,11 +55,10 @@ class ApplicationController < ActionController::Base
     super unless token == 'rbMmEeoH8RxRDyN24PQv'
   end
 
-  def set_navbar
-    @notices = Warehouse::Notice.all
-  end
+  def render_js(path, notice = '')
 
-  def render_js(path, options={})
+    flash[:notice] = notice if notice.present?
+
     render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
   end
 

@@ -51,9 +51,10 @@ class ProductsController < ApplicationController
 
   def warehouse_index
 
-    @showSearchBar = true
+    gon.searchBar = true
 
     conditions = {category_id: params[:category_id],
+                  tag: 'JYD',
                   searchText: params[:searchText],
                   page: params[:page],
                   per: 20}
@@ -83,7 +84,7 @@ class ProductsController < ApplicationController
 
   def warehouse_show
 
-    @showSearchBar = true
+    gon.searchBar = true
 
     @product = Warehouse::Product.find(params[:product_id])
 
@@ -183,10 +184,10 @@ class ProductsController < ApplicationController
     headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
     headers['Authentication-Token'] = '4Kzp1iyj4DiHVPhv4JVm'
 
+
     begin
       response = RestClient.get(url, headers)
     rescue
-      render :new, notice: '该产品不存在'
       return
     end
 
@@ -194,15 +195,16 @@ class ProductsController < ApplicationController
     json = JSON.parse(response.body)
 
 
+
     begin
       @product = Product.shop(current_user).find(json['id'])
 
-      redirect_to @product, notice: '该产品已存在.'
+      render_js product_path @product, notice: '该产品已存在.'
     rescue
       @product = Product.new(json)
       @product.state = State.find_by(value: "offline")
       if @product.shop(current_user).save
-        redirect_to @product, notice: '该产品添加成功.'
+        render_js product_path @product, notice: '该产品添加成功.'
       else
         render :new
       end
@@ -349,7 +351,7 @@ class ProductsController < ApplicationController
       notice = "商品#{@product.state.name}失败,#{@product.errors.full_messages.join(',')}"
     end
 
-    render_js product_path(@product), notice: notice
+    render_js product_path(@product), notice
 
   end
 

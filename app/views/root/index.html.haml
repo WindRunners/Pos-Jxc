@@ -9,20 +9,22 @@
     = csrf_meta_tags
     %script{type:"text/javascript",src:"http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"}
     = stylesheet_link_tag "application", :media => "all"
+
+    = javascript_include_tag "angular.min.js"
+
     = javascript_include_tag "application"
 
 
     /[if lte IE 9]
-      <haml_loud> stylesheet_link_tag &quot;ace/ace-part2.css&quot; </haml_loud>
-    /[if lte IE 9]
-      <haml_loud> stylesheet_link_tag &quot;ace/ace-ie.css&quot; </haml_loud>
+      = stylesheet_link_tag "ace/ace-part2.css"
+      = stylesheet_link_tag "ace/ace-ie.css"
     / ace settings handler
     = javascript_include_tag "ace/ace-extra.js"
 
     / HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries
     /[if lte IE 8]
-      <haml_loud> javascript_include_tag &quot;ace/html5shiv.js&quot; </haml_loud>
-      <haml_loud> javascript_include_tag &quot;ace/respond.js&quot; </haml_loud>
+      = javascript_include_tag "ace/html5shiv.js"
+      = javascript_include_tag "ace/respond.js"
   %body.no-skin
     = render 'partials/navbar'
     #main-container.main-container

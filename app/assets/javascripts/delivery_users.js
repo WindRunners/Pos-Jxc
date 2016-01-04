@@ -85,3 +85,32 @@ $(function(){
 
 
 
+//门店接单
+function take_store(delivery_user_id,store_id){
+
+    var data = {store_id:store_id,op:"add"}
+    $.post("/delivery_users/"+delivery_user_id+"/store_save",data,
+        function(data,status){
+            if(data.flag == 1){
+                $("#take_store_href"+store_id).parent().prev().html("已接单");
+                $("#take_store_href"+store_id).hide();
+                $("#untake_store_href"+store_id).show();
+            }
+            alert(data.msg);
+    });
+}
+
+//门店不接单
+function untake_store(delivery_user_id,store_id){
+
+    var data = {store_id:store_id,op:"remove"}
+    $.post("/delivery_users/"+delivery_user_id+"/store_save",data,
+        function(data,status){
+            if(data.flag == 1){
+                $("#untake_store_href"+store_id).parent().prev().html("未接单");
+                $("#untake_store_href"+store_id).hide();
+                $("#take_store_href"+store_id).show();
+            }
+            alert(data.msg);
+    });
+}

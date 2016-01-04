@@ -1,5 +1,5 @@
 class DeliveryUsersController < ApplicationController
-  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save,:stores_index]
+  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save,:store_index,:store_save]
 
   # GET /delivery_users
   # GET /delivery_users.json
@@ -109,8 +109,8 @@ class DeliveryUsersController < ApplicationController
   def store_index
 
     @store_ids = @delivery_user['store_ids']
-    @store_ids = [] if @store_ids.present?
-    @stores = Stores.where({"_id"=>{"$in"=>@store_ids}})
+    @store_ids = [] if !@store_ids.present?
+    @stores = Store.where({"userinfo_id"=>@delivery_user['userinfo_id']})
   end
 
   #门店保存
@@ -124,14 +124,15 @@ class DeliveryUsersController < ApplicationController
 
       if(op == "add")
 
-        @delivery_user.update({"$addToSet"=>{"store_ids"=>object_store_id}})
+        @delivery_user.add_to_set({"store_ids"=> object_store_id})
       else
-        @delivery_user.update({"$pull"=>{"store_ids"=>object_store_id}})
+        @delivery_user.pull({"store_ids"=>object_store_id})
       end
       respond_to do |format|
         format.json {render json: {"flag"=> 1,"msg"=> "门店操作成功！"} }
       end
-    rescue
+    rescue Exception=>e #异常捕获
+      puts e
       respond_to do |format|
         format.json {render json: {"flag"=> 0,"msg"=> "门店操作失败，服务器出现异常！"} }
       end

@@ -49,8 +49,10 @@ module DeliveryUserV1APIHelper
       verifycode2 = deliveryUser.verify_codes["login"]["code"].to_s
       time = deliveryUser.verify_codes["login"]["time"]
 
-      if verifycode != verifycode2 #判断验证码是否一致
-
+      #判断配送员是否已经审核通过
+      if deliveryUser.status != 1
+        {msg: '当前配送员未审核通过，请耐心等待审核!', flag: 0}
+      elsif verifycode != verifycode2 #判断验证码是否一致
         {msg: '验证码错误,请重新获取!', flag: 0}
       elsif Time.now - time > EXPIRY_TIMES #有效期10分钟
         {msg: '验证码失效,请重新获取!', flag: 0}

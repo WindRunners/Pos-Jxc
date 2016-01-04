@@ -112,7 +112,7 @@ class AnnouncementV1API < Grape::API
 
 
   post 'stow_list' do
-    present Announcement.where({"status":"1","customer_ids":params[:customer_id]}),with: Entities::Announcement
+    present Announcement.where({"status"=>"1","customer_ids"=>params[:customer_id]}),with: Entities::Announcement
   end
 
 end

@@ -7,17 +7,17 @@
 
 #a_top {
     padding: 2% 4%;
-    height: 300px;
+
 }
 
 #a_title {
-    height: 200px;
+
     font-size: 400%;
     text-align: center;
 }
 
 #h_footer {
-    height: 100px;
+    margin-top: 6%;
     font-size: 300%;
 }
 

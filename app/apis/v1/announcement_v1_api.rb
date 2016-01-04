@@ -61,11 +61,10 @@ class AnnouncementV1API < Grape::API
 
 
   post 'add_comment' do
-    p params
     @announcement = Announcement.find(params[:announcement_id])
     @chateau_comment = @announcement.chateau_comments.build();
     @chateau_comment.content = params[:content]
-    @chateau_comment.customer_id = params[:customer_id]
+    @chateau_comment.customer_id = current_customerUser.id
     @chateau_comment.save
     data ={}
     if @chateau_comment.save
@@ -92,9 +91,9 @@ class AnnouncementV1API < Grape::API
 
   post 'stow' do
     @announcement = Announcement.find(params[:announcement_id])
-    @announcements.customer_ids << params[:customer_id]
+    @announcement.customer_ids << current_customerUser.id
     data ={}
-    if @announcements.save
+    if @announcement.save
       data['flag'] = 1
       data['message'] = '收藏成功！'
 
@@ -104,4 +103,16 @@ class AnnouncementV1API < Grape::API
     end
     data
   end
+
+  desc '收藏快讯列表'
+
+  params do
+    requires :customer_id, type: String, desc: 'customer_id'
+  end
+
+
+  post 'stow_list' do
+    present Announcement.where({"status":"1","customer_ids":params[:customer_id]}),with: Entities::Announcement
+  end
+
 end

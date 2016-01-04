@@ -128,6 +128,7 @@ Rails.application.routes.draw do
     get 'batch_check', :on => :collection
     get 'next_check', :on => :collection
     get 'next_check_out', :on => :collection
+    post 'stow', :on => :collection
   end
 
   resources :announcement_categories

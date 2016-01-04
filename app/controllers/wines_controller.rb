@@ -12,6 +12,7 @@ class WinesController < ApplicationController
       i +=1 if w.created_at.today?
     end
     @data = {}
+    @data['wines'] = Wine.all.page(params[:page]).order('created_at DESC')
     @data['today'] = i
     @data['total'] = @wines.count
     @data
@@ -38,7 +39,8 @@ class WinesController < ApplicationController
     @wine.user = current_user
     respond_to do |format|
       if @wine.save
-        format.html { redirect_to @wine, notice: 'Wine was successfully created.' }
+        format.js { render_js wine_path(@wine) }
+        # format.html { redirect_to @wine, notice: 'Wine was successfully created.' }
         format.json { render :show, status: :created, location: @wine }
       else
         format.html { render :new }
@@ -52,7 +54,8 @@ class WinesController < ApplicationController
   def update
     respond_to do |format|
       if @wine.update(wine_params)
-        format.html { redirect_to @wine, notice: 'Wine was successfully updated.' }
+        format.js { render_js wine_path(@wine) }
+        # format.html { redirect_to @wine, notice: 'Wine was successfully updated.' }
         format.json { render :show, status: :ok, location: @wine }
       else
         format.html { render :edit }

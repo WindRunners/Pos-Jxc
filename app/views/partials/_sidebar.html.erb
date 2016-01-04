@@ -257,7 +257,7 @@
         </li>
       </ul>
     </li>
-
+    <% if current_user.has_role?(:xiaoda_kuaixun||:admin) %>
     <li class="open">
       <a data-href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-file-o"></i>
@@ -285,7 +285,8 @@
         </li>
       </ul>
     </li>
-
+        <% end %>
+    <% if current_user.has_role?(:jiu_world||:admin) %>
     <li class="open">
       <a data-href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-pencil-square-o"></i>
@@ -323,7 +324,7 @@
       </ul>
     </li>
 
-
+        <% end %>
 
 
     <li class="open">
@@ -441,7 +442,7 @@
         </li>
       </ul>
     </li>
-
+    <% if current_user.has_role?(:business||:admin) %>
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>
@@ -469,7 +470,7 @@
         </li>
       </ul>
     </li>
-
+        <% end %>
   </ul><!-- /.nav-list -->
   </ul>
   <!-- /.nav-list -->

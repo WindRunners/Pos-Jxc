@@ -53,9 +53,6 @@ class ApplicationController < ActionController::Base
     super unless token == 'rbMmEeoH8RxRDyN24PQv'
   end
 
-  def render_js(path, notice = '')
-
-    flash[:notice] = notice if notice.present?
 
 
   def sendMessage(mobile)

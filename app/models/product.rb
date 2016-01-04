@@ -68,6 +68,11 @@ class Product
     id
   end
 
+  def avatar
+    self.avatar_url ||= 'missing.png'
+    RestConfig::IMG_SERVER + self.avatar_url
+  end
+
   def coupon
     begin
       result << Coupon.find(coupon_id)

@@ -20,7 +20,7 @@ class ProductsDatatable
   def data
     products.map do |product|
       [
-          raw("<img src=#{RestConfig::IMG_SERVER + product.avatar_url}' width='60px' height='60px'/>&nbsp;&nbsp;&nbsp;&nbsp;") + link_to(product.title, @view.userinfo_product_preview_path(@current_user.userinfo, product), :target => '_blank'),
+          raw("<img src='#{product.avatar}' width='60px' height='60px'/>&nbsp;&nbsp;&nbsp;&nbsp;") + link_to(product.title, @view.userinfo_product_preview_path(@current_user.userinfo, product), :target => '_blank'),
           best_in_place(product, :price, :display_with => :number_to_currency, :helper_options => {unit: '￥'}),
           best_in_place(product, :stock),
           product.sale_count,

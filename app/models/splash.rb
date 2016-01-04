@@ -1,10 +1,13 @@
-class Splash < ActiveResource::Base
-  self.site = 'http://10.99.99.206/'
-  self.element_name = 'splash_screen'
-  self.headers["appkey"] ='LARK'
+class Splash
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Paperclip
 
-  def self.splashCache
-    #Rails.cache.fetch("Business.all") { all }
-    all
-  end
+  field :stop_seconds, type: Integer
+  field :start_time, type: DateTime
+  field :end_time, type: DateTime
+
+  has_mongoid_attached_file :avatar
+
+  validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 end

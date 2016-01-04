@@ -11,8 +11,8 @@
           <b class="arrow"></b>
         </li>
 
-        <% Warehouse::MobileCategory.all.each do |category| %>
-            <li class="hover" style="width: 90px">
+        <% Warehouse::MobileCategory.JYD.each do |category| %>
+            <li class="hover center" style="width: 90px">
               <a data-href="<%= warehouse_index_products_path(category_id: category.id) %>">
                 <img src="<%= RestConfig::PRODUCT_SERVER + category.avatar %>" class="img-responsive center-block"/>
                 <span class="menu-text"><%= category.title %></span>
@@ -42,7 +42,7 @@
       </div>
       <div class="col-xs-8">
         <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-              <%= paginate @products,:remote => true %>
+          <%= paginate @products,:remote => true %>
         </div>
       </div>
     </div>

@@ -24,9 +24,6 @@
       %th 真实名
       %th 状态
       %th
-      %th
-      %th
-
   %tbody
     - @delivery_users.each do |delivery_user|
       %tr
@@ -39,9 +36,11 @@
             待审核
           - else  delivery_user.status == -1
             不通过
-        %td= link_to '详细', '', 'data-href'=>delivery_user_path(delivery_user) , :class => 'btn btn-minier btn-yellow'
-        %td= link_to '审核', '', 'data-href'=>delivery_user_path(delivery_user)+"/check",:class => 'btn btn-minier btn-primary'
-        %td= link_to '删除', delivery_user_path(delivery_user), :method => :delete,:remote=>true, :data => { :confirm => '配送员删除后不可恢复,确定删除吗?' },:class => 'btn btn-minier btn-danger'
+        %td
+          = link_to '详细', '', 'data-href'=>delivery_user_path(delivery_user) , :class => 'btn btn-minier btn-yellow'
+          = link_to '审核', '', 'data-href'=>delivery_user_path(delivery_user)+"/check",:class => 'btn btn-minier btn-primary'
+          = link_to '门店设置', '', 'data-href'=>"/delivery_users/"+delivery_user.id+"/store_index",:class => 'btn btn-minier btn-primary'
+          = link_to '删除', delivery_user_path(delivery_user), :method => :delete,:remote=>true, :data => { :confirm => '配送员删除后不可恢复,确定删除吗?' },:class => 'btn btn-minier btn-danger'
 %div.row
   %div.col-xs-6
     %div#dynamic-table_info.dataTables_info

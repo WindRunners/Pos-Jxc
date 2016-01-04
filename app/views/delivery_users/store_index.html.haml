@@ -1,0 +1,37 @@
+%h1 门店设置#{}}
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 运营商名字
+      %th 地址
+      %th 商店类型
+      %th 是否接单
+      %th 操作
+  %tbody
+    - @stores.each do |store|
+      %tr
+        %td= store.name
+        %td= store.manager
+        %td
+          - if store.type == 0
+            虚拟门店
+          - else
+            实体门店
+        %td.take_state
+          - if @store_ids.include?(store.id)
+            已接单
+          - else
+            未接单
+        %td
+          - if @store_ids.include?(store.id)
+            = link_to '取消', "javascript:untake_store('"+@delivery_user.id+"','"+store.id+"')" , :class => 'btn btn-minier btn-yellow',:id=>"untake_store_href#{store.id.to_s}"
+            = link_to '接单', "javascript:take_store('"+@delivery_user.id+"','"+store.id+"')" , :class => 'btn btn-minier btn-yellow',:id=>"take_store_href#{store.id.to_s}",style: 'display: none'
+          - else
+            = link_to '取消', "javascript:untake_store('"+@delivery_user.id+"','"+store.id+"')" , :class => 'btn btn-minier btn-yellow',:id=>"untake_store_href#{store.id.to_s}",style: 'display: none'
+            = link_to '接单', "javascript:take_store('"+@delivery_user.id+"','"+store.id+"')" , :class => 'btn btn-minier btn-yellow',:id=>"take_store_href#{store.id.to_s}"
+
+%br
+
+
+

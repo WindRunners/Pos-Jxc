@@ -1,9 +1,10 @@
 //设置配送员的运营商属性
-function set_userinfo(userinfo_id,userinfo_name){
+function set_userinfo(userinfo_id,userinfo_name,userinfo_shopname){
 
     //alert("设置配送员运营商"+userinfo_id);
     $("#delivery_user_userinfo_id").val(userinfo_id);
     $("#delivery_user_userinfo_name").html(userinfo_name);
+    $("#delivery_user_userinfo_shopname").html(userinfo_shopname);
 }
 
 
@@ -21,6 +22,7 @@ function check() {
 //配送员查询
 function search(){
 
+    if($("#search-scope #mobile").length==0) return ;
 
     var mobile = $("#search-scope #mobile").val();
     var status = $("#search-scope #status").val();
@@ -30,10 +32,24 @@ function search(){
         return;
     }
 
-    window.location.href = get_location_href_no_search()+"?mobile="+mobile+"&status="+status;
+    window.location.href = get_location_href_no_search()+"?mobile="+mobile+"&status="+status+"&f="+get_rand_num();
     //window.location.href = window.location.pathname+"?mobile="+mobile+"&status="+status;
     //alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
 }
+
+
+//查询运营商
+function search_userinfo(){
+
+    if($("#search-scope-userinfo #userinfo_name").length==0) return;
+    var userinfo_name = $("#search-scope-userinfo #userinfo_name").val();
+    var userinfo_shopname = $("#search-scope-userinfo #userinfo_shopname").val();
+
+    window.location.href = get_location_href_no_search()+"?userinfo_name="+userinfo_name+"&userinfo_shopname="+userinfo_shopname+"&f="+get_rand_num();
+    //window.location.href = window.location.pathname+"?mobile="+mobile+"&status="+status;
+    //alert("手机号码为:"+mobile+",状态:"+status+",页面url:"+window.location.pathname);
+}
+
 
 
 
@@ -56,7 +72,9 @@ $(function(){
             //要做的事情
         }
         if(e && e.keyCode==13){ // enter 键
-           search();
+
+            search(); //查询运营商
+            search_userinfo(); //查询运营商
         }
     };
 
@@ -67,3 +85,32 @@ $(function(){
 
 
 
+//门店接单
+function take_store(delivery_user_id,store_id){
+
+    var data = {store_id:store_id,op:"add"}
+    $.post("/delivery_users/"+delivery_user_id+"/store_save",data,
+        function(data,status){
+            if(data.flag == 1){
+                $("#take_store_href"+store_id).parent().prev().html("已接单");
+                $("#take_store_href"+store_id).hide();
+                $("#untake_store_href"+store_id).show();
+            }
+            alert(data.msg);
+    });
+}
+
+//门店不接单
+function untake_store(delivery_user_id,store_id){
+
+    var data = {store_id:store_id,op:"remove"}
+    $.post("/delivery_users/"+delivery_user_id+"/store_save",data,
+        function(data,status){
+            if(data.flag == 1){
+                $("#untake_store_href"+store_id).parent().prev().html("未接单");
+                $("#untake_store_href"+store_id).hide();
+                $("#take_store_href"+store_id).show();
+            }
+            alert(data.msg);
+    });
+}

@@ -10,15 +10,15 @@
 .main .main_top .main_txt{ padding:0 10px; font-size:18px; }
 .main .main_top a{ color:#fd4638; display:block; float:right; padding-right:10px; text-decoration:none; font-size:14px;line-height:50px;}
 em{ color:#C00;padding-top: 11px; font-family:"微软雅黑";}
-span.error{height:12px; font-size:12px; font-family:"微软雅黑";  line-height:12px; margin-left:10px; margin-top:8px;}
+span.error{height:12px; font-size:12px; font-family:"微软雅黑";  line-height:12px; margin-left:10px; margin-top:8px; color: red}
 /**/
-.con,#con2,.con3{ padding:30px 20px; overflow:hidden; margin: 0px auto}
+.con,#con2,.con3{ padding:30px 20px; overflow:hidden; margin: 0px auto;height: 340px}
 .con .con_left{ float:left; font-size:14px; line-height:40px; color:#333333;}
 .con .con_left .con_group{ overflow:hidden; margin-bottom:14px;}
 .con_label{ float:left; text-align:right; width:90px; margin-right:10px;}
 .frm_controls{ float:right;width:202px;margin-right:60px; overflow:hidden;}
 input.con_input{ width:200px; height:38px; border:1px solid #dddddd;}
-input#input1{ width:92px; margin-right:20px; height:38px; float:left;}
+input#input_code{ width:92px; margin-right:20px; height:38px; float:left;}
 input.unchanged{ float:left;  height:38px; line-height:38px; width:80px; text-align:center;}
 span.lbl_content{ color:#666666; font-size:12px;}
 label a{ color:#fd473a; text-decoration:none; float:right; font-size:12px;}
@@ -32,7 +32,7 @@ label a{ color:#fd473a; text-decoration:none; float:right; font-size:12px;}
 .con .con_right .con_dw a img{ display:block; position:relative; left:20px; top:-24px;}
 .con .con_right .con_dw:hover .con_xz{ display:block;}
 #telphonen{background-color: #eee;}
-.con_xz{ display:none; z-index:999; position:absolute; left:-300px; top:-124px; width:280px; background:url(../images/regis/juju.png) no-repeat; background-size:100% 100%;padding:20px; background-origin:border-box;}
+.con_xz{ display:none; z-index:999; position:absolute; left:-300px; top:-124px; width:280px; background:url(/images/juju.png) no-repeat; background-size:100% 100%;padding:20px; background-origin:border-box;}
 .con_xztxt{text-align:center; font-size:18px; margin:0 30px 10px 0; font-weight:bold; padding:6px 0; line-height:30px; border-bottom:1px solid #e3e3e3; color:#3b3c3e;}
 .con .con_right .con_dw:hover .con_xz{ display:block;}
 .con_xztxtone{ width:280px; overflow:hidden;font-size:18px; font-weight:bold; padding:2px 0 4px; line-height:30px;}

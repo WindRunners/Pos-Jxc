@@ -1,4 +1,4 @@
-<%= form_for [:admin, @user], :html => { :class => "form-horizontal user", multipart: true } do |f| %>
+<%= form_for [:admin, @user], :html => { :class => "form-horizontal user", multipart: true ,remote: true} do |f| %>
 
 <input type="hidden" name="user[step]" value="3">
     <% if @user.errors.any? %>
@@ -75,7 +75,8 @@
 
     <%= f.submit nil, :class => 'btn btn-primary' %>
 
-    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                admin_users_path, :class => 'btn btn-default' %>
+    <a href='#' class="btn btn-default" onclick='history.go(-1);return false;'>
+      <span class="bigger-110">返回</span>
+    </a>
 
 <% end %>

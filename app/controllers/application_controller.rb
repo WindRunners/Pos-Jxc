@@ -40,16 +40,14 @@ class ApplicationController < ActionController::Base
     raise
   end
 
-  def authenticate_userinfo
-    p '-=-=-=-=-=',current_user.step==3
-    p "121212121111111111111==parms=#{params[:is_redirect_to]}====blank=#{params[:is_redirect_to].blank?}",
-    if current_user.step ==1
-      redirect_to :controller => "userinfos" ,action: "index", :is_redirect_to => true if params[:is_redirect_to].blank?
-    elsif current_user.step ==3
-      redirect_to :controller => "userinfos" ,action: "index", :is_redirect_to => true if params[:is_redirect_to].blank?
-      current_user.step =4
-    end
-  end
+  # def authenticate_userinfo
+  #   if current_user.step ==1
+  #     redirect_to :controller => "userinfos" ,action: "index", :is_redirect_to => true if params[:is_redirect_to].blank?
+  #   elsif current_user.step ==3
+  #     redirect_to :controller => "userinfos" ,action: "index", :is_redirect_to => true if params[:is_redirect_to].blank?
+  #     current_user.step =4
+  #   end
+  # end
 
   def authenticate_user!
     token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
@@ -65,5 +63,18 @@ class ApplicationController < ActionController::Base
     # location.reload() ;
     render :text => "location.hash = '##{path}|hash#{rand(1000)}';"
   end
+
+  def sendMessage(mobile)
+    @codestr = [('a'..'z'),('0'..'9')].map{|i| i.to_a}.flatten
+    code = (0..3).map{ @codestr[rand(@codestr.length)] }.join
+
+    ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
+
+
+    ChinaSMS.to mobile, "【酒运达】您的验证码是#{code}。如非本人操作，请忽略本短信"
+
+    code
+  end
+
 
 end

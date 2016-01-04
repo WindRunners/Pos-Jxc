@@ -8,35 +8,35 @@ class CashesController < ApplicationController
     if @app_key.present?
       @cashes = Cash.all
     else
-      @cashes = Cash.all
-      @cashOrders=CashOrder.all
+      @cashes = Cash.where(:userinfo_id=>current_user.userinfo_id)
+      @cashOrders=CashOrder.where(:userinfo_id=>current_user.userinfo_id)
       @cash=Cash.new
       @pay_totle=0.00
       @pay_o=0.00
       @pay_q=0.00
       @cash_totle=0.00
         @cashOrders.each do |cashOrder|
-            if cashOrder.userinfo_id==current_user.userinfo_id #完成订单
               @pay_o=cashOrder.paycost + @pay_o
-            else
-              @pay_o=0.00
-            end
         end
       @cash_totle=0
       @cash_y=0
       @cashing_totle=0
         @cashes.each do |cash|
-           if cash.cash_state == 2 && cash.userinfo_id==current_user.userinfo_id
+           if cash.cash_state == 2
              @cash_totle=cash.cash + @cash_totle
-           elsif cash.cash_state == 1 && cash.userinfo_id==current_user.userinfo_id
+           elsif cash.cash_state == 1
              @cashing_totle = cash.cash + @cashing_totle
-           elsif cash.cash_state == 4 && cash.userinfo_id==current_user.userinfo_id
+           elsif cash.cash_state == 4
              @cash_y= cash.cash + @cash_y
            end
         end
       @pay_totle=@pay_o-(@cash_totle+@cashing_totle+@cash_y)
       @cashes=Kaminari.paginate_array(@cashes).page(params[:page]).per(10)
       @cashOrders=Kaminari.paginate_array(@cashOrders).page(params[:page]).per(10)
+        respond_to do |format|
+          format.html{}
+          format.json{ render json: CashDatatable.new(view_context,current_user) }
+        end
     end
   end
 

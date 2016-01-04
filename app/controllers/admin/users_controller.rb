@@ -1,29 +1,11 @@
 class Admin::UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
-  skip_before_action :authenticate_user!
   before_action :auth?
 
   def index
     @current_user = current_user
-    if @app_key.present?
-      if params[:mobile].present?
-        @users= User.where(:mobile => /#{params[:mobile]}/)
-      else
-        @users = User.all
-      end
-    elsif @current_user.mobile=="admin"
-      @users = User.all.page params[:page]
-    else
-      if @current_user.step==1
-        render 'userinfos/regist_mail', layout: false
-      elsif @current_user.step==3
-        redirect_to new_userinfo_path
-      elsif @current_user.step==9
-        @users = User.all.page params[:page]
-      end
-    end
-
+    @users = User.all.page params[:page]
   end
 
   def new
@@ -39,7 +21,7 @@ class Admin::UsersController < ApplicationController
     if @app_key.present?
       @user=User.find(params[:id])
     else
-      @user = User.find_by(id: params[:id])
+      @user = User.find(params[:id])
     end
   end
 
@@ -53,13 +35,14 @@ class Admin::UsersController < ApplicationController
       params[:user][:password] ||= params[:password]
     end
     @user = User.new(user_params)
-
-    @user.userinfo=Userinfo.create(pdistance: 1)
+    if @app_key.present?
+      @user.userinfo=Userinfo.create(pdistance: 1)
+    end
     respond_to do |format|
       if @user.save
-        if @app_key.blank?
-          format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-          format.json { render :show, status: :ok, location: @user }
+        if @app_key.present?
+          # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+          format.json { render :show, status: :ok }
         else
           format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           format.json { render :show, status: :ok }
@@ -76,6 +59,19 @@ class Admin::UsersController < ApplicationController
     p params
   end
 
+  def upload
+    @user=User.find(current_user.id)
+    # @user.avatar.destroy
+    @user.avatar= params[:user][:avatar]
+    @user.save
+    respond_to do |format|
+      format.html{redirect_to "/#/userinfos/#{current_user.userinfo_id}"}
+      format.js{render_js "/#/userinfos/#{current_user.userinfo_id}"}
+    end
+
+  end
+
+
   def update
 
     respond_to do |format|
@@ -85,6 +81,7 @@ class Admin::UsersController < ApplicationController
       result = false
 
       if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+
         result = @user.update_without_password(user_params)
       else
         result = @user.update(user_params)
@@ -100,17 +97,14 @@ class Admin::UsersController < ApplicationController
             @user.add_role role
           end
         end
+        format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+        format.json { render :show, status: :ok }
+        format.js{ render_js admin_user_path(@user) }
 
-        if @app_key.blank?
-          format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-          format.json { render :show, status: :ok, location: @user }
-        else
-          format.json { render :show, status: :ok }
-
-        end
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.js{ render_js edit_admin_user_path(@user) }
       end
     end
   end

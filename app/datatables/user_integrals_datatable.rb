@@ -19,12 +19,15 @@ class UserIntegralsDatatable
 
   def data
     integrals.map do |integral|
+
       [
           integral.integral,
           integral.state_show_str,
           integral.type_show_str,
           integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s,
-          link_to('显示', integral)
+          # link_to('显示',"##{user_integral_path(integral)}", "data-url" => user_integral_path(integral))
+          raw("<div class='hidden-sm hidden-xs action-buttons'><a class='btn btn-xs btn-info' data-url='#{@view.user_integral_path(integral)}' href='##{@view.user_integral_path(integral)}'>显示</a></div>")
+
       ]
     end
   end
@@ -34,9 +37,17 @@ class UserIntegralsDatatable
   end
 
   def fetch_integrals
-    p '--------------==============---------',params[:state]
-    integrals = params[:state].present? ? UserIntegral.where(:state => params[:aasm_state]) : UserIntegral
-    integrals = integrals.where(:userinfo_id=>@current_user.userinfo_id)
+
+    if params[:state]=="zc"
+      state_to_i=2
+    elsif params[:state]==1
+      state_to_i=1
+    else
+      state_to_i=1
+    end
+
+    integrals = params[:state].present? ? UserIntegral.where(:state =>  state_to_i) : UserIntegral
+    integrals = integrals.where(:userinfo_id=>@current_user.userinfo_id,:state =>  state_to_i)
     integrals = integrals.order("#{sort_column} #{sort_direction}")
     integrals = integrals.page(page).per(per_page)
     if params[:sSearch].present?

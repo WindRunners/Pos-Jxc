@@ -1,0 +1,12 @@
+%table{:class => "table-center table table-striped table-bordered table-hover", :id => "cashes", "data-source" => "#{cashes_url(format: "json")}"}
+  %thead
+    %tr
+      %th= "取现金额"
+      %th= "取现状态"
+      %th= "取现时间"
+
+  %tbody
+:javascript
+  $(document).ready(function () {
+      cashIndex();
+  });

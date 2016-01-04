@@ -38,7 +38,7 @@
 - if policy(@import_bag).update?
   %br
   %h1 批量导入礼包
-  = form_tag({action: :batch}, multipart: true) do
+  = form_tag({action: :batch}, multipart: true, remote:true) do
     = file_field_tag 'excel_data',accept:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
     = submit_tag '批量导入' ,class: 'btn btn-default',onclick: 'return batch_import_check()'
 %br

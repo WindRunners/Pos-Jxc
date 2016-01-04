@@ -252,52 +252,71 @@ class ChateausController < ApplicationController
     end
   end
 
-  def search
-    @data ={}
-    status_condition=params[:status] || ''
-    name_condition=params[:name] || ''
-    conditionParams = {}
-    conditionParams['status'] = status_condition if status_condition.present?
-    conditionParams['name'] = /#{name_condition}/ if name_condition.present?
-    @data['chateaus'] = Chateau.where(conditionParams).page(params[:page]).order('created_at DESC')
-    # render :index
+
+
+  def batch_check
+    @chateau = Chateau.where(:status => params[:status]).order('created_at DESC').first
     respond_to do |format|
-      # format.html { redirect_to chateaus_url, notice: '审核通过成功！' }
-      format.js { render_js chateaus_path }
+      if @chateau.present?
+        format.html { redirect_to chateau_path(@chateau) }
+      else
+        format.html { redirect_to chateaus_path }
+      end
+    end
+  end
+
+
+  def next_check
+    chateau = Chateau.find(params[:chateau_id])
+    chateau.status = 1
+    chateau.save
+    @chateau = Chateau.where(:status => params[:status], :created_at => {"$lt" => chateau.created_at}).order('created_at DESC').first
+    respond_to do |format|
+      if @chateau.present?
+        format.html { redirect_to chateau_path(@chateau) }
+      else
+        format.html { redirect_to chateaus_path }
+      end
+    end
+  end
+
+
+  def next_check_out
+    chateau = Chateau.find(params[:chateau_id])
+    chateau.status = -1
+    chateau.save
+    @chateau = Chateau.where(:status => params[:status], :created_at => {"$lt" => chateau.created_at}).order('created_at DESC').first
+    respond_to do |format|
+      if @chateau.present?
+        format.html { redirect_to chateau_path(@chateau) }
+      else
+        format.html { redirect_to chateaus_path }
+      end
     end
   end
 
 
   def check
     @chateau = Chateau.find(params[:chateau_id])
+    @chateau.update_attribute(:status, 1)
     respond_to do |format|
-      if @chateau.update_attribute(:status, 1)
-        format.html { redirect_to chateaus_url, notice: '审核通过成功！' }
-        format.json { head :no_content }
-      else
-        format.json { render json: @chateau.errors, status: :unprocessable_entity }
-      end
-      format.js
+      format.html { redirect_to chateaus_path }
     end
   end
 
 
   def check_out
     @chateau = Chateau.find(params[:chateau_id])
+    @chateau.update_attribute(:status, -1)
     respond_to do |format|
-      if @chateau.update_attribute(:status, -1)
-        format.html { redirect_to chateaus_url, notice: '审核不通过成功！' }
-        format.json { head :no_content }
-      else
-        format.json { render json: @chateau.errors, status: :unprocessable_entity }
-      end
-      format.js
+      format.html { redirect_to chateaus_path }
     end
   end
 
   def workload
+    @data ={}
     @users = User.all
-    @work_array = []
+    @data['work_array'] = []
     User.all.each do |u|
       if !u.chateaus.empty?
         work = {}
@@ -313,10 +332,11 @@ class ChateausController < ApplicationController
         end
         work['today_chateau'] = i
         work['today_check'] = j
-        @work_array << work
+        @data['work_array'] << work
       end
     end
-    @work_array
+    @data['chateaus'] = Chateau.where(:status => -1,:user_id=>current_user.id)
+    @data
   end
 
 

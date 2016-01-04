@@ -60,6 +60,7 @@ class ApplicationController < ActionController::Base
     flash[:notice] = notice if notice.present?
 
     render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
-  end
 
+  end
+  
 end

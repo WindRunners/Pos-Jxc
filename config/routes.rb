@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :chateau_comments
   resources :user_integrals
   resources :wines
 
@@ -24,6 +23,9 @@ Rails.application.routes.draw do
   resources :delivery_users
   get 'delivery_users/:id/check' => "delivery_users#check"
   post 'delivery_users/:id/check_save' => "delivery_users#check_save"
+  get 'delivery_users/:id/store_index' => "delivery_users#store_index"
+  post 'delivery_users/:id/store_save' => "delivery_users#store_save"
+
 
   get 'activities/skipe_one_index/:id/:platform' => 'activities#skipe_one_index'
   get 'activities/skipe_one_search'
@@ -121,12 +123,13 @@ Rails.application.routes.draw do
     get 'check_out'
     post 'batch', :on => :collection
     get 'app_show'
-    get 'search', :on => :collection
 
     get 'warehouse_notice_index', :on => :collection
-
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
+    post 'stow', :on => :collection
   end
-  post 'announcements/data_table/' => "announcements#data_table"
 
   resources :announcement_categories
 
@@ -231,12 +234,20 @@ Rails.application.routes.draw do
     get 'search', :on => :collection
     get 'wines'
     get 'workload', :on => :collection
-    post 'relate_wine'
-    delete 'resolve_wine'
+    post 'relate_wine', :on => :collection
+    delete 'resolve_wine', :on => :collection
     get 'ex_pic',:on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
   end
   resources :chateau_marks
 
+
+  resources :chateau_comments do
+  end
+  post 'chateau_comments/add_comment'=> 'chateau_comments#add_comment'
+  post 'chateau_comments/hit'=> 'chateau_comments#hit'
   resources :regions do
     get 'children'
     post 'add_children'

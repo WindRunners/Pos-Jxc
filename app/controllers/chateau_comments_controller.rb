@@ -1,5 +1,6 @@
 class ChateauCommentsController < ApplicationController
   before_action :set_chateau_comment, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:hit]
 
   # GET /chateau_comments
   # GET /chateau_comments.json
@@ -61,14 +62,58 @@ class ChateauCommentsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_chateau_comment
-      @chateau_comment = ChateauComment.find(params[:id])
+
+  def add_comment
+    # binding.pry
+    @announcement = Announcement.find(params[:announcement_id])
+    @chateau_comment = @announcement.chateau_comments.build();
+    @chateau_comment.content = params[:content]
+    @chateau_comment.customer_id = params[:customer_id]
+    @chateau_comment.save
+    data ={}
+
+    respond_to do |format|
+      if @chateau_comment.save
+        data['flag'] = 1
+        data['message'] = '保存成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '保存失败！'
+      end
+      format.json { render json: data }
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def chateau_comment_params
-      params.require(:chateau_comment).permit(:content, :status, :hits)
+  end
+
+
+  def hit
+    # binding.pry
+    @chateau_comment = ChateauComment.find(params[:chateau_comment_id])
+    @chateau_comment.hits+=1
+    data ={}
+    respond_to do |format|
+      if @chateau_comment.save
+        data['flag'] = 1
+        data['message'] = '保存成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '保存失败！'
+      end
+      format.json { render json: data }
     end
+
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_chateau_comment
+    @chateau_comment = ChateauComment.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def chateau_comment_params
+    params.require(:chateau_comment).permit(:content, :status, :hits, :customer_id)
+  end
 end

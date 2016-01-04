@@ -7,7 +7,9 @@ class AnnouncementsController < ApplicationController
   def index
     status_condition=params[:status] || ''
     title_condition=params[:title] || ''
+    category_condition =params[:announcement_category_id] || ''
     conditionParams = {}
+    conditionParams['announcement_category_id'] = category_condition if category_condition.present?
     conditionParams['status'] = status_condition if status_condition.present?
     conditionParams['title'] = /#{title_condition}/ if title_condition.present?
     @announcements = Announcement.where(conditionParams).page(params[:page]).order('created_at DESC')
@@ -35,6 +37,22 @@ class AnnouncementsController < ApplicationController
     @announcement.author = current_user.name
     @announcement.read_num = 0
     @announcement.status = 0
+    Dir.mkdir('public/upload/image/announcements/'+ @announcement.id.to_s)
+    i =params[:announcement]['content']
+    @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
+        c = a[5, a.length]
+        uuid=SecureRandom.uuid
+        # 下载
+        open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+          begin
+            file << open(c).read
+            @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+              # 替换content原图片链接并转化城IMG标签
+          rescue
+          end
+        end
+        a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+    }
     respond_to do |format|
       if @announcement.save
         format.js { render_js announcements_path }
@@ -105,41 +123,68 @@ class AnnouncementsController < ApplicationController
   end
 
 
-  def check
-    # binding.pry
-    @announcement = Announcement.find(params[:announcement_id])
-    # @announcement.update_attribute(:status, 1)
-    # render_js announcements_path(page:params[:page]),notice: '审核通过成功！'
+  def batch_check
+    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
     respond_to do |format|
-      if @announcement.update_attribute(:status, 1)
-        # format.js { render_js announcements_path(page:params[:page]) }
-        format.html { redirect_to announcements_path(page:params[:page]), notice: '审核通过成功！' }
-        format.json { render :index, status: :ok }
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
       else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
+        format.html { redirect_to announcements_path }
       end
+    end
+  end
+
+
+  def next_check
+    announcement= Announcement.find(params[:announcement_id])
+    announcement.status = 1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    respond_to do |format|
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
+      else
+        format.html { redirect_to announcements_path }
+      end
+    end
+
+  end
+
+  def next_check_out
+    announcement = Announcement.find(params[:announcement_id])
+    announcement.status = -1
+    announcement.save
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    respond_to do |format|
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
+      else
+        format.html { redirect_to announcements_path }
+      end
+    end
+  end
+
+
+  def check
+    @announcement = Announcement.find(params[:announcement_id])
+    @announcement.update_attribute(:status, 1)
+    respond_to do |format|
+      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核通过成功！' }
     end
   end
 
   def check_out
     @announcement = Announcement.find(params[:announcement_id])
-    # @announcement.update_attribute(:status, -1)
-    # render_js announcements_path(page:params[:page]),notice: '审核不通过成功！'
+    @announcement.update_attribute(:status, -1)
     respond_to do |format|
-      if @announcement.update_attribute(:status, -1)
-        # format.js { render_js announcements_path(page:params[:page]) }
-        format.html { redirect_to announcements_path(page:params[:page]), notice: '审核不通过成功！' }
-        format.json { render :index, status: :ok }
-      else
-        format.html { redirect_to announcements_url, notice: '审核失败！' }
-      end
+      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核不通过成功！' }
     end
   end
 
 
   def batch
     @announcement_category_id = params[:announcement_category_id]
-    a = Roo::Spreadsheet.open(params[:excel_data])
+    a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
       @fwb = ""
       #建立模型
@@ -193,6 +238,23 @@ class AnnouncementsController < ApplicationController
   end
 
 
+  def stow
+    # binding.pry
+    @announcement = Announcement.find(params[:announcement_id])
+    data ={}
+    respond_to do |format|
+      if !@announcement.customer_ids.include? params[:customer_id]
+        @announcement.save
+        data['flag'] = 1
+        data['message'] = '收藏成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '收藏失败！你已经收藏过了哦'
+      end
+      format.json { render json: data }
+    end
+  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

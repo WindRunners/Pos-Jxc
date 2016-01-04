@@ -3,6 +3,19 @@
 
 - if current_user.has_role? :SuperAdmin
   %h1 选择运营商:
+  .row#search-scope-userinfo
+    .col-xs-12
+      .col-xs-1.no-padding-right
+        %label{for:'userinfo_name'} 运营商:
+      .col-xs-3.no-padding-left
+        %input#userinfo_name.form-control{placeholder: '请输入运营商'}
+      .col-xs-1.no-padding-right
+        %label{for:'userinfo_shopname'} 商店名称:
+      .col-xs-5.no-padding-left
+        %input#userinfo_shopname.form-control{placeholder: '请输入商店名称'}
+      .col-xs-1
+        %a.btn.btn-primary{href: 'javascript:search_userinfo();'} 搜索
+
   = paginate @userinfos
   %table.table.table-striped.table-bordered.table-hover
     %thead
@@ -12,7 +25,7 @@
         %th 商店名称
     %tbody
       - @userinfos.each do |userinfo|
-        %tr{'onclick'=> "javascript:set_userinfo(\"#{userinfo.id}\",\"#{userinfo.name}\");"}
+        %tr{'onclick'=> "javascript:set_userinfo(\"#{userinfo.id}\",\"#{userinfo.name}\",\"#{userinfo.shopname}\");"}
           %td= userinfo.name
           %td= userinfo.address
           %td= userinfo.shopname

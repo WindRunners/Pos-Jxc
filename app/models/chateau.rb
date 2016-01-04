@@ -34,4 +34,14 @@ class Chateau
   def created_time
     created_at.strftime("%Y%m%d%H%M%S")
   end
+
+  def status_str
+    if self.status == 1
+      p '通过'
+    elsif self.status == 0
+      p '待审核'
+    elsif self.status == -1
+      p '不通过'
+    end
+  end
 end

@@ -1,4 +1,8 @@
-%h1 New wine
+.row
+  .col-sm-12.col-sm-offset-5
+    %h1
 = render 'form'
-.col-sm-9
-  = link_to 'Back', wines_path,:class=> 'btn btn-info'
+
+
+.col-sm-12.col-sm-offset-5
+  = link_to 'Back','', 'data-href' => wines_path,:class=> 'btn btn-info'

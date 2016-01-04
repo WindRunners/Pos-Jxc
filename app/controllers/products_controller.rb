@@ -205,6 +205,16 @@ class ProductsController < ApplicationController
       @product.state = State.find_by(value: "offline")
       if @product.shop(current_user).save
         render_js product_path @product, notice: '该产品添加成功.'
+
+        #添加字典数据
+        ['brand', 'specification', 'origin', 'manufacturer'].each do |field|
+          name = @product[field]
+          unless name.blank?
+            Dictionary.find_or_create_by({'userinfo_id' => current_user.userinfo.id.to_s, 'type' => 'product', 'subtype' => field, 'name' => name})
+          end
+        end
+
+        redirect_to @product, notice: '该产品添加成功.'
       else
         render :new
       end

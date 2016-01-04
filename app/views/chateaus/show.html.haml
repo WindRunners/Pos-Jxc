@@ -1,54 +1,203 @@
-%p#notice= notice
+.row{class:'col-xs-12',style:'background-color:#EFF3F8'}
+.div{class:'col-xs-6'}
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4.widget-title.lighter.smaller 基本属性
+    .widget-body
+      .widget-main.padding-8
+        %dl.dl-horizontal
+          %dt
+            %strong 名称
+          %dd=@chateau.name
+        %dl.dl-horizontal
+          %dt
+            %strong 主人
+          %dd=@chateau.owner
+        %dl.dl-horizontal
+          %dt
+            %strong 地区
+          %dd= @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+        %dl.dl-horizontal
+          %dt
+            %strong 详细地址
+          %dd=@chateau.address
+        %dl.dl-horizontal
+          %dt
+            %strong 电话
+          %dd=@chateau.phone
+        %dl.dl-horizontal
+          %dt
+            %strong 网址
+          %dd=@chateau.urls
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4.widget-title.lighter.smaller logo图片
+    .widget-body
+      .widget-main.padding-8
+        - if @chateau.logo.present?
+          = image_tag(@chateau.logo,size: '150x75')
 
-%p
-  %b 酒庄名称:
-  = @chateau.name
-%p
-  %b 主人:
-  = @chateau.owner
-%p
-  %b 所在地区:
-  = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
-%p
-  %b 地址:
-  = @chateau.address
-%p
-  %b 联系电话:
-  = @chateau.phone
-%p
-  %b 酒庄网址:
-  = @chateau.urls
-%p
-  %b 酒庄标签:
-  %p
-  - @chateau.chateau_marks.each do |mark|
-    =mark.name
-    %b :
-    =mark.value
-    %p
-%p
-  %b 酒庄logo图片:
-  - if @chateau.logo.present?
-    = image_tag(@chateau.logo,size: '300x150')
-%p
-  %b 浏览次数:
-  = @chateau.hits
-%p
-  %b 排序字段:
-  = @chateau.sequence
-%p
-  %b 轮播图:
-  - if @chateau.pictures.present?
-    -@chateau.pictures.each do |x|
-      = image_tag(x.pic)
-%p
-  %b 酒庄介绍:
-#container{:style=>"padding:2% 4%; font-family:SimHei;"}
-  = markdown @chateau.chateau_introduce['introduce']
-%p
-  %b 图片地址数组:
-  = @chateau.pic_path.count
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4.widget-title.lighter.smaller 轮播图片
+    .widget-body
+      .widget-main.padding-8
+        - if @chateau.pictures.present?
+          -@chateau.pictures.each do |x|
+            = image_tag(x.pic,size: '160x120')
 
-= link_to '编辑','', 'data-href' => edit_chateau_path(@chateau),:class=>'btn btn-xs btn-info'
-\|
-= link_to '返回','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-pink'
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4.widget-title.lighter.smaller 标签
+    .widget-body
+      .widget-main.padding-8
+        - if @chateau.chateau_marks.present?
+          -@chateau.chateau_marks.each do |m|
+            %dl.dl-horizontal
+              %dt
+                %strong
+                  =m.name
+              %dd=m.value
+.div{class:'col-xs-6',style: "padding:2% 4%; font-family:SimHei;"}
+  .div{style:"font-size:280%;line-height:160%; color:#282828; border-top:0px solid #d6d6d6;"}
+    = markdown  @chateau.chateau_introduce.introduce
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4.widget-title.lighter.smaller 审核:
+      当前状态：
+      =@chateau.status_str
+      最后修改时间：
+      =@chateau.updated_at.to_s
+      %br
+    .widget-body
+      .widget-main.padding-8
+        %form#comment-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>chateaus_path,'data-remote'=>'true'}
+          .div
+            %label{:for => "form-field-8"} 审核意见:
+            %textarea#form-field-8.autosize-transition.form-control{:placeholder => "Default Text"}
+        .div.padding-8
+          -if current_user.has_role? :admin
+            = link_to '通过','', 'data-href' => next_check_chateaus_path(:chateau_id=>@chateau.id,:status=>@chateau.status),:class=>'btn btn-xs btn-info'
+            \|
+            = link_to '驳回','', 'data-href' => next_check_chateaus_path(:chateau_id=>@chateau.id,:status=>@chateau.status),:class=>'btn btn-xs btn-info'
+            \|
+          = link_to '编辑','', 'data-href' => edit_chateau_path(@chateau),:class=>'btn btn-xs btn-info'
+          \|
+          = link_to '标签管理','', 'data-href' => chateau_chateau_mark_path(@chateau),:class=>'btn btn-xs btn-info'
+          \|
+          = link_to '轮播图管理','', 'data-href' => chateau_turn_picture_path(@chateau),:class=>'btn btn-xs btn-info'
+          \|
+          = link_to '返回','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-pink'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-#%p#notice= notice
+-#
+-#%p
+-#  %b 酒庄名称:
+-#  = @chateau.name
+-#%p
+-#  %b 主人:
+-#  = @chateau.owner
+-#%p
+-#  %b 所在地区:
+-#  = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
+-#%p
+-#  %b 地址:
+-#  = @chateau.address
+-#%p
+-#  %b 联系电话:
+-#  = @chateau.phone
+-#%p
+-#  %b 酒庄网址:
+-#  = @chateau.urls
+-#%p
+-#  %b 酒庄标签:
+-#  %p
+-#  - @chateau.chateau_marks.each do |mark|
+-#    =mark.name
+-#    %b :
+-#    =mark.value
+-#    %p
+-#%p
+-#  %b 酒庄logo图片:
+-#  - if @chateau.logo.present?
+-#    = image_tag(@chateau.logo,size: '300x150')
+-#%p
+-#  %b 浏览次数:
+-#  = @chateau.hits
+-#%p
+-#  %b 排序字段:
+-#  = @chateau.sequence
+-#%p
+-#  %b 轮播图:
+-#  - if @chateau.pictures.present?
+-#    -@chateau.pictures.each do |x|
+-#      = image_tag(x.pic)
+-#%p
+-#  %b 酒庄介绍:
+-##container{:style=>"padding:2% 4%; font-family:SimHei;"}
+-#  = markdown @chateau.chateau_introduce['introduce']
+-#%p
+-#  %b 图片地址数组:
+-#  = @chateau.pic_path.count
+-#
+-#= link_to '编辑','', 'data-href' => edit_chateau_path(@chateau),:class=>'btn btn-xs btn-info'
+-#\|
+-#= link_to '返回','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-pink'
+
+
+

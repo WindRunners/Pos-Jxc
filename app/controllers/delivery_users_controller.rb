@@ -1,5 +1,5 @@
 class DeliveryUsersController < ApplicationController
-  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save]
+  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save,:store_index,:store_save]
 
   # GET /delivery_users
   # GET /delivery_users.json
@@ -14,6 +14,7 @@ class DeliveryUsersController < ApplicationController
   # GET /delivery_users/1
   # GET /delivery_users/1.json
   def show
+    @userinfo = Userinfo.where(_id: @delivery_user['userinfo_id']).first if current_user.has_role? :SuperAdmin
   end
 
   # GET /delivery_users/new
@@ -61,8 +62,16 @@ class DeliveryUsersController < ApplicationController
   # GET /delivery_users/1.json
   def check
 
+
+    userinfo_name = params[:userinfo_name]
+    userinfo_shopname = params[:userinfo_shopname]
+
+    whereParams = {}
+    whereParams['name'] = /#{userinfo_name}/ if userinfo_name.present?
+    whereParams['shopname'] = /#{userinfo_shopname}/ if userinfo_shopname.present?
+
     @userinfo = Userinfo.where(_id: @delivery_user['userinfo_id']).first if current_user.has_role? :SuperAdmin
-    @userinfos = Userinfo.all.page(params[:page]) if current_user.has_role? :SuperAdmin
+    @userinfos = Userinfo.where(whereParams).page(params[:page]) if current_user.has_role? :SuperAdmin
 
   end
 
@@ -95,6 +104,42 @@ class DeliveryUsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+  #门店管理
+  def store_index
+
+    @store_ids = @delivery_user['store_ids']
+    @store_ids = [] if !@store_ids.present?
+    @stores = Store.where({"userinfo_id"=>@delivery_user['userinfo_id']})
+  end
+
+  #门店保存
+  def store_save
+
+    begin
+
+      op = params[:op] #add 添加，remove 移除
+      store_id = params[:store_id]
+      object_store_id = BSON::ObjectId(store_id)
+
+      if(op == "add")
+
+        @delivery_user.add_to_set({"store_ids"=> object_store_id})
+      else
+        @delivery_user.pull({"store_ids"=>object_store_id})
+      end
+      respond_to do |format|
+        format.json {render json: {"flag"=> 1,"msg"=> "门店操作成功！"} }
+      end
+    rescue Exception=>e #异常捕获
+      puts e
+      respond_to do |format|
+        format.json {render json: {"flag"=> 0,"msg"=> "门店操作失败，服务器出现异常！"} }
+      end
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

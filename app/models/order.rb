@@ -154,7 +154,7 @@ class Order
         self.cost_price += ordergood.purchasePrice * ordergood.quantity
         self.goodsvalue += ordergood.price * ordergood.quantity
         self.totalquantity += ordergood.quantity
-        self.userinfo.integral -= ordergood.integral * ordergood.quantity
+        # self.userinfo.integral -= ordergood.integral * ordergood.quantity
 
         activitie.current_reduction += ordergood.price * ordergood.quantity
         activitie.current_quantity += ordergood.quantity
@@ -204,9 +204,9 @@ class Order
 
   #取消订单方法
   def cancel_order
-    self.ordergoods.each do |ordergood|
-      self.userinfo.integral += ordergood.integral * ordergood.quantity #退还小B积分
-    end
+    # self.ordergoods.each do |ordergood|
+    #   self.userinfo.integral += ordergood.integral * ordergood.quantity #退还小B积分
+    # end
 
     if self.getintegral > 0
       #赠送活动积分
@@ -231,11 +231,13 @@ class Order
   #确认收货
   def commit_order(auto)
 
+    # self.userinfo.integral -= self.goodsvalue.round
+
     #本单购买总积分
     integral_order = 0
-    self.ordergoods.each do |ordergood|
-      integral_order += ordergood.integral * ordergood.quantity
-    end
+    # self.ordergoods.each do |ordergood|
+    #   integral_order += ordergood.integral * ordergood.quantity
+    # end
 
     if integral_order !=0
       begin
@@ -430,6 +432,14 @@ class Order
       #设置订单门店
       self.subscribe(Store.new)
       broadcast(:set_order_store,self.id)
+
+    elsif workflow_state == 'cancelled' #取消订单
+
+      if self.paymode == 3 #酒库提酒
+        #退换酒库商品
+        subscribe(SpiritRoom.new)
+        broadcast(:back_spiritroom_product,self.id)
+      end
     end
 
   end

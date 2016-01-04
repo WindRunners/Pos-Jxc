@@ -60,3 +60,7 @@
         %td.col-sm-2{"style"=>"text-align:right"} 运营商:
         %td#delivery_user_userinfo_name.col-sm-8{"style"=>"text-align:left"}
           = "#{@userinfo.name if @userinfo.present?}"
+      %tr
+        %td.col-sm-2{"style"=>"text-align:right"} 商店名称:
+        %td#delivery_user_userinfo_shopname.col-sm-8{"style"=>"text-align:left"}
+          = "#{@userinfo.shopname if @userinfo.present?}"

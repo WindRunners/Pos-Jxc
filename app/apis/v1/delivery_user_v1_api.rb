@@ -87,7 +87,6 @@ class DeliveryUserV1API < Grape::API
     end
   end
 
-
   desc '获取配送员登录验证码'
   params do
     requires :mobile, type: String, desc: '手机号'
@@ -152,6 +151,20 @@ class DeliveryUserV1API < Grape::API
 
       status 200 #修改post默认返回状态
 
+    end
+
+    desc '配送员注销' do
+      success Entities::DeliveryUser
+      detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
+    end
+    params do
+      requires :token, type: String, desc: '身份认证token'
+    end
+    post 'login_out' do
+
+      status 200 #修改post默认返回状态
+      current_deliveryUser.update_attribute(:authentication_token, "")
+      {msg: "注销成功!", flag: 1}
     end
   end
 

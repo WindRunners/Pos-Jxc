@@ -143,7 +143,7 @@ gem 'jquery-validation-rails'
 gem 'gon'
 
 gem 'wx_pay', :git => "git://github.com/jasl/wx_pay.git" #微信支付
-gem 'alipay' #支付宝
+gem 'alipay', :git => "git://github.com/stockcode/alipay.git" #:path => "../alipay" #支付宝
 
 gem 'baidu-cloud_push' #百度推送
 

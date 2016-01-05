@@ -7,6 +7,12 @@ GIT
       rest-client (>= 1.7)
 
 GIT
+  remote: git://github.com/stockcode/alipay.git
+  revision: 062d8abcc9291148da89d1684e2dfa50f2763e2b
+  specs:
+    alipay (0.11.0)
+
+GIT
   remote: git://github.com/stockcode/china_sms.git
   revision: 38298e9a746c26d7465e0c82a7aa4fb8eb97594c
   specs:
@@ -79,7 +85,6 @@ GEM
       request_store
       user_agent_parser
       uuidtools
-    alipay (0.11.0)
     arel (6.0.3)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -522,7 +527,7 @@ DEPENDENCIES
   activeresource
   activeresource-response
   ahoy_matey
-  alipay
+  alipay!
   baidu-cloud_push
   bcrypt (~> 3.1.7)
   best_in_place

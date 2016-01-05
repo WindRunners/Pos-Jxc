@@ -30,11 +30,9 @@ class AchieveOrderPushChannels
     fail_channels = []
 
     Rails.logger.info channels
-    
+
     channels.each do |channel|
       arr = channel.split('|')
-
-      Rails.logger.info arr
 
       r = {}
 
@@ -42,6 +40,8 @@ class AchieveOrderPushChannels
         r = ios_client.push_single_device(arr.last, ios_msg, {msg_type: 1, deploy_status: 2})
       elsif arr.first == 'ANDROID'
         r = android_client.push_single_device(arr.last, android_msg, {msg_type: 1})
+        
+        Rails.logger.info r.to_json
       else
         next
       end

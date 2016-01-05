@@ -78,6 +78,20 @@ class Store
       storeId = store.id if store.present?
     end
 
+    channels = []
+    dusers = DeliveryUser.where(:store_ids => storeId)
+
+    dusers.each do |user|
+      channels << user.channel_ids
+    end
+
+    logger.info channels
+
+    push_log = PushLog.create(order_id:order_id, userinfo_id:self.userinfo.id)
+
+    Resque.enqueue(AchieveOrderPushChannels, channels, 0, push_log.id)
+
+
     #更新订单门店及配送距离
     Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance})
   end

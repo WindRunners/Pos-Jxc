@@ -66,7 +66,7 @@ class ProductV1API < Grape::API
     end
 
     products = Product.shop_id(params[:id]).where(where_params).order_by(:category_name => :desc)
-    Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
+    #Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
     # products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) } #遍历递增曝光量太耗时
 
     present products, with: Entities::Product
@@ -82,9 +82,17 @@ class ProductV1API < Grape::API
 
     products = Product.shop_id(params[:id]).limit(50).order_by(:sale_count => :desc)
 
-    products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) }
-
     present products, with: Entities::Product
+  end
+
+  desc '获取OA的闪屏广告'
+  get 'splash_screen' do
+    array = []
+
+    splash=Splash.first
+    if splash.present?
+      array << {img:splash.avatar.url, seconds:splash.stop_seconds}
+    end
   end
 
   desc '获取小B的轮播列表'
@@ -94,19 +102,13 @@ class ProductV1API < Grape::API
   get 'slideshow' do
     array = []
 
-    begin
-      carousel=CarouselAsset.find_by(carousel_id: params[:id])
-      carouselAssets=CarouselAsset.all
-      array << {img:"#{carousel[0].asset.path.split("public")[1]}", url:""} if carousel[0].present?
-      array << {img:"#{carousel[1].asset.path.split("public")[1]}", url:""} if carousel[1].present?
-      array << {img:"#{carouselAssets[0].img1_path.split(".")[0]}"+".png", url:"#{carouselAssets[0].url1}"} if carouselAssets.present?
-      array << {img:"#{carouselAssets[0].img2_path.split(".")[0]}"+".png", url:"#{carouselAssets[0].url2}"} if carouselAssets.present?
-    rescue
-      carouselAssets=CarouselAsset.all
-      array << {img:"#{carouselAssets[0].img1_path.split(".")[0]}"+".png", url:"#{carouselAssets[0].url1}"} if carouselAssets.present?
-      array << {img:"#{carouselAssets[0].img2_path.split(".")[0]}"+".png", url:"#{carouselAssets[0].url2}"} if carouselAssets.present?
+    carousels = Carousel.all
+
+    carousels.each do |carousel|
+      array << {img:carousel.avatar, url:carousel.url}
     end
 
+    array
   end
 
   desc '获取小B的促销列表'
@@ -128,62 +130,7 @@ class ProductV1API < Grape::API
     promotions
   end
 
-  desc '获取OA的闪屏广告'
-  get 'splash_screen' do
-    array = []
-    splashes = Splash.splashCache
-    if SpalashScreenAsset.all.present?
-      @spalashScreenAssets=SpalashScreenAsset.all
-      if  File:: directory?("public/upload/image/splash_screen/splash_screen_assets/")
-        p '-=-='
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{splashes[0].splash_screen_img}")
-          p splashes[0].splash_screen_img
-          open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body) }
-        }
-        @spalashScreenAssets[0].update("img_path"=>splashes[0].splash_screen_img)
-        @spalashScreenAssets[0].update("seconds"=>splashes[0].stop_seconds)
-        p '-=-='
-      else
-        FileUtils.makedirs("public/upload/image/splash_screen/splash_screen_assets/")
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{splashes[0].splash_screen_img}")
-          open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body) }
-        }
-        @spalashScreenAssets[0].update("img_path"=>splashes[0].splash_screen_img)
-        @spalashScreenAssets[0].update("seconds"=>splashes[0].stop_seconds)
-      end
-    else
-      @spalashScreenAsset=SpalashScreenAsset.new
 
-      if  File:: directory?("public/upload/image/splash_screen/splash_screen_assets/")
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{splashes[0].splash_screen_img}")
-          p splashes[0].splash_screen_img
-          open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body) }
-        }
-        @spalashScreenAsset.update("img_path"=>splashes[0].splash_screen_img)
-        @spalashScreenAsset.update("seconds"=>splashes[0].stop_seconds)
-      else
-        FileUtils.makedirs("public/upload/image/splash_screen/splash_screen_assets/")
-        Net::HTTP.start("10.99.99.206") { |http|
-          resp = http.get("/#{splashes[0].splash_screen_img}")
-          open("public/#{splashes[0].splash_screen_img.split(".")[0]+".png"}", "wb") { |file|
-            file.write(resp.body) }
-        }
-        @spalashScreenAsset.update("img_path"=>splashes[0].splash_screen_img)
-        @spalashScreenAsset.update("seconds"=>splashes[0].stop_seconds)
-      end
-    end
-
-    spalsh=SpalashScreenAsset.all
-    if spalsh.present?
-    array << {img:"#{spalsh[0].img_path.split(".")[0]}"+".png", seconds:"#{spalsh[0].seconds}"}
-    end
-  end
 
   desc '根据多个商品id，返回商品活动分组信息' do
     success Entities::FullReduction

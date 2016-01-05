@@ -124,55 +124,21 @@ line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #f
             <div class="clearfix"></div>
        		<div class="con_bk_naver">
             	<div class="con_bk_naverbox">
-                <!--第一个-->
-                	<div class="col-xs-6 con_bk_rm">
-                    	<div class="con_bk_rmimg">
-                    		<img src="/images/manjian/fruit_01.png">
-                        </div>
-                        <div class="con_bk_rmspan">
-                            <span class="con_bk_rmspan01">美的农场甜玉米</span><br/>
-                            <span class="con_bk_rmspan02">450-550g/盒</span><br/>
-                            <span class="con_bk_rmspan03">¥7.8</span>
-                        </div>
-                        <div class="con_bk_rma"><a href="#">立即购买</a></div>
-                    </div>    <!--col-xs-6 con_bk_rm-->
-                    <!--第二个-->
-                    <div class="col-xs-6 con_bk_rm">
-                    	<div class="con_bk_rmimg">
-                    		<img src="/images/manjian/fruit_01.png">
-                        </div>
-                        <div class="con_bk_rmspan">
-                            <span class="con_bk_rmspan01">美的农场甜玉米</span><br/>
-                            <span class="con_bk_rmspan02">450-550g/盒</span><br/>
-                            <span class="con_bk_rmspan03">¥7.8</span>
-                        </div>
-                        <div class="con_bk_rma"><a href="#">立即购买</a></div>
-                    </div>    <!--col-xs-6 con_bk_rm-->
-                  <!--第三个-->
-                	<div class="col-xs-6 con_bk_rm">
-                    	<div class="con_bk_rmimg">
-                    		<img src="/images/manjian/fruit_01.png">
-                        </div>
-                        <div class="con_bk_rmspan">
-                            <span class="con_bk_rmspan01">美的农场甜玉米</span><br/>
-                            <span class="con_bk_rmspan02">450-550g/盒</span><br/>
-                            <span class="con_bk_rmspan03">¥7.8</span>
-                        </div>
-                        <div class="con_bk_rma"><a href="#">立即购买</a></div>
-                    </div>    <!--col-xs-6 con_bk_rm-->
-                    <!--第四个-->
-                    <div class="col-xs-6 con_bk_rm">
-                    	<div class="con_bk_rmimg">
-                    		<img src="/images/manjian/fruit_01.png">
-                        </div>
-                        <div class="con_bk_rmspan">
-                            <span class="con_bk_rmspan01">美的农场甜玉米</span><br/>
-                            <span class="con_bk_rmspan02">450-550g/盒</span><br/>
-                            <span class="con_bk_rmspan03">¥7000.08</span>
-                        </div>
-                        <div class="con_bk_rma"><a href="#">立即购买</a></div>
-                    </div>    <!--col-xs-6 con_bk_rm-->  
-                
+                    <% @hotProducts.each do |product| %>
+                    	<div class="col-xs-6 con_bk_rm">
+                        	<div class="con_bk_rmimg">
+                        		<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                            </div>
+                            <div class="con_bk_rmspan">
+                                <span class="con_bk_rmspan01"><%= product.title %></span><br/>
+                                <span class="con_bk_rmspan02"><%= product.specification %></span><br/>
+                                <span class="con_bk_rmspan03">¥<%= product.price %></span>
+                            </div>
+                            <div class="con_bk_rma">
+                                <a href="javascript:void(0)" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a>
+                            </div>
+                        </div>    <!--col-xs-6 con_bk_rm-->
+                    <% end %>
                 </div>   <!--con_bk_naverbox-->
             
             </div>    <!--con_bk_naver-->

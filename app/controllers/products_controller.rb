@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   skip_before_action :authenticate_user!, only: [:desc, :preview]
 
-  def se
+  def searchByQrcode
 
     begin
       @product = Product.shop(current_user).find_by(:qrcode => params[:qrcode]) if current_user.present?
@@ -430,8 +430,16 @@ class ProductsController < ApplicationController
       @totalQuantity = productPurchaseStatistics.to_a[0]["value"]["totalQuantity"].to_f if !productPurchaseStatistics.empty?
     rescue
     end
-    purchaseStatistics = @purchaseProducts.map {|st| [Product.shop(current_user).find(st.product_id).title, st.total_quantity]}
+    purchaseStatistics = @purchaseProducts.map do |st|
+      begin
+        [Product.shop(current_user).find(st.product_id).title, st.total_quantity]
+      rescue
+        ["product not exists!", 0]
+      end
+    end
     @purchaseResults << {:name => "商品购买次数", :data => purchaseStatistics}
+    @totalQuantity = 1 if 0 == @totalQuantity
+    @exposureNum = 1 if 0 == @exposureNum
   end
 
   def statistic

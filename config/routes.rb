@@ -4,11 +4,12 @@ Rails.application.routes.draw do
   resources :wines
 
   resources :userinfo_asks
-  resources :promotion_discounts
-  # resources :gift_bags
   resources :cashes
   resources :import_bags do
     resources :import_bag_receivers, shallow: true
+  end
+  resources :promotion_discounts do
+    get 'products/:product_id/:operat/:type' => :products, :on => :collection
   end
 
   post 'import_bags/:import_bag_id/import_bag_receivers/batch' => "import_bag_receivers#batch" #后台收礼人批量导入
@@ -29,10 +30,11 @@ Rails.application.routes.draw do
 
   get 'activities/skipe_one_index/:id/:platform' => 'activities#skipe_one_index'
   get 'activities/skipe_one_search'
-  get 'activities/full_reduction/:id/:full_reduction_id/:platform' => 'activities#index'
-  get 'activities/promotion_discount/:id/:promotion_discount_id/:platform' => 'activities#promotionDiscount'
+  get 'activities/full_reduction/:userinfo_id/:full_reduction_id/:platform' => 'activities#fullReductions'
+  get 'activities/promotion_discount/:userinfo_id/:promotion_discount_id/:platform' => 'activities#promotionDiscount'
   get 'activities/coupons/:userinfo_id/:platform' => 'activities#coupons'
   get 'activities/promotions/:userinfo_id/:platform' => 'activities#promotions'
+  get 'activities/discount/:userinfo_id/:platform' => 'activities#discount'
 
   resources :coupons do
     get :invalided
@@ -44,7 +46,11 @@ Rails.application.routes.draw do
   end
 
 
-  resources :full_reductions
+  resources :full_reductions do
+    get 'products/:product_id/:operat' => :products, :on => :collection
+    get 'coupons/:coupon_info/:operat' => :coupons, :on => :collection
+    get 'giftProducts/:product_info/:operat' => :giftProducts, :on => :collection
+  end
 
   resources :panic_buyings do
     get 'product_list', :on => :collection
@@ -190,7 +196,7 @@ Rails.application.routes.draw do
 
     post 'search', :on => :collection
 
-    post 'se', :on => :collection
+    post 'searchByQrcode', :on => :collection
 
     get 'dataTablesProducts', :on => :collection
 

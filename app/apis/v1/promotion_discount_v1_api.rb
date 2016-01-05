@@ -20,7 +20,22 @@ class PromotionDiscountV1API < Grape::API
     end
   end
 
-  desc '获取所有促销打折信息', {
+  desc '获取能参与促销打折的商品列表', {
+               headers: {
+                   "Authentication-Token" => {
+                       description: "用户Token",
+                       required: true
+                   }
+               },
+               :entity => Entities::Product
+           }
+  params do
+  end
+  get :getPromotionProductsList do
+    present Product.shop(current_user).where(:state_id => State.find_by(:value => "online"), :panic_price => 0), with: Entities::Product
+  end
+
+  desc '获取指定状态促销打折信息', {
                headers: {
                    "Authentication-Token" => {
                        description: "用户Token",
@@ -31,10 +46,12 @@ class PromotionDiscountV1API < Grape::API
            }
   params do
     requires :type, type: String, desc: '活动类型：0:打折,1:促销'
+    requires :aasm_state, type: String, desc: '优惠券状态：noBeging:未开始, beging:正在进行, end:已结束, invalided:已失效'
   end
   get :getPromotionDiscountList do
-      authenticate!
-      promotionDiscounts = PromotionDiscount.where(:type => params[:type], :userinfo_id => @current_user.userinfo.id)
+    authenticate!
+    promotionDiscounts = PromotionDiscount.where(:aasm_state => params[:aasm_state], :type => params[:type], :userinfo_id => @current_user.userinfo.id).order(:updated_at => :DESC)
+    present promotionDiscounts, with: Entities::PromotionDiscount
   end
   
   desc '创建促销打折', {
@@ -47,16 +64,18 @@ class PromotionDiscountV1API < Grape::API
                :entity => Entities::Status
            }
   params do
-    requires :promotion_discount, type: String, desc: "促销打折信息，json字符串{title:标题,discount:折扣(75:表示75折),type:0:打折，1:促销,start_time:开始时间(yyyy-MM-dd HH:mm),end_time:结束时间,use_goods: #可使用的商品0:全店通用,1:指定商品,tag:为商品几天就打标签,participate_product_ids:打折格式是品id数组, 促销格式{product_id: 商品id, product_name: 商品名称, price: 促销价格}}"
+    requires :promotion_discount, type: String, desc: "促销打折信息，json字符串{title:标题,discount:折扣(75:表示75折),type:0:打折，1:促销,start_time:开始时间(yyyy-MM-dd HH:mm),end_time:结束时间,tag:为商品几天就打标签,participate_product_ids:打折格式是品id数组, 促销格式{product_id: 商品id, product_name: 商品名称, price: 促销价格}}"
   end
   post :createPromotionDiscount do
     authenticate!
     promotion_discount = PromotionDiscount.new(JSON.parse(params[:promotion_discount]))
-    promotion_discount.userinfo = @current_user.userinfo
-    if promotion_discount.save
+    Rails.logger.info "promotion_discount====#{promotion_discount}"
+    promotion_discount.createUserInfo = @current_user.userinfo
+    begin
+      promotion_discount.save!
       {:success => true}
-    else
-      {:success => false}
+    rescue Exception => e
+      {:success => false, :info => e.summary}
     end
   end
 
@@ -70,15 +89,18 @@ class PromotionDiscountV1API < Grape::API
                :entity => Entities::Status
            }
   params do
-    requires :promotion_discount, type: String, desc: "促销打折信息，json字符串{title:标题,discount:折扣(75:表示75折),type:0:打折，1:促销,start_time:开始时间(yyyy-MM-dd HH:mm),end_time:结束时间,use_goods: #可使用的商品0:全店通用,1:指定商品,tag:为商品几天就打标签,participate_product_ids:打折格式是品id数组, 促销格式{product_id: 商品id, product_name: 商品名称, price: 促销价格}}"
+    requires :promotion_discount, type: String, desc: "促销打折信息，json字符串{title:标题,discount:折扣(75:表示75折),type:0:打折，1:促销,start_time:开始时间(yyyy-MM-dd HH:mm),end_time:结束时间,tag:为商品几天就打标签,participate_product_ids:打折格式是品id数组, 促销格式{product_id: 商品id, product_name: 商品名称, price: 促销价格}}"
     requires :promotion_discount_id, type: String, desc: "促销打折活动id"
   end
   post :updatePromotionDiscount do
     authenticate!
-    if promotion_discount.where(:id => params[:promotion_discount_id]).update(JSON.parse(params[:promotion_discount]))
+    promotion_discount = PromotionDiscount.find_by(:id => params[:promotion_discount_id])
+    promotion_discount.old_promotion_discount = promotion_discount.clone
+    begin
+      promotion_discount.update!(JSON.parse(params[:promotion_discount]))
       {:success => true}
-    else
-      {:success => false}
+    rescue Exception => e
+      {:success => false, :info => e.summary}
     end
   end
 
@@ -96,7 +118,7 @@ class PromotionDiscountV1API < Grape::API
   end
   get :destroyPromotionDiscount do
     authenticate!
-    if PromotionDiscount.where(:id => params[:promotion_discount_id]).destroy
+    if PromotionDiscount.find_by(:id => params[:promotion_discount_id]).destroy
       {:success => true}
     else
       {:success => false}

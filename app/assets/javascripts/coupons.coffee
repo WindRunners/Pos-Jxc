@@ -7,12 +7,13 @@
   aasm_state = aasm_state || ""
   ajaxUrl = $('#coupons').data('source')
   @couponsDataTables.ajax.url(ajaxUrl + "?aasm_state=#{aasm_state}").load()
+
 @couponsIndex = ->
   @dataTableAjaxParams["sAjaxSource"] = $('#coupons').data('source')
   @couponsDataTables = $("#coupons").DataTable @dataTableAjaxParams
+
 @coupons = ->
-  @originTable = $("#tableProducts").DataTable @dataTableParams
-  @selectedTable = $("#selectedProductsTable").DataTable @dataTableParams
+  @initDataTable()
   $("#coupon_title").change ->
     couponObj = $("#coupon_title")
     if couponObj.val().isBlank()
@@ -61,33 +62,64 @@
       $("#addProducts").css "display", "none"
     else
       $("#addProducts").css "display", "block"
+
 @toogleActivity = (product_id) ->
   buttonObj = $("#" + product_id + "_attend")
   if "取消" == buttonObj.text()
     @activityProductArray.remove product_id
-    delete @activityProductHash["" + product_id]
     buttonObj.text "选取"
   else
-    @activityProductHash["" + product_id] = ""
     @activityProductArray.push product_id
     buttonObj.text "取消"
-  # $("#sureUse").css "display", if "{}" == JSON.stringify(@activityProductHash) then "none" else "block"
   $("#sureUse").css "display", if 0 == @activityProductArray.length then "none" else "block"
+
 @loadSelectProducts = ->
-  $('#selectProducts').load "/coupons/selectProducts.html"
+  $('#selectProducts').load "/coupons/selectProducts.html", ->
+    $('#selectProducts').removeAttr "data-ajax-content"
+
 @sureUse = ->
-  $("#selectProductHash").val JSON.stringify @activityProductHash
-  loadSelectedProducts activityProductArray.join(','), 'a'
+  url = "/coupons/products/#{activityProductArray.join(',')}/a"
+  $.getJSON(
+    url
+    (data)->
+      if data.success
+        do ->
+          @loadDataTable "selected"
+      else
+        do ->
+          alert '添加商品失败！'
+  )
+
+@loadDataTable = (type) ->
+  $("#sureUse").css "display", "none"
+  @activityProductArray = []
+  if "selected" == type
+    @selectedTable.ajax.url($('#selectedProductsTable').data('source')).load()
+  else
+    @selectTable.ajax.url($('#selectProductsTable').data('source')).load()
+
+@initDataTable = ->
+  @dataTableAjaxParams["sAjaxSource"] = $('#selectProductsTable').data('source')
+  @selectTable = $("#selectProductsTable").DataTable @dataTableAjaxParams
+
+  @dataTableAjaxParams["sAjaxSource"] = $('#selectedProductsTable').data('source')
+  @selectedTable = $("#selectedProductsTable").DataTable @dataTableAjaxParams
+
 @loadSelectedProducts = (product_id, operat) ->
-  $('#selectedProducts').load "/coupons/products/#{product_id}/#{operat}.html"
-@deleteSelectProduct = (product_id) ->
+  $('#selectedProducts').load "/coupons/products/#{product_id}/#{operat}.html", ->
+    $('#selectedProducts').removeAttr "data-ajax-content"
 
 @cancelActivity = (product_id) ->
   buttonCancel = $("#" + product_id + "_cancel")
-  @selectedTable.row(buttonCancel.parent().parent()).remove().draw false
-  delete @activityProductHash["" + product_id]
-  $("#selectProductHash").val JSON.stringify @activityProductHash
-  buttonAttend = $(@originTable.row(".cls_" + product_id).node()).find("button")
-  buttonAttend.text "参加活动"
-  buttonAttend.prop "disabled", false
-  buttonAttend.prop "class", "btn btn-primary"
+
+  url = "/coupons/products/#{product_id}/d"
+  $.getJSON(
+    url
+    (data)->
+      if data.success
+        do ->
+          @selectedTable.row(buttonCancel.parent().parent()).remove().draw false
+      else
+        do ->
+          alert '删除商品失败！'
+  )

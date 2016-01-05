@@ -1,25 +1,41 @@
 class ActivitiesController < ApplicationController
   skip_before_action :authenticate_user!
-  
-  def index
+  before_action :getHotProducts, only: [:fullReductions, :coupons, :promotions, :discount, :promotionDiscount]
+
+  def fullReductions
     @platform = params[:platform]
     begin
-      @fullReduction = FullReduction.find_by(:id => params[:full_reduction_id], :aasm_state => "beging", :userinfo_id => params[:id])
-      @products = @fullReduction.participateProductsById(params[:id])
-
-      # productsJson = {}
-      # @products.each {|p| productsJson[p.id] = p}
-      # gon.products = productsJson
-
+      @fullReduction = FullReduction.find_by(:id => params[:full_reduction_id], :aasm_state => "beging", :userinfo_id => params[:userinfo_id])
+      @products = @fullReduction.participateProducts
     rescue
     end
-    render :layout => false
+    if @fullReduction.present?
+      case @fullReduction.preferential_way
+        when "4" then
+          @gift_count = 0
+          @fullReduction.gifts_product_ids.each { |pinfo| @gift_count += pinfo["quantity"].to_i }
+          render :buyGift, :layout => false
+        when "1" then render :layout => false
+        else
+          render :fullGift, :layout => false
+      end
+    else
+      render :layout => false
+    end
+  end
+
+  def fullGift
+
+  end
+
+  def buyGift
+
   end
 
   def coupons
     @platform = params[:platform]
     begin
-      @coupons = Coupon.where(:aasm_state => "beging", :userinfo_id => params[:userinfo_id])
+      @coupons = Coupon.where(:aasm_state => "beging", :userinfo_id => params[:userinfo_id], :quantity => {"$gt" => 0})
     rescue
     end
     render :layout => false
@@ -30,8 +46,18 @@ class ActivitiesController < ApplicationController
     @products = Array.new
     begin
       @promotions = PromotionDiscount.where(:aasm_state => "beging", :userinfo_id => params[:userinfo_id], :type => "1")
-      puts "count===#{@promotions.count}"
       @products = @promotions[0].participateProducts if 0 < @promotions.count
+    rescue
+    end
+    render :layout => false
+  end
+
+  def discount
+    @platform = params[:platform]
+    @products = Array.new
+    begin
+      @discounts = PromotionDiscount.where(:aasm_state => "beging", :userinfo_id => params[:userinfo_id], :type => "0")
+      @products = @discounts[0].participateProducts if 0 < @discounts.count
     rescue
     end
     render :layout => false
@@ -40,7 +66,7 @@ class ActivitiesController < ApplicationController
   def promotionDiscount
     @platform = params[:platform]
     begin
-      promotionDiscount = PromotionDiscount.find_by(:id => params[:promotion_discount_id],:aasm_state => "beging", :userinfo_id => params[:id])
+      promotionDiscount = PromotionDiscount.find_by(:id => params[:promotion_discount_id],:aasm_state => "beging", :userinfo_id => params[:userinfo_id])
       @products = promotionDiscount.participateProducts
     rescue
     end
@@ -91,4 +117,10 @@ class ActivitiesController < ApplicationController
       format.html { render :partial => "skipe_01_product", :layout => false }
     end
   end
+
+  private
+
+    def getHotProducts
+      @hotProducts = Product.shop_id(params[:userinfo_id]).limit(10).order_by(:sale_count => :desc)
+    end
 end

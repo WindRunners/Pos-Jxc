@@ -1,11 +1,26 @@
 // Place all the styles related to the cashiers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#cashier-header
+{
+  margin: 5px 0px 10px 0px;
+}
+
+.margin-bottom-20
+{
+  margin-bottom: 20px;
+}
+
+.radius-10
+{
+  border-radius: 10px;
+}
+
 #divTotalPrice
 {
   height: 100px;
   font-weight: 900;
-  font-size: 60px;
+  font-size: 35px;
 }
 
 #divDiscount
@@ -18,7 +33,6 @@
 #tdCalculation
 {
   width: 70%;
-  background-color: #1E90FF;
 }
 
 #divProductQuantity
@@ -37,6 +51,17 @@
 #divSmallTicket
 {
   display: none;
+}
+
+.cashier-operat
+{
+  position: relative;
+  top: 130px;
+}
+
+.width-300
+{
+  width: 300px;
 }
 
 #tableSmallTicket
@@ -68,4 +93,46 @@
 .footer-index
 {
   z-index: 1 !important;
+}
+
+.btn-group > .btn:first-child {
+  margin: 0 10px 0 0;
+}
+
+.btn-group > .btn,
+.btn-group > .btn + .btn
+{
+  margin: 0 10px 0 0;
+}
+
+.fixed-thread
+{
+  display: block;
+  width: 100%;
+  font-size: 13px;
+  color: #393939;
+  padding: 8px;
+  height: 36px;
+  background-color: #E4E3E8;
+}
+
+.scroll-tbody
+{
+  display: block;
+  height: 250px;
+  overflow-y: auto;
+  width: 100%;
+  padding-right: -10px;
+}
+
+.product-row
+{
+  height: 50px;
+  font-size: 13px;
+  padding: 8px;
+}
+
+.product-operat span
+{
+  margin: 0 4px;
 }

@@ -38,12 +38,11 @@ class CashiersController < ApplicationController
   end
 
   def checkCustomer
-    begin
-      @customer = Customer.find_by_mobile(params[:mobile])
-    rescue
-    end
+    mobile = params[:mobile]
+    @customer = Customer.find_by_mobile(params[:mobile])
+    @customer = Customer.create_by_mobile(params[:mobile]) if @customer.blank?
 
-    if @customer
+    if @customer.present?
       respond_to do |format|
         format.json { render :json => {exists: true,
                                        id: @customer.id,

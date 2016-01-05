@@ -1,11 +1,11 @@
 class FullReduction
   include Mongoid::Document
   include Mongoid::Timestamps
-  # include Mongoid::Taggable
   include AASM
   
-  before_save :check
+  before_create :check
   before_update :check
+  before_destroy :clearActivity
 
   belongs_to :createUserInfo, :class_name => "Userinfo", :foreign_key => :userinfo_id
 
@@ -28,7 +28,9 @@ class FullReduction
   field :aasm_state, type: String #状态
   field :condition, type: Boolean,default: false #是否满足条件
 
-  field :avatar #活动图片
+  field :avatar, type: String, default: "" #活动图片
+
+  attr_accessor :old_full_reduction #旧的对象
 
   aasm do
     state :noBeging, :initial => true #未开始
@@ -104,73 +106,127 @@ class FullReduction
   def groupTag
   end
   
+  def clearActivity
+    #清除优惠券与满减活动的关联信息
+    coupons.each do |c|
+      c.full_reduction_ids.delete(id.to_s)
+      c.save
+    end
+    #清除商品与满减活动的关联信息
+    participateProducts.each do |p|
+      p.full_reduction_id = nil
+      p.tags_array.delete(tag)
+      p.shop_id(userinfo_id.to_s).save
+    end
+    #清除赠送商品与满减活动的关联信息
+    gifts.each do |p|
+      p.gift_full_reduction_ids.delete(id.to_s)
+      p.shop_id(userinfo_id.to_s).save
+    end
+  end
+
+  def changeSelectCouponsProducts
+    if old_full_reduction.present?
+      case old_full_reduction.preferential_way
+        when "3" then
+          old_full_reduction.coupon_infos.each do |cinfo|
+            if coupon_infos.index {|ci| ci["coupon_id"] == cinfo["coupon_id"]}.present?
+              old_full_reduction.coupon_infos.delete(cinfo)
+            end
+          end
+          
+          Coupon.where(:id => {"$in" => old_full_reduction.coupon_infos.map {|cinfo| cinfo["coupon_id"]}}).each do |c|
+            c.full_reduction_ids.delete(id.to_s)
+            c.save
+          end
+          coupon_infos.each do |cinfo|
+            coupon_id = cinfo[:coupon_id] || cinfo["coupon_id"]
+            coupon = Coupon.find(coupon_id)
+            coupon.full_reduction_ids << id.to_s if !coupon.full_reduction_ids.include?(id.to_s)
+            coupon.save
+          end
+
+        when "4", "5" then
+          old_full_reduction.gifts_product_ids.each do |pinfo|
+            if gifts_product_ids.index {|pi| pi["product_id"] == pinfo["product_id"]}.present?
+              old_full_reduction.gifts_product_ids.delete(pinfo)
+            end
+          end
+
+          Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => old_full_reduction.gifts_product_ids.map {|pinfo| pinfo["product_id"]}}).each do |p|
+            p.gift_full_reduction_ids.delete(old_full_reduction.id.to_s)
+            p.shop_id(userinfo_id.to_s)
+          end
+
+          gifts_product_ids.each do |pinfo|
+            product_id = pinfo[:product_id] || pinfo["product_id"]
+            product = Product.shop_id(userinfo_id.to_s).find(product_id)
+            product.gift_full_reduction_ids << id.to_s if !product.gift_full_reduction_ids.include?(id.to_s)
+            product.shop_id(userinfo_id.to_s).save
+          end
+      end
+
+      old_full_reduction.participate_product_ids.each do |pid|
+        if participate_product_ids.include?(pid)
+          old_full_reduction.participate_product_ids.delete(pid)
+        end
+      end
+
+      Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => old_full_reduction.participate_product_ids}).each do |p|
+        p.full_reduction_id = nil
+        p.tags_array.delete(old_full_reduction.tag)
+        p.shop_id(userinfo_id.to_s).save
+      end
+    end
+
+    participateProducts.each do |product|
+      if product.full_reduction_id.blank?
+        product.tags_array.delete(old_full_reduction.tag) if old_full_reduction.present? && old_full_reduction.tag.present?
+        (product.tags.present? ? product.tags_array << tag : product.tags = tag) if tag.present? && !product.tags_array.include?(tag)
+        product.full_reduction_id = id.to_s
+      else
+        if old_full_reduction.present? && old_full_reduction.tag.present?
+          if tag.present? && old_full_reduction.tag != tag
+            product.tags_array.delete(old_full_reduction.tag)
+            product.tags_array << tag
+          end
+        else
+          product.tags_array << tag if tag.present?
+        end
+      end
+      product.shop_id(userinfo_id.to_s).save
+    end
+  end
+
   def check
     today = Time.now.strftime('%Y%m%d%H%M%S').to_i
     startTime = start_time.strftime('%Y%m%d%H%M%S').to_i
     endTime = end_time.strftime('%Y%m%d%H%M%S').to_i
     
     if today >= startTime && today < endTime
-      start if "beging" != aasm_state
+      Rails.logger.info "full_reduction start======="
+      start if may_start?
     elsif today < startTime
-      ready if "noBeging" != aasm_state
+      Rails.logger.info "full_reduction ready======="
+      ready if may_ready?
     else
-      stop if "end" != aasm_state
+      Rails.logger.info "full_reduction stop======="
+      stop if may_stop?
     end
+
+    changeSelectCouponsProducts
   end
   
   def coupons
-    result = Array.new
-    coupon_infos.each do |cinfo|
-      begin
-        result << Coupon.find(cinfo[:coupon_id])
-      rescue
-      end
-    end
-    result
+    Coupon.where(:id => {"$in" => coupon_infos.map {|cinfo| cinfo[:coupon_id] || cinfo["coupon_id"]}})
   end
   
-  def giftsById(userInfoId)
-    result = Array.new
-    gifts_product_ids.each do |pinfo|
-      begin
-        result << Product.shop_id(userInfoId).find(pinfo[:product_id])
-      rescue
-      end
-    end
-    result
+  def gifts
+    Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => gifts_product_ids.map {|pinfo| pinfo[:product_id] || pinfo["product_id"]}})
   end
   
-  def gifts(user)
-    result = Array.new
-    gifts_product_ids.each do |pinfo|
-      begin
-        result << Product.shop(user).find(pinfo[:product_id])
-      rescue
-      end
-    end
-    result
-  end
-  
-  def participateProductsById(userInfoId)
-    result = Array.new
-    participate_product_ids.each do |pid|
-      begin
-        result << Product.shop_id(userInfoId).find(pid)
-      rescue
-      end
-    end
-    result
-  end
-  
-  def participateProducts(user)
-    result = Array.new
-    participate_product_ids.each do |pid|
-      begin
-        result << Product.shop(user).find(pid)
-      rescue
-      end
-    end
-    result
+  def participateProducts
+    Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => participate_product_ids})
   end
 
   def gift_good_group

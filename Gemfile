@@ -58,7 +58,7 @@ gem 'redcarpet'
 gem 'select2-rails'
 
 gem "therubyracer"
-gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "less-rails", :git => 'https://github.com/suzan2go/less-rails.git', :branch => 'fix-nomethoderror-for-sprockets3'
 gem 'twitter-bootstrap-rails'
 
 gem 'jquery-fileupload-rails'
@@ -143,7 +143,7 @@ gem 'jquery-validation-rails'
 gem 'gon'
 
 gem 'wx_pay', :git => "git://github.com/jasl/wx_pay.git" #微信支付
-gem 'alipay' #支付宝
+gem 'alipay', :git => "git://github.com/stockcode/alipay.git" #:path => "../alipay" #支付宝
 
 gem 'baidu-cloud_push' #百度推送
 

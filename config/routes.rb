@@ -151,6 +151,9 @@ Rails.application.routes.draw do
     get "users/sessions/password_reset", to: "users/sessions#password_reset"
     get "users/sessions/cheak_mobile",to: "users/sessions#cheak_mobile"
     get "users/send_message",to: "users/registrations#send_message"
+    post "users/sessions/fix_password",to: "users/sessions#fix_password"
+    post "users/mobile_sign_in", to: "users/mobile_sessions#create"
+    post "users/mobile_sign_out", to: "users/mobile_sessions#destroy"
   end
 
 

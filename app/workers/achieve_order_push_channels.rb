@@ -29,8 +29,12 @@ class AchieveOrderPushChannels
 
     fail_channels = []
 
+    Rails.logger.info channels
+    
     channels.each do |channel|
       arr = channel.split('|')
+
+      Rails.logger.info arr
 
       r = {}
 

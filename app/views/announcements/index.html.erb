@@ -58,6 +58,7 @@
     <th>阅读量</th>
     <th>是否置顶</th>
     <th>创建时间</th>
+    <th>创建人</th>
     <th></th>
     <th>操作</th>
     <th></th>
@@ -84,6 +85,7 @@
         <td><%= announcement.read_num %></td>
         <td><%= announcement.is_top %></td>
         <td><%= announcement.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s %></td>
+        <td><%= announcement.user.name if announcement.user.present? %></td>
         <td><%= link_to '详细', '', 'data-href' => announcement_path(announcement), :class => 'btn btn-xs btn-primary' %></td>
         <td><%= link_to '编辑', "##{edit_announcement_path(announcement)}", 'data-href' => edit_announcement_path(announcement), :class => 'btn btn-xs btn-info' %></td>
         <% if announcement.status ==0 || announcement.status ==-1 %>

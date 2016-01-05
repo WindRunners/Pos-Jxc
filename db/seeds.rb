@@ -49,5 +49,23 @@ Role.create(:name       => "manager")
 #超级管理员
 Role.create(:name       => "SuperAdmin")
 
+#门店
+Role.create(:name       => "store")
+#运营商
+Role.create(:name       => "business")
+
+
+#门店
+Role.create(:name       => "store")
+#运营商
+Role.create(:name       => "business")
+Role.create(:name => "xiaoda_kuaixun") #小大快讯
+Role.create(:name => "jiu_world")#酒世界
+
 
 Region.create(:name => "世界")
+
+
+
+
+

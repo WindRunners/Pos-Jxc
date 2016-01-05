@@ -27,7 +27,7 @@
   </div>
 
   <div id="con">
-    <%= form_for(User.new, url: user_session_path,:class=>"bl-form bl-formhor") do |f| %>
+    <%= form_tag users_sessions_fix_password_path,class:"bl-form bl-formhor",:id=>"new_user" do |f| %>
         <input type="hidden" , name="setpassword" , value="true">
         <input type="hidden" , name="check_mobile" , value="true">
         <div class="con_grou clearfix">

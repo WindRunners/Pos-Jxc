@@ -15,4 +15,12 @@ class State
   def product_counts(user)
     Product.shop(user).where(state_id:id).count
   end
+
+  def self.online
+    @online ||= State.find_by(value:'online')
+  end
+
+  def self.offline
+    @offline ||= State.find_by(value:'offline')
+  end
 end

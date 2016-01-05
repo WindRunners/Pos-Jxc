@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>折扣</title>
+<%= stylesheet_link_tag "application", :media => "all" %>
+<%= javascript_include_tag "application" %>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    function productDetails(id, platform)
+    {
+        if("android" == platform)
+        {
+            Android.productDetails(id);
+        }
+        else if("ios" == platform)
+        {
+            var url= "myapp:&func=productDetails&product_id=" + id;
+            document.location = url;
+        }
+    }
+    function addToShoppingCart(id, platform)
+    {
+        if("android" == platform)
+        {
+            Android.addToShoppingCart(id);
+        }
+        else if("ios" == platform)
+        {
+            var url= "myapp:&func=addToShoppingCart&product_id=" + id;
+            document.location = url;
+        }
+    }
+</script>
+<style>
+*{ margin:0px; padding:0px;font-family:"微软雅黑"}
+.container{ padding:0}
+a:hover{ text-decoration:none;}
+.meiyou_box{ width:100%; margin-top:25%; margin-bottom:25%;}
+.meiyou_box img{ display:block; width:25%; margin-left:auto; margin-right:auto;}
+.meiyou_box div{ text-align:center; font-size:100%; line-height:240%; color:#999999;}
+
+.container .banner{/* margin-bottom:10px;*/ background:#f8f8f8}
+.container .banner img,.container .fx img{ width:100% ;}
+.container .banner{ position:relative;}
+.container .banner button.fen{ border:none;color:#FFF; border-radius:20px 20px; padding:2px 0; position:absolute; right:3%; bottom:10%; font-size:110%; 
+line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #ffe3bf 0%,#ff9c17 100%);  background:-moz-linear-gradient(top,  #ffe3bf 0%,#ff9c17 100%);  background:-ms-linear-gradient(top,  #ffe3bf 0%,#ff9c17 100%);  background:-o-linear-gradient(top,  #ffe3bf 0%,#ff9c17 100%);  background:linear-gradient(top,  #ffe3bf 0%,#ff9c17 100%); /*background:url(/images/discount/bg01.png) repeat-x !important;*//* cursor:pointer;*/ color:#FFF; font-weight:bold; box-shadow:1px 1px 2px #c17124;}
+.container .fen01{ padding:14px 0;}
+.container .fen01 img{ width:100%;}
+.container .qg_one{ padding:0 4%;}
+.container .qg_one .qg_con{ border:1px solid #ffc880; padding:12px 0 8px; border-radius:10px 10px;  margin-bottom:10px;}
+.container .qg_one .qg_con .qg_con_left{ padding:8px 2%; /*border-right:2px solid #f8f8f8;*/}
+.container .qg_one .qg_con .qg_con_img{ width:100%; }
+.container .qg_one .qg_con .qg_con_right{ padding:0 1% 0 0;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 img{ width:100%;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg01{ font-weight:bold; color:#656975; font-size:110%; line-height:150% !important;  padding-top:2px;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg02{ color:#b6b6b6; font-size:100%; line-height:150%;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg03{ font-weight:bold; color:#ef533f; font-size:120%; line-height:150%;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg04{font-weight:bold; color:#b6b6b6; font-size:90%; line-height:150%;text-decoration:line-through;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg05{ color:#b6b6b6; font-size:80%; line-height:120%;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right01 .span_qg06{color:#ef533f;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right02{ padding:6px 0 0;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right02 .qg_con_rightone{ background-color:#4ecaee; padding:3px 0; border-radius:6px 6px;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right02 a{ display:block; padding:8px 8%; text-align:center; color:#FFF; letter-spacing:1px; font-size:100%; font-weight:bold;}
+.container .qg_one .qg_con .qg_con_right .qg_con_right03{ padding:0; height:14px;}
+/*.container .qg_one .qg_con .qg_con_right .qg_con_right03 .progress_one{  background-color:#fbcb00;}*/
+/**/
+.container .qg_con01{ padding:2px 2% ;}
+.container .qg_con01 .qg_con01_bg{ overflow:hidden;}
+.container .qg_con01 .qg_con01_bg .qg_con_fr01{ padding:12px 0%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr{ margin-bottom:10px; padding:0 2%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr01 .qg_con_fr01_img{padding:6px 3%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr01 .qg_con_fr01_img img{ width:100%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr02{ width:100%; text-align:center; font-family:'arial'; font-size:100%; font-weight:bold; color:#585858; line-height:150%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr04{font-family:'arial'; width:100%; text-align:center;  font-size:100%; font-weight:bold; color:#585858; line-height:140%;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr05{ font-size:90%; font-weight:bold; color:#ef533f;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_fr06{ font-size:80%; color:#cccccc; text-decoration:line-through;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_right_fr{ padding:6px 0;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_right_fr .qg_con_right_fr_one{ background-color:#4ecaee; padding:3px 0; border-radius:5px 5px;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_right_fr a{ display:block; padding:3px 10%; le text-align:center; color:#FFF; font-size:100%; font-weight:bold;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_right_fr .qg_con_right_fr_one .qg_con_right_fr03{ padding:0;}
+.container .qg_con01 .qg_con01_bg .qg_con01_fr .qg_con_right_fr .qg_con_right_fr_one .qg_con_right_fr03 .progress_one{ background-color:#fbcb00;}
+
+</style>
+</head>
+<body>
+    <div class="container">
+       <!-- <h3 class="col-xs-12 tuangou">团购</h3>-->
+        <div class="banner">
+            <img src="/images/discount/dazhe.png">
+            <button class="col-xs-4 fen">分享给朋友</button>
+        </div>   <!--banner-->
+        <div class="col-xs-12 fen01"><img src="/images/discount/huodong_dz.png"></div>
+        <% if @products.blank? %>
+          <div class="meiyou_box">
+            <img src="/images/promotion/meiyou.png">
+            <div>抱歉，没有打折活动</div>
+          </div>
+        <% end %>
+        <div class="qg_one">
+        <!--HOT one-->
+          <% @products.each do |product| %>
+            <div class="col-xs-12 qg_con">
+              <div class="col-xs-4 qg_con_left">
+                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+              </div>
+              <div class="col-xs-7 col-xs-offset-1  qg_con_right">
+                <div class="qg_con_right01">
+                  <span class="span_qg01"><%= product.title %></span>
+                  <span class="span_qg02"><%= product.specification %></span><br>
+                  <span class="span_qg03">¥<%= product.panic_price %>&nbsp;</span>
+                  <span class="span_qg04">¥<%= product.price %></span><br>
+                  <div class="col-xs-7 qg_con_right02 ">
+                    <div class="qg_con_rightone">
+                      <a href="javascript:void(0)" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a>
+                    </div>    <!--qg_con_rightone-->
+                  </div>     <!--col-xs-7 qg_con_right02-->
+                </div>
+
+              </div>      <!--col-xs-8 qg_con_right-->
+            </div>
+          <% end %>
+        </div>  <!--qg_one-->
+        <!--食物-->
+        <div class="col-xs-12 fen01">
+            <img src="/images/discount/remai.png">
+        </div>
+        <div class="col-xs-12 qg_con01">
+            <div class="qg_con01_bg">
+                <% @hotProducts.each do |product| %>
+                    <div class="col-xs-6 qg_con01_fr">
+                        <div class="qg_con_fr01">
+                            <div class="qg_con_fr01_img">
+                            	<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                            </div>
+                        </div>  <!--qg_con_fr01-->
+                        <div class="qg_con_fr02"><%= product.title %></div>
+                        <div class="qg_con_fr04">
+                            <span class="qg_con_fr05">¥<%= product.price %></span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-xs-8 col-xs-offset-2 qg_con_right_fr">
+                            <div class="qg_con_right_fr_one">
+                                <a href="javascript:void(0)" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a>
+                            </div>    <!--qg_con_right_fr_one-->
+                    	</div>     <!--col-xs-8 col-xs-offset-2 qg_con_right_fr-->
+                    </div>  <!--col-xs-6 qg_con01_fr-->
+                <% end %>
+            </div>   <!--qg_con01_bg-->
+        </div>  <!--col-xs-12 qg_con01-->
+        <!--end-第一个食物-->
+        
+        
+        
+        
+    </div>   <!--container-->
+</body>  
+</html>

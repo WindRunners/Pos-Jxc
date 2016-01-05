@@ -5,6 +5,11 @@ class UserIntegral
 
   belongs_to :userinfo
   after_initialize :self_no, :if => :new_record?
+  after_save do
+    if self.state == 1 && self.type==3
+      self.userinfo.update(:integral => self.userinfo.integral+self.integral )
+    end
+  end
 
   field :usreinfo_id,type: BSON::ObjectId
   field :order_no,type: String

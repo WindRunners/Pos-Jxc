@@ -18,5 +18,11 @@ class CashOrder
   def add_time
     self.pay_date=Time.now
   end
-
+  def pay_state_str
+    if self.pay_state==1
+      p "支付宝"
+    elsif self.pay_state==2
+      p "微信支付"
+    end
+  end
 end

@@ -20,7 +20,22 @@ class CouponV1API < Grape::API
     end
   end
 
-  desc '获取所有优惠券信息', {
+  desc '获取能参与优惠券的商品列表', {
+               headers: {
+                   "Authentication-Token" => {
+                       description: "用户Token",
+                       required: true
+                   }
+               },
+               :entity => Entities::Product
+           }
+  params do
+  end
+  get :getCouponProductsList do
+    present Product.shop(current_user).where(:state_id => State.find_by(:value => "online"), :coupon_id => nil), with: Entities::Product
+  end
+
+  desc '获取指定状态的优惠券信息', {
                headers: {
                    "Authentication-Token" => {
                        description: "用户Token",
@@ -30,10 +45,13 @@ class CouponV1API < Grape::API
                :entity => Entities::Coupon
            }
   params do
+    requires :aasm_state, type: String, desc: '优惠券状态：noBeging:未开始, beging:正在进行, end:已结束, invalided:已失效'
   end
   get :getCouponList do
     authenticate!
-    present Coupon.where(:aasm_state => "beging", :userinfo_id => @current_user.userinfo.id), with: Entities::Coupon
+    coupons = Coupon.where(:aasm_state => params[:aasm_state], :userinfo_id => @current_user.userinfo.id)
+    coupons += Coupon.where(:aasm_state => "end", :userinfo_id => @current_user.userinfo.id) if "invalided" == params[:aasm_state]
+    present coupons, with: Entities::Coupon
   end
   
   desc '创建优惠券', {
@@ -74,7 +92,9 @@ class CouponV1API < Grape::API
   end
   post :updateCoupon do
     authenticate!
-    if Coupon.where(:id => params[:coupon_id]).update(JSON.parse(params[:coupon]))
+    coupon = Coupon.find(params[:coupon_id])
+    coupon.old_coupon = coupon.clone
+    if coupon.update(JSON.parse(params[:coupon]))
       {:success => true}
     else
       {:success => false}

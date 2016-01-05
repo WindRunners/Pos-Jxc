@@ -13,21 +13,13 @@ userinfo = Userinfo.create(:name => '管理员',
                            :pdistance => 500)
 
 User.find_or_create_by(:name => "管理员",
-                       :mobile => "admin",
+                       :mobile => "12345678900",
                        :email => "admin@aibuluo.com",
                        :password => "123456",
                        :password_confirmation => "123456",
                        :userinfo => userinfo)
 
 
-State.create(:name => "已入库",
-             :value => "stocking",
-             :background => "#85FF00",
-             :color => "white")
-State.create(:name => "补货中",
-             :value => "restocking",
-             :background => "#00CFFD",
-             :color => "white")
 State.create(:name => "已上架",
              :value => "online",
              :background => "#00CFFD",

@@ -28,6 +28,7 @@ class DeliveryUser
   field :longitude, type: Float #经度
   field :latitude, type: Float #纬度
   field :position, type: String #位置描述
+  field :channel_ids, type:Array,default: [] #移动设备推送IDs
 
   index({mobile: 1}, {unique: true, name: "mobile_index"}) #手机号唯一索引
   index({location: "2d"}, {min: -200, max: 200})

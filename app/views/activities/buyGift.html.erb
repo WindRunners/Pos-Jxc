@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>买赠</title>
+<%= stylesheet_link_tag "application", :media => "all" %>
+<%= javascript_include_tag "application" %>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    function productDetails(id, platform)
+    {
+        if("android" == platform)
+        {
+            Android.productDetails(id);
+        }
+        else if("ios" == platform)
+        {
+            var url= "myapp:&func=productDetails&product_id=" + id;
+            document.location = url;
+        }
+    }
+    function addToShoppingCart(id, platform)
+    {
+        if("android" == platform)
+        {
+            Android.addToShoppingCart(id);
+        }
+        else if("ios" == platform)
+        {
+            var url= "myapp:&func=addToShoppingCart&product_id=" + id;
+            document.location = url;
+        }
+    }
+</script>
+<style>
+
+body{ margin:0;}
+img{ width:100% ;}
+*{ font-family:"微软雅黑"}
+.container{ padding:0; overflow:hidden; background-color:#efefef;}
+.banner{ position:relative;}
+.btn{ background:url(/images/buyGift/a02.png) repeat-x; font-size:80%; color:#ffffff; border-radius:20px; position:absolute;right:5%; bottom:5%; text-align:center;}
+.aa{ overflow:hidden; position:relative; padding:3% 0;}
+.wz{ position:absolute; left:50%; top:50%; letter-spacing:1px;font-size:14px; color:#ffffff; margin-top:-12px; margin-left:-30px;}
+.bb{ width:86%; margin-left:auto; margin-right:auto; border-radius:8px; background-color:#ffffff; overflow:hidden;}
+.bb01{ width:44%; overflow:hidden; margin-left:3%; margin-right:3%; padding-top:6%; float:left; margin-bottom:5%;}
+.cc01{ font-size:110%; line-height:150%; color:#585858; margin-top:3%;}
+.cc01_mz{ width:46%; text-align:center; background-color:#ef533f; font-size:90%; line-height:150%; color:#FFF; border-radius:10px 10px;}
+.cc02{ font-size:90%; line-height:150%; color:#aaaaaa;}
+.cc03{ font-size:100%; line-height:150%; color:#ef533f;}
+.btn01{ width:70%; margin-left:15%; background-color:#ef533f; border-radius:6px; border:0; color:#ffffff; height:36px;}
+.ll{ overflow:hidden; width:86%; margin-left:auto; margin-right:auto;}
+.nn{ background-color:#fff; overflow:hidden; margin-bottom:10%}
+.nn h4{ color:#585858; text-align:center;}
+.kk{ overflow:hidden; padding-bottom:5%}
+.kk p{ color:#999999; margin-top:1%; margin-bottom:1%; line-height:150%}
+.im{ margin-top:5%}
+</style>
+</head>
+
+
+
+
+
+<body>
+<div class="container">
+	<div class="row">
+    	<div class="banner">
+		<img src="/images/buyGift/a01.png">
+        <button class="col-xs-4 btn btn-pink">分享给朋友</button>
+    </div>
+    
+    <div class="aa">
+      <img src="/images/buyGift/a03.png">
+      <div class="wz">活动商品</div>
+    </div>
+    
+    <div class="bb">
+      <% @products.each do |product| %>
+        <div class="bb01">
+          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+          <div class="cc01"><%= product.title %></div>
+          <div class="cc01_mz">买<%= @fullReduction.purchase_quantity %>赠<%= @gift_count %></div>
+          <div class="cc02"><%= product.specification %></div>
+          <div class="cc03">¥<%= product.price %></div>
+          <button class="btn01" type="button" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</button>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="aa">
+      <img src="/images/buyGift/a03.png">
+      <div class="wz">热卖商品</div>
+    </div>
+    <div class="bb">
+      <% @hotProducts.each do |product| %>
+        <div class="bb01">
+          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+          <div class="cc01"><%= product.title %></div>
+          <div class="cc02"><%= product.specification %></div>
+          <div class="cc03">¥<%= product.price %></div>
+          <button class="btn01" type="button" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</button>
+        </div>
+      <% end %>
+    </div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+    	<div class="ll">
+        	<img class="im" src="/images/buyGift/a08.png">
+            <div class="nn">
+            	<div class=" col-xs-10 col-xs-offset-1 kk">
+                    <h4>活动规则</h4>
+                    <p>1.购买（活动）商品订单满100元，立减5元；满200元，立减10元；</p>
+                    <p>2.购买（活动）商品订单满100元，赠送10元代金券；满200送20元代金券；</p>
+                    <p>3.代金券请按使用规则使用。</p>
+                    <p>4.实付订单满20元免配送费，不满20元需支付5元配送费。</p>
+                    <p>5. 本次活动最终解释权归XXX所有。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

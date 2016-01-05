@@ -5,7 +5,6 @@
       %ul
         - @promotion_discount.errors.full_messages.each do |msg|
           %li= msg
-
   .field
     = f.hidden_field :type
     = hidden_field_tag "selectProductHash", @selectProductHashStr
@@ -13,11 +12,14 @@
   .hr.hr-16.hr-dotted
 
   .form-group{:style => "height: 240px; margin-bottom: 10px;"}
-    %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;"}
+    - if @promotion_discount.avatar.present?
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @promotion_discount.avatar}"}
+    - else
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @promotions[0].avatar if 0 < @promotions.count}"}
   .form-group
     = f.label t(:avatar, scope: "mongoid.attributes.PromotionDiscount") + ":", :class => "col-sm-2 control-label no-padding-right"
     .col-sm-10
-      = f.collection_select :avatar, @promotions, :avatar, :title, :prompt => "请选择图片模版", :class => 'form-control'
+      = f.collection_select :avatar, @promotions, :avatar, :title
   .form-group
     = f.label t(:title, scope: "mongoid.attributes.PromotionDiscount") + ":", :class => "col-sm-2 control-label no-padding-right"
     .col-sm-10
@@ -58,20 +60,15 @@
   .form-group
     = label_tag "", "选择赠品:", :class => "col-sm-2 control-label no-padding-right"
     .col-sm-10
-      = radio_button_tag "product_select", "all"
-      全部商品参与
-      %br
-      = radio_button_tag "product_select", "select", true
-      部分商品参与
       .tabbable{:id => "divProducts"}
         %ul{:id => "myTab", :class => "nav nav-tabs"}
-          %li{:class => "active"}
+          %li{:class => "active", :onclick => 'loadSelectProducts($(this))'}
             %a{:href => "#home", "data-toggle" => "tab"}选择商品
-          %li
+          %li{:onclick => 'loadSelectedProducts($(this))'}
             %a{:href => "#profile", "data-toggle" => "tab"}已选商品
         .tab-content
           .tab-pane.in.active{:id => "home"}
-            %table{:class => "table table-striped table-bordered table-hover", :id => "tableProducts"}
+            %table{:class => "table table-striped table-bordered table-hover", :id => "tableProducts", "data-source" => "#{products_url(format: "json")}?operat=promotion_select_product&type=#{@promotion_discount.type}"}
               %thead
                 %tr
                   %th= t(:thumbnail, scope: "mongoid.attributes.product")
@@ -84,24 +81,8 @@
                     %th= t(:price, scope: "mongoid.attributes.PromotionDiscount")
                   %th= t '.actions', :default => t("helpers.actions")
               %tbody
-                - @products.each do |product|
-                  %tr{:class => "cls_#{product.id}"}
-                    %td
-                      %img.product-img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
-                    %td= product.qrcode
-                    %td= product.title
-                    %td= format("%.2f", product.purchasePrice).to_f
-                    %td= format("%.2f", product.price).to_f
-                    %td= product.stock
-                    - if "1" == @promotion_discount.type
-                      %td= number_field "quantity_#{product.id}", @selectProductHash[product.id.to_s]
-                    %td
-                      - if @promotion_discount.participateProductIds.include?(product.id.to_s)
-                        %button{:type => "button", :class => "btn", :id => "#{product.id}_attend", :onclick => "attendActivity('#{product.id}', #{"1" == @promotion_discount.type})", :disabled => "true"}已参加
-                      - else
-                        %button{:type => "button", :class => "btn btn-primary", :id => "#{product.id}_attend", :onclick => "attendActivity('#{product.id}', #{"1" == @promotion_discount.type})"}参加活动
           .tab-pane{:id => "profile"}
-            %table{:class => "table table-striped table-bordered table-hover", :id => "selectedProductsTable"}
+            %table{:class => "table table-striped table-bordered table-hover", :id => "selectedProductsTable", "data-source" => "#{products_url(format: "json")}?operat=promotion_selected_product&type=#{@promotion_discount.type}"}
               %thead
                 %tr
                   %th= t(:thumbnail, scope: "mongoid.attributes.product")
@@ -114,19 +95,6 @@
                     %th= t(:price, scope: "mongoid.attributes.PromotionDiscount")
                   %th= t '.actions', :default => t("helpers.actions")
               %tbody
-                - @promotion_discount.participateProducts.each do |product|
-                  %tr{:class => "cls_#{product.id}"}
-                    %td
-                      %img.product-img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
-                    %td= product.qrcode
-                    %td= product.title
-                    %td= format("%.2f", product.purchasePrice).to_f
-                    %td= format("%.2f", product.price).to_f
-                    %td= product.stock
-                    - if "1" == @promotion_discount.type
-                      %td= number_field "quantity_#{product.id}", @selectProductHash[product.id.to_s]
-                    %td
-                      %button{:type => "button", :class => "btn btn-primary", :id => "#{product.id}_cancel", :onclick => "cancelActivity('#{product.id}', false)"}取消参加
   .form-actions
     .col-md-offset-3.col-md-9
       %button{:class => "btn btn-info"}
@@ -140,5 +108,6 @@
         取消
 :javascript
   $(document).ready(function () {
-    promotionDiscount();
+    var img_server = "#{RestConfig::IMG_SERVER}";
+    promotionDiscount(img_server);
   });

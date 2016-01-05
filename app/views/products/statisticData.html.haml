@@ -1,35 +1,35 @@
 #products-exposure{:style => "height: 400px;"}
-	.col-xs-8
-		= column_chart @result, :height => "400px", :library => @options
-	.col-xs-4{:style => "height: 400px; line-height: 35px;"}
-		.col-xs-2
-			%b 排名
-		.col-xs-7
-			%b 商品名
-		.col-xs-3
-			%b 曝光占比
-		- @products.each_index do |i|
-			.col-xs-2
-				= i + 1
-			.col-xs-7
-				= link_to @products[i].title, @products[i]
-			.col-xs-3
-				= format("%.2f", @products[i].exposure_num.to_f / @exposureNum * 100) + "%"
-#purchase-products{:style => "margin-top: 25px; height: 400px;"}
-	.col-xs-8
-		= column_chart @purchaseResults, :height => "400px", :library => @purchaseOptions
-	.col-xs-4{:style => "height: 400px; line-height: 35px;"}
-		.col-xs-2
-			%b 排名
-		.col-xs-7
-			%b 商品名
-		.col-xs-3
-			%b 占比
-		- @purchaseProducts.each_index do |i|
-			- product = Product.shop(current_user).find(@purchaseProducts[i].product_id)
-			.col-xs-2
-				= i + 1
-			.col-xs-7
-				= link_to product.title, product
-			.col-xs-3
-				= format("%.2f", @purchaseProducts[i].total_quantity.to_f / @totalQuantity * 100) + "%"
+  .col-xs-8
+    = column_chart @result, :height => "400px", :library => @options
+  .col-xs-4.overflow-hidden{:style => "height: 400px; line-height: 35px;"}
+    .col-xs-2
+      %b 排名
+    .col-xs-7
+      %b 商品名
+    .col-xs-3
+      %b 曝光占比
+    - @products.each_index do |i|
+      .col-xs-2
+        = i + 1
+      .col-xs-7
+        = link_to @products[i].title, "##{product_path(@products[i])}"
+      .col-xs-3
+        = format("%.2f", @products[i].exposure_num.to_f / @exposureNum * 100) + "%"
+#purchase-products.overflow-hidden{:style => "margin-top: 25px; height: 400px;"}
+  .col-xs-8
+    = column_chart @purchaseResults, :height => "400px", :library => @purchaseOptions
+  .col-xs-4{:style => "height: 400px; line-height: 35px;"}
+    .col-xs-2
+      %b 排名
+    .col-xs-7
+      %b 商品名
+    .col-xs-3
+      %b 占比
+    - @purchaseProducts.each_index do |i|
+      - product = Product.shop(current_user).find(@purchaseProducts[i].product_id)
+      .col-xs-2
+        = i + 1
+      .col-xs-7
+        = link_to product.title, "##{product_path(product)}"
+      .col-xs-3
+        = format("%.2f", @purchaseProducts[i].total_quantity.to_f / @totalQuantity * 100) + "%"

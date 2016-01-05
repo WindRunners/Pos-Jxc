@@ -66,3 +66,31 @@ moment.locale("zh_cn")
   "lengthMenu": [5, 10, 15, 20, 25, 50, 100]
   "bDestroy": true
   "stateSave": true
+
+@uuid = (len, radix) ->
+  `var uuid`
+  chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('')
+  uuid = []
+  i = undefined
+  radix = radix or chars.length
+  if len
+    # Compact form
+    i = 0
+    while i < len
+      uuid[i] = chars[0 | Math.random() * radix]
+      i++
+  else
+    # rfc4122, version 4 form
+    r = undefined
+    # rfc4122 requires these characters
+    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-'
+    uuid[14] = '4'
+    # Fill in random data.  At i==19 set the high bits of clock sequence as
+    # per rfc4122, sec. 4.1.5
+    i = 0
+    while i < 36
+      if !uuid[i]
+        r = 0 | Math.random() * 16
+        uuid[i] = chars[if i == 19 then r & 0x3 | 0x8 else r]
+      i++
+  uuid.join ''

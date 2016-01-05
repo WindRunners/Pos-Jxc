@@ -16,6 +16,7 @@ class ElephantV1Api < Grape::API
 
           payload,header = JWT.decode(params[:token],'key')
           @current_deliveryUser = DeliveryUser.where(_id: payload['user_id']).first
+          error!({msg: 'token is nil',flag: 401},401) if !@current_deliveryUser.authentication_token.present? || @current_deliveryUser.authentication_token != params[:token]
         else
           error!({msg: 'token is nil',flag: 401},401)
         end
@@ -60,11 +61,11 @@ class ElephantV1Api < Grape::API
 
   end
 
-  # rescue_from :all do |e|
-  #   ahoy = Ahoy::Tracker.new
-  #   ahoy.track "elephant_exception", {'exception'=> e, 'backtrace' =>e.backtrace}
-  #   error!(e, 500)
-  # end
+  rescue_from :all do |e|
+    ahoy = Ahoy::Tracker.new
+    ahoy.track "exception", {'exception'=> e, 'backtrace' =>e.backtrace}
+    error!(e, 500)
+  end
 
   mount API::UserV1API => 'user'
 

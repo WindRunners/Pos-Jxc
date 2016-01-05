@@ -63,6 +63,19 @@
 	color: #f35550;
 }
 
+.sidebar-icon
+{
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  vertical-align: sub;
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+  width: 20px;
+  height: 20px;
+}
+
 .overview-block
 {
 	padding: 14px;
@@ -88,4 +101,11 @@
 	// float: left;
 	// background-repeat: no-repeat;
 	// background-position: right;
+}
+
+.overflow-hidden div
+{
+	overflow: hidden !important;
+	white-space: nowrap;
+	word-break: keep-all;
 }

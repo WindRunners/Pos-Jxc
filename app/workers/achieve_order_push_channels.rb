@@ -18,7 +18,7 @@ class AchieveOrderPushChannels
     }
 
     android_msg = {
-      title: "买卖通",
+      title: "小达快跑",
       description: "您有新的订单,请注意查收",
       notification_builder_id: 0,
       notification_basic_style: "2",

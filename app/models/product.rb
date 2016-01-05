@@ -8,8 +8,6 @@ class Product
 
   disable_tags_index! # will disable index creation
 
-  has_and_belongs_to_many :categories
-
   resourcify
 
   #validates :qrcode, presence: true
@@ -66,6 +64,21 @@ class Product
 
   def pid
     id
+  end
+
+  def avatar
+    self.avatar_url ||= 'missing.png'
+    RestConfig::IMG_SERVER + self.avatar_url
+  end
+
+  def main
+    self.main_url ||= 'missing.png'
+    RestConfig::IMG_SERVER + self.main_url
+  end
+
+  def desc
+    self.desc_url ||= 'missing.png'
+    RestConfig::IMG_SERVER + self.desc_url
   end
 
   def coupon

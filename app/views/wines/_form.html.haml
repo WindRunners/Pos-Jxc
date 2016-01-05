@@ -31,7 +31,7 @@
         .field
           = f.label :price,:class=>'col-sm-2 control-label no-padding-right'
         .col-sm-9
-          = f.select :category,  options_for_select([['100元以下2', 1], ['200元3', 2], ['201-300元', 3], ['301-500元', 4], ['501-1000元', 5], ['1001-3000元', 6], ['3001-5000元', 7],['5001-10000元', 8], ['10000元以上', 9]],1 ),:class=> 'col-xs-10 col-sm-5'
+          = f.select :category,  options_for_select([['100元以下', 1], ['200元', 2], ['201-300元', 3], ['301-500元', 4], ['501-1000元', 5], ['1001-3000元', 6], ['3001-5000元', 7],['5001-10000元', 8], ['10000元以上', 9]],1 ),:class=> 'col-xs-10 col-sm-5'
       .form-group
         .field
           = f.label :hits,:class=>'col-sm-2 control-label no-padding-right'
@@ -57,7 +57,7 @@
         .col-sm-9
           = f.text_area :ad,:class => 'ckeditor'
 
-        .actions.col-sm-8
+        .actions.col-sm-8.col-sm-offset-4
           = f.submit 'Save',:class=> 'btn btn-info'
 
 

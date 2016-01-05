@@ -314,8 +314,9 @@ class ChateausController < ApplicationController
   end
 
   def workload
+    @data ={}
     @users = User.all
-    @work_array = []
+    @data['work_array'] = []
     User.all.each do |u|
       if !u.chateaus.empty?
         work = {}
@@ -331,10 +332,11 @@ class ChateausController < ApplicationController
         end
         work['today_chateau'] = i
         work['today_check'] = j
-        @work_array << work
+        @data['work_array'] << work
       end
     end
-    @work_array
+    @data['chateaus'] = Chateau.where(:status => -1,:user_id=>current_user.id)
+    @data
   end
 
 

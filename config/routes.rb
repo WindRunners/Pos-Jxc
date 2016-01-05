@@ -150,6 +150,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     get "users/sessions/password_reset", to: "users/sessions#password_reset"
     get "users/sessions/cheak_mobile",to: "users/sessions#cheak_mobile"
+    get "users/send_message",to: "users/registrations#send_message"
   end
 
 
@@ -205,6 +206,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    post 'users/upload'
     resources :users
   end
 
@@ -234,8 +236,8 @@ Rails.application.routes.draw do
     get 'search', :on => :collection
     get 'wines'
     get 'workload', :on => :collection
-    post 'relate_wine'
-    delete 'resolve_wine'
+    post 'relate_wine', :on => :collection
+    delete 'resolve_wine', :on => :collection
     get 'ex_pic',:on => :collection
     get 'batch_check', :on => :collection
     get 'next_check', :on => :collection

@@ -9,7 +9,7 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w(rediscss/sessionindex.css registjs/jquery-1.10.2.min.js registjs/jquery.form.js rediscss/regismail.css rediscss/regissh.css rediscss/regisindex.css rediscss/registx.css ace/ace-extra.js ace/html5shiv.js ace/respond.js ace/ace-part2.css ace/ace-ie.css ace/bootstrap.min.css ace/jquery.js ace/bootbox.js)
+Rails.application.config.assets.precompile += %w(rediscss/sessionindex.css registjs/jquery-1.10.2.min.js registjs/jquery.form.js rediscss/regismail.css rediscss/regissh.css rediscss/regisindex.css rediscss/registx.css ace/ace-extra.js ace/html5shiv.js ace/respond.js ace/ace-part2.css ace/ace-ie.css ace/bootstrap.min.css ace/jquery.js ace/bootbox.js angular.min.js)
 
 #需要整合的样式扩展名
 NEED_TO_COMPILE_EXT = %w(.scss .css .coffee .js)

@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
  #before_filter :configure_sign_in_params, only: [:create]
-
+  prepend_before_action :valify_rucaptcha!, only: [:create]
   #GET /resource/sign_in
   def new
     #super
@@ -11,7 +11,9 @@ class Users::SessionsController < Devise::SessionsController
       format.html {render layout: false}
       format.json {super}
     end
-
+    unless params[:user].blank?
+      flash.notice = "手机号或密码不正确！"
+    end
   end
 
   # POST /resource/sign_in
@@ -24,9 +26,9 @@ class Users::SessionsController < Devise::SessionsController
         render 'cheak_mobile',layout:false
       else
         if verify_rucaptcha?
-          @codestr = [('a'..'z'),('0'..'9')].map{|i| i.to_a}.flatten
-          session[:code] = (0..3).map{ @codestr[rand(@codestr.length)] }.join
-          sms(@user.mobile,session[:code])
+          session[:code] = sendMessage(@user.mobile)
+          logger.info session[:code]
+          render "password_reset", layout: false
         else
         flash[:rucaptcha_error] = "验证码或手机号输入错误"
         render "cheak_mobile",layout:false
@@ -49,57 +51,19 @@ class Users::SessionsController < Devise::SessionsController
       return
     end
 
-    respond_to do |format|
-      # if verify_rucaptcha?
-        format.html {super}
-        format.json do
-          super do |user|
-            if params[:user][:channel_id].present?
-              user.channel_id = params[:user][:channel_id]
-              user.save
-            end
+    flash[:mobile]= params[:user][:mobile]
 
-            user.name = user.userinfo.name
-            user.shop_name = user.userinfo.shopname
-          end
-        end
-
-        begin
-          user = User.find_by(mobile:params[:user][:mobile])
-          #创建当前用户的秒杀活动
-          if 0 == PanicBuying.where(:userinfo => user.userinfo).count
-            PanicBuying.build_panics(user.userinfo)
-          end
-        end
-
-
-
-      # else
-      #   format.html {render 'devise/sessions/new', layout: false}
-      #   flash[:user_error]='验证码或手机号输入错误'
-      # end
-    end
+    super
 
   end
-  def sms(mobile,code)
-    require 'rest_client'
-    url = 'http://www.nit.cn:4000'
-    url += '/api/v1/user/verifycode'
-    begin
-      response = RestClient.post(url,:mobile =>"#{mobile}" ,:code=>"#{code}")
-      Rails.logger.info "---------========#{response.code}===========----------------"
-      if response.code==201
-        render "password_reset",layout:false
-      else
-        flash[:rucaptcha_error] = "短信发送失败"
-        render "cheak_mobile",layout:false
-        {messages:"短信发送失败"}
-      end
-    rescue
-      flash[:rucaptcha_error] = "短信发送失败"
-      render "cheak_mobile",layout:false
-      {messages:"短信发送失败"}
+
+  def valify_rucaptcha!
+    if !verify_rucaptcha?
+      flash[:mobile]= params[:user][:mobile]
+      flash[:rucaptcha_error]="验证码错误"
+      redirect_to new_user_session_path and return
     end
+    true
   end
 
   def password_reset

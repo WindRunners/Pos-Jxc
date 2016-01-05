@@ -87,7 +87,7 @@ class AnnouncementsController < ApplicationController
         a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
       else
         a.replace a
-        a.insert(5, '/')
+        # a.insert(5, '/')
       end
     }
     respond_to do |format|

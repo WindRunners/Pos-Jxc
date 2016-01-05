@@ -66,18 +66,6 @@
         $("#new_user").validate({
             submitHandler: function() {
                 form.submit();
-//                    $.ajax({
-//                        url:'http://www.nit.cn:4000/api/v1/user/verifycode',
-//                        dataType:'json',
-//                        type:'post',
-//                        data:{mobile:$("#telphone").val(),code:"1234"},
-//                        error:function(){
-//                            alert('错误');
-//                        },
-//                        success:function(data){
-//                            alert('验证码已发送成功');
-//                        }
-//                    })
           }
         });
         $(".rucaptcha-image-box").click(function(e){

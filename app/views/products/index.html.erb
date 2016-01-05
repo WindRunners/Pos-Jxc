@@ -1,23 +1,8 @@
 <%- model_class = Product -%>
 
-<div class="row">
-  <div class="col-xs-9">
-    <%= link_to '发布商品',
-                '', 'data-href' => new_product_path,
-                :class => 'btn btn-primary' %>
-  </div>
+<div class="row right">
   <div class="col-xs-1">
-    <%= select_tag "mobile_category", options_from_collection_for_select(MobileCategory.where(userinfo:current_user.userinfo).order_by(:num => :asc), "id", "title"), include_blank: "所有分组" %>
-  </div>
-  <div class="col-xs-2">
-    <div class="nav-search" id="nav-search">
-      <%= form_tag '/products', method: :get, :class => "form-search", :id => 'searchForm' do %>
-								<span class="input-icon">
-                                  <%= text_field_tag 'searchText', nil, placeholder: '搜索', :class => "nav-search-input" %>
-                  <i class="ace-icon fa fa-search nav-search-icon"></i>
-								</span>
-      <% end %>
-    </div><!-- /.nav-search -->
+    <%= select_tag "mobile_category", options_from_collection_for_select(MobileCategory.where(userinfo:current_user.userinfo).order_by(:num => :desc), "id", "title"), include_blank: "所有分组" %>
   </div>
 </div>
 

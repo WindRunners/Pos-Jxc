@@ -32,9 +32,13 @@
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
-            admin_users_path, :class => 'btn btn-default'  %>
+            '',
+            "data-href" => admin_users_path,
+            :class => 'btn btn-default'  %>
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
-            edit_admin_user_path(@user), :class => 'btn btn-default' %>
+            '',
+            "data-href" =>edit_admin_user_path(@user),
+            :class => 'btn btn-default' %>
 <% if policy(@user).isAdmin? %>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
             admin_user_path(@user),
@@ -42,4 +46,3 @@
             :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
             :class => 'btn btn-danger' %>
 <% end %>
-<%= link_to "更新详细信息",new_userinfo_path,:class => 'btn btn-default' %>

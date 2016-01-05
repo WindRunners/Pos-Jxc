@@ -17,28 +17,21 @@
     <% end %>
   </ul><!-- /.breadcrumb -->
 
-  <% if flash[:notice] %>
-      <div id="notice" class="alert alert-block alert-success center">
-        <button type="button" class="close" data-dismiss="alert">
-          <i class="ace-icon fa fa-times"></i>
-        </button>
-        <%= flash[:notice] %>
-      </div>
-  <% end %>
-
-  <% if @showSearchBar %>
-      <div class="nav-search" id="nav-search">
-        <%= form_tag warehouse_index_products_path, method: :get, :class => "form-search", :id => 'searchForm' do %>
+  <div class="nav-search" id="nav-search">
 								<span class="input-icon">
-                                  <%= text_field_tag 'searchText', params[:searchText], placeholder: '搜索', :class => "nav-search-input" %>
+                     <%= text_field_tag 'searchText', params[:searchText], placeholder: '搜索', :class => "nav-search-input" %>
                   <i class="ace-icon fa fa-search nav-search-icon"></i>
 								</span>
-        <% end %>
-      </div>
-  <% end %>
+  </div>
 </div>
 
 <script>
-  $('#notice').delay(2000).fadeOut(400)
+  $("#nav-search").hide();
+
+  $("#searchText").keyup(function(event){
+    if(event.keyCode == 13){
+      location.hash = "#/products/warehouse_index?searchText=" + encodeURIComponent($(this).val()) + "|hash#{rand(1000)}";
+    }
+  });
 </script>
 <!-- /section:basics/content.breadcrumbs -->

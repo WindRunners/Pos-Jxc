@@ -1,11 +1,21 @@
-%div= File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.scss")
 -if File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.scss") || File.exists?("#{Rails.root}/app/assets/stylesheets/#{controller_name}.css")
   = stylesheet_link_tag controller_name, :media => "all"
 
 -if File.exists?("#{Rails.root}/app/assets/javascripts/#{controller_name}.coffee") || File.exists?("#{Rails.root}/app/assets/javascripts/#{controller_name}.js")
   = javascript_include_tag controller_name
 
+= include_gon
+
 = yield
+
+-if flash[:notice]
+  :javascript
+    $.gritter.add({
+          title: '温馨提示',
+          text: '#{flash[:notice]}',
+          time: '3000',
+          class_name: 'gritter-info gritter-light'
+        });
 
 :javascript
   var scripts = [null, null]
@@ -21,3 +31,12 @@
       $(this).attr('href', '#' + href);
     }
   })
+
+  if("undefined" == typeof gon || "undefined" == typeof gon.searchBar) {
+    $("#nav-search").hide();
+  }
+  else {
+    console.log(gon);
+    $("#nav-search").show();
+    delete gon.searchBar;
+  }

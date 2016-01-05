@@ -168,7 +168,6 @@ class DeliveryUserV1API < Grape::API
     end
 
     desc '配送员注销' do
-      success Entities::DeliveryUser
       detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
     end
     params do

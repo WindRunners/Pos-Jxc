@@ -68,7 +68,6 @@ class UserinfoOrdersController < ApplicationController
   end
 
   def getcode
-    require 'rest_client'
 
     url_r = 'https://api.weixin.qq.com/sns/oauth2/access_token?'
     url_end= '&grant_type=authorization_code'
@@ -83,7 +82,7 @@ class UserinfoOrdersController < ApplicationController
       Rails.logger.info "-----------------------=====#{response_json}============="
         if response_json["errcode"].present? && response_json["errcode"]==40029
           flash[:error]="请退回公证号重新点击‘绑定商户’在操作"
-          redirect_to '/userinfo_orders/getcode',layout: false
+          render '/userinfo_orders/getcode',layout: false
         else
            session[:id]=response_json["openid"]
         end
@@ -92,89 +91,49 @@ class UserinfoOrdersController < ApplicationController
   end
 
   def binduserinfo
-      if params[:check_user].present?
-        begin
-          @user=User.find_by(mobile: params[:user_mobile])
-          @userinfo=Userinfo.find_by(:name =>  params[:user_name])
-          @codestr = [('a'..'z'),('0'..'9')].map{|i| i.to_a}.flatten
-          session[:code] = (0..3).map{ @codestr[rand(@codestr.length)] }.join
-          sms(@user.mobile,session[:code])
-        rescue
-          respond_to do |format|
-            flash[:error]="用户电话或姓名不存在,请查证"
-            format.html{render 'getcode',layout: false}
-          end
-        end
-          render "bind_form",layout:false
-      end
+    if params[:check_user].present?
+      begin
+        @user=User.find_by(mobile: params[:user_mobile])
+        if  @user.userinfo.name==params[:user_name]
 
-      if params[:check_mesage].present?
-        begin
-          @userinfo = Userinfo.find(params[:check_info])
-          if session[:code] == params[:mesage]
+          session[:code] = sendMessage(@user.mobile)
+          logger.info session[:code]
+          render "bind_form",layout:false
+        else
+          raise StandardError
+        end
+      rescue
+        respond_to do |format|
+          flash[:error]="用户电话或姓名不存在,请查证"
+          format.html{render 'getcode',layout: false}
+        end
+      end
+      # render "bind_form",layout:false
+    end
+
+    if params[:check_mesage].present?
+      begin
+        @userinfo = Userinfo.find(params[:check_info])
+        if session[:code] == params[:mesage]
           @userinfo.update(:wx_name => params[:wx_name],:openid => session[:id])
           session[:id]=""
           session[:code]=""
-          else
-            flash[:error]="验证码有误！！"
-            render "bind_form",layout:false
-          end
-          render "binduserinfo",layout:false
-        rescue
+        else
+          flash[:error]="验证码有误！！"
+          render "bind_form",layout:false
         end
-
+        render "binduserinfo",layout:false
+      rescue
       end
 
-    # begin
-    #   @user=User.find_by(mobile: params[:user_mobile])
-    #   @userinfo=Userinfo.find_by(:name =>  params[:user_name])
-    #
-    #   if params[:wx_name].present?
-    #     @userinfo.update(:wx_name => params[:wx_name],:openid => session[:id])
-    #   else
-    #     render 'getcode',layout: false
-    #   end
-    #
-    #   @userinfo.userinfo_oppenids.find_or_create_by(:openid=>session[:id],:name=> params[:wx_name])
-    #   p "-----------------------=====#{session[:id]}============="
-    #   respond_to do |format|
-    #     format.html{render 'binduserinfo',layout: false}
-    #     session[:id]="0"
-    #   end
-    # rescue =>err
-    #   respond_to do |format|
-    #     flash[:error]="用户电话或姓名不存在,请填写正确的"
-    #     format.html{render 'getcode',layout: false}
-    #   end
-    # end
+    end
 
   end
 
   def bind_form
-       render layout: false
+
   end
 
-  def sms(mobile,code)
-    require 'rest_client'
-    url = 'http://www.nit.cn:4000'
-    url += '/api/v1/user/verifycode'
-    begin
-      response = RestClient.post(url,:mobile =>"#{mobile}" ,:code=>"#{code}")
-      Rails.logger.info "---------========#{response.code}===========----------------"
-      render "bind_form",layout:false
-      # if response.code==201
-      #   render "userinfo_orders/form",layout:false
-      # else
-      #   flash[:rucaptcha_error] = "短信发送失败"
-      #   render "userinfo_orders/getcode",layout:false
-      #   {messages:"短信发送失败"}
-      # end
-    rescue
-      flash[:rucaptcha_error] = "短信发送失败"
-      render "userinfo_orders/getcode",layout:false
-      {messages:"短信发送失败"}
-    end
-  end
 
   private
   # Use callbacks to share common setup or constraints between actions.

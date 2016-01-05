@@ -7,42 +7,49 @@ class UserinfosController < ApplicationController
   # GET /userinfos
   # GET /userinfos.json
   def index
-  @current_user = current_user
+      @current_user = current_user
 
-          begin
-          @cashes = Cash.where(:userinfo_id => @current_user.userinfo_id)
-          @cashOrders=CashOrder.where(:userinfo_id => @current_user.userinfo_id)
-          @cash=Cash.new
-          #金额
-          @pay_totle=0.00
-          @pay_o=0.00
-          @pay_q=0.00
-          @cash_totle=0.00
-            @cashOrders.each do |cashOrder|
-              if cashOrder.userinfo_id==current_user.userinfo_id #完成订单
-                @pay_o=cashOrder.paycost + @pay_o
-              else
-                @pay_o=0.00
-              end
-            end
-          @cash_totle=0
-          @cash_y=0
-          @cashing_totle=0
-            @cashes.each do |cash|
-              if cash.cash_state == 2 && cash.userinfo_id==current_user.userinfo_id
-                @cash_totle=cash.cash + @cash_totle
-              elsif cash.cash_state == 1 && cash.userinfo_id==current_user.userinfo_id
-                @cashing_totle = cash.cash + @cashing_totle
-              elsif cash.cash_state == 4 && cash.userinfo_id==current_user.userinfo_id
-                @cash_y= cash.cash + @cash_y
-              end
-            end
-          @pay_totle=@pay_o-(@cash_totle+@cashing_totle+@cash_y)
-          @cashes=Kaminari.paginate_array(@cashes).page(params[:page]).per(10)
-          @cashOrders=Kaminari.paginate_array(@cashOrders).page(params[:page]).per(10)
-          @user_integrals=Kaminari.paginate_array(@user_integrals).page(params[:page]).per(10)
-          rescue
-         end
+      @cashes = Cash.where(:userinfo_id => @current_user.userinfo_id)
+      @cashOrders=CashOrder.where(:userinfo_id => @current_user.userinfo_id)
+
+      @cash_res=Cash.where(:userinfo_id => @current_user.userinfo_id,:cash_state=>1)
+      @cash_yes=Cash.where(:userinfo_id => @current_user.userinfo_id,:cash_state=>4)
+      @r_integrals = UserIntegral.where(:userinfo_id => @current_user.userinfo_id,:state=>1)
+      @z_integrals = UserIntegral.where(:userinfo_id => @current_user.userinfo_id,:state=>2)
+
+      @cash_res=Kaminari.paginate_array(@cash_res).page(params[:page]).per(10)
+      @cash_yes=Kaminari.paginate_array(@cash_yes).page(params[:page]).per(10)
+      @cashOrders=Kaminari.paginate_array(@cashOrders).page(params[:page]).per(10)
+      @r_integrals=Kaminari.paginate_array(@r_integrals).page(params[:page]).per(10)
+      @z_integrals=Kaminari.paginate_array(@z_integrals).page(params[:page]).per(10)
+
+      #金额
+      @pay_totle=0.00
+      @pay_o=0.00
+      @pay_q=0.00
+      @cash_totle=0.00
+      @cashOrders.each do |cashOrder|
+        @pay_o=cashOrder.paycost + @pay_o
+      end
+      @cash_totle=0
+      @cash_y=0
+      @cashing_totle=0
+      @cashes.each do |cash|
+        if cash.cash_state == 2
+          @cash_totle=cash.cash + @cash_totle
+        elsif cash.cash_state == 1
+          @cashing_totle = cash.cash + @cashing_totle
+        elsif cash.cash_state == 4
+          @cash_y= cash.cash + @cash_y
+        end
+      end
+      @pay_totle=@pay_o-(@cash_totle+@cashing_totle+@cash_y)
+
+
+      respond_to do |format|
+        format.html
+        format.js {render_js userinfos_path(page:params[:page]) }
+      end
   end
 
   # GET /userinfos/1

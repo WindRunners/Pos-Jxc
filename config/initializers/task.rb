@@ -153,6 +153,25 @@ scheduler.cron '*/60 * * * *' do
   Rails.logger.info "自动抓取轮播图成功"
 end
 
+#小B取现
+scheduler.at Time.now do
+  # params = {
+  #     partner_trade_no: '123123123',
+  #     openid: 'oM39dwfGmGhYZg4p7GNooywQx6B8',
+  #     check_name: 'FORCE_CHECK',
+  #     re_user_name: '耿科',
+  #     amount: 1,
+  #     desc: '提现',
+  #     spbill_create_ip: '127.0.0.1'
+  # }
+  #
+  # r = WxPay::Service.invoke_transfer(params)
+  #
+  # Rails.logger.info r
+  #
+  Rails.logger.info "取现成功"
+end
+
 
 scheduler.at Time.now do
   @panic_buyings = PanicBuying.all

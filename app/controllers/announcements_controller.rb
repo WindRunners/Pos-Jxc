@@ -124,7 +124,7 @@ class AnnouncementsController < ApplicationController
 
 
   def batch_check
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status],:user_id=>current_user.id).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }

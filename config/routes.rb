@@ -108,6 +108,8 @@ Rails.application.routes.draw do
     get 'statisticData', :on => :collection
     post "wx_notify", :on => :member
     post "alipay_notify", :on => :member
+    post "alipay_refund_notify", :on => :member
+    post "alipay_dback_notify",  :on => :member
   end
 
 

@@ -16,6 +16,7 @@ class ElephantV1Api < Grape::API
 
           payload,header = JWT.decode(params[:token],'key')
           @current_deliveryUser = DeliveryUser.where(_id: payload['user_id']).first
+          error!({msg: 'token is nil',flag: 401},401) if !@current_deliveryUser.authentication_token.present? || @current_deliveryUser.authentication_token != params[:token]
         else
           error!({msg: 'token is nil',flag: 401},401)
         end

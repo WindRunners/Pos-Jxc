@@ -36,7 +36,7 @@ module DeliveryUserV1APIHelper
 
 
   #配送员登录
-  def DeliveryUserV1APIHelper.login(mobile, verifycode)
+  def DeliveryUserV1APIHelper.login(mobile, verifycode, channel)
 
     begin
 
@@ -57,6 +57,9 @@ module DeliveryUserV1APIHelper
       elsif Time.now - time > EXPIRY_TIMES #有效期10分钟
         {msg: '验证码失效,请重新获取!', flag: 0}
       else
+
+
+        deliveryUser.channel_ids << channel unless deliveryUser.channel_ids.include? channel
 
         deliveryUser.set_delivery_user_track
         deliveryUser.save #更新配送员登录信息

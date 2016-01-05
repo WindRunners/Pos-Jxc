@@ -68,17 +68,21 @@ class DeliveryUserV1API < Grape::API
   params do
     requires :mobile, type: String, desc: '手机号'
     requires :verifycode, type: String, desc: '手机验证码'
+    requires :channel_type, type: String, desc: '手机类型(ANDROID,IOS)'
+    requires :channel_id, type: String, desc: 'channel_id'
   end
   post 'login' do
 
     mobile = params[:mobile]
     verifycode = params[:verifycode]
 
+    channel = params[:channel_type] + "|" + params[:channel_id]
+
     return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
     return {msg: '验证码不合法', flag: 0} if !RegexV1APIHelper.verifycode(verifycode)
 
     status 200 #修改post默认返回状态
-    data = DeliveryUserV1APIHelper.login(mobile,verifycode)
+    data = DeliveryUserV1APIHelper.login(mobile,verifycode, channel)
 
     if (data.class == DeliveryUser)
       present data, with: Entities::DeliveryUser

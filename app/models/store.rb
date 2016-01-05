@@ -82,7 +82,7 @@ class Store
     dusers = DeliveryUser.where(:store_ids => storeId)
 
     dusers.each do |user|
-      channels << dusers.channel_ids
+      channels << user.channel_ids
     end
 
     logger.info channels

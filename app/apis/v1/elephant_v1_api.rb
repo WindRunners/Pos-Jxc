@@ -62,7 +62,7 @@ class ElephantV1Api < Grape::API
 
   rescue_from :all do |e|
     ahoy = Ahoy::Tracker.new
-    ahoy.track "elephant", {'exception'=> e, 'backtrace' =>e.backtrace}
+    ahoy.track "exception", {'exception'=> e, 'backtrace' =>e.backtrace}
     error!(e, 500)
   end
 

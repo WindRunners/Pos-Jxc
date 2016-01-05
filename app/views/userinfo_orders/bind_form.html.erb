@@ -17,7 +17,7 @@
 <div style="width: 100%;">
   <%= form_tag(controller: "userinfo_orders",action: "binduserinfo",method: "post",class: "bl-form bl-formhor") %>
   <input type="hidden" name="check_mesage", value="true" />
-  <input type="hidden" name="check_info", value="<%= @userinfo.id %>" />
+  <input type="hidden" name="check_info", value="<%= @user.userinfo.id %>" />
   <% if flash[:error].present? %>
       <div class="alert alert-warning" data-dismiss="alert">
         <a href="#" class="close" data-dismiss="alert">

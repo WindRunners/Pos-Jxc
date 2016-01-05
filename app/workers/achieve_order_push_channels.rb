@@ -36,10 +36,10 @@ class AchieveOrderPushChannels
 
       if arr.first == 'IOS'
         r = ios_client.push_single_device(arr.last, ios_msg, {msg_type: 1, deploy_status: 2})
-
       elsif arr.first == 'ANDROID'
         r = android_client.push_single_device(arr.last, android_msg, {msg_type: 1})
-
+      else
+        next
       end
 
       unless r.result

@@ -82,12 +82,12 @@ class Store
     dusers = DeliveryUser.where(:store_ids => storeId)
 
     dusers.each do |user|
-      channels << user.channel_ids
+      channels << user.channel_ids if user.channel_ids.present?
     end
 
     logger.info channels
 
-    push_log = PushLog.create(order_id:order_id, userinfo_id:self.userinfo.id)
+    push_log = PushLog.create(order_id:order_id, userinfo_id:order['userinfo_id'])
 
     Resque.enqueue(AchieveOrderPushChannels, channels, 0, push_log.id)
 

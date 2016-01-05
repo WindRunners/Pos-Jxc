@@ -61,6 +61,8 @@ module DeliveryUserV1APIHelper
 
         deliveryUser.channel_ids << channel unless deliveryUser.channel_ids.include? channel
 
+        Rails.logger.info deliveryUser.channel_ids
+
         deliveryUser.set_delivery_user_track
         deliveryUser.save #更新配送员登录信息
         deliveryUser

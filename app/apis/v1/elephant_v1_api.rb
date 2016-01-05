@@ -60,11 +60,11 @@ class ElephantV1Api < Grape::API
 
   end
 
-  # rescue_from :all do |e|
-  #   ahoy = Ahoy::Tracker.new
-  #   ahoy.track "elephant_exception", {'exception'=> e, 'backtrace' =>e.backtrace}
-  #   error!(e, 500)
-  # end
+  rescue_from :all do |e|
+    ahoy = Ahoy::Tracker.new
+    ahoy.track "elephant", {'exception'=> e, 'backtrace' =>e.backtrace}
+    error!(e, 500)
+  end
 
   mount API::UserV1API => 'user'
 

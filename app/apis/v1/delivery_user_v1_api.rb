@@ -10,6 +10,16 @@ class DeliveryUserV1API < Grape::API
 
   format :json
 
+  use ApiLogger
+
+  helpers do
+
+    def ahoy
+      @ahoy ||= Ahoy::Tracker.new
+    end
+
+  end
+
   #嵌入帮助类
   include DeliveryUserV1APIHelper
   include RegexV1APIHelper

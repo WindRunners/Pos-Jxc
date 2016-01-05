@@ -20,7 +20,7 @@ class SearchV1API < Grape::API
   get :generate_keywords do
     Search.where(user_id:params[:id]).delete_all()
 
-    keywords = ['酸奶','水果','水','饼干','精选牛肉','海鲜','瓜子','面包','农夫山泉','苹果', '麻辣烫']
+    keywords = ['茅台','五粮液','泸州老窖','二锅头','黑啤','长城干红','张裕','百威','黄酒','汇源', '轩尼诗']
 
     for keyword in keywords
       search = Search.new

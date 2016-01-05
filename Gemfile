@@ -58,7 +58,7 @@ gem 'redcarpet'
 gem 'select2-rails'
 
 gem "therubyracer"
-gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "less-rails", :git => 'https://github.com/suzan2go/less-rails.git', :branch => 'fix-nomethoderror-for-sprockets3'
 gem 'twitter-bootstrap-rails'
 
 gem 'jquery-fileupload-rails'

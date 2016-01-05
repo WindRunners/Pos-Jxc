@@ -125,56 +125,51 @@
       </dd>
     </dl>
     <div class="btn-group">
-      <a class="btn btn-success" href="<%= new_product_path %>">发布商品</a>
-      <a class="btn btn-success" data-href="/userinfos/<%= current_user.userinfo_id %>/">修改个人信息</a>
-      <a class="btn" href="">访问店铺</a>
+      <a class="btn btn-success" data-href="<%= new_product_path %>">发布商品</a>
+      <a class="btn btn-success" data-href="/userinfos/<%= @current_user.userinfo_id if @current_user.userinfo_id.present? %>/">修改个人信息</a>
+      <!--<a class="btn" href="">访问店铺</a>-->
     </div>
   </div>
 
   <div class="ui-overview">
     <div class="overview-group">
       <div class="overview-group-inner">
-        <span class="h4"><%= @pay_totle %></span>
+        <span class="h4"><% if @pay_totle.present? %><%= @pay_totle.to_i %><% else %>0<% end %></span>
         <span class="h5">可用余额</span>
       </div>
     </div>
     <div class="overview-group">
       <div class="overview-group-inner">
-        <span class="h4"><%= @cashing_totle %></span>
+        <span class="h4"><% if @cashing_totle.present? %><%= @cashing_totle %><% else %>0<% end %></span>
         <span class="h5">提现中金额</span>
       </div>
     </div>
     <div class="overview-group">
       <div class="overview-group-inner">
-        <span class="h4"><%= @cash_totle %></span>
+        <span class="h4"><% if @cash_totle.present? %><%= @cash_totle %><% else %>0<% end %></span>
         <span class="h5">可用现金</span>
       </div>
     </div>
     <div class="overview-group">
       <div class="overview-group-inner">
-        <span class="h4"><%= @integrals_totle %></span>
+        <span class="h4"><% if @current_user.userinfo.present? %><%= @current_user.userinfo.integral %><% else %>0<% end %></span>
         <span class="h5">可用积分</span>
       </div>
     </div>
     <div class="overview-group">
       <div class="overview-group-inner">
-        <a class="h4" href="">2</a>
-        <span class="h5">微页面</span>
+        <a class="h4" href=""></a>
+        <span class="h5"></span>
       </div>
     </div>
-    <div class="overview-group">
-      <div class="overview-group-inner">
-        <a class="h4" href="">76</a>
-        <span class="h5">商品</span>
-      </div>
-    </div>
+
   </div>
 
   <div class="ui-block-head">
     <h3 class="block-title">现金管理</h3>
     <ul class="block-link">
       <li>
-        <a href="" class="new-window">》</a>
+        <a data-href="/cashes" class="new-window">》</a>
       </li>
     </ul>
   </div>
@@ -199,25 +194,35 @@
           <tr>
             <th><%="订单号"%></th>
             <th><%="订单状态"%></th>
-            <th><%= "订单类型"%></th>
             <th><%= "订单金额"%></th>
             <th><%= "订单时间"%></th>
             <th></th>
           </tr>
           </thead>
           <tbody>
-          <% @cashOrders.each do | cashOrder| %>
+          <% if @cashOrders.present? %>
+              <% @cashOrders.each do | cashOrder| %>
                   <tr>
                     <td><%= cashOrder.orderno if cashOrder.orderno %></td>
-                    <td><%= cashOrder.pay_state %></td>
-                    <td><%= cashOrder.pay_type %></td>
+                    <td><%= cashOrder.pay_state_str %></td>
                     <td><%= cashOrder.paycost %></td>
-                    <td><%= cashOrder.pay_type %></td>
                     <td><%= cashOrder.pay_date.strftime('%Y-%m-%d %H:%M:%S').to_s if cashOrder.pay_date.present? %></td>
                   </tr>
+              <% end %>
           <% end %>
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+              <%= page_entries_info @cashOrders, :entry_name =>  '订单' %></div>
+          </div>
+          <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @cashOrders,:remote => true %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="tab-pane" id="home"  >
         <table id="integrals" class="table table-hover">
@@ -225,23 +230,34 @@
           <tr>
             <th><%="取现金额"%></th>
             <th><%="取现状态"%></th>
-            <th><%= "取现时间"%></th>
             <th></th>
           </tr>
           </thead>
           <tbody>
-          <% @cashes.each do |cash| %>
-              <% if cash.cash_state==1 %>
-                  <tr>
-                    <td><%= "-#{cash.cash}" %></td>
-                    <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
-                    <td><%= cash.data_show %></td>
-                    <td><%= link_to 'Show', cash %></td>
-                  </tr>
+          <% if @cashes.present? %>
+              <% @cashes.each do |cash| %>
+                  <% if cash.cash_state==1 %>
+                      <tr>
+                        <td><%= "-#{cash.cash}" %></td>
+                        <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
+                        <td><%= cash.data_show %></td>
+                      </tr>
+                  <% end %>
               <% end %>
           <% end %>
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+              <%= page_entries_info @cashes, :entry_name =>  '取现' %></div>
+          </div>
+          <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @cashes,:remote => true %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="tab-pane" id="profile">
         <table id="integrals" class="table table-hover">
@@ -250,22 +266,33 @@
             <th><%="取现金额"%></th>
             <th><%="取现状态"%></th>
             <th><%= "取现时间"%></th>
-            <th></th>
           </tr>
           </thead>
           <tbody>
-          <% @cashes.each do |cash| %>
-              <% if cash.cash_state == 4 %>
-                  <tr>
-                    <td><%= "-#{cash.cash}" %></td>
-                    <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
-                    <td><%= cash.data_show %></td>
-                    <td><%= link_to 'Show', cash %></td>
-                  </tr>
+          <% if @cashes.present? %>
+              <% @cashes.each do |cash| %>
+                  <% if cash.cash_state == 4 %>
+                      <tr>
+                        <td><%= "-#{cash.cash}" %></td>
+                        <td><%= cash.cash_state_to_s if cash.cash_state.present? %></td>
+                        <td><%= cash.data_show %></td>
+                      </tr>
+                  <% end %>
               <% end %>
           <% end %>
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+              <%= page_entries_info @cashes, :entry_name =>  '取现' %></div>
+          </div>
+          <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @cashes,:remote => true %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -276,7 +303,7 @@
     <h3 class="block-title">积分管理</h3>
     <ul class="block-link">
       <li>
-        <a href="" class="new-window">》</a>
+        <a data-href="/user_integrals" class="new-window">》</a>
       </li>
     </ul>
   </div>
@@ -295,24 +322,26 @@
       <div class="tab-pane in active" id="in_tag"  >
         <table id="integrals" class="table table-hover">
           <thead>
-              <tr>
-                  <th><%="积分"%></th>
-                  <th><%="状态"%></th>
-                  <th><%="类型"%></th>
-                  <th><%="操作日期"%></th>
-              </tr>
+          <tr>
+            <th><%="积分"%></th>
+            <th><%="状态"%></th>
+            <th><%="类型"%></th>
+            <th><%="操作日期"%></th>
+          </tr>
           </thead>
           <tbody>
-          <% @user_integrals.each do |user_integral| %>
-              <% if user_integral.state==1 && user_integral.userinfo_id==current_user.userinfo_id %>
-              <tr>
-                  <td><%= user_integral.integral %></td>
-                  <td><%= user_integral.state_show_str %></td>
-                  <td><%= user_integral.type_show_str %></td>
-                  <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
-              </tr>
+          <% if @user_integrals.present? %>
+              <% @user_integrals.each do |user_integral| %>
+                  <% if user_integral.state==1 && user_integral.userinfo_id==@current_user.userinfo_id %>
+                      <tr>
+                        <td><%= user_integral.integral %></td>
+                        <td><%= user_integral.state_show_str %></td>
+                        <td><%= user_integral.type_show_str %></td>
+                        <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+                      </tr>
+                  <% end %>
               <% end %>
-           <% end %>
+          <% end %>
           </tbody>
         </table>
       </div>
@@ -327,15 +356,17 @@
           </tr>
           </thead>
           <tbody>
-          <% @user_integrals.each do |user_integral| %>
-             <% if user_integral.state == 0 && user_integral.userinfo_id==current_user.userinfo_id %>
-              <tr>
-                <td><%= user_integral.integral %></td>
-                <td><%= user_integral.state_show_str %></td>
-                <td><%= user_integral.type_show_str %></td>
-                <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
-              </tr>
-             <% end %>
+          <% if @user_integrals.present? %>
+              <% @user_integrals.each do |user_integral| %>
+                  <% if user_integral.state == 2 && user_integral.userinfo_id==@current_user.userinfo_id %>
+                      <tr>
+                        <td><%= user_integral.integral %></td>
+                        <td><%= user_integral.state_show_str %></td>
+                        <td><%= user_integral.type_show_str %></td>
+                        <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+                      </tr>
+                  <% end %>
+              <% end %>
           <% end %>
           </tbody>
         </table>
@@ -343,9 +374,6 @@
     </div>
 
   </div>
-
-
-
 
 </div>
 

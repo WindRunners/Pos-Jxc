@@ -12,21 +12,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
  # POST /resource
   def create
     @user = User.new(user_params)
-  #  respond#_to do |format|
-  #    if @user.save
-  #      UserMailer.signup_confirmation(@user).deliver
-  #      @user.update_attribute(:step,1)
-  #      format.json{render json:{success:true,token:@user.authentication_token,user_id:@user.id}}
-  #    end
-  #  end
+
     @user.userinfo=Userinfo.create(pdistance: 1)
    if @user.save
      # cookies[:authentication_token] = @user.authentication_token
-     @user.update(:confirmation_token=>set_confirmation_token,:confirmation_token_at=>Time.now,:step=>1)
-     # @user.update_attribute(:confirmation_token,set_confirmation_token)
-     # @user.update_attribute(:confirmation_token_at,Time.now)
-     # @user.update_attribute(:step,1)
-     UserMailer.signup_confirmation(@user).deliver
+     # @user.update(:confirmation_token=>set_confirmation_token,:confirmation_token_at=>Time.now,:step=>1)
+
      render 'devise/sessions/new' ,:layout => false
      else
      render 'devise/registrations/new',:layout => false

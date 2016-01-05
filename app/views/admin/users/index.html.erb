@@ -16,7 +16,7 @@
       <tr>
         <% if user.id == @current_user.id %>
         <% if policy(user).show? %>
-        <td><%= link_to user.name, admin_user_path(user) %></td>
+        <td><%= link_to user.name,'',"data-href"=> admin_user_path(user) %></td>
             <% else	  %>
             <td><%= user.name %></td>
          <% end %>
@@ -24,13 +24,14 @@
         <td>
           <div class="hidden-sm hidden-xs action-buttons">
             <% if policy(user).show? %>
-                <a class="btn btn-xs btn-info" href="<%= edit_admin_user_path(user) %>">
+                <a class="btn btn-xs btn-info" data-href="<%= edit_admin_user_path(user) %>">
                   <i class="ace-icon fa fa-pencil bigger-130"></i>
                 </a>
             <% end %>
             <% if policy(user).isAdmin? %>
                 <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
-                            admin_user_path(user),
+                            '',
+                            "data-href"=>admin_user_path(user),
                             :method => :delete,
                             :data => { :confirm => '你确定删除该用户吗?'},
                             :class => 'btn btn-xs btn-danger' %>
@@ -38,7 +39,7 @@
           </div>
           </td>
         <% elsif @current_user.step.nil? %>
-            <td><%= link_to user.name, admin_user_path(user) %></td>
+            <td><%= link_to user.name,'',"data-href"=> admin_user_path(user) %></td>
 
         <td><%= user.mobile %></td>
         <td>
@@ -47,7 +48,8 @@
                   <i class="ace-icon fa fa-pencil bigger-130"></i>
                 </a>
                 <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
-                            admin_user_path(user),
+                            '',
+                            "data-href"=>admin_user_path(user),
                             :method => :delete,
                             :data => { :confirm => '你确定删除该用户吗?'},
                             :class => 'btn btn-xs btn-danger' %>

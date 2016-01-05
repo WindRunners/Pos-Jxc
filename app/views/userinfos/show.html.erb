@@ -1,404 +1,306 @@
 <%- model_class = Userinfo %>
 <div id="user-profile-2" class="user-profile">
   <div class="tabbable">
-    <ul class="nav nav-tabs padding-18">
-      <li class="active">
-        <a data-toggle="tab" href="#home" aria-expanded="true">
-          <i class="green ace-icon fa fa-user bigger-120"></i>
-          员工信息
-        </a>
-      </li>
-
-      <li class="">
-        <a data-toggle="tab" href="#family" aria-expanded="false">
-          <i class="orange ace-icon fa fa-rss bigger-120"></i>
-          家庭成员
-        </a>
-      </li>
-
-      <li class="">
-        <a data-toggle="tab" href="#work" aria-expanded="false">
-          <i class="blue ace-icon fa fa-users bigger-120"></i>
-          工作情况
-        </a>
-      </li>
-      <li class="">
-        <a data-toggle="tab" href="#education" aria-expanded="false">
-          <i class="blue ace-icon fa fa-users bigger-120"></i>
-          教育情况
-        </a>
-      </li>
-      <li class="">
-        <a data-toggle="tab" href="#pictures" aria-expanded="false">
-          <i class="pink ace-icon fa fa-picture-o bigger-120"></i>
-          证件照
-        </a>
-      </li>
-    </ul>
-
     <div class="tab-content no-border padding-24">
       <div id="home" class="tab-pane active">
         <div class="row">
           <div class="col-xs-12 col-sm-3 center">
             <span class="profile-picture">
-              <!--size:"170x189") -->
+              <% if @user.avatar.present? %>
+              <%= image_tag(@user.avatar.url,size: "170x189",:class=>"editable img-responsive editable-click editable-empty", alt: "Edit Entry") %>
+              <% else %>
+              <img src="missing.png" id="user_avatar1" width="170px" height="189px" class="editable img-responsive editable-click editable-empty"  alt="Edit Entry1">
+              <% end %>
             </span>
-            <%= "form" %>
+            <%= form_tag admin_users_upload_path,:multipart => true  do |f| %>
            <span class="btn btn-success fileinput-button">
                     <i class="glyphicon glyphicon-plus"></i>
-                    <span>上传员工照片</span>
-                    <input type="file" name="staff[avatar]" multiple="">
-                </span>
-            <% "end" %>
-
-            <script id="template-upload" type="text/x-tmpl">
-        <div class="upload">
-          {%=o.name%}
-          <div class="progress"><div class="bar" style="width: 0%"></div></div>
-        </div>
-        </script>
+                    <span>选择头像</span>
+             <%= file_field_tag :avatar,name: "user[avatar]",id:"user_avatar",accpet:'image/jpg, image/jpeg, image/png, image/gif' %>
+            </span><span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-check"></i>
+                    <span>上传头像</span>
+            <%= submit_tag "tijiao" %>
+            </span>
+            <% end %>
             <div class="space space-4"></div>
+            <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+              <div class="inline position-relative">
+                <!--<a aria-expanded="false" href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">-->
+                <i class="ace-icon fa fa-circle light-green"></i>
+                &nbsp;
+                <span class="white"><%= @userinfo.name%></span>&nbsp;<i class="ace-icon fa fa-circle light-green"></i>
+              </div>
+            </div>
           </div><!-- /.col -->
           <div class="col-xs-12 col-sm-9">
             <h4 class="blue">
-              <span class="middle">  sdf</span>
-
-              <span class="label label-purple arrowed-in-right">
-                <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
-                online
-              </span>
+              <span class="middle"> <%= @userinfo.shopname %></span>
             </h4>
-
             <div class="profile-user-info">
               <div class="profile-info-row">
-                <div class="profile-info-name">sdf: </div>
-
-                <div class="profile-info-value">
-                  <span>sdf></span>
-                </div>
-              </div>
-              <div class="profile-info-row">
-                <div class="profile-info-name">sdf: </div>
-
-                <div class="profile-info-value">
-                  <span><%= "" %></span>
-                </div>
-              </div>
-
-              <div class="profile-info-row">
-                <div class="profile-info-name">sdfa:</div>
+                <div class="profile-info-name">所属区域: </div>
 
                 <div class="profile-info-value">
                   <i class="fa fa-map-marker light-orange bigger-110"></i>
-                  <span>sadf</span>
+                  <span><%= @userinfo.province %>/<%= @userinfo.city %>/<%= @userinfo.district %></span>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name">地址: </div>
+
+                <div class="profile-info-value">
+                  <i class="fa fa-map-marker light-orange bigger-110"></i>
+                  <span><%= @userinfo.address %></span>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name">营业时间: </div>
+
+                <div class="profile-info-value">
+                  <span><%= @userinfo.start_business%>~~<%= @userinfo.end_business%></span>
                 </div>
               </div>
               <div class="profile-info-row">
-                <div class="profile-info-name">saf: </div>
-
+                <div class="profile-info-name">日间配送时间:<br>起送价/运费: </div>
                 <div class="profile-info-value">
-                  <span><%= "sex" %></span>
+                  <span><%= @userinfo.fright_time %><br><%= @userinfo.lowestprice %>(元) / <%= @userinfo.fright %>(元)</span>
                 </div>
               </div>
-
-
-
-            <div class="hr hr-8 dotted"></div>
-
-            <div class="profile-user-info">
               <div class="profile-info-row">
-                <div class="profile-info-name"> asfd </div>
-
+                <div class="profile-info-name">夜间配送时间:<br>起送价/运费: </div>
                 <div class="profile-info-value">
-                  <a href="#" target="_blank">wer</a>
+                  <span><%= @userinfo.night_time %><br><%= @userinfo.h_lowestprice %>(元) / <%= @userinfo.h_fright %>(元)</span>
                 </div>
               </div>
-            </div>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-
-        <div class="space-20"></div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-6" style="width: 95%">
-            <div class="widget-box transparent">
-              <div class="widget-header widget-header-small">
-                <h4 class="widget-title smaller">
-
-
-
-
-                  <%= link_to t('.back', :default => t("helpers.links.back")),
-                              "", :class => 'btn btn-default'  %>
-                  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                              "", :class => 'btn btn-default' %>
-
-                </h4>
+              <div class="profile-info-row">
+                <div class="profile-info-name"></div>
+                <div class="profile-info-value"> </div>
               </div>
 
-              <div class="widget-body">
-              </div>
             </div>
           </div>
         </div>
-      </div><!-- /#home -->
-
-      <div id="family" class="tab-pane">
-
-      </div><!-- /#family -->
-
-
-      <div id="work" class="tab-pane">
-
-      </div><!-- /#work -->
-      <div id="education" class="tab-pane">
-
-      </div><!-- /#education -->
-
+      </div>
     </div>
   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div>
-<p id="notice"><%= notice %></p>
-<p>
-  <strong>营业者:</strong>
-  <%= @userinfo.name%>
-</p>
-
-<p>
-  <strong>地址:</strong>
-  <%= @userinfo.address %>
-</p>
-
-<p>
-  <strong>商店名称:</strong>
-
-</p>
-<p>
-  <strong>当前积分:</strong>
-  <%= @userinfo.integral %>分
-</p>
-<p>
-  <strong>当前配送距离:</strong>
-  <%= @userinfo.pdistance %>米
-<% if @userinfo_ask.present?%>
-  <%= form_for(@userinfo,html:{:class=>"ask_pd"}) do |f|%>
-      <%= hidden_field_tag "set_pdistance","true" %>
-      <%= hidden_field_tag "userinfo[shopname]","#{@userinfo.shopname}" %>
-      <%= hidden_field_tag "userinfo[location_data]","#{@userinfo.location_data}" %>
-      <%= hidden_field_tag "userinfo[pdistance]","#{@userinfo.pdistance}" %>
-      <%= hidden_field_tag "userinfo[location]","#{@userinfo.location}"%>
-      <% if @userinfo_ask.pdistance_state==0 %>
-      <%= f.label "配送距离：", :class => 'control-label' %><%= radio_button_tag "userinfopd[pdistance]", 100 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "100米" %>&nbsp;&nbsp;
-      <%= radio_button_tag "userinfopd[pdistance]", 200 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "200米" %>&nbsp;&nbsp;
-      <%= radio_button_tag "userinfopd[pdistance]", 500 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "500米" %><br>&nbsp;&nbsp;
-      <%= f.submit "修改配送距离申请" %>
-      <% end %>
-  <% end %>
-<% else %>
-      <%= form_for(@userinfo,html:{:class=>"ask_pd"}) do |f|%>
-          <%= hidden_field_tag "set_pdistance","true" %>
-          <%= hidden_field_tag "userinfo[shopname]","#{@userinfo.shopname}" %>
-          <%= hidden_field_tag "userinfo[location_data]","#{@userinfo.location_data}" %>
-          <%= hidden_field_tag "userinfo[pdistance]","#{@userinfo.pdistance}" %>
-          <%= hidden_field_tag "userinfo[location]","#{@userinfo.location}"%>
-          <%= f.label "配送距离：", :class => 'control-label' %><%= radio_button_tag "userinfopd[pdistance]", 100 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "100米" %>&nbsp;&nbsp;
-          <%= radio_button_tag "userinfopd[pdistance]", 200 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "200米" %>&nbsp;&nbsp;
-          <%= radio_button_tag "userinfopd[pdistance]", 500 %>&nbsp;<%= label_tag "userinfopd[pdistance]", "500米" %><br>&nbsp;&nbsp;
-          <%= f.submit "修改配送距离申请" %>
-      <% end %>
-<% end %>
-</p>
-<p>
-  <strong>当前起送价格:</strong>
-  <%= @userinfo.lowestprice %>元
-</p>
-<p>
-  <strong>当前运费:</strong>
-  <%= @userinfo.fright %>元
-</p>
-<p>
-  <strong>营业开始时间:</strong>
-  <%= @userinfo.start_business %>
-</p>
-<p>
-  <strong>营业结束时间:</strong>
-  <%= @userinfo.end_business %>
-</p>
-
-
-<% if @userinfo.busp.present? %>
-    <span>营业执照</span>  <%= image_tag(@userinfo.busp.url, size: "300x160", alt: "Edit Entry") %>
-<% end %>
-
-  <% if @userinfo.footp.present? %>
-      <strong>食品流通许可证:</strong>
-  <%= image_tag(@userinfo.footp.url,size: "300x160", alt: "Edit Entry") %>
-      <% end %>
-
-
-  <% if @userinfo.healthp.present? %>
-    <strong>卫生许可证:</strong>
-      <%= image_tag(@userinfo.healthp.url,size: "300x160", alt: "Edit Entry") %>
-  <% end %>
-
-  <% if @userinfo.taxp.present? %>
-      <strong>税务登记证T:</strong>
-      <%= image_tag(@userinfo.taxp.url,size: "300x160", alt: "Edit Entry") %>
-  <% end %>
-
-
-  <% if @userinfo.orgp.present? %>
-    <strong>组织机构代码证:</strong>
-      <%= image_tag(@userinfo.orgp.url,size: "300x160", alt: "Edit Entry") %>
-  <% end %>
-
-
-  <% if @userinfo.idpf.present? %>
-    <strong>身份真正面:</strong>
-      <%= image_tag(@userinfo.idpf.url,size: "300x160", alt: "Edit Entry") %>
-  <% end %>
-
-
-  <% if @userinfo.idpb.present? %>
-    <strong>身份证反面:</strong>
-      <%= image_tag(@userinfo.idpb.url,size: "300x160", alt: "Edit Entry") %>
-  <% end %>
-
-   <br>
-
-
-  <%= form_for @userinfo, :html => { :class => "form-horizontal user", multipart: true } do |f| %>
-      <div class="control-group">
-        <%= f.label "营业开始时间", :class => 'control-label' %>
-        <div class="controls">
-          <%=  f.text_field :start_business %>
+  <div class="hr hr-24"></div>
+  <%= form_for @userinfo, :html => { :class => "form-horizontal user", remote: true } do |f| %>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">营业时间</label>
+        <div class="col-sm-7">
+			<span class="input-icon">
+              <%=  f.text_field :start_business,:id=>"form-field-1" %>
+			</span>
+          <i class="fa fa-exchange"></i>
+            <span class="input-icon input-icon-right">
+               <%=  f.text_field :end_business,:id=>"form-field-2"%>
+            </span>
         </div>
       </div>
-          <script>
-              $(function () {
-                  $('#userinfo_start_business').datetimepicker({
-                      sideBySide: true,
-                      locale: "zh-cn",
-                      format: "HH:mm",
-                      showClose: true
-                  });
+      <script>
+          $("#user_avatar").change(function(){
+              var objUrl = getObjectURL(this.files[0]) ;
+              console.log("objUrl = "+objUrl) ;
+              if (objUrl) {
+                  $("#user_avatar1").attr("src", objUrl) ;
+              }
+          }) ;
+          //建立一個可存取到該file的url
+          function getObjectURL(file) {
+              var url = null ;
+              if (window.createObjectURL!=undefined) { // basic
+                  url = window.createObjectURL(file) ;
+              } else if (window.URL!=undefined) { // mozilla(firefox)
+                  url = window.URL.createObjectURL(file) ;
+              } else if (window.webkitURL!=undefined) { // webkit or chrome
+                  url = window.webkitURL.createObjectURL(file) ;
+              }
+              return url ;
+          }
+          $(function () {
+              $('#form-field-1').datetimepicker({
+                  sideBySide: true,
+                  locale: "zh-cn",
+                  format: "HH:mm",
+                  showClose: true
               });
-          </script>
-      <div class="control-group">
-        <%= f.label "营业结束时间", :class => 'control-label' %>
-        <div class="controls">
-          <%=  f.text_field :end_business  %>
-        </div>
-      </div>
-    <script>
-        $(function () {
-            $('#userinfo_end_business').datetimepicker({
-                sideBySide: true,
-                locale: "zh-cn",
-                format: "HH:mm",
-                showClose: true
-            });
-        });
-    </script>
-    <div class="control-group">
-      <%= f.label "日间配送时间", :class => 'control-label' %>
-      <div class="controls">
-        <%=  f.text_field :fright_time  %>
-      </div>
-    </div>
-    <script>
-        $(function () {
-            $('#userinfo_fright_time').datetimepicker({
-                sideBySide: true,
-                locale: "zh-cn",
-                format: "HH:mm",
-                showClose: true,
-            });
-        });
-    </script>
-      <div class="control-group">
-        <%= f.label "日间起送价", :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :lowestprice %>
+              $('#form-field-2').datetimepicker({
+                  sideBySide: true,
+                  locale: "zh-cn",
+                  format: "HH:mm",
+                  showClose: true
+              });
+              $('#form-field-fright_time').datetimepicker({
+                  sideBySide: true,
+                  locale: "zh-cn",
+                  format: "HH:mm",
+                  showClose: true
+              });
+              $('#form-field-night_time').datetimepicker({
+                  sideBySide: true,
+                  locale: "zh-cn",
+                  format: "HH:mm",
+                  showClose: true
+              });
+          });
+      </script>
+
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">日间配送时间</label>
+        <div class="col-sm-9">
+          <%=  f.text_field :fright_time,:class=>"col-xs-5 col-sm-2",:id=>"form-field-fright_time"  %>
+          <label class="col-sm-1 control-label no-padding-right" for="form-field-1">起送价</label>
+          <%=  f.text_field :lowestprice,:class=>"col-xs-5 col-sm-1"  %>
+          <label class="col-sm-1 control-label no-padding-right" for="form-field-1">邮费</label>
+          <%=  f.text_field :fright,:class=>"col-xs-5 col-sm-1"  %>
         </div>
       </div>
 
-      <div class="control-group">
-        <%= f.label "日间运费", :class => 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :fright %>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1">日间配送时间</label>
+        <div class="col-sm-9">
+          <%=  f.text_field :night_time,:class=>"col-xs-5 col-sm-2",:id=>"form-field-night_time"  %>
+          <label class="col-sm-1 control-label no-padding-right" for="form-field-1">起送价</label>
+          <%=  f.text_field :h_lowestprice,:class=>"col-xs-5 col-sm-1"  %>
+          <label class="col-sm-1 control-label no-padding-right" for="form-field-1">邮费</label>
+          <%=  f.text_field :h_fright,:class=>"col-xs-5 col-sm-1"  %>
         </div>
       </div>
 
-    <div class="control-group">
-      <%= f.label "夜间配送时间", :class => 'control-label' %>
-      <div class="controls">
-        <%=  f.text_field :night_time  %>
-      </div>
-    </div>
-    <script>
-        $(function () {
-            $('#userinfo_night_time').datetimepicker({
-                sideBySide: true,
-                locale: "zh-cn",
-                format: "HH:mm",
-                showClose: true,
-            });
-        });
-    </script>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地址 </label>
 
-    <div class="control-group">
-      <%= f.label "夜间起送价", :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :h_lowestprice %>
+        <div class="col-sm-9">
+          <input id="userinfo_address" name="userinfo[address]" placeholder="地址" class="col-xs-7 col-sm-5" type="text">
+          <button type="button" class="btn btn-default btn-sm" id="searchMap" onclick="map_search()" style="float: left;margin-left: 5px;">查询</button>
+        </div>
       </div>
-    </div>
 
-    <div class="control-group">
-      <%= f.label "夜间运费", :class => 'control-label' %>
-      <div class="controls">
-        <%= f.text_field :h_fright %>
+      <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">所属省/市/区(县)</label>
+
+        <div class="col-sm-9">
+          <style>
+              input:disabled {
+                  background-color: #D77979 !important;
+                  color: #090707 !important;
+              }
+          </style>
+            <span class="input-icon">
+                <input id="userinfo_province" name="userinfo[province]" type="text" readonly="true">
+                <i class="ace-icon fa fa-leaf blue"></i>
+            </span>
+
+            <span class="input-icon input-icon-right">
+                <input id="userinfo_city" name="userinfo[city]" type="text" readonly="true">
+                <i class="ace-icon fa fa-leaf green ">市</i>
+            </span>
+          	<span class="input-icon input-icon-right">
+            <input id="userinfo_district" name="userinfo[district]" type="text" readonly="true">
+            <i class="ace-icon fa fa-leaf green">区(县)</i>
+             </span>
+
+        </div>
       </div>
-    </div>
-    <br>
-
-      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <div style="width:630px;height:230px;border:1px solid gray;margin: 0px auto;margin-right: 330px" id="container"></div>
+      <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+          <button class="btn btn-info" type="submit">
+            <i class="ace-icon fa fa-check bigger-110"></i>
+            修改
+          </button>
+          &nbsp; &nbsp; &nbsp;
+          <a class="btn" data-href="<%= userinfos_url %>" role="button">
+            <i class="ace-icon fa fa-undo bigger-110"></i>
+            返回
+          </a>
+        </div>
+      </div>
 
   <% end %>
-<%= javascript_include_tag "registjs/jquery.form" %>
-<script>
-    $(function(){
-        $(".ask_pd").validate({
-            submitHandler: function() {
-                alert("申请成功，24小时返回信息");
-                form.submit();
-            }
-        })
-    })
-
-</script>
-
 </div>
+<script type="text/javascript">
+    var map = new BMap.Map("container");//初始化地图
+    map.addControl(new BMap.NavigationControl());  //初始化地图控件
+    //map.addControl(new BMap.ScaleControl());
+    //map.addControl(new BMap.OverviewMapControl());
+    map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+    map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+    map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+    //map.addControl(new BMap.OverviewMapControl()); //添加默认缩略地图控件
+    //map.addControl(new BMap.OverviewMapControl({ isOpen: true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));   //右下角，打开
 
+    var point=new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
 
+    var gc = new BMap.Geocoder();//地址解析类
+    //关键字查询
+    var localSearch = new BMap.LocalSearch(map);
+    localSearch.enableAutoViewport();
+    function map_search(){
+        map.clearOverlays();//清空原来的标注
+        var keyword = document.getElementById("userinfo_address").value;
+        localSearch.setSearchCompleteCallback(function (searchResult) {
+            var poi = searchResult.getPoi(0);
+            map.centerAndZoom(poi.point, 15);
+            var marker = new BMap.Marker(new BMap.Point(poi.point.lng, poi.point.lat));  // 创建标注，为要查询的地方对应的经纬度
+            map.addOverlay(marker);
+            var content = document.getElementById("text_").value + "<br/><br/>经度：" + poi.point.lng + "<br/>纬度：" + poi.point.lat;
+            var infoWindow = new BMap.InfoWindow("<p style='font-size:14px;'>" + content + "</p>");
+            marker.addEventListener("click", function () { this.openInfoWindow(infoWindow); });
+            // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        });
+        localSearch.search(keyword);
+
+    }
+
+    //添加标记点击监听
+    map.addEventListener("click", function(e){
+        map.clearOverlays();//清空原来的标注
+        var circle = new BMap.Circle(e.point,100,
+                {fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        map.addOverlay(circle);
+        gc.getLocation(e.point, function(rs){
+            showLocationInfo(e.point, rs);
+        });
+
+    });
+
+    //ip定位城市
+    function myFun(result){
+        var cityName = result.name;
+        map.setCenter(cityName);
+
+    }
+    var myCity = new BMap.LocalCity();
+    myCity.get(myFun);
+
+    //显示地址信息窗口
+    function showLocationInfo(pt, rs){
+        var marker = new BMap.Marker(pt); //初始化地图标记
+        map.centerAndZoom(pt, 18); //设置中心点坐标和地图级别
+        map.addOverlay(marker); //将标记添加到地图中
+
+        var opts = {
+            width : 250,     //信息窗口宽度
+            height: 100,     //信息窗口高度
+            title : ""  //信息窗口标题
+        }
+        var addComp = rs.addressComponents;
+        var adds =  addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber ;
+        var addr = "当前标记地址：" + addComp.province +  addComp.city +  addComp.district +  addComp.street +  addComp.streetNumber + "<br/>";
+        addr += "纬度: " + pt.lat + ", " + "经度：" + pt.lng;
+        //alert(addr);
+        var infoWindow = new BMap.InfoWindow(addr, opts);  //创建信息窗口对象
+        marker.openInfoWindow(infoWindow);
+        $("#userinfo_address").val(adds);
+        $("#userinfo_lng").val(pt.lng);
+        $("#userinfo_lat").val(pt.lat);
+        $("#userinfo_province").val(addComp.province);
+        $("#userinfo_city").val(addComp.city);
+        $("#userinfo_district").val(addComp.district);
+    }
+</script>

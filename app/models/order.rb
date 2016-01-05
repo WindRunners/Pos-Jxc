@@ -72,6 +72,7 @@ class Order
     # 待接货
     state :take do
       event :take_product, :transitions_to => :distribution
+      event :cancel_order, :transitions_to => :cancelled
     end
 
     # 配送中

@@ -27,7 +27,7 @@
   </div>
 
   <div id="con">
-    <%= form_for(User.new, url: user_session_path,:class=>"bl-form bl-formhor") do |f| %>
+    <%= form_tag users_sessions_fix_password_path,class:"bl-form bl-formhor",:id=>"new_user" do |f| %>
         <input type="hidden" , name="setpassword" , value="true">
         <input type="hidden" , name="check_mobile" , value="true">
         <div class="con_grou clearfix">
@@ -66,18 +66,6 @@
         $("#new_user").validate({
             submitHandler: function() {
                 form.submit();
-//                    $.ajax({
-//                        url:'http://www.nit.cn:4000/api/v1/user/verifycode',
-//                        dataType:'json',
-//                        type:'post',
-//                        data:{mobile:$("#telphone").val(),code:"1234"},
-//                        error:function(){
-//                            alert('错误');
-//                        },
-//                        success:function(data){
-//                            alert('验证码已发送成功');
-//                        }
-//                    })
           }
         });
         $(".rucaptcha-image-box").click(function(e){

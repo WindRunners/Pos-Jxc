@@ -73,6 +73,7 @@ class Order
     state :take do
       event :take_product, :transitions_to => :distribution
       event :cancel_order, :transitions_to => :cancelled
+      event :commit_order, :transitions_to => :completed
     end
 
     # 配送中

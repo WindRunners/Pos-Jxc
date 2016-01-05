@@ -34,7 +34,7 @@ class AnnouncementsController < ApplicationController
   # POST /announcements.json
   def create
     @announcement = Announcement.new(announcement_params)
-    @announcement.author = current_user.name
+    @announcement.user = current_user
     @announcement.read_num = 0
     @announcement.status = 0
     Dir.mkdir('public/upload/image/announcements/'+ @announcement.id.to_s)
@@ -87,7 +87,7 @@ class AnnouncementsController < ApplicationController
         a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
       else
         a.replace a
-        # a.insert(5, '/')
+        a.insert(5, '/') if a[5]!='/'
       end
     }
     respond_to do |format|
@@ -124,7 +124,7 @@ class AnnouncementsController < ApplicationController
 
 
   def batch_check
-    @announcement = Announcement.where(:status => params[:status]).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status],:user_id=>current_user.id).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -224,6 +224,7 @@ class AnnouncementsController < ApplicationController
         end
       end
       announcement.content = @fwb
+      announcement.user = current_user
       #保存
       announcement.save
     end
@@ -239,7 +240,6 @@ class AnnouncementsController < ApplicationController
 
 
   def stow
-    # binding.pry
     @announcement = Announcement.find(params[:announcement_id])
     data ={}
     respond_to do |format|

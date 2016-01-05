@@ -10,6 +10,16 @@ class DeliveryUserV1API < Grape::API
 
   format :json
 
+  use ApiLogger
+
+  helpers do
+
+    def ahoy
+      @ahoy ||= Ahoy::Tracker.new
+    end
+
+  end
+
   #嵌入帮助类
   include DeliveryUserV1APIHelper
   include RegexV1APIHelper
@@ -68,17 +78,21 @@ class DeliveryUserV1API < Grape::API
   params do
     requires :mobile, type: String, desc: '手机号'
     requires :verifycode, type: String, desc: '手机验证码'
+    requires :channel_type, type: String, desc: '手机类型(ANDROID,IOS)'
+    requires :channel_id, type: String, desc: 'channel_id'
   end
   post 'login' do
 
     mobile = params[:mobile]
     verifycode = params[:verifycode]
 
+    channel = params[:channel_type] + "|" + params[:channel_id]
+
     return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
     return {msg: '验证码不合法', flag: 0} if !RegexV1APIHelper.verifycode(verifycode)
 
     status 200 #修改post默认返回状态
-    data = DeliveryUserV1APIHelper.login(mobile,verifycode)
+    data = DeliveryUserV1APIHelper.login(mobile,verifycode, channel)
 
     if (data.class == DeliveryUser)
       present data, with: Entities::DeliveryUser
@@ -86,7 +100,6 @@ class DeliveryUserV1API < Grape::API
       return data
     end
   end
-
 
   desc '获取配送员登录验证码'
   params do
@@ -152,6 +165,19 @@ class DeliveryUserV1API < Grape::API
 
       status 200 #修改post默认返回状态
 
+    end
+
+    desc '配送员注销' do
+      detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
+    end
+    params do
+      requires :token, type: String, desc: '身份认证token'
+    end
+    post 'login_out' do
+
+      status 200 #修改post默认返回状态
+      current_deliveryUser.update_attribute(:authentication_token, "")
+      {msg: "注销成功!", flag: 1}
     end
   end
 

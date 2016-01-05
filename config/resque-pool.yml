@@ -1,18 +1,20 @@
-#achieves_queue_send_message: 1
-#achieves_queue_cancel_generation: 1
-#achieves_queue_cancel_paid: 1
-#achieves_queue_completed: 1
-#achieves_queue_order_synchronous: 1
-#achieves_queue_keywords: 1
-#achieves_queue_gift_bag_expiry: 1
+achieves_queue_send_message: 1
+achieves_queue_cancel_generation: 1
+achieves_queue_cancel_paid: 1
+achieves_queue_completed: 1
+achieves_queue_order_synchronous: 1
+achieves_queue_keywords: 1
+achieves_queue_gift_bag_expiry: 1
 achieves_queue_refund_online_payment: 1
+achieves_order_push_channels: 1
 
 production:
-  #"achieves_queue_send_message": 2
-  #"achieves_queue_cancel_generation": 2
-  #"achieves_queue_cancel_paid": 2
-  #"achieves_queue_completed": 2
-  #"achieves_queue_order_synchronous": 2
-  #"achieves_queue_keywords": 2
-  #"achieves_queue_gift_bag_expiry": 2
+  "achieves_queue_send_message": 2
+  "achieves_queue_cancel_generation": 2
+  "achieves_queue_cancel_paid": 2
+  "achieves_queue_completed": 2
+  "achieves_queue_order_synchronous": 2
+  "achieves_queue_keywords": 2
+  "achieves_queue_gift_bag_expiry": 2
   "achieves_queue_refund_online_payment": 2
+  "achieves_order_push_channels": 2

@@ -5,7 +5,7 @@ class Coupon
   
   belongs_to :userinfo, :class_name => "Userinfo", :foreign_key => :userinfo_id
   
-  before_save :check
+  before_create :check
   before_update :check
   
   field :customer_ids, type: Array, default: [] #小Cid列表
@@ -26,7 +26,9 @@ class Coupon
   field :type, type: String
   field :tag, type: String #同步为商品打标签
   field :receive_count, type: Integer, default: 0 #领取次数
-  
+
+  attr_accessor :old_coupon  #旧的对象
+
   aasm do
     state :noBeging, :initial => true
     state :beging
@@ -35,6 +37,10 @@ class Coupon
     
     event :start do
       transitions :from => [:noBeging, :end], :to => :beging
+    end
+
+    event :ready do
+      transitions :from => [:beging, :end], :to => :noBeging
     end
     
     event :stop do
@@ -61,23 +67,56 @@ class Coupon
   def endTimeShow
     end_time.strftime("%Y-%m-%d %H:%M")
   end
+
+  def changeSelectProducts
+    if old_coupon.present?
+      old_coupon.product_ids.each do |pid|
+        if product_ids.include?(pid)
+          old_coupon.product_ids.delete(pid)
+        end
+      end
+
+      Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => old_coupon.product_ids}).each do |product|
+        product.coupon_id = nil
+        product.tags_array.delete(old_coupon.tag) if old_coupon.tag.present?
+        product.shop_id(userinfo_id.to_s).save
+      end
+    end
+    Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => product_ids}).each do |product|
+      if product.coupon_id.blank?
+        product.coupon_id = id.to_s
+        product.tags_array << tag if tag.present?
+      else
+        if old_coupon.present? && old_coupon.tag.present?
+          if tag.present? && old_coupon.tag != tag
+            product.tags_array.delete(old_coupon.tag)
+            product.tags_array << tag
+          end
+        else
+          product.tags_array << tag if tag.present?
+        end
+      end
+      product.shop_id(userinfo_id.to_s).save
+    end
+  end
   
   def check
-    return false if "invalided" == aasm_state
+    return false if invalided?
     today = Time.now.strftime('%Y%m%d%H%M%S').to_i
     startTime = start_time.strftime('%Y%m%d%H%M%S').to_i
     endTime = end_time.strftime('%Y%m%d%H%M%S').to_i
     
     if today >= startTime && today < endTime
-      puts "start======"
-      start if "beging" != aasm_state
+      Rails.logger.info "coupon start======"
+      start if may_start?
     elsif today < startTime
-      puts "ready======"
-      ready if "noBeging" != aasm_state
+      Rails.logger.info "coupon ready======"
+      ready if may_ready?
     else
-      puts "stop======="
-      stop if "end" != aasm_state
+      Rails.logger.info "coupon stop======="
+      stop if may_stop?
     end
+    changeSelectProducts()
   end
   
   def fullReductions
@@ -90,16 +129,16 @@ class Coupon
   end
   
   def products
-    result = Array.new
-    product_ids.each do |pid|
-      begin
-        result << Product.shop_id(userinfo_id.to_s).find(pid)
-      rescue
-      end
-    end
-    result
+    Product.shop_id(userinfo_id.to_s).where(:id => {"$in" => product_ids})
   end
 
+  def receiveCustomerCount
+    customer_ids.size
+  end
+
+  def useCount
+    Ordercompleted.where(:coupon_id => id.to_s, :userinfo_id => userinfo_id, :workflow_state => "completed").count
+  end
 
   def coupon_format
     couphash = Hash.new

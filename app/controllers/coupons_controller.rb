@@ -1,8 +1,6 @@
 class CouponsController < ApplicationController
   before_action :set_coupon, only: [:show, :edit, :update, :destroy]
   before_action :auth?
-  before_action :get_products, only: [:new, :edit]
-  before_action :buildHash
   # GET /coupons
   # GET /coupons.json
   def index
@@ -22,9 +20,9 @@ class CouponsController < ApplicationController
     else
       session[:select_product_ids] += params[:product_id].split(",")
     end
-    Rails.logger.info "action[products]//session[:select_product_ids]==#{session[:select_product_ids]}"
-    @products = session[:select_product_ids].collect {|pid| Product.shop(current_user).find(pid)}
-    render :layout => false
+    respond_to do |format|
+      format.json {render :json => {:success => true}.to_json}
+    end
   end
 
   def selectProducts
@@ -40,41 +38,25 @@ class CouponsController < ApplicationController
 
   # GET /coupons/new
   def new
-    session[:select_product_ids] = Array.new
-    @selectProductHashStr = "{}"
     @coupon = Coupon.new(:use_goods => "1", :order_amount_way => "1")
-    @selectProductHashStr = @selectProductHash.to_s.gsub(/=>/, ":")
   end
 
   # GET /coupons/1/edit
   def edit
     session[:select_product_ids] = @coupon.product_ids
-    @selectProductHash = Hash.new
-    @coupon.product_ids.each do |pid|
-      @selectProductHash[pid] = ""
-    end
-    @selectProductHashStr = @selectProductHash.to_s.gsub(/=>/, ":")
   end
 
   # POST /coupons
   # POST /coupons.json
   def create
     @coupon = Coupon.new(coupon_params)
-    session[:select_product_ids].each do |product_id|
-      @product = Product.shop(current_user).find(product_id)
-      @coupon.product_ids << product_id
-      @product.coupon_id = @coupon.id
-      (@product.tags.present? ? @product.tags_array << @coupon.tag : @product.tags = @coupon.tag) if @coupon.tag.present?
-      begin
-        @product.shop(current_user).save
-      rescue
-      end
-    end
     @coupon.userinfo = current_user.userinfo
+    @coupon.product_ids = session[:select_product_ids]
     respond_to do |format|
       if @coupon.save
         format.html { redirect_to :action => "index" }
         format.json { render :show, status: :created, location: @coupon }
+        format.js {render_js coupons_path}
       else
         format.html { render :new }
         format.json { render json: @coupon.errors, status: :unprocessable_entity }
@@ -86,6 +68,7 @@ class CouponsController < ApplicationController
   # PATCH/PUT /coupons/1
   # PATCH/PUT /coupons/1.json
   def update
+    @coupon.old_coupon = @coupon.clone
     @update_coupon = Coupon.new(coupon_params)
     if @app_key.present?
       if !@coupon.customer_ids.include?(params[:customer_id])
@@ -93,36 +76,13 @@ class CouponsController < ApplicationController
       end
     else
       session[:select_product_ids] = [] if "0" == @update_coupon.use_goods
-      @coupon.products.each do |p|
-        if !session[:select_product_ids].include?(p.id.to_s)
-          p.coupon_id = nil
-          p.tags_array.delete(@coupon.tag)
-          p.shop(current_user).save
-          @coupon.product_ids.delete(p.id.to_s)
-        else
-          session[:select_product_ids].delete(p.id.to_s)
-        end
-      end
-      session[:select_product_ids].each do |product_id|
-        @product = Product.shop(current_user).find(product_id)
-        @coupon.product_ids << product_id
-        @product.coupon_id = @coupon.id
-        if @coupon.tag.present?
-            @product.tags_array.delete(@coupon.tag)
-            @product.tags_array << @update_coupon.tag if @update_coupon.tag.present?
-        else
-            (@product.tags.present? ? @product.tags_array << @update_coupon.tag : @product.tags = @update_coupon.tag) if @update_coupon.tag.present?
-        end
-        begin
-            @product.shop(current_user).save
-        rescue
-        end
-      end
+      @coupon.product_ids = session[:select_product_ids]
     end
     respond_to do |format|
       if @coupon.update(coupon_params)
         format.html { redirect_to :action => "index"}
         format.json { render :show, status: :ok, location: @coupon }
+        format.js {render_js coupons_path}
       else
         format.html { render :edit }
         format.json { render json: @coupon.errors, status: :unprocessable_entity }
@@ -166,19 +126,6 @@ class CouponsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_coupon
       @coupon = Coupon.find(params[:id])
-    end
-
-    def buildHash
-      @aasmState = Hash.new
-      @aasmState[:noBeging] = "未开始"
-      @aasmState[:beging] = "正在进行"
-      @aasmState[:end] = "已结束"
-      @aasmState[:invalided] = "已失效"
-    end
-    
-    def get_products
-      @state = State.find_by(:value => "online")
-      @products = Product.shop(current_user).where(:state_id => @state.id, :coupon_id => nil)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -179,9 +179,22 @@ class OrdersController < ApplicationController
     payment = AlipayPayment.new(alipay_payment_params)
     payment.save!
 
-    order = Order.find(order_id)
+    begin
+      order = Order.find(order_id)
+    rescue
+      order = Ordercompleted.find(order_id)
+    end
 
-    if order.workflow_state == 'paid' then
+    if order.workflow_state == 'paid'
+      render plain: "success"
+      return
+    end
+
+    if 'REFUND_SUCCESS' == payment.refund_status
+      order.update_attribute(:refund_at, Time.now)
+
+      logger.info 'refund success'
+
       render plain: "success"
       return
     end
@@ -189,7 +202,6 @@ class OrdersController < ApplicationController
     notify_params = params.except(*request.path_parameters.keys)
 
     if Alipay::Notify.verify?(notify_params)
-      logger.info "verify success"
 
       if order.workflow_state == 'generation' && order.paymode == 1 then
         order.payment_order!
@@ -199,9 +211,22 @@ class OrdersController < ApplicationController
 
       render plain: "fail"
     else
-      logger.info "verify fail"
       render plain: "fail"
     end
+  end
+
+  def alipay_refund_notify
+    logger.info params
+
+    refund = AlipayPaymentRefund.new(alipay_payment_refund_params)
+
+    refund.save!
+
+    render plain: "success"
+  end
+
+  def alipay_dback_notify
+    logger.info params
   end
 
   def statisticData

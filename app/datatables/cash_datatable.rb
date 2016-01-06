@@ -34,12 +34,11 @@ class CashDatatable
   end
 
   def fetch_cashes
-    p '././././.',params[:aasm_state]
     cashes = params[:state].present? ? Cash.where(:userinfo_id => params[:aasm_state]) : Cash
     cashes = cashes.where(:userinfo_id=>@current_user.userinfo_id).order("#{sort_column} #{sort_direction}")
     cashes = cashes.page(page).per(per_page)
     if params[:sSearch].present?
-      cashes = cashes.where(:cash => /#{searchText}/)
+      cashes = cashes.where(:cash => /#{params[:sSearch]}/)
     end
     cashes
   end

@@ -33,16 +33,20 @@ class Cash
       p '余额转积分'
     elsif self.cash_state == 9
       p '取现成功'
+    elsif self.cash_state == 10
+      p '提现成功'
+    elsif self.cash_state == 11
+      p '提现失败'
     end
   end
 
   def data_show
     if self.cash_state ==1
-      p  self.cash_req_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+      self.cash_req_date.strftime('%Y-%m-%d %H:%M:%S').to_s if self.cash_req_date.present?
     elsif self.cash_state ==2 || self.cash_state==4
-      self.cash_req_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+      self.cash_req_date.strftime('%Y-%m-%d %H:%M:%S').to_s if self.cash_req_date.present?
     elsif self.cash_state ==9
-      self.cash_back_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+      self.cash_back_date.strftime('%Y-%m-%d %H:%M:%S').to_s if self.cash_back_date.present?
     end
   end
 

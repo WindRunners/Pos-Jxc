@@ -4,4 +4,4 @@
 
 = link_to '展示','', 'data-href' => chateaus_path(@chateau)
 \|
-= link_to '返回','', 'data-href' => chateaus_path
+= link_to '返回','', 'data-href' => chateaus_path("page" => cookies['current_page'])

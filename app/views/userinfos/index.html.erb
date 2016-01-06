@@ -147,7 +147,7 @@
     <div class="overview-group">
       <div class="overview-group-inner">
         <span class="h4"><% if @cash_totle.present? %><%= @cash_totle %><% else %>0<% end %></span>
-        <span class="h5">可用现金</span>
+        <span class="h5">取现金额</span>
       </div>
     </div>
     <div class="overview-group">
@@ -234,8 +234,8 @@
           </tr>
           </thead>
           <tbody>
-          <% if @cashes.present? %>
-              <% @cashes.each do |cash| %>
+          <% if @cash_res.present? %>
+              <% @cash_res.each do |cash| %>
                   <% if cash.cash_state==1 %>
                       <tr>
                         <td><%= "-#{cash.cash}" %></td>
@@ -250,11 +250,11 @@
         <div class="row">
           <div class="col-xs-4">
             <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
-              <%= page_entries_info @cashes, :entry_name =>  '取现' %></div>
+              <%= page_entries_info @cash_res, :entry_name =>  '取现' %></div>
           </div>
           <div class="col-xs-8">
             <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-              <%= paginate @cashes,:remote => true %>
+              <%= paginate @cash_res,:remote => true %>
             </div>
           </div>
         </div>
@@ -269,8 +269,8 @@
           </tr>
           </thead>
           <tbody>
-          <% if @cashes.present? %>
-              <% @cashes.each do |cash| %>
+          <% if @cash_yes.present? %>
+              <% @cash_yes.each do |cash| %>
                   <% if cash.cash_state == 4 %>
                       <tr>
                         <td><%= "-#{cash.cash}" %></td>
@@ -285,11 +285,11 @@
         <div class="row">
           <div class="col-xs-4">
             <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
-              <%= page_entries_info @cashes, :entry_name =>  '取现' %></div>
+              <%= page_entries_info @cash_yes, :entry_name =>  '余额转积分' %></div>
           </div>
           <div class="col-xs-8">
             <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-              <%= paginate @cashes,:remote => true %>
+              <%= paginate @cash_yes,:remote => true %>
             </div>
           </div>
         </div>
@@ -330,20 +330,31 @@
           </tr>
           </thead>
           <tbody>
-          <% if @user_integrals.present? %>
-              <% @user_integrals.each do |user_integral| %>
-                  <% if user_integral.state==1 && user_integral.userinfo_id==@current_user.userinfo_id %>
-                      <tr>
-                        <td><%= user_integral.integral %></td>
-                        <td><%= user_integral.state_show_str %></td>
-                        <td><%= user_integral.type_show_str %></td>
-                        <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
-                      </tr>
-                  <% end %>
+          <% if @r_integrals.present? %>
+              <% @r_integrals.each do |user_integral| %>
+
+                  <tr>
+                    <td><%= user_integral.integral %></td>
+                    <td><%= user_integral.state_show_str %></td>
+                    <td><%= user_integral.type_show_str %></td>
+                    <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+                  </tr>
+
               <% end %>
           <% end %>
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+              <%= page_entries_info @r_integrals, :entry_name =>  '入账积分' %></div>
+          </div>
+          <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @r_integrals,:remote => true %>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="tab-pane" id="out_tag">
         <table id="integrals" class="table table-hover">
@@ -356,20 +367,29 @@
           </tr>
           </thead>
           <tbody>
-          <% if @user_integrals.present? %>
-              <% @user_integrals.each do |user_integral| %>
-                  <% if user_integral.state == 2 && user_integral.userinfo_id==@current_user.userinfo_id %>
-                      <tr>
-                        <td><%= user_integral.integral %></td>
-                        <td><%= user_integral.state_show_str %></td>
-                        <td><%= user_integral.type_show_str %></td>
-                        <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
-                      </tr>
-                  <% end %>
+          <% if @z_integrals.present? %>
+              <% @z_integrals.each do |user_integral| %>
+                  <tr>
+                    <td><%= user_integral.integral %></td>
+                    <td><%= user_integral.state_show_str %></td>
+                    <td><%= user_integral.type_show_str %></td>
+                    <td><%= user_integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s if  user_integral.integral_date.present? %></td>
+                  </tr>
               <% end %>
           <% end %>
           </tbody>
         </table>
+        <div class="row">
+          <div class="col-xs-4">
+            <div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
+              <%= page_entries_info @z_integrals, :entry_name =>  '支出积分' %></div>
+          </div>
+          <div class="col-xs-8">
+            <div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
+              <%= paginate @z_integrals,:remote => true %>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

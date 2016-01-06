@@ -65,6 +65,7 @@ class Userinfo
   field :h_lowestprice, type: Integer,default: 0 # 最低起送价格h
   field :start_business, type: String  #营业开始时间
   field :end_business, type: String #营业结束时间
+  field :channel_ids, type:Array,default: [] #移动设备推送IDs
 
   validates :pdistance,presence: true
 

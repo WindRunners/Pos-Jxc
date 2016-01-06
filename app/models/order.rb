@@ -430,6 +430,29 @@ class Order
   end
 
   after_save do
+
+    paid_count = self.userinfo.orders.where(:workflow_state => :paid).count
+
+    if workflow_state == 'paid'
+      data = {
+          orderno: self.orderno,
+          order_id: self.id
+      }
+      MessageBus.publish "/channel/#{self.userinfo.id}", data
+
+      # push_log = PushLog.create(order_id:self.id, userinfo_id:self.userinfo.id)
+      #
+      # Resque.enqueue(AchieveOrderPushChannels, self.userinfo.channel_ids, paid_count, push_log.id)
+
+    elsif workflow_state == 'distribution'
+      if paid_count == 0
+        MessageBus.publish "/channel/#{self.userinfo.id}", nil
+      end
+    end
+
+
+
+
     orderjson = (self.to_json(:include => {:ordergoods => {:except => :product_id}}).to_s).force_encoding('UTF-8')
     #同步总库订单表
     Resque.enqueue(AchieveOrderSynchronous, orderjson)

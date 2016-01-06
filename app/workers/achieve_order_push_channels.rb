@@ -5,7 +5,7 @@ class AchieveOrderPushChannels
 
     channels, badge, log_id = args.first, args[1], args.last
 
-    ios_client = Baidu::CloudPush.new('QKWTjM7bZbc0vs6HsylLGnIO', 'h4VbnLpGDANQqW3oE7OQ0D4X2VtKHSh5')
+    ios_client = Baidu::CloudPush.new('9qKGVvWRL4dPvLX7h4UFlI2n', 'AI9fNO8dVHjZFM7FHsXjlRwKX5TZzmbW')
     android_client = Baidu::CloudPush.new('YSG5VESAS4QsuKhUoiAFdPuH', 'uK7R7g9fX1pvomK1cBMFEmsYjbrGEtT3')
 
 
@@ -18,7 +18,7 @@ class AchieveOrderPushChannels
     }
 
     android_msg = {
-      title: "买卖通",
+      title: "小达快跑",
       description: "您有新的订单,请注意查收",
       notification_builder_id: 0,
       notification_basic_style: "2",
@@ -36,10 +36,10 @@ class AchieveOrderPushChannels
 
       if arr.first == 'IOS'
         r = ios_client.push_single_device(arr.last, ios_msg, {msg_type: 1, deploy_status: 2})
-
       elsif arr.first == 'ANDROID'
         r = android_client.push_single_device(arr.last, android_msg, {msg_type: 1})
-
+      else
+        next
       end
 
       unless r.result

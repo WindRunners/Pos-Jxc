@@ -22,6 +22,8 @@
             <div class="widget-main">
               标题：<%=  @announcement.title %>
               <br>
+              类别：<%=  @announcement.announcement_category.name %>
+              <br>
               是否置顶：<%=  @announcement.is_top_str %>
               <br>
               排序字段：<%=  @announcement.sequence %>
@@ -60,7 +62,9 @@
               |
               <%= link_to '修改', '', 'data-href' => edit_announcement_path(@announcement), :class => 'btn btn-inverse btn-xs' %>
               |
-              <%= link_to '返回', '', 'data-href' => announcements_path, :class => 'btn btn-primary btn-xs' %>
+              <%= link_to '删除', '', 'data-href' => next_delete_announcements_path(:announcement_id => @announcement.id, :status => @announcement.status), :class => 'btn btn-danger btn-xs' %>
+              |
+              <%= link_to '返回', '', 'data-href' => announcements_path("page" => cookies['current_page']), :class => 'btn btn-primary btn-xs' %>
             </div>
           </div>
         </div>

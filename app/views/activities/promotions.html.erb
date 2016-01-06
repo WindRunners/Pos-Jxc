@@ -48,6 +48,9 @@ a:hover{ text-decoration:none;}
 .container .banner img{ width:100% ;}
 .container .banner{ position:relative; margin-bottom:10px;}
 /*爆款专区*/
+.meiyou_box{ width:100%; margin-top:25%; margin-bottom:25%;}
+.meiyou_box img{ display:block; width:25%; margin-left:auto; margin-right:auto;}
+.meiyou_box div{ text-align:center; font-size:100%; line-height:240%; color:#999999;}
 .container .main_cx{ padding:18px 0 4px;}
 .container .main_cx .main_cx_con01{ padding:0px 4%;}
 .container .main_cx .main_cx_con01 .main_cx_cx{ background-color:#fef9d9; padding-bottom:6px; margin-bottom:10px;} 
@@ -85,31 +88,37 @@ a:hover{ text-decoration:none;}
             <a href="#"><img src="/images/promotion/banner.png"></a>
         </div>   <!--banner-->
         <!--爆款专区-->
+        <% if @products.blank? %>
+          <div class="meiyou_box">
+            <img src="/images/promotion/meiyou.png">
+            <div>抱歉，没有促销活动</div>
+          </div>
+        <% end %>
         <div class="main_cx">
         	<div class="main_cx_con01">
-                <% @products.each do |product| %>
-                    <div class="main_cx_cx">
-                        <div class="main_cx_cximg">
-                            <img src="/images/promotion/huodong_cx.png">
-                        </div>
-                        <div class=" col-xs-5 main_cx_con02">
-                            <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
-                        </div>
-                        <div class="col-xs-7 main_cx_con03">
-                            <div class="main_cx_con04"><%= product.title %></div>
-                            <div class="main_cx_con05">500g</div>
-                            <div class="main_cx_con06">
-                                <span class="main_cx_con07">¥<%= product.panic_price %></span>
-                                <span class="main_cx_con08">/原价：<span><%= product.price %>元</span></span>
-                                <div class="col-xs-7 col-xs-offset-4 main_cx_con09"><a href="#" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a></div>
-                            </div>  <!--main_cx_con06-->
-                            
-                        </div>  <!--main_cx_con03-->
-                        
-                        <div class="clearfix"></div>
-                    </div>
-                <% end %>
-            </div>  <!-- main_cx_con01-->
+            <% @products.each do |product| %>
+              <div class="main_cx_cx">
+                <div class="main_cx_cximg">
+                  <img src="/images/promotion/huodong_cx.png">
+                </div>
+                <div class=" col-xs-5 main_cx_con02">
+                  <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                </div>
+                <div class="col-xs-7 main_cx_con03">
+                  <div class="main_cx_con04"><%= product.title %></div>
+                  <div class="main_cx_con05"><%= product.specification %></div>
+                  <div class="main_cx_con06">
+                    <span class="main_cx_con07">¥<%= product.panic_price %></span>
+                    <span class="main_cx_con08">/原价：<span><%= product.price %>元</span></span>
+                    <div class="col-xs-7 col-xs-offset-4 main_cx_con09"><a href="#" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a></div>
+                  </div>  <!--main_cx_con06-->
+
+                </div>  <!--main_cx_con03-->
+
+                <div class="clearfix"></div>
+              </div>
+            <% end %>
+          </div>  <!-- main_cx_con01-->
         </div>   <!--main_cx-->
          <div class="main_cx">
         	<div class="main_cx_con">
@@ -118,86 +127,28 @@ a:hover{ text-decoration:none;}
                 </div>
             </div>   <!-- main_cx_con-->
             <div  class="con_dh">
-            <!--one-->
-            	<div class="col-xs-6 con_dh_img">
-                    <div class="con_dh_img01">
-                        <div class="con_dh_image"><img src="/images/promotion/hongjiu.png"></div>
-                        <div class="con_dh_zi">
-                            <div class=" con_dh_left">
-                                <div class="con_dh_left01">RIO&nbsp;鸡尾酒</div>
-                                <div class="con_dh_left02">
-                                	<span class="con_dh_left03">¥1000.50</span>
-                                    <span class="con_dh_left04">原价：1020.50</span>
-                                </div>
+                <% @hotProducts.each do |product| %>
+                	<div class="col-xs-6 con_dh_img">
+                        <div class="con_dh_img01">
+                            <div class="con_dh_image">
+                                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
                             </div>
-                      
-                        </div>   <!--con_dh_zi-->
-                        <div class="col-xs-8 col-xs-offset-2 con_dh_liji">
-                        	<a href="#">立即购买</a>
-                        </div>
-                    </div>   <!--con_dh_img01-->
-                
-            	</div>    <!--col-xs-6 con_dh_img--
-            <!--two-->    
-               <div class="col-xs-6 con_dh_img">
-                    <div class="con_dh_img01">
-                        <div class="con_dh_image"><img src="/images/promotion/hongjiu.png"></div>
-                        <div class="con_dh_zi">
-                            <div class=" con_dh_left">
-                                <div class="con_dh_left01">RIO&nbsp;鸡尾酒</div>
-                                <div class="con_dh_left02">
-                                	 <span class="con_dh_left03">¥1020.50</span>
-                                    <span class="con_dh_left04">原价：1320.50</span>
+                            <div class="con_dh_zi">
+                                <div class=" con_dh_left">
+                                    <div class="con_dh_left01"><%= product.title %></div>
+                                    <div class="con_dh_left02">
+                                    	<span class="con_dh_left03">¥<%= product.price %></span>
+                                    </div>
                                 </div>
+                          
+                            </div>   <!--con_dh_zi-->
+                            <div class="col-xs-8 col-xs-offset-2 con_dh_liji">
+                            	<a href="javascript:void(0)" onclick="addToShoppingCart('<%= product.id %>','<%= @platform %>')">立即购买</a>
                             </div>
-                      
-                        </div>   <!--con_dh_zi-->
-                        <div class="col-xs-8 col-xs-offset-2 con_dh_liji">
-                        	<a href="#">立即购买</a>
-                        </div>
-                    </div>   <!--con_dh_img01-->
-                
-            	</div>    <!--col-xs-6 con_dh_img-->
-             <!--three-->     
-                <div class="col-xs-6 con_dh_img">
-                    <div class="con_dh_img01">
-                        <div class="con_dh_image"><img src="/images/promotion/hongjiu.png"></div>
-                        <div class="con_dh_zi">
-                            <div class=" con_dh_left">
-                                <div class="con_dh_left01">RIO&nbsp;鸡尾酒</div>
-                                <div class="con_dh_left02">
- 									<span class="con_dh_left03">¥1000.50</span>
-                                    <span class="con_dh_left04">原价：1020.50</span>                              
-                                </div>
-                            </div>
-                        </div>   <!--con_dh_zi-->
-                        <div class="col-xs-8 col-xs-offset-2 con_dh_liji">
-                        	<a href="#">立即购买</a>
-                        </div>
-                    </div>   <!--con_dh_img01-->
-                
-            	</div>    <!--col-xs-6 con_dh_img-->
-             <!--fourth-->   
-                <div class="col-xs-6 con_dh_img">
-                    <div class="con_dh_img01">
-                        <div class="con_dh_image"><img src="/images/promotion/hongjiu.png"></div>
-                        <div class="con_dh_zi">
-                            <div class=" con_dh_left">
-                                <div class="con_dh_left01">RIO&nbsp;鸡尾酒</div>
-                                <div class="con_dh_left02">
-                                    <span class="con_dh_left03">¥1000.50</span>
-                                    <span class="con_dh_left04">原价：1020.50</span>
-                                </div>
-                            </div>
-                      
-                        </div>   <!--con_dh_zi-->
-                        <div class="col-xs-8 col-xs-offset-2 con_dh_liji">
-                        	<a href="#">立即购买</a>
-                        </div>
-                    </div>   <!--con_dh_img01-->
-                
-            	</div>    <!--col-xs-6 con_dh_img-->
-                
+                        </div>   <!--con_dh_img01-->
+                    
+                	</div>
+                <% end %>
             </div>  <!--con_dh-->
             
           </div>     <!--main_cx-->

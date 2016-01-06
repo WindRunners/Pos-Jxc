@@ -172,11 +172,19 @@ class DeliveryUserV1API < Grape::API
     end
     params do
       requires :token, type: String, desc: '身份认证token'
+      requires :channel_type, type: String, desc: '手机类型(ANDROID,IOS)'
+      requires :channel_id, type: String, desc: 'channel_id'
     end
     post 'login_out' do
 
       status 200 #修改post默认返回状态
-      current_deliveryUser.update_attribute(:authentication_token, "")
+
+      channel = params[:channel_type] + "|" + params[:channel_id]
+
+      current_deliveryUser.channel_ids.delete channel
+      current_deliveryUser.authentication_token = ''
+      current_deliveryUser.save
+
       {msg: "注销成功!", flag: 1}
     end
   end

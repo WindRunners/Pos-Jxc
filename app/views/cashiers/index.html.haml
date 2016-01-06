@@ -1,70 +1,82 @@
 - model_class = Cashier
 .page-header
-  %h1 POS收银台
-%table.table
-  %tbody
-    %tr
-      %td
-        = form_tag "/products/se.json", method: :post, remote: true, id: "qrcode_search" do
-          %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
-          = label_tag(:qrcode, "商品编号/条形码")
-          = text_field_tag(:qrcode)
-          = submit_tag("搜索")
-      %td
-        = form_tag "/cashiers/checkCustomer.json", method: :post, remote: true, id: "check_customer_search" do
-          %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
-          = hidden_field_tag(:customerId)
-          = label_tag(:mobile, "会员号：")
-          = text_field_tag(:mobile)
-          = submit_tag("检查")
-      %td
-        %label 积分：
-        %label#integral 0
-      %td{:align => "right"}
-        %label 小票流水号：
-        %label 20150123123123
-%table#cashierTable.table.table-striped.table-bordered.table-hover
-  %thead
-    %tr
-      %th 编号/条形码
-      %th 品名
-      %th 单价
-      %th 折扣率％
-      %th 数量
-      %th 金额
-      %th= t '.actions', :default => t("helpers.actions")
-  %tbody
-%table.table
-  %tr
-    %td#tdCalculation{:rowspan => "4"}
-      #divTotalPrice
-        共：¥
-        %span#totalPrice 0.00
-      #divDiscount
-        折扣：¥
-        %span 0
-      #divProductQuantity
-        商品数量：
-        %span#productQuantity 0
-    %td 应收：
-    %td
-      %input#receivablesMoney{:disabled => "disabled", :type => "text", :value => "0.00"}/
-    %td
-  %tr
-    %td 实收：
-    %td
-      %input#realMoney{:type => "number"}/
-  %tr
-    %td 找零：
-    %td
-      %input#change{:disabled => "disabled", :type => "text", :value => "0.00"}/
-  %tr
-    %td
-      %button{:onclick => "clearing(false)"} 结算
-    %td
-      %button#btnClearing{:onclick => "clearing(true)"} 结算并打印
-        
-      %button{:onclick => "clearTable()"} 清空
+  %span.btn.btn-info.btn-lg.radius-10#cashiers-title POS收银台
+.col-xs-12#cashier-header{:style => "padding-right: 0px;"}
+  .col-xs-8{:style => "padding-left: 0px;"}
+    = form_tag "/products/searchByQrcode.json", method: :post, remote: true, id: "qrcode_search", :class => "col-xs-6", :style => "padding-left:0px;" do
+      %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
+      .input-group{:style => "width: 300px;"}
+        %span.input-group-addon
+          %i.fa.fa-qrcode
+        %input#qrcode.form-control{:type => "text", :placeholder => "条形码", :name => "qrcode"}
+        %span.input-group-addon{:onclick => "searchQrcode()", :title => "搜索条形码对应的商品"}
+          %i.fa.fa-search
+    = form_tag "/cashiers/checkCustomer.json", method: :post, remote: true, id: "check_customer_search", :class => "col-xs-6" do
+      %input{:name => "authenticity_token", :type => "hidden", :value => ""}/
+      %input#customerId{:type => "hidden", :name => "customerId"}
+      .input-group{:style => "width: 300px; position: absolute; right: 4px;"}
+        %span.input-group-addon
+          %i.glyphicon.glyphicon-user
+        %input#mobile.form-control{:type => "text", :placeholder => "手机号", :name => "mobile"}
+        %span.input-group-addon{:onclick => "checkMobile()", :title => "检查手机号是否注册"}
+          %i.fa.fa-check
+  .col-xs-4{:style => "text-align: right; padding-right: 0px;"}
+    %button.btn.btn-sm.btn-info.radius-10{:type => "button"}
+      积分
+      %span.badge#integral 0
+.col-xs-8
+  %table#cashierTable.table.table-striped.table-bordered.table-hover{:style => "display: none;"}
+    %thead
+      %tr
+        %th.product-qrcode.center 条形码
+        %th.product-title.center 商品名称
+        %th.product-price.center 单价
+        %th.product-quantity.center 数量
+        %th.product-total-price.center
+          %i.fa.fa-money
+          总价
+        %th.center= t '.actions', :default => t("helpers.actions")
+    %tbody
+  .fixed-thread#select-products-hread
+    .col-xs-2.center 条形码
+    .col-xs-4.center 商品名称
+    .col-xs-1.center 单价
+    .col-xs-1.center 数量
+    .col-xs-1.center 总价
+    .col-xs-3.center= t '.actions', :default => t("helpers.actions")
+  .scroll-tbody#select-products-body
+.col-xs-4{:style => "padding-right: 0px;"}
+  .input-group.margin-bottom-20
+    %span.input-group-addon 应收现金:
+    %span.input-group-addon
+      %i.fa.fa-jpy
+    %input#receivablesMoney.form-control{:type => "text", :disabled => "disabled", :value => "0.00"}
+  .input-group.margin-bottom-20
+    %span.input-group-addon 实收现金:
+    %span.input-group-addon
+      %i.fa.fa-jpy
+    %input#realMoney.form-control{:type => "number", :placeholder => "实收现金"}
+  .input-group.margin-bottom-20
+    %span.input-group-addon
+      &nbsp;&nbsp;&nbsp;&nbsp;找零:&nbsp;&nbsp;&nbsp;&nbsp;
+    %span.input-group-addon
+      %i.fa.fa-jpy
+    %input#change.form-control{:type => "number", :disabled => "disabled", :value => "0.00"}
+  .btn-group.btn-group-justified.cashier-operat{:role => "group", "aria-label" => "..."}
+    .btn-group{:role => "group"}
+      %button.btn.btn-primary.btn-xlg.radius-10{:type => "button", :onclick => "clearing()"} 结算
+    .btn-group{:role => "group"}
+      %button.btn.btn-pink.btn-xlg.radius-10{:type => "button", :onclick => "printSmallTicket('#{current_user.name}')"} 打印小票
+    .btn-group{:role => "group"}
+      %button.btn.btn-warning.btn-xlg.radius-10{:type => "button", :onclick => "clearTable()"} 清空
+#divTotalPrice.col-xs-8
+  .col-xs-6
+    总计：
+    %span#totalPrice 0.00
+    元
+  .col-xs-6{:style => "text-align: right;"}
+    商品数量：
+    %span#productQuantity 0
 #divSmallTicket
   %table#tableSmallTicket
     %thead
@@ -72,15 +84,21 @@
         %td{:colspan => "3"}
           %img{:height => "100", :src => "#", :width => "100%"}/
       %tr
-        %td{:colspan => "3"} 流水号：20151010
+        %td{:colspan => "3"}
+          流水号：
+          %span#serial-number
       %tr
-        %td{:colspan => "3"} 会员卡号：18536781288
+        %td{:colspan => "3"}
+          会员卡号：
+          %span#member-mobile
       %tr
         %td{:colspan => "3"}
           结账日期：
           %span#spanClearing
       %tr
-        %td{:colspan => "3"} 收银员：李寻欢
+        %td{:colspan => "3"}
+          收银员：
+          %span#small-ticket-cashier
       %tr
         %th.smallTicketName 名称
         %th 数量
@@ -95,24 +113,24 @@
         %td 合计：
         %td#tdProductQuantity
         %td
-          %span.spanReceivablesMoney> 0.00
+          %span.spanReceivablesMoney 0.00
           元
       %tr
         %td{:align => "right", :colspan => "3"}
           应收：
-          %span.spanReceivablesMoney> 0.00
+          %span.spanReceivablesMoney 0.00
           元
         %td
       %tr
         %td{:align => "right", :colspan => "3"}
           实收：
-          %span#spanRealMoney> 0.00
+          %span#spanRealMoney 0.00
           元
         %td
       %tr
         %td{:align => "right", :colspan => "3"}
           找零：
-          %span#spanChange> 0.00
+          %span#spanChange 0.00
           元
         %td
 %span{:style => "position: fixed; right: 10px; bottom: 10px;"}

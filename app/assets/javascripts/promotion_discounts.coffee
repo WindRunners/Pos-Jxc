@@ -2,41 +2,64 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 @activityProductHash = {}
-@promotionDiscount = ->
-  @originTable = $("#tableProducts").DataTable @dataTableParams
-  @selectedTable = $("#selectedProductsTable").DataTable @dataTableParams
+@img_server = ""
+@promotionDiscount = (img_server)->
+  @img_server = img_server
+  $("#promotion_discount_avatar").change ->
+    $("#avatar_img").attr "src", img_server + this.value
+  @activityProductHash = JSON.parse $("#selectProductHash").val()
+  @selectProducts()
 @attendActivity = (product_id, isPromotion) ->
-  @activityProductHash["" + product_id] = "" if !isPromotion
-  @activityProductHash["" + product_id] = (if $("#quantity_#{product_id}_").val().isBlank() then "0" else $("#quantity_#{product_id}_").val()) if isPromotion
   $("#selectProductHash").val JSON.stringify @activityProductHash
-  buttonObj = $("#" + product_id + "_attend")
-  buttonObj.text "已参加"
-  buttonObj.prop "class", "btn"
-  buttonObj.prop "disabled", true
-  trObj = buttonObj.parent().parent().clone()
-  buttonCancel = trObj.find("button")
-  buttonCancel.prop "disabled", false
-  buttonCancel.prop "class", "btn btn-primary"
-  buttonCancel.prop "id", product_id + "_cancel"
-  buttonCancel.text "取消参加"
-  buttonCancel.attr "onclick", "cancelActivity('" + product_id + "', " + isPromotion + ")"
-  @selectedTable.row.add(trObj).draw false
+  url = "/promotion_discounts/products/"
+  url += "#{product_id}"
+  url += "," + (if $("#quantity_#{product_id}").val().isBlank() then "0" else $("#quantity_#{product_id}").val()) if isPromotion
+  url += "/a/" + (if isPromotion then "1" else "0")
+  $.getJSON(
+    url
+    (data)->
+      if data.success
+        do ->
+          buttonObj = $("#" + product_id + "_attend")
+          buttonObj.text "已参加"
+          buttonObj.prop "class", "btn"
+          buttonObj.prop "disabled", true
+      else
+        do ->
+          alert '选择商品失败！'
+  )
 
 @cancelActivity = (product_id, isPromotion) ->
   buttonCancel = $("#" + product_id + "_cancel")
-  @selectedTable.row(buttonCancel.parent().parent()).remove().draw false
-  delete @activityProductHash["" + product_id]
-  $("#selectProductHash").val JSON.stringify @activityProductHash
-  @originTable.row(".cls_" + product_id).node()
-  buttonAttend = $(@originTable.row(".cls_" + product_id).node()).find("button")
-  buttonAttend.text "参加活动"
-  buttonAttend.prop "disabled", false
-  buttonAttend.prop "class", "btn btn-primary"
+  url = "/promotion_discounts/products/#{product_id}/d/" + (if isPromotion then "1" else "0")
+  $.getJSON(
+    url
+    (data)->
+      if data.success
+        do ->
+          @selectedTable.row(buttonCancel.parent().parent()).remove().draw false
+      else
+        do ->
+          alert '取消商品失败！'
+  )
 
 @aasmStateChange = (aasm_state) ->
   aasm_state = aasm_state || ""
   ajaxUrl = $('#promotion_discounts').data('source')
   @PromotionDiscountsDataTables.ajax.url(ajaxUrl + "&aasm_state=#{aasm_state}").load()
+@loadSelectProducts = (objTable)->
+  if !objTable.hasClass('active')
+    ajaxUrl = $('#tableProducts').data('source')
+    @originTable.ajax.url(ajaxUrl).load()
+@loadSelectedProducts = (objTable)->
+  if !objTable.hasClass('active')
+    ajaxUrl = $('#selectedProductsTable').data('source')
+    @selectedTable.ajax.url(ajaxUrl).load()
+@selectProducts = ->
+  @dataTableAjaxParams["sAjaxSource"] = $('#tableProducts').data('source')
+  @originTable = $("#tableProducts").DataTable @dataTableAjaxParams
+  @dataTableAjaxParams["sAjaxSource"] = $('#selectedProductsTable').data('source')
+  @selectedTable = $("#selectedProductsTable").DataTable @dataTableAjaxParams
 @PromotionDiscountsIndex = ->
   @dataTableAjaxParams["sAjaxSource"] = $('#promotion_discounts').data('source')
   @PromotionDiscountsDataTables = $("#promotion_discounts").DataTable @dataTableAjaxParams

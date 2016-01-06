@@ -39,7 +39,6 @@ class Users::SessionsController < Devise::SessionsController
     if params[:setpassword].present?
 
       @user = User.where(mobile: params[:user][:mobile]).first
-
       if @user.blank?
         render 'cheak_mobile', layout: false
       else

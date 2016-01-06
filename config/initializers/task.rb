@@ -71,87 +71,89 @@ scheduler = Rufus::Scheduler.new
 # end
 #
 #
-# #从OA获取闪屏广告
-# scheduler.cron '*/60 * * * *' do
-# #scheduler.cron '40 03 * * *' do
-#   url = RestConfig::OA_SERVER + 'api/v1/ads/splash_screen?type=JYD'
-#
-#
-#   headers = {}
-#   headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
-#
-#
-#   response = RestClient.get(url, headers)
-#
-#
-#   json = JSON.parse(response.body)
-#
-#   begin
-#     splash = Splash.find(json['id'])
-#     splash.destroy
-#   rescue
-#   end
-#
-#   avatar = RestConfig::OA_SERVER + json.delete('avatar')
-#
-#   splash = Splash.new(json)
-#
-#   splash.avatar = avatar
-#
-#   if splash.save
-#     Rails.logger.info "#{splash.id} has been saved."
-#     {success: "#{splash.id} has been saved."}
-#   else
-#     Rails.logger.info splash.errors
-#     error!({"message" => splash.errors}, 202)
-#   end
-#
-#   Rails.logger.info "自动抓取闪屏广告成功"
-# end
-#
-# #从OA获取轮播图
-#
-# scheduler.cron '*/60 * * * *' do
-# #scheduler.cron '40 03 * * *' do
-#
-#   url = RestConfig::OA_SERVER + 'api/v1/ads/carousels?type=JYD'
-#
-#
-#   headers = {}
-#   headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
-#
-#
-#   response = RestClient.get(url, headers)
-#
-#
-#   array = JSON.parse(response.body)
-#
-#   array.each do |json|
-#
-#     begin
-#       carousel = Carousel.find(json['id'])
-#       carousel.destroy
-#     rescue
-#     end
-#
-#     avatar = RestConfig::OA_SERVER + json.delete('avatar')
-#
-#     carousel = Carousel.new(json)
-#
-#     carousel.avatar = avatar
-#
-#     if carousel.save
-#       Rails.logger.info "#{carousel.id} has been saved."
-#       {success: "#{carousel.id} has been saved."}
-#     else
-#       Rails.logger.info carousel.errors
-#       error!({"message" => carousel.errors}, 202)
-#     end
-#   end
-#
-#
-#   Rails.logger.info "自动抓取轮播图成功"
-# end
+#从OA获取闪屏广告
+scheduler.at Time.now do
+#scheduler.cron '*/60 * * * *' do
+#scheduler.cron '40 03 * * *' do
+  url = RestConfig::OA_SERVER + 'api/v1/ads/splash_screen?type=JYD'
+
+
+  headers = {}
+  headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
+
+
+  response = RestClient.get(url, headers)
+
+
+  json = JSON.parse(response.body)
+
+  begin
+    splash = Splash.find(json['id'])
+    splash.destroy
+  rescue
+  end
+
+  avatar = RestConfig::OA_SERVER + json.delete('avatar')
+
+  splash = Splash.new(json)
+
+  splash.avatar = avatar
+
+  if splash.save
+    Rails.logger.info "#{splash.id} has been saved."
+    {success: "#{splash.id} has been saved."}
+  else
+    Rails.logger.info splash.errors
+    error!({"message" => splash.errors}, 202)
+  end
+
+  Rails.logger.info "自动抓取闪屏广告成功"
+end
+
+#从OA获取轮播图
+
+scheduler.at Time.now do
+#scheduler.cron '*/60 * * * *' do
+#scheduler.cron '40 03 * * *' do
+
+  url = RestConfig::OA_SERVER + 'api/v1/ads/carousels?type=JYD'
+
+
+  headers = {}
+  headers['X-Warehouse-Rest-Api-Key'] = '5604a417c3666e0b7300001a'
+
+
+  response = RestClient.get(url, headers)
+
+
+  array = JSON.parse(response.body)
+
+  array.each do |json|
+
+    begin
+      carousel = Carousel.find(json['id'])
+      carousel.destroy
+    rescue
+    end
+
+    avatar = RestConfig::OA_SERVER + json.delete('avatar')
+
+    carousel = Carousel.new(json)
+
+    carousel.avatar = avatar
+
+    if carousel.save
+      Rails.logger.info "#{carousel.id} has been saved."
+      {success: "#{carousel.id} has been saved."}
+    else
+      Rails.logger.info carousel.errors
+      error!({"message" => carousel.errors}, 202)
+    end
+  end
+
+
+  Rails.logger.info "自动抓取轮播图成功"
+end
 #
 # #小B取现
 # scheduler.at Time.now do

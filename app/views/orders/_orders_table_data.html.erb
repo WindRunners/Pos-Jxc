@@ -2,20 +2,27 @@
 <table id="" class="table no-padding">
   <thead>
       <tr>
-        <th  colspan="2" width="28%">商品</th>
-        <th style="text-align: center" width="8%">单价/规格</th>
-        <th style="text-align: center" width="4%">数量</th>
-        <th style="text-align: center" width="15%">
-          收货地址
-        </th>
-        <th style="text-align: center" width="15%">
-          下单时间
-        </th>
-        <th style="text-align: center" width="15%">
-          订单状态
-        </th>
-        <th style="text-align: center" width="15%">
-          实付金额
+        <th>
+          <div class="row">
+            <div style="text-align: center" class="col-xs-3">
+              商品
+            </div>
+            <div style="text-align: center" class="col-xs-1">
+              单价
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              地址
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              下单时间
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              状态
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              实付金额
+            </div>
+          </div>
         </th>
       </tr>
   </thead>
@@ -28,12 +35,12 @@
     <div class="widget-box">
       <div class="widget-header">
         <div class="row">
-          <div class="col-xs-10">
+          <div class="col-xs-6">
             <h4>
-              <span>订单号: <a href="<%= "##{order_path(order.id)}" %>" data-url="<%= order_path(order.id) %>"><%= order.orderno %></a> </span>
+              <span>订单号: <a href="<%= "##{order_path(order.id)}?tab=#{params[:workflow_state]}" %>" data-url="<%= order_path(order.id) %>"><%= order.orderno %></a> </span>
             </h4>
           </div>
-          <div class="col-xs-2" style="text-align: right">
+          <div class="col-xs-6" style="text-align: right">
             <div class="hidden-sm hidden-xs action-buttons">
               <h4>
                 <% if :paid == workflow_state %>
@@ -54,69 +61,58 @@
       </div>
       <div class="widget-body">
         <div class="widget-main no-padding">
-          <table id="" class="table table-bordered">
-            <tbody>
-            <tr>
-              <td width="40%" style="padding-top: 0;padding-bottom: 0">
-                <table id="" class="table no-padding">
-                  <tbody>
-                  <% order.ordergoods.each do |ordergood| %>
-                      <tr>
-                        <td>
-                          <a href="#<%= product_path(ordergood.product_id) %>"><img class="img-responsive" src="<%= RestConfig::IMG_SERVER + ordergood.avatar_url %>" height="60px" width="60px"></a>
-                        </td>
-                        <td>
-                          <p><a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></p>
-                          <p><%= ordergood.qrcode %></p>
-                        </td>
-                        <td align="center" width="20%">
-                          <p><%= ordergood.price %></p>
-                          <p>(<%= ordergood.specification %>)</p>
-                        </td>
-                        <td align="center" width="10%">
-                          <%= ordergood.quantity %>
-                        </td>
-                      </tr>
-                  <% end %>
-                  </tbody>
-                </table>
-              </td>
-              <td  rowspan="<%= order.ordergoods.size %>" width="15%">
-                <% if :paid == workflow_state || :distribution == workflow_state%>
-                    <p><%= order.address %></p>
-                <% else %>
-                    <p><%= format_encryption(order.address) %></p>
-                <% end %>
-              </td>
-              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
-                <% time = order.created_at %>
-                <p><%= time.strftime("%Y-%m-%d") %></p>
-                <p><%= time.strftime("%H:%M:%S") %></p>
-              </td>
-              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
-                <% if :generation == workflow_state %>
-                    待付款
-                <% elsif :paid == workflow_state %>
-                    待接单
-                <% elsif :distribution == workflow_state %>
-                    配送中
-                <% elsif :receive == workflow_state %>
-                    配送完成
-                <% elsif :cancelled == workflow_state %>
-                    已取消
-                <% elsif :completed == workflow_state %>
-                    已完成
-                <% end %>
-              </td>
-              <td align="center" rowspan="<%= order.ordergoods.size %>" width="15%">
-                <p><%=number_to_currency(order.paycost,  :unit=>"￥")%></p>
-                <% if 0 == order.paymode %>
-                    <p><span style="color: #F60">(货到付款)</span></p>
-                <% end %>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="row">
+            <div class="col-xs-4">
+              <% order.ordergoods.each do |ordergood| %>
+                  <div class="row">
+                    <div style="text-align: center" class="col-xs-3">
+                      <a href="#<%= product_path(ordergood.product_id) %>"><img class="img-responsive" src="<%= RestConfig::IMG_SERVER + ordergood.avatar_url %>" ></a>
+                    </div>
+                    <div class="col-xs-6">
+                      <p><a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></p>
+                    </div>
+                    <div style="text-align: center" class="col-xs-3">
+                      <p><%= ordergood.price %></p>
+                      <p><%= ordergood.quantity %>件</p>
+                    </div>
+                  </div>
+              <% end %>
+            </div>
+
+            <div class="col-xs-2">
+              <% if  :distribution == workflow_state%>
+                  <p><%= order.address %></p>
+              <% else %>
+                  <p><%= format_encryption(order.address) %></p>
+              <% end %>
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              <% time = order.created_at %>
+              <p><%= time.strftime("%Y-%m-%d") %></p>
+              <p><%= time.strftime("%H:%M:%S") %></p>
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              <% if :generation == workflow_state %>
+                  待付款
+              <% elsif :paid == workflow_state %>
+                  待接单
+              <% elsif :distribution == workflow_state %>
+                  配送中
+              <% elsif :receive == workflow_state %>
+                  配送完成
+              <% elsif :cancelled == workflow_state %>
+                  已取消
+              <% elsif :completed == workflow_state %>
+                  已完成
+              <% end %>
+            </div>
+            <div style="text-align: center" class="col-xs-2">
+              <p><%=number_to_currency(order.paycost,  :unit=>"￥")%></p>
+              <% if 0 == order.paymode %>
+                  <p><span style="color: #F60">(货到付款)</span></p>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>

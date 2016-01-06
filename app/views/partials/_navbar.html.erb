@@ -68,7 +68,7 @@
             <li class="dropdown-content">
               <ul class="dropdown-menu dropdown-navbar navbar-pink">
                 <li>
-                  <a href="<%= orders_path(:workflow_state => "paid") %>">
+                  <a href="#<%= orders_path(:workflow_state => "paid") %>">
                     <div class="clearfix">
                         <span class="pull-left">
                             <i class="btn btn-xs no-hover btn-success fa fa-shopping-cart"></i>
@@ -82,7 +82,7 @@
 
 
                 <li>
-                  <a href="<%= orders_path(:workflow_state => "distribution") %>">
+                  <a href="#<%= orders_path(:workflow_state => "distribution") %>">
                     <div class="clearfix">
                         <span class="pull-left" >
                             <i class="btn btn-xs no-hover btn-info fa fa-twitter"></i>
@@ -96,7 +96,7 @@
             </li>
 
             <li class="dropdown-footer">
-              <a href="<%= orders_path(:workflow_state => "all") %>">
+              <a href="#<%= orders_path(:workflow_state => "all") %>">
                 全部订单
                 <i class="ace-icon fa fa-arrow-right"></i>
               </a>
@@ -131,6 +131,7 @@
 														<span>{{notice.created_at | date:"MM/dd/yyyy HH:mm"}}</span>
 													</span>
 												</span>
+                      </a>
                 </li>
               </ul>
             </li>

@@ -87,7 +87,7 @@
           \|
           = link_to '轮播图管理','', 'data-href' => chateau_turn_picture_path(@chateau),:class=>'btn btn-xs btn-info'
           \|
-          = link_to '返回','', 'data-href' => chateaus_path,:class=>'btn btn-xs btn-pink'
+          = link_to '返回','', 'data-href' => chateaus_path("page" => cookies['current_page']),:class=>'btn btn-xs btn-pink'
 
 
 

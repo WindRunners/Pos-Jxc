@@ -19,15 +19,6 @@
       <%= f.text_field :title %>
     </div>
 
-    <!--
-    <% if @announcement.avatar.present? %>-->
-        <!--<%= image_tag(@announcement.avatar.url, size: '200x200') %>-->
-        <!--
-    <% end %>-->
-
-    <!--<p>-->
-    <!--<%= f.file_field :avatar %>-->
-    <!--</p>-->
 
     <div class="field">
       <%= f.label :description %><br>
@@ -46,24 +37,14 @@
     <div class="actions">
       <%= f.submit %>
     </div>
-<% end %>
 
+<% end %>
 
 
 <!--引入TinyMCE富文本编辑器-->
 <script type="text/javascript">
-
     $(function () {
-        tinymce.init({
-            selector: 'textarea.tinymce',
-            height: 500,
-            plugins: [
-                'advlist autolink lists link image charmap print preview anchor',
-                'searchreplace visualblocks code fullscreen',
-                'insertdatetime media table contextmenu paste code'
-            ],
-            toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        });
-
+        var category_id = "<%=@announcement.announcement_category.id.to_s%>";
+        $("#announcement_category_id").val(category_id);
     });
 </script>

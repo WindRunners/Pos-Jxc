@@ -70,6 +70,8 @@ class AnnouncementsController < ApplicationController
   def update
     i =params[:announcement]['content']
     @announcement.title = params[:announcement]['title']
+    @announcement.announcement_category_id = params[:announcement]['announcement_category_id']
+    @announcement.description = params[:announcement]['description']
     @announcement.is_top = params[:announcement]['is_top']
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
       if !a.include? 'upload/image/announcements'
@@ -92,7 +94,7 @@ class AnnouncementsController < ApplicationController
     }
     respond_to do |format|
       if @announcement.save
-        format.js { render_js announcements_path, '修改成功！' }
+        format.js { render_js announcements_path("page" => cookies['current_page']), '修改成功！' }
         # format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { render :show, status: :ok, location: @announcement }
       else
@@ -112,8 +114,8 @@ class AnnouncementsController < ApplicationController
     end
     @announcement.destroy
     respond_to do |format|
-      format.js { render_js announcements_path }
-      format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
+      format.js { render_js announcements_path("page" => cookies['current_page']) }
+      # format.html { redirect_to announcements_url, notice: 'Announcement was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -185,7 +187,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     @announcement.update_attribute(:status, 1)
     respond_to do |format|
-      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核通过成功！' }
+      format.html { redirect_to announcements_path("page" => cookies['current_page']), notice: '审核通过成功！' }
     end
   end
 
@@ -193,7 +195,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find(params[:announcement_id])
     @announcement.update_attribute(:status, -1)
     respond_to do |format|
-      format.html { redirect_to announcements_path("page" => params[:page]), notice: '审核不通过成功！' }
+      format.html { redirect_to announcements_path("page" => cookies['current_page']), notice: '审核不通过成功！' }
     end
   end
 

@@ -332,5 +332,7 @@ Rails.application.routes.draw do
 
   get 'dashboards/index'=> 'dashboards#index'
   post 'dashboards/store_order_data' => "dashboards#store_order_data"
+  post 'dashboards/exposure_product_data' => "dashboards#exposure_product_data"
+  post 'dashboards/sale_product_data' => "dashboards#sale_product_data"
 
 end

@@ -91,3 +91,7 @@
 //= require util.js
 
 //= require lark.js
+
+//= require message-bus
+
+//= require ace/jquery.jplayer.min.js

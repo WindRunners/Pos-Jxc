@@ -6,7 +6,7 @@ class CashesController < ApplicationController
   # GET /cashes.json
   def index
     if @app_key.present?
-      @cashes = Cash.all
+      @cashes = Cash.where(:cash_state =>{"$in" => [1,2,3,9]})
     else
       @cashes = Cash.where(:userinfo_id=>current_user.userinfo_id)
       @cashOrders=CashOrder.where(:userinfo_id=>current_user.userinfo_id)

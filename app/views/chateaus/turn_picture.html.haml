@@ -4,12 +4,14 @@
     %tr
       %th 酒庄名称
       %th 酒庄轮播图
+      %th 创建时间
       %th 删除图片
   %tbody
     - @data['turn_picture'].each do |picture|
       %tr
         %td= picture.chateau.name
         %td= image_tag(picture.pic,size: '320x240')
+        %td= picture.created_at.to_s
         %td= link_to '删除', chateau_turn_picture_reduce_path(:picture_id=>picture.id),:remote=>true,:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 %br
 

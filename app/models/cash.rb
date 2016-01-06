@@ -33,6 +33,10 @@ class Cash
       p '余额转积分'
     elsif self.cash_state == 9
       p '取现成功'
+    elsif self.cash_state == 10
+      p '提现成功'
+    elsif self.cash_state == 11
+      p '提现失败'
     end
   end
 

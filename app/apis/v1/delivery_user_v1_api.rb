@@ -183,7 +183,7 @@ class DeliveryUserV1API < Grape::API
 
       current_deliveryUser.channel_ids.delete channel
       current_deliveryUser.authentication_token = ''
-      current_delivery.save
+      current_deliveryUser.save
 
       {msg: "注销成功!", flag: 1}
     end

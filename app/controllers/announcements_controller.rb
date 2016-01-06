@@ -92,7 +92,7 @@ class AnnouncementsController < ApplicationController
     }
     respond_to do |format|
       if @announcement.save
-        format.js { render_js announcements_path }
+        format.js { render_js announcements_path, '修改成功！' }
         # format.html { redirect_to @announcement, notice: 'Announcement was successfully updated.' }
         format.json { render :show, status: :ok, location: @announcement }
       else
@@ -164,6 +164,22 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+  def next_delete
+    announcement = Announcement.find(params[:announcement_id])
+    picture_path = 'public/upload/image/announcements/'+ announcement.id
+    if Dir.exist? picture_path
+      FileUtils.rm_rf(picture_path)
+    end
+    announcement.destroy
+    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    respond_to do |format|
+      if @announcement.present?
+        format.html { redirect_to announcement_path(@announcement) }
+      else
+        format.html { redirect_to announcements_path }
+      end
+    end
+  end
 
   def check
     @announcement = Announcement.find(params[:announcement_id])
@@ -229,7 +245,7 @@ class AnnouncementsController < ApplicationController
       announcement.save
     end
     respond_to do |format|
-      format.js { render_js announcements_path }
+      format.js { render_js announcements_path,'批量导入成功！' }
     end
   end
 

@@ -330,6 +330,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-
   get 'dashboards/index'=> 'dashboards#index'
+  post 'dashboards/store_order_data' => "dashboards#store_order_data"
+
 end

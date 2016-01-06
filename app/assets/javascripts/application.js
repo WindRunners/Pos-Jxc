@@ -91,3 +91,5 @@
 //= require util.js
 
 //= require lark.js
+
+//= require message-bus

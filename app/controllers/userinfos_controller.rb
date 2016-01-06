@@ -10,7 +10,7 @@ class UserinfosController < ApplicationController
       @current_user = current_user
 
       @cashes = Cash.where(:userinfo_id => @current_user.userinfo_id)
-      @cashOrders=CashOrder.where(:userinfo_id => @current_user.userinfo_id)
+      @cashOrders=CashOrder.where(:userinfo_id => @current_user.userinfo_id,:pay_state=>{"$in"=>[1,2]})
 
       @cash_res=Cash.where(:userinfo_id => @current_user.userinfo_id,:cash_state=>1)
       @cash_yes=Cash.where(:userinfo_id => @current_user.userinfo_id,:cash_state=>4)
@@ -197,7 +197,8 @@ class UserinfosController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def userinfo_params
     params.require(:userinfo).permit(:name, :address, :shopname, :url, :lat, :lng, :busp, :footp, :pdistance,:district,:city,:province, :integral,
-                                     :approver,:pusher,:pusher_phone,:healthp, :taxp, :orgp, :idpb, :idpf, :idnumber,:aseet4,:aseet3,:fright,:lowestprice,:fright_time,:h_lowestprice,:h_fright, :start_business,:end_business)
+                                     :approver,:pusher,:pusher_phone,:healthp, :taxp, :orgp, :idpb, :idpf, :idnumber,:aseet4,:aseet3,:fright,:lowestprice,
+                                     :fright_time,:h_lowestprice,:h_fright,:night_time ,:province,:city,:district,:address,:start_business,:end_business)
   end
 
   def auth_userinfo_params

@@ -1,4 +1,35 @@
+
+//jquery 初始化函数
 $(function () {
+
+    //键盘enter事件
+    document.onkeydown = function (event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if (e && e.keyCode == 27) { // 按 Esc
+            //要做的事情
+        }
+        if (e && e.keyCode == 113) { // 按 F2
+            //要做的事情
+        }
+        if (e && e.keyCode == 13) { // enter 键
+            search();
+        }
+    };
+
+
+    //tinymce初始化
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        height: 500,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    });
+
+
     //分页添加AJAX
     $(".pagination a").each(function () {
 
@@ -9,8 +40,9 @@ $(function () {
             $(this).attr('href', "#" + href);
         }
     });
-});
 
+
+});
 
 //查询
 function search() {
@@ -30,24 +62,6 @@ function search() {
 }
 
 
-//jquery 初始化函数
-$(function () {
-
-    //键盘enter事件
-    document.onkeydown = function (event) {
-        var e = event || window.event || arguments.callee.caller.arguments[0];
-        if (e && e.keyCode == 27) { // 按 Esc
-            //要做的事情
-        }
-        if (e && e.keyCode == 113) { // 按 F2
-            //要做的事情
-        }
-        if (e && e.keyCode == 13) { // enter 键
-            search();
-        }
-    };
-});
-
 
 function submit_form() {
     var excel_file = $('#excel_file_id');
@@ -55,4 +69,4 @@ function submit_form() {
         alert('请选择文件');
         return false;
     }
-}
+};

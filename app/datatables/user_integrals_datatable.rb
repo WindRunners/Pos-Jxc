@@ -25,8 +25,6 @@ class UserIntegralsDatatable
           integral.state_show_str,
           integral.type_show_str,
           integral.integral_date.strftime('%Y-%m-%d %H:%M:%S').to_s,
-          # link_to('显示',"##{user_integral_path(integral)}", "data-url" => user_integral_path(integral))
-          raw("<div class='hidden-sm hidden-xs action-buttons'><a class='btn btn-xs btn-info' data-url='#{@view.user_integral_path(integral)}' href='##{@view.user_integral_path(integral)}'>显示</a></div>")
 
       ]
     end
@@ -45,13 +43,13 @@ class UserIntegralsDatatable
     else
       state_to_i=1
     end
-
+    p './././',params[:sSearch]
     integrals = params[:state].present? ? UserIntegral.where(:state =>  state_to_i) : UserIntegral
     integrals = integrals.where(:userinfo_id=>@current_user.userinfo_id,:state =>  state_to_i)
     integrals = integrals.order("#{sort_column} #{sort_direction}")
     integrals = integrals.page(page).per(per_page)
     if params[:sSearch].present?
-      integrals = integrals.where(:integral => /#{searchText}/)
+      integrals = integrals.where(:integral => params[:sSearch])
     end
     integrals
   end

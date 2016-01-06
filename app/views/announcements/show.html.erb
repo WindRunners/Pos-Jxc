@@ -64,7 +64,7 @@
               |
               <%= link_to '删除', '', 'data-href' => next_delete_announcements_path(:announcement_id => @announcement.id, :status => @announcement.status), :class => 'btn btn-danger btn-xs' %>
               |
-              <%= link_to '返回', '', 'data-href' => announcements_path, :class => 'btn btn-primary btn-xs' %>
+              <%= link_to '返回', '', 'data-href' => announcements_path("page" => cookies['current_page']), :class => 'btn btn-primary btn-xs' %>
             </div>
           </div>
         </div>

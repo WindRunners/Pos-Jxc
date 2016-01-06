@@ -11,15 +11,12 @@ module DeliveryOrderV1APIHelper
     return [] if !store_ids.present? || store_ids.empty?
 
     take_orders = []
+    store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'].to_s)
     #获取门店待接单列表
     orders = Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).order('created_at desc')
     orders.each do |order|
 
-      # deliveryOrder = DeliveryOrder.new
-      # deliveryOrder['id'] = order.id
-      # deliveryOrder['address'] = order.address
-      # deliveryOrder['distance'] = order['distance']
-      store = Store.find(order['store_id'])
+      store = store_info[order['store_id']]
       order['store_address'] = store.position
       if current_lng.present? && current_lat.present?
         order['current_distance'] = DeliveryOrderV1APIHelper.get_distance_for_points(current_lng, current_lat,store.location[0],store.location[1])
@@ -112,8 +109,9 @@ module DeliveryOrderV1APIHelper
     #包括状态[待接货,配送中,配送完成]
     orders = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).order('updated_at desc')
     my_orders = []
+    store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|
-      store = Store.find(order['store_id'])
+      store = store_info[order['store_id']]
       order['store_address'] = store.position
       my_orders << order
     end
@@ -128,8 +126,9 @@ module DeliveryOrderV1APIHelper
     #包括状态[确认收货,取消的]
     orders = Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).order('created_at desc').skip((page-1)*10).limit(10)
     my_his_orders = []
+    store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|
-      store = Store.find(order['store_id'])
+      store = store_info[order['store_id']]
       order['store_address'] = store.position
       my_his_orders << order
     end
@@ -148,6 +147,17 @@ module DeliveryOrderV1APIHelper
     lng_sin = Math.sin(lng_diff/2.0) ** 2
     first = Math.sqrt(lat_sin + Math.cos(lat1*PI/180.0) * Math.cos(lat2*PI/180.0) * lng_sin)
     Math.asin(first) * 2 * 6378137.0
+  end
+
+
+  #获取当前单位的单位
+  def DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(userinfo_id)
+
+    storeinfo = {}
+    Store.where({'userinfo_id'=>userinfo_id}).each do |store|
+      storeinfo[store.id] = store
+    end
+    storeinfo
   end
 
 

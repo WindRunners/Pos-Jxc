@@ -1,6 +1,6 @@
 class CashesController < ApplicationController
   before_action :set_cash, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!
+
   before_action :auth?
   # GET /cashes
   # GET /cashes.json

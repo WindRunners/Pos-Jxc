@@ -4,11 +4,26 @@
     $(function () {
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             $('#workflow_state').val($(e.target).attr('name'));
+
             ajax_pagination(1);
         });
 
         $('#myTab a[name="<%= params[:workflow_state] %>"]').tab('show');
+
+        $('#beginTime').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+        $('#endTime').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
     });
+
 
 
 
@@ -36,224 +51,194 @@
     }
 
 
-
-    function getCount() {
-        $.get('<%= order_state_count_orders_path%>', {}, function (data, status) {
-            if (status == 'success') {
-                $('#all_count').text(data.order_all_count);
-                $('#generation_count').text(data.order_generation_count);
-                $('#paid_count').text(data.order_paid_count);
-                $('#distribution_count').text(data.order_distribution_count);
-                $('#receive_count').text(data.order_receive_count);
-            } else {
-                ;
-            }
-        });
-    }
-//    window.setInterval(getCount,1000 * 60 * 2);
+  function clear_form() {
+      $(':input','#search_form').not(':button, :submit, :reset, :hidden').val('');
+      $('#workflow_state').val('all');
+  }
 
 </script>
-
 
 <div class="row" style="padding-left: 80px;padding-right: 80px">
   <div class="form-actions" style="padding: 25px;">
     <div class="form-horizontal">
-      <div class="row">
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>订单号码：</h6></lable>
+      <form id="search_form">
+        <div class="row">
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>订单号码：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p><input type="text" id="orderno" style="width:90%" class="input-sm" value="<%= params[:orderno] %>"></p>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>收货人：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p><input type="text" id="consignee" style="width:90%" class="input-sm" value="<%= params[:consignee] %>"></p>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>联系方式：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p><input type="text" id="telephone" style="width:90%" class="input-sm" value="<%= params[:telephone] %>"></p>
+            </div>
           </div>
         </div>
-        <div class="col-xs-2">
-          <div>
-            <p><input type="text" id="orderno" style="width:90%" class="input-sm" value="<%= params[:orderno] %>"></p>
+        <div class="row">
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>订单类型：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p>
+                <select class="input-sm" style="width:90%" id="ordertype">
+                  <option value="" selected>全部</option>
+                  <option value="0" <% if "0" == params[:ordertype] %> selected <% end%>>线下订单</option>
+                  <option value="1" <% if "1" == params[:ordertype] %> selected <% end%>>线上订单</option>
+                </select>
+              </p>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>订单状态：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p>
+                <select id="workflow_state" class="input-sm" style="width:90%" >
+                  <option value="all" selected>全部</option>
+                  <option value="generation" <% if "generation" == params[:workflow_state] %> selected <% end%>>待付款</option>
+                  <option value="paid" <% if "paid" == params[:workflow_state] %> selected <% end%>>待接单</option>
+                  <option value="distribution" <% if "distribution" == params[:workflow_state] %> selected <% end%>>配送中</option>
+                  <option value="receive" <% if "receive" == params[:workflow_state] %> selected <% end%>>配送完成</option>
+                  <option value="cancelled" <% if "cancelled" == params[:workflow_state] %> selected <% end%>>已取消</option>
+                  <option value="completed" <% if "completed" == params[:workflow_state] %> selected <% end%>>已完成</option>
+                </select>
+              </p>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>付款方式：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p>
+                <select class="input-sm" style="width:90%" id="paymode">
+                  <option value="" selected>全部</option>
+                  <option value="0" <% if "0" == params[:paymode] %> selected <% end%>>货到付款</option>
+                  <option value="1" <% if "1" == params[:paymode] %> selected <% end%>>支付宝</option>
+                  <option value="2" <% if "2" == params[:paymode] %> selected <% end%>>微信</option>
+                </select>
+              </p>
+            </div>
           </div>
         </div>
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>收货人：</h6></lable>
+        <div class="row">
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>下单时间：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-10">
+            <div>
+              <p>
+                <input id="beginTime"  type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
+                至
+                <input id="endTime"  type="datetime" class="input-sm" value="<%= params[:endTime] %>">
+              </p>
+            </div>
           </div>
         </div>
-        <div class="col-xs-2">
-          <div>
-            <p><input type="text" id="consignee" style="width:90%" class="input-sm" value="<%= params[:consignee] %>"></p>
-          </div>
-        </div>
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>联系方式：</h6></lable>
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div>
-            <p><input type="text" id="telephone" style="width:90%" class="input-sm" value="<%= params[:telephone] %>"></p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>订单类型：</h6></lable>
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div>
-            <p>
-              <select class="input-sm" style="width:90%" id="ordertype">
-                <option value="" selected>全部</option>
-                <option value="0" <% if "0" == params[:ordertype] %> selected <% end%>>线下订单</option>
-                <option value="1" <% if "1" == params[:ordertype] %> selected <% end%>>线上订单</option>
-              </select>
-            </p>
-          </div>
-        </div>
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>订单状态：</h6></lable>
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div>
-            <p>
-              <select id="workflow_state" class="input-sm" style="width:90%" >
-                <option value="all" selected>全部</option>
-                <option value="generation" <% if "generation" == params[:workflow_state] %> selected <% end%>>待付款</option>
-                <option value="paid" <% if "paid" == params[:workflow_state] %> selected <% end%>>待接单</option>
-                <option value="distribution" <% if "distribution" == params[:workflow_state] %> selected <% end%>>配送中</option>
-                <option value="receive" <% if "receive" == params[:workflow_state] %> selected <% end%>>配送完成</option>
-                <option value="cancelled" <% if "cancelled" == params[:workflow_state] %> selected <% end%>>已取消</option>
-                <option value="completed" <% if "completed" == params[:workflow_state] %> selected <% end%>>已完成</option>
-              </select>
-            </p>
-          </div>
-        </div>
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>付款方式：</h6></lable>
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div>
-            <p>
-              <select class="input-sm" style="width:90%" id="paymode">
-                <option value="" selected>全部</option>
-                <option value="0" <% if "0" == params[:paymode] %> selected <% end%>>货到付款</option>
-                <option value="1" <% if "1" == params[:paymode] %> selected <% end%>>支付宝</option>
-                <option value="2" <% if "2" == params[:paymode] %> selected <% end%>>微信</option>
-              </select>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-1">
-          <div style="text-align: right">
-            <lable><h6>下单时间：</h6></lable>
-          </div>
-        </div>
-        <div class="col-xs-11">
-          <div>
-            <p>
-              <input id="beginTime"  type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
-              至
-              <input id="endTime"  type="datetime" class="input-sm" value="<%= params[:endTime] %>">
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-1">
+        <div class="row">
+          <div class="col-xs-2">
 
-        </div>
-        <div class="col-xs-2">
-          <div>
-            <p>
-              <button type="button" class="btn btn-sm btn-primary" onclick="ajax_pagination(1);">筛选</button>
-              &nbsp;
-              &nbsp;
-              <button type="reset" class="btn btn-sm" >重置</button>
-            </p>
+          </div>
+          <div class="col-xs-10">
+            <div>
+              <p>
+                <button type="button" class="btn btn-sm btn-primary" onclick="ajax_pagination(1);">筛选</button>
+                &nbsp;
+                &nbsp;
+                <button type="button" class="btn btn-sm" onclick="clear_form();">重置</button>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </form>
+
     </div>
   </div>
 
   <ul class="nav nav-tabs" id="myTab">
-    <li class="">
-      <a name="all" data-toggle="tab" href="#home">
-        <i id="all_count" class="green icon-home bigger-110"><%= @order_state_count.order_all_count %></i>
-        全部
-      </a>
-    </li>
-
-    <li class="">
-        <a name="generation" data-toggle="tab" href="#home">
-          待付款
-          <span id="generation_count" class="badge badge-danger"><%= @order_state_count.order_generation_count %></span>
-        </a>
-    </li>
-
-
     <li class="">
       <a name="paid" data-toggle="tab" href="#home">
         待接单
         <span id="paid_count" class="badge badge-danger"><%= @order_state_count.order_paid_count %></span>
       </a>
     </li>
-
-
+    <li class="">
+        <a name="generation" data-toggle="tab" href="#home">
+          待付款
+          <span id="generation_count" class="badge badge-danger"><%= @order_state_count.order_generation_count %></span>
+        </a>
+    </li>
     <li class="">
       <a name="distribution" data-toggle="tab" href="#home">
         配送中
         <span id="distribution_count" class="badge badge-danger"><%= @order_state_count.order_distribution_count %></span>
       </a>
     </li>
-
     <li class="">
       <a name="receive" data-toggle="tab" href="#home">
         配送完成
         <span id="receive_count" class="badge badge-danger"><%= @order_state_count.order_receive_count %></span>
       </a>
     </li>
-
     <li class="">
       <a name="cancelled" data-toggle="tab" href="#home">
         已取消
       </a>
     </li>
-
     <li class="">
       <a name="completed" data-toggle="tab" href="#home">
         已完成
       </a>
     </li>
-
+    <li class="">
+      <a name="all" data-toggle="tab" href="#home">
+        <i id="all_count" class="green icon-home bigger-110"><%= @order_state_count.order_all_count %></i>
+        全部
+      </a>
+    </li>
   </ul>
 
   <div id="tab_content" class="tab-content no-border no-padding">
     <div id="home" class="tab-pane  active">
 
+
     </div>
   </div>
+
 </div>
 
-<script type="text/javascript">
-    $(function () {
-        $('#beginTime').datetimepicker({
-            sideBySide: true,
-            locale: "zh-cn",
-            format: "YYYY-MM-DD HH:mm:ss"
-        });
-    });
 
-    $(function () {
-        $('#endTime').datetimepicker({
-            sideBySide: true,
-            locale: "zh-cn",
-            format: "YYYY-MM-DD HH:mm:ss"
-        });
-    });
-</script>
+
+
 
 

@@ -93,7 +93,8 @@ gem 'sunspot_mongo'
 gem 'rest-client'
 gem 'httparty'
 
-
+gem "puma"
+gem 'message_bus'
 gem 'workflow', '~> 1.2'
 
 gem 'aasm'

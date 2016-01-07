@@ -8,7 +8,8 @@ class Ahoy::Store < Ahoy::Stores::FluentdStore
   end
 
   def exclude?
-    ENV["RAILS_ENV"] != "production"
+    #ENV["RAILS_ENV"] != "production"
+    true
   end
 
   def logger

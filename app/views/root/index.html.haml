@@ -72,40 +72,40 @@
             loop: true
         });
 
-        -#MessageBus.start();
-        -#//MessageBus.callbackInterval = 100;
-        -#MessageBus.alwaysLongPoll = true;
-        -#MessageBus.subscribe("/channel/#{current_user.userinfo.id if current_user.userinfo.present? }", function(data){
-        -#
-        -#  if(data != null){
-        -#    $.gritter.add({
-        -#      title: '您有一条新的订单!',
-        -#      text: '订单号码：<a href="#/orders/' + data.order_id + '?tab=all">' + data.orderno + '</a>',
-        -#      class_name: 'gritter-success gritter-light'
-        -#    });
-        -#    $("#jplayer").jPlayer('play');
-        -#  }else{
-        -#    $("#jplayer").jPlayer('stop');
-        -#  }
-        -#
-        -#  $.get('#{order_state_count_orders_path}', {}, function (datacount, status) {
-        -#      if (status == 'success') {
-        -#          $('#paid_order_count').text(datacount.order_paid_count);
-        -#          $('#all_order_count').text('当前订单总数：' + datacount.order_all_count);
-        -#          $('#new_order_count').text('+' + datacount.order_paid_count);
-        -#          $('#distribution_order_count').text('+' +datacount.order_distribution_count);
-        -#
-        -#          $('#all_count').text(datacount.order_all_count);
-        -#          $('#generation_count').text(datacount.order_generation_count);
-        -#          $('#paid_count').text(datacount.order_paid_count);
-        -#          $('#distribution_count').text(datacount.order_distribution_count);
-        -#          $('#receive_count').text(datacount.order_receive_count);
-        -#      } else {
-        -#          ;
-        -#      }
-        -#  });
-        -#
-        -#});
+        MessageBus.start();
+        MessageBus.callbackInterval = 500;
+        MessageBus.alwaysLongPoll = true;
+        MessageBus.subscribe("/channel/#{current_user.userinfo.id if current_user.userinfo.present? }", function(data){
+
+          if(data != null){
+            $.gritter.add({
+              title: '您有一条新的订单!',
+              text: '订单号码：<a href="#/orders/' + data.order_id + '?tab=all">' + data.orderno + '</a>',
+              class_name: 'gritter-success gritter-light'
+            });
+            $("#jplayer").jPlayer('play');
+          }else{
+            $("#jplayer").jPlayer('stop');
+          }
+
+          $.get('#{order_state_count_orders_path}', {}, function (datacount, status) {
+              if (status == 'success') {
+                  $('#paid_order_count').text(datacount.order_paid_count);
+                  $('#all_order_count').text('当前订单总数：' + datacount.order_all_count);
+                  $('#new_order_count').text('+' + datacount.order_paid_count);
+                  $('#distribution_order_count').text('+' +datacount.order_distribution_count);
+
+                  $('#all_count').text(datacount.order_all_count);
+                  $('#generation_count').text(datacount.order_generation_count);
+                  $('#paid_count').text(datacount.order_paid_count);
+                  $('#distribution_count').text(datacount.order_distribution_count);
+                  $('#receive_count').text(datacount.order_receive_count);
+              } else {
+                  ;
+              }
+          });
+
+        });
 
     });
 

@@ -72,17 +72,17 @@ class Store
       #    distance = storeResult['results'][0]['dis']
       # end
 
-      store = Store.near(location: location).limit(1)
-      if store.present?
-        storeId = store.id
-        distance = get_distance_for_points(store.location.to_a[0], store.location.to_a[1], order.location.to_a[1], order.location.to_a[0])
+      near_store = Store.near('location'=> location).first
+      if near_store.present?
+        storeId = near_store.id
+        distance = get_distance_for_points(near_store.location.to_a[0], near_store.location.to_a[1], order.location.to_a[1], order.location.to_a[0])
       end
     end
 
     #门店定位失败或找不到时,查询虚拟门店
     if storeId == 0
-      store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
-      storeId = store.id if store.present?
+      near_store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
+      storeId = near_store.id if near_store.present?
     end
 
     channels = []

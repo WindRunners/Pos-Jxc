@@ -5,7 +5,7 @@
       %ul
         - @wine.errors.full_messages.each do |msg|
           %li= msg
-  #col-xs-12
+  .col-xs-12
     %form.form-horizontal
       .form-group
         .field
@@ -46,19 +46,25 @@
       .form-group
         .field
           = f.label :logo,:class=>'col-sm-2 control-label no-padding-right'
-          - if @wine.logo.present?
-            = image_tag(@wine.logo,size: '300x160')
         .col-sm-9
           = f.file_field :logo,:class=> 'col-xs-10 col-sm-5'
+      - if @wine.logo.present?
+        .form-group
+          .field
+            = f.label :现有LOGO,:class=>'col-sm-2 control-label no-padding-right'
+          .col-sm-9
+            = image_tag(@wine.logo,size: '300x160')
 
       .form-group
         .field
-          = f.label :ad,:class=>'col-sm-2 control-label no-padding-right'
+          = f.label :introduce,:class=>'col-sm-2 control-label no-padding-right'
         .col-sm-9
-          = f.text_area :ad,:class => 'ckeditor'
+          = f.text_area :chateau_introduce['introduce'],:class => 'ckeditor'
 
-        .actions.col-sm-8.col-sm-offset-4
-          = f.submit 'Save',:class=> 'btn btn-info'
+      .actions.col-sm-1.col-sm-offset-3
+        = f.submit 'Save',:class=> 'btn btn-Success'
+      .actions.col-sm-8
+        = link_to 'Back','', 'data-href' => wines_path,:class=> 'btn btn-info'
 
 
 

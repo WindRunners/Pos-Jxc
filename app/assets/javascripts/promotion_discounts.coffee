@@ -1,16 +1,13 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-@activityProductHash = {}
 @img_server = ""
 @promotionDiscount = (img_server)->
   @img_server = img_server
   $("#promotion_discount_avatar").change ->
     $("#avatar_img").attr "src", img_server + this.value
-  @activityProductHash = JSON.parse $("#selectProductHash").val()
   @selectProducts()
 @attendActivity = (product_id, isPromotion) ->
-  $("#selectProductHash").val JSON.stringify @activityProductHash
   url = "/promotion_discounts/products/"
   url += "#{product_id}"
   url += "," + (if $("#quantity_#{product_id}").val().isBlank() then "0" else $("#quantity_#{product_id}").val()) if isPromotion

@@ -63,7 +63,8 @@ module SpiritRoomV1APIHelper
       if product.present?
         product['store_count'] += spiritRoomProduct.count
       else
-        product = Product.shop_id(spiritRoomProduct['userinfo_id']).find(spiritRoomProduct.product_id) #商品
+        product = Product.shop_id(spiritRoomProduct['userinfo_id']).where({'id'=>spiritRoomProduct.product_id}).first #商品
+        next if !product.present?
         product['store_count'] = spiritRoomProduct.count
         productMap[spiritRoomProduct.product_id] = product
       end

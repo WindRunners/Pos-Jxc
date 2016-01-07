@@ -9,6 +9,8 @@ class DeliveryOrderV1API < Grape::API
 
   format :json
 
+  use ApiLogger
+  
   #嵌入帮助类
   include DeliveryOrderV1APIHelper
 

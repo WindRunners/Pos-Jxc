@@ -7,24 +7,25 @@
       = stylesheet_link_tag 'application'
   %body
     .container
-      .row
-        .col-xs-12
-          #myCarousel.carousel.slide
-            / 轮播（Carousel）指标
-            %ol.carousel-indicators
-              %li.active{"data-slide-to" => "0", "data-target" => "#myCarousel"}
-              %li{"data-slide-to" => "1", "data-target" => "#myCarousel"}
-              %li{"data-slide-to" => "2", "data-target" => "#myCarousel"}
-            / 轮播（Carousel）项目
-            .carousel-inner
-              .item.active
-                %img{:alt => "First slide", :src => "/upload/image/chateaus/a73.jpg",:style=>"width:100%"}
-              -@chateau.pictures.each do |p|
-                .item
-                  %img{:alt => "First slide", :src => p.pic.url,:style=>"width:100%"}
-            / 轮播（Carousel）导航
-            %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"}
-            %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"}
+      -if @chateau.pictures.present?
+        .row
+          .col-xs-12
+            #myCarousel.carousel.slide
+              / 轮播（Carousel）指标
+              %ol.carousel-indicators
+                %li.active{"data-slide-to" => "0", "data-target" => "#myCarousel"}
+                %li{"data-slide-to" => "1", "data-target" => "#myCarousel"}
+                %li{"data-slide-to" => "2", "data-target" => "#myCarousel"}
+              / 轮播（Carousel）项目
+              .carousel-inner
+                .item.active
+                  %img{:alt => "First slide", :src => @chateau.pictures.to_a.first.pic.url,:style=>"width:100%"}
+                -@chateau.pictures.to_a.drop(1).each do |p|
+                  .item
+                    %img{:alt => "First slide", :src => p.pic.url,:style=>"width:100%"}
+              / 轮播（Carousel）导航
+              %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"}
+              %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"}
       .row
         .infos.col-xs-12{:style => "font-size:280%;"}
           %strong

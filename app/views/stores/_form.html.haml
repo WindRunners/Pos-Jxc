@@ -4,57 +4,59 @@
     max-width: none;
   }
 
-= form_for @store, remote:true do |f|
-  - if @store.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
-      %ul
-        - @store.errors.full_messages.each do |msg|
-          %li= msg
 
-  .field
-    = f.label :门店名称
-    = f.text_field :name
-  .field
-    = f.label :门店管理者
-    = f.text_field :manager
-  .field
-    = f.label :门店描述
-    = f.text_field :describe
-  .field
-    = f.label :门店类型
-    = f.radio_button(:type, 1)
-    = f.label(:type, '实体门店')
-    = f.radio_button(:type, 0)
-    = f.label(:type, '虚拟门店')
-  .field
-    = f.label :门店经度
-    = f.text_field :longitude,{:id => 'longitude'}
-  .field
-    = f.label :门店纬度
-    = f.text_field :latitude,{:id => 'latitude'}
-  .field
-    = f.label :门店位置
-    = f.text_field :position,{:id => 'position'}
-  #store-map{style:'width:630px;height:230px;border:1px solid gray'}
+.row
+  .container
+    = form_for @store, remote:true do |f|
+      - if @store.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
+          %ul
+            - @store.errors.full_messages.each do |msg|
+              %li= msg
+      .field
+        = f.label :门店名称
+        = f.text_field :name
+      .field
+        = f.label :门店店长
+        = f.text_field :manager
+      .field
+        = f.label :门店描述
+        = f.text_field :describe
+      .field
+        = f.label :门店类型
+        = f.radio_button(:type, 1)
+        = f.label(:type, '实体门店')
+        = f.radio_button(:type, 0)
+        = f.label(:type, '虚拟门店')
+      .field
+        = f.label :门店经度
+        = f.text_field :longitude,{:id => 'longitude'}
+      .field
+        = f.label :门店纬度
+        = f.text_field :latitude,{:id => 'latitude'}
+      .field
+        = f.label :门店位置
+        = f.text_field :position,{:id => 'position'}
+      #store-map{style:'width:630px;height:230px;border:1px solid gray'}
 
-  .field
-    = f.label :身份证正面照片
-    -if @store.bp.present?
-      = image_tag(@store.idpf.url, size: '200x200')
-    = f.file_field :idpf,{:id => 'store_idpf'}
+      .field
+        = f.label :身份证正面照片
+        -if @store.bp.present?
+          = image_tag(@store.idpf.url, size: '200x200')
+        = f.file_field :idpf,{:id => 'store_idpf'}
 
-  .field
-    = f.label :身份证反面照片
-    -if @store.bp.present?
-      = image_tag(@store.idpb.url, size: "200x200")
-    = f.file_field :idpb,{:id => 'store_idpb'}
+      .field
+        = f.label :身份证反面照片
+        -if @store.bp.present?
+          = image_tag(@store.idpb.url, size: "200x200")
+        = f.file_field :idpb,{:id => 'store_idpb'}
 
-  .field
-    = f.label :营业执照照片
-    -if @store.bp.present?
-      = image_tag(@store.bp.url, size: '200x200')
-    = f.file_field :bp,{:id => 'store_bp'}
+      .field
+        = f.label :营业执照照片
+        -if @store.bp.present?
+          = image_tag(@store.bp.url, size: '200x200')
+        = f.file_field :bp,{:id => 'store_bp'}
 
-  .actions
-    = f.submit '保存',:class => 'btn btn-yellow'
+      .actions
+        = f.submit '保存',:class => 'btn btn-yellow'

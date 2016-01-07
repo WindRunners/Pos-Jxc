@@ -56,7 +56,9 @@ class ChateausController < ApplicationController
       # 下载
       open('public/upload/image/chateaus/'+ chateau_id + '/' + uuid + '.jpg', 'wb') do |file|
         begin
-          file << open(c).read
+          pic_file =open(c).read
+          file << pic_file
+          pic_file.close
           @chateau.pic_path << '/upload/image/chateaus/' + chateau_id + '/' + uuid + '.jpg'
         rescue
         end
@@ -89,7 +91,9 @@ class ChateausController < ApplicationController
         # 下载
         open('public/upload/image/chateaus/'+ @chateau.id + '/' + uuid + '.jpg', 'wb') do |file|
           begin
-            file << open(c).read
+            pic_file =open(c).read
+            file << pic_file
+            pic_file.close
             @chateau.pic_path << '/upload/image/chateaus/' + @chateau.id + '/' + uuid + '.jpg'
               # 替换content原图片链接并转化城IMG标签
           rescue
@@ -174,7 +178,9 @@ class ChateausController < ApplicationController
       @picture.type= params[:type]
       uuid=SecureRandom.uuid
       open('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg', 'wb') do |file|
-        file << open(c).read
+        pic_file =open(c).read
+        file << pic_file
+        pic_file.close
         @picture.pic = file
         File.delete('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg')
       end
@@ -195,7 +201,6 @@ class ChateausController < ApplicationController
   def introduce_show
     @data ={}
     @chateau = Chateau.find(params[:chateau_id])
-    # binding.pry
     @chateau.wines << Wine.all
     @data['chateau'] = @chateau
     @data['introduce'] = @chateau.chateau_introduce.introduce

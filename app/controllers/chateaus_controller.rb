@@ -195,6 +195,7 @@ class ChateausController < ApplicationController
   def introduce_show
     @data ={}
     @chateau = Chateau.find(params[:chateau_id])
+    # binding.pry
     @chateau.wines << Wine.all
     @data['chateau'] = @chateau
     @data['introduce'] = @chateau.chateau_introduce.introduce

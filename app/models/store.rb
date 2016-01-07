@@ -62,10 +62,11 @@ class Store
 
     storeId = 0
     distance = 0
-    if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #定位有效
-      #查询离小C最近的门店
-      storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).limit(1).geo_near(order.location.to_a)
+    if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #
 
+      location = [order.location.to_a[1],order.location.to_a[0]] #调整经纬度
+      #查询离小C最近的门店
+      storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).limit(1).geo_near(location)
       if storeResult.present? && storeResult['results']!=0
          storeId = storeResult['results'][0]['obj']['_id']
          distance = storeResult['results'][0]['dis']

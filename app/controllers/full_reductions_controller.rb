@@ -108,7 +108,7 @@ class FullReductionsController < ApplicationController
       coupon_index = session[:coupon_infos].index {|cinfo| cinfo["coupon_id"] == coupon_quantity[0]}
       session[:coupon_infos].delete_at(coupon_index) if coupon_index.present?
     else
-      session[:coupon_infos] << {"coupon_id": coupon_quantity[0], "quantity": coupon_quantity[1]}
+      session[:coupon_infos] << {"coupon_id"=> coupon_quantity[0], "quantity"=> coupon_quantity[1]}
     end
 
     respond_to do |format|
@@ -123,7 +123,7 @@ class FullReductionsController < ApplicationController
       product_index = session[:gifts_product_ids].index {|pinfo| pinfo["product_id"] == product_quantity[0]}
       session[:gifts_product_ids].delete_at(product_index) if product_index.present?
     else
-      session[:gifts_product_ids] << {"product_id": product_quantity[0], "quantity": product_quantity[1]}
+      session[:gifts_product_ids] << {"product_id"=> product_quantity[0], "quantity"=> product_quantity[1]}
     end
 
     respond_to do |format|

@@ -2,7 +2,7 @@
 %h1 名酒录入
 %p 亲爱的#{current_user.name}，你一共上传了#{@data['total']}款名酒,你今天一共上传了#{@data['today']}款名酒。
 
-%table#example.table.table-striped.table-bordered.table-hover
+%table.table.table-striped.table-bordered.table-hover
   %thead
     %tr
       %th 名字
@@ -12,20 +12,28 @@
       %th 排序字段
       %th 状态
       %th 上传人
+      %th
       %th 操作
+      %th
+      %th
   %tbody
   -@data['wines'].each do |w|
     %tr
-      %th=w.name
-      %th=w.category
-      %th=w.price
-      %th=w.hits
-      %th=w.sequence
-      %th=w.status
-      %th=w.user.name if w.user.name.present?
-      %th op
-
-
+      %td=w.name
+      %td=w.category
+      %td=w.price
+      %td=w.hits
+      %td=w.sequence
+      %td=w.status
+      %td=w.user.name if w.user.name.present?
+      %td= link_to '详细', '', 'data-href' =>wine_path(w),:class => 'btn btn-primary'
+      %td= link_to '编辑', '', 'data-href' =>edit_wine_path(w),:class => 'btn btn-info'
+      -if current_user.has_role?(:admin)
+        - if w.status ==0 || w.status ==-1
+          %td= link_to '审核通过','', 'data-href' => '/wines/'+w.id+'/check',class:'btn btn-xs btn-Success'
+        - else
+          %td= link_to '审核不通过','', 'data-href' =>'/wines/'+w.id+'/check_out',class:'btn btn-xs btn-warning'
+      %td= link_to '删除', wine_path(w), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
 %br
 

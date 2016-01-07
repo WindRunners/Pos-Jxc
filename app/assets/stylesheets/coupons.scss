@@ -1,1 +1,183 @@
-// Place all the styles related to the Coupons controller here.// They will automatically be included in application.css.// You can use Sass (SCSS) here: http://sass-lang.com/.col-xs-4{	width: 350px;	padding: 0px;}.col-xs-8{	left: 10px;	margin-top: 71px;	min-width: 680px;}.col-xs-8 form{	padding: 12px 10px;	background: #f8f8f8;	border-radius: 5px;	border: 1px solid #d1d1d1;}.app-preview{	border: 1px solid #e5e5e5;	border-bottom-width: 0;	box-sizing: border-box;	background: #fff;	border-radius: 18px 18px 0 0;}.app-header{	height: 70px;	background: url("/images/coupon/iphone_head.png") no-repeat center center;}.app-coupon-header{	margin: 0 auto;	padding: 18px 60px 0 60px;	height: 64px;	font-size: 16px;	color: #fff;	background: url("/images/coupon/titlebar.png") no-repeat;}.app-coupon-header span{	display: inline-block;	height: 46px;	line-height: 46px;	width: 200px;	text-overflow: ellipsis;	text-align: center;	vertical-align: middle;	white-space: nowrap;	overflow: hidden;}.app-field{	cursor: pointer;	min-height: 200px;	border: 1px solid #c5c5c5;	background: #f9f9f9;	margin: 0 14px;	padding-bottom: 11px;}.clearfix{	height: 50px;	padding-left: 10px;	line-height: 50px;	vertical-align: middle;	font-size: 18px;}.promote-value{	color: #ef523f;	font-size: 50px;	font-weight: bold;	height: 80px;	line-height: 80px;}.promote-value .unit{	font-size: 18px;}.promote-limit{	font-size: 16px;	background-color: #febcb4;	border-radius: 10px;	margin: 0 40px;	line-height: 40px;	height: 40px;}.valid-date{	color: white;	font-size: 13px;	background-color: #ef523f;	height: 40px;	line-height: 40px;	border-radius: 0 0 10px 10px;	margin-top: 10px;}.promote-desc-head{	font-size: 14px;	padding: 5px 0 0 20px;	height: 28px;	vertical-align: baseline;}.promote-desc-context{	padding: 10px;	line-height: 22px;	border: 0px none;	border-top: 2px solid #e5e5e5;	border-image: url("/images/coupon/border-line.png") 2 stretch;}.center{	text-align: center;	vertical-align: middle;}.font-grey{    color: #A59999;}.arrow{	width: 0px;	height: 0px;	border-style: solid;	border-width: 8px 10px 8px 0;	border-color: transparent #d1d1d1 transparent transparent;	position: absolute;	top: 19px;	left: 3px;}.arrow::after{	content: "";	border-right-color: #f8f8f8;	left: 11px;	top: -8px;}
+// Place all the styles related to the Coupons controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.coupon-left
+{
+	width: 350px;
+	padding: 0px;
+}
+
+.coupon-right
+{
+	left: 10px;
+	margin-top: 71px;
+	min-width: 680px;
+}
+
+.col-xs-8 form
+{
+	padding: 12px 10px;
+	background: #f8f8f8;
+	border-radius: 5px;
+	border: 1px solid #d1d1d1;
+}
+
+.coupon-preview
+{
+	padding: 0;
+  background-image: url(/images/coupon/coupon_preview.png);
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-size: 100% 100%;
+  overflow: hidden;
+  margin-bottom: 5%;
+  margin-top: 5%;
+  height: 100px;
+  width: 320px;
+  color: white;
+}
+
+.app-preview
+{
+	border: 1px solid #e5e5e5;
+	border-bottom-width: 0;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 18px 18px 0 0;
+}
+
+.app-header
+{
+	height: 70px;
+	background: url("/images/coupon/iphone_head.png") no-repeat center center;
+}
+
+.app-coupon-header
+{
+	margin: 0 auto;
+	padding: 18px 60px 0 60px;
+	height: 64px;
+	font-size: 16px;
+	color: #fff;
+	background: url("/images/coupon/titlebar.png") no-repeat;
+}
+
+.app-coupon-header span
+{
+	display: inline-block;
+	height: 46px;
+	line-height: 46px;
+	width: 200px;
+	text-overflow: ellipsis;
+	text-align: center;
+	vertical-align: middle;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.app-field
+{
+	cursor: pointer;
+	min-height: 200px;
+	border: 1px solid #c5c5c5;
+	background: #f9f9f9;
+	margin: 0 14px;
+	padding-bottom: 11px;
+}
+
+#couponId
+{
+	height: 50px;
+	padding-left: 2px;
+	padding-top: 10px;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.promote-value
+{
+	font-weight: bold;
+	height: 50px;
+	line-height: 50px;
+}
+
+.promote-value .unit
+{
+	font-size: 12px;
+}
+
+.promote-value #couponAmount
+{
+	font-size: 16px;
+}
+
+.img-juan
+{
+	width: 12%;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+}
+
+.promote-limit
+{
+	font-size: 14px;
+	position: absolute;
+	top: 35px;
+}
+
+.valid-date
+{
+	font-size: 13px;
+	position: absolute;
+	top: 60px;
+}
+
+.promote-desc-head
+{
+	font-size: 14px;
+	padding: 5px 0 0 20px;
+	height: 28px;
+	vertical-align: baseline;
+}
+
+.promote-desc-context
+{
+	padding: 10px;
+	line-height: 22px;
+	border: 0px none;
+	border-top: 2px solid #e5e5e5;
+	border-image: url("/images/coupon/border-line.png") 2 stretch;
+}
+
+.center
+{
+	text-align: center;
+	vertical-align: middle;
+}
+
+.font-grey
+{
+    color: #A59999;
+}
+
+.arrow
+{
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 8px 10px 8px 0;
+	border-color: transparent #d1d1d1 transparent transparent;
+	position: absolute;
+	top: 19px;
+	left: 3px;
+}
+
+.arrow::after
+{
+	content: "";
+	border-right-color: #f8f8f8;
+	left: 11px;
+	top: -8px;
+}
+

@@ -39,6 +39,7 @@ class CouponsController < ApplicationController
   # GET /coupons/new
   def new
     @coupon = Coupon.new(:use_goods => "1", :order_amount_way => "1")
+    session[:select_product_ids] = []
   end
 
   # GET /coupons/1/edit

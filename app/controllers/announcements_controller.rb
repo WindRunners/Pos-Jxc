@@ -37,7 +37,7 @@ class AnnouncementsController < ApplicationController
     @announcement.user = current_user
     @announcement.read_num = 0
     @announcement.status = 0
-    Dir.mkdir('public/upload/image/announcements/'+ @announcement.id.to_s)
+    FileUtils.makedirs('public/upload/image/announcements/'+ @announcement.id.to_s)
     i =params[:announcement]['content']
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
         c = a[5, a.length]
@@ -45,7 +45,9 @@ class AnnouncementsController < ApplicationController
         # 下载
         open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
           begin
-            file << open(c).read
+            pic_file =open(c).read
+            file << pic_file
+            pic_file.close
             @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
               # 替换content原图片链接并转化城IMG标签
           rescue
@@ -80,7 +82,9 @@ class AnnouncementsController < ApplicationController
         # 下载
         open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
           begin
-            file << open(c).read
+            pic_file =open(c).read
+            file << pic_file
+            pic_file.close
             announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
               # 替换content原图片链接并转化城IMG标签
           rescue
@@ -209,7 +213,7 @@ class AnnouncementsController < ApplicationController
       announcement = Announcement.new
       announcement.announcement_category_id = @announcement_category_id
       b = announcement.id.to_s
-      Dir.mkdir('public/upload/image/announcements/'+ b)
+      FileUtils.makedirs('public/upload/image/announcements/'+ b)
       announcement.title = x[0]
       announcement.source = x[2]
       announcement.release_time = x[3]
@@ -225,7 +229,9 @@ class AnnouncementsController < ApplicationController
               # 下载
               open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
                 begin
-                  file << open(c).read
+                  pic_file =open(c).read
+                  file << pic_file
+                  pic_file.close
                 rescue
                 end
               end

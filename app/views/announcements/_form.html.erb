@@ -41,10 +41,13 @@
 <% end %>
 
 
-<!--引入TinyMCE富文本编辑器-->
-<script type="text/javascript">
-    $(function () {
-        var category_id = "<%=@announcement.announcement_category.id.to_s%>";
-        $("#announcement_category_id").val(category_id);
-    });
-</script>
+
+<% if params[:action]== "edit" %>
+    <!--引入TinyMCE富文本编辑器-->
+    <script type="text/javascript">
+        $(function () {
+            var category_id = "<%=@announcement.announcement_category.id.to_s%>";
+            $("#announcement_category_id").val(category_id);
+        });
+    </script>
+<% end %>

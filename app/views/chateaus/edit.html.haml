@@ -1,7 +1,5 @@
-%h1 编辑酒庄
+.row.alert.alert-info
+  .col-sm-12.col-sm-offset-3
+    %h1 酒庄修改
 
 = render 'form'
-
-= link_to '展示','', 'data-href' => chateaus_path(@chateau)
-\|
-= link_to '返回','', 'data-href' => chateaus_path("page" => cookies['current_page'])

@@ -6,56 +6,90 @@
       %ul
         - @chateau.errors.full_messages.each do |msg|
           %li= msg
-  .field
-    = f.label :category
-    = f.select :category, options_for_select([['红酒酒庄', 1], ['白酒酒厂', 2]], 1)
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :owner
-    = f.text_field :owner
+  .col-xs-12
+    %form.form-horizontal
+      .form-group
+        .field
+          = f.label :category,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.select :category, options_for_select([['红酒酒庄', 1], ['白酒酒厂', 2]], 1),:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :name,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.text_field :name,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :owner,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.text_field :owner,:class=> 'col-xs-11 col-sm-5'
+      - if @chateau.region.present?
+        .form-group
+          .field
+            = f.label :原所在产地,:class=>'col-sm-2 control-label no-padding-right'
+          .col-sm-9
+            = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
+      .form-group
+        .field
+          = f.label :region,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9#region_select
+          = f.select :region,options_for_select(Region.root.children.all.map { |c| [c.name, c.id] }.insert(0,["--请选择--","0"])),:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :address,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.text_field :address,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :phone,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.text_field :phone,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :urls,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.text_field :urls,:class=> 'col-xs-11 col-sm-5'
 
-  - if @chateau.region.present?
-    = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1)
-  .field#region_select
-    = f.label :region
-    = f.select :region,options_for_select(Region.root.children.all.map { |c| [c.name, c.id] }.insert(0,["--请选择--","0"]))
-  .field
-    = f.label :address
-    = f.text_field :address
-  .field
-    = f.label :phone
-    = f.text_field :phone
-  .field
-    = f.label :urls
-    = f.text_field :urls
-  .field
-    = f.label :logo
-    - if @chateau.logo.present?
-      = image_tag(@chateau.logo,size: '300x150')
-    = f.file_field :logo
-  .field
-    = f.label :hits
-    = f.text_field :hits
-  .field
-    = f.label :sequence
-    = f.text_field :sequence
+      - if @chateau.logo.present?
+        .form-group
+          .field
+            = f.label :原LOGO图片,:class=>'col-sm-2 control-label no-padding-right'
+          .col-sm-9
+            = image_tag(@chateau.logo,size: '300x150')
+      .form-group
+        .field
+          = f.label :logo,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.file_field :logo,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :hits,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.number_field :hits,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        .field
+          = f.label :sequence,:class=>'col-sm-2 control-label no-padding-right'
+        .col-sm-9
+          = f.number_field :sequence,:class=> 'col-xs-11 col-sm-5'
+      .form-group
+        - if @chateau.pictures.present?
+          -@chateau.pictures.where(:type=>2).each do |x|
+            = image_tag(x.pic,size: '320x240')
+        = f.fields_for :chateau_introduce do |i|
+          = i.label :详细介绍
+          - if params[:action] == 'edit'
+            = i.text_area :introduce,:class => "tinymce", :rows => 40, :cols => 120,:value=>"#{@chateau.chateau_introduce.introduce}"
+          - else
+            = i.text_area :introduce, :class => "tinymce", :rows => 40, :cols => 120
 
-  %p
-    %b 素材图:
-    - if @chateau.pictures.present?
-      -@chateau.pictures.where(:type=>2).each do |x|
-        = image_tag(x.pic,size: '320x240')
 
-  = f.fields_for :chateau_introduce do |i|
-    = i.label :详细介绍
-    - if params[:action] == 'edit'
-      = i.text_area :introduce,:class => "tinymce", :rows => 40, :cols => 120,:value=>"#{@chateau.chateau_introduce.introduce}"
-    - else
-      = i.text_area :introduce, :class => "tinymce", :rows => 40, :cols => 120
-  %input{"type"=>"hidden","id"=>"chateau_region_hidden","name"=>"chateau[region]","value"=>""}
-  .actions
-    = f.submit '保存',onclick: 'return save_check()'
+
+        %input{"type"=>"hidden","id"=>"chateau_region_hidden","name"=>"chateau[region]","value"=>""}
+
+        .hr.hr-16.hr-dotted
+        .actions.col-sm-1.col-sm-offset-3
+          = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'
+        .actions.col-sm-8
+          = link_to 'Back','', 'data-href' => chateaus_path("page" => cookies['current_page']),:class=> 'btn btn-info'
 
 

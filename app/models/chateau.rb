@@ -16,6 +16,7 @@ class Chateau
   field :pic_path, type: Array #详细图片数组
 
   validates :name, :category,:region, presence: true #名称，种类不能为空
+  validates :name,uniqueness: true #名称唯一
 
   has_one :chateau_introduce, :autosave => true # 详细介绍
   has_many :pictures #轮播图片

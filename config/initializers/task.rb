@@ -81,8 +81,7 @@ scheduler.cron '1 0 * * *' do
 end
 #
 #从OA获取闪屏广告
-scheduler.at Time.now do
-#scheduler.cron '*/60 * * * *' do
+scheduler.cron '*/60 * * * *' do
 #scheduler.cron '40 03 * * *' do
   url = RestConfig::OA_SERVER + 'api/v1/ads/splash_screen?type=JYD'
 
@@ -121,8 +120,7 @@ end
 
 #从OA获取轮播图
 
-scheduler.at Time.now do
-#scheduler.cron '*/60 * * * *' do
+scheduler.cron '*/60 * * * *' do
 #scheduler.cron '40 03 * * *' do
 
   url = RestConfig::OA_SERVER + 'api/v1/ads/carousels?type=JYD'

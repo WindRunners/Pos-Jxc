@@ -58,7 +58,7 @@ class CityV1API < Grape::API
         :badge => 1
     }
 
-    r = ios_client.push_single_device('5593745682466391165', ios_msg, {msg_type: 1, deploy_status: 2})
+    r = ios_client.push_single_device('5206231975630492203', ios_msg, {msg_type: 1, deploy_status: 2})
 
     {success: r}
 

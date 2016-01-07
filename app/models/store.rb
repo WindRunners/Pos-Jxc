@@ -4,6 +4,7 @@ class Store
   include Mongoid::Attributes::Dynamic
   include Mongoid::Paperclip
   include Mongoid::Geospatial
+  include Math
 
   field :name, type: String #门店名称
   field :manager, type: String #负责人

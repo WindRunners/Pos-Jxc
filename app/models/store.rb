@@ -66,7 +66,7 @@ class Store
 
       location = [order.location.to_a[1],order.location.to_a[0]] #调整经纬度
       #查询离小C最近的门店
-      storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).limit(1).geo_near(location)
+      storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).geo_near(location).limit(1)
       if storeResult.present? && storeResult['results']!=0
          storeId = storeResult['results'][0]['obj']['_id']
          distance = storeResult['results'][0]['dis']

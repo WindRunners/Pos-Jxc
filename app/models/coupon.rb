@@ -101,7 +101,7 @@ class Coupon
   end
   
   def check
-    return false if invalided?
+    return false if old_coupon.present? && old_coupon.invalided?
     today = Time.now.strftime('%Y%m%d%H%M%S').to_i
     startTime = start_time.strftime('%Y%m%d%H%M%S').to_i
     endTime = end_time.strftime('%Y%m%d%H%M%S').to_i

@@ -98,11 +98,11 @@ class Order
 
 
   def lng
-    return self.location[1] if self.location.present?
+    return self.location[1].to_s if self.location.present?
   end
 
   def lat
-    return self.location[0] if self.location.present?
+    return self.location[0].to_s if self.location.present?
   end
 
   def load_workflow_state

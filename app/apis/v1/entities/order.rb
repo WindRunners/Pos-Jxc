@@ -21,8 +21,10 @@ module Entities
     expose :coupons, documentation: {type: String, desc: '可用优惠券列表', is_array: true}
     expose :getcoupons, documentation: {type: String, desc: '获赠优惠券列表', is_array: true}
     expose :workflow_state, documentation: {type: String, desc: '订单状态'}, if: lambda { |order, options| !order.workflow_state.nil?}
-    expose :lng, documentation: {type: Float, desc: '经度'}
-    expose :lat, documentation: {type: Float, desc: '纬度'}
+    expose :lng, documentation: {type: String, desc: '经度'}
+    expose :lat, documentation: {type: String, desc: '纬度'}
+    expose :remarks, documentation: {type: String, desc: '备注'}
+
   end
 end
 

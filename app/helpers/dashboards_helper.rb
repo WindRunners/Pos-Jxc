@@ -66,7 +66,7 @@ module DashboardsHelper
     xAxis = {'categories' => ['前十名商品']} #x轴
     yAxis = {'title' => {text: '曝光量（次）'}, 'plotLines' => [{'value' => 0, 'width' => 1, 'color' => '#808080'}]}
     legend = {'layout' => 'vertical', 'align' => 'right', 'verticalAlign' => 'middle', 'borderWidth' => 0}
-    tooltip = {'valueSuffix'=> '单'}
+    tooltip = {'valueSuffix'=> '次'}
     series = []
     Product.shop_id(user['userinfo_id']).order('exposure_num desc').limit(10).each do |product|
       series << {'name'=>product['title'],'data'=>[product['exposure_num']]}

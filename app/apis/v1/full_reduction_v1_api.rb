@@ -1,6 +1,8 @@
 class FullReductionV1API < Grape::API
   format :json
-  
+
+  use ApiLogger
+
   helpers do
     def ahoy
       @ahoy ||= Ahoy::Tracker.new

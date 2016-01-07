@@ -3,6 +3,7 @@ require 'grape'
 class OrderV1API < Grape::API
   format :json
 
+  use ApiLogger
 
   desc '根据商品集合计算支付金额，并且查询该用户可使用的积分' do
     success Entities::OrderJsonBack

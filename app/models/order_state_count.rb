@@ -25,9 +25,10 @@ class OrderStateCount
       }
     }
 
-    orderStateCount = OrderStateCount.new
+    orderStateCount = OrderStateCount.new()
 
-    orders = Order.where(:userinfo_id => userinfo_id).map_reduce(map, reduce).out(inline: true)
+    curren_user_orders = Order.where(:userinfo_id => userinfo_id)
+    orders = curren_user_orders.map_reduce(map, reduce).out(inline: true)
 
     begin
       orders.each do |state_count|
@@ -49,12 +50,11 @@ class OrderStateCount
         if "receive" == state_count["_id"]
           orderStateCount.order_receive_count = statecount
         end
-        orderStateCount.order_all_count = Order.count + Ordercompleted.count
+        orderStateCount.order_all_count = curren_user_orders.count + Ordercompleted.where(:userinfo_id => userinfo_id).count
       end
     rescue
 
     end
-
 
     return orderStateCount
   end

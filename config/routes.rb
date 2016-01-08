@@ -126,21 +126,21 @@ Rails.application.routes.draw do
   end
 
 
-  # resources :announcements do
-  #   get 'check'
-  #   get 'check_out'
-  #   post 'batch', :on => :collection
-  #   get 'app_show'
-  #
-  #   get 'warehouse_notice_index', :on => :collection
-  #   get 'batch_check', :on => :collection
-  #   get 'next_check', :on => :collection
-  #   get 'next_check_out', :on => :collection
-  #   get 'next_delete', :on => :collection
-  #   post 'stow', :on => :collection
-  # end
-  #
-  # resources :announcement_categories
+  resources :announcements do
+    #get 'check'
+    #get 'check_out'
+    #post 'batch', :on => :collection
+    get 'app_show'
+
+    get 'warehouse_notice_index', :on => :collection
+    #get 'batch_check', :on => :collection
+    #get 'next_check', :on => :collection
+    #get 'next_check_out', :on => :collection
+    #get 'next_delete', :on => :collection
+    #post 'stow', :on => :collection
+  end
+
+  resources :announcement_categories
 
 
   resources :pictures do

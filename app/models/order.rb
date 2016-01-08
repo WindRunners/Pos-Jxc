@@ -197,9 +197,9 @@ class Order
     if self.useintegral > 0
       #扣除用户积分
       current_customer.update_attributes(:integral => current_customer.integral - self.useintegral)
-      self.paycost = self.totalcost - self.useintegral * 0.01
+      self.paycost += self.totalcost - self.useintegral * 0.01
     else
-      self.paycost = self.totalcost
+      self.paycost += self.totalcost
     end
   end
 

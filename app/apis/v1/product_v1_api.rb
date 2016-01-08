@@ -119,7 +119,7 @@ class ProductV1API < Grape::API
     promotions = Array.new
     fullReductions = FullReduction.where(:userinfo_id => params[:id], :aasm_state => "beging")
     fullReductions.each do |f|
-      promotions.push({:title => f.name, :url => "#{f.url}#{params[:id]}/#{f.id}/", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.participateProductsById(params[:id])).to_json)})
+      promotions.push({:title => f.name, :url => "#{f.url}#{params[:id]}/#{f.id}/", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.participateProducts).to_json)})
     end
 
     promotionDiscount = PromotionDiscount.where(:userinfo_id => params[:id], :aasm_state => "beging")

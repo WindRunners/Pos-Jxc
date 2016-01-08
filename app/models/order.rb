@@ -173,7 +173,7 @@ class Order
           if activitie.current_reduction >= activitie.quota && (activitie.condition == false)
             activitie.condition = true
             if "1" == activitie.preferential_way
-              self.totalcost -= activitie.quota
+              self.paycost -= activitie.reduction
             elsif "2" == activitie.preferential_way
               self.getintegral += activitie.integral
               self.userinfo.integral -= activitie.integral
@@ -341,7 +341,7 @@ class Order
           if activitie.current_reduction >= activitie.quota && (activitie.condition == false)
             activitie.condition = true
             if "1" == activitie.preferential_way
-              self.totalcost -= activitie.quota
+              self.paycost -= activitie.reduction
             elsif "2" == activitie.preferential_way
               self.getintegral += activitie.integral
             elsif "3" == activitie.preferential_way

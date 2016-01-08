@@ -24,7 +24,7 @@ class PanicBuying
 
     avatar = nil
     begin
-      avatar = Warehouse::Promotion.first(:type => 'panic_buying').avatar
+      avatar = Warehouse::Promotion.where(:type => 'panic_buying').first.avatar
     end
 
     time_cron.each do |time|

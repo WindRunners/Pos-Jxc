@@ -9,7 +9,7 @@
 
   <div class="sidebar-shortcuts" id="sidebar-shortcuts">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-      <a class="btn btn-success" data-href="<%= warehouse_index_products_path %>" >
+      <a class="btn btn-success" data-href="" >
         <i class="ace-icon fa fa-qrcode"></i>
       </a>
 
@@ -235,74 +235,6 @@
 
       </ul>
     </li>
-    <% if current_user.has_role?(:xiaoda_kuaixun||:admin) %>
-    <li class="open">
-      <a data-href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-file-o"></i>
-        <span class="menu-text">小达快讯</span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= announcements_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            快讯管理
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-        <li class="">
-          <a data-href="<%= announcement_categories_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            快讯种类管理
-          </a>
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
-        <% end %>
-    <% if current_user.has_role?(:jiu_world||:admin) %>
-    <li class="open">
-      <a data-href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-pencil-square-o"></i>
-        <span class="menu-text">酒江湖</span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= chateaus_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            酒庄管理
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-        <li class="">
-          <a data-href="<%= regions_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            产地管理
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= wines_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            名酒管理
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-      </ul>
-    </li>
-
-        <% end %>
 
 
     <li class="open">

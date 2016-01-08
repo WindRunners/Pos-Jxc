@@ -40,20 +40,20 @@ class AnnouncementsController < ApplicationController
     FileUtils.makedirs('public/upload/image/announcements/'+ @announcement.id.to_s)
     i =params[:announcement]['content']
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
-        c = a[5, a.length]
-        uuid=SecureRandom.uuid
-        # 下载
-        open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
-          begin
-            pic_file =open(c).read
-            file << pic_file
-            pic_file.close
-            @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
-              # 替换content原图片链接并转化城IMG标签
-          rescue
-          end
+      c = a[5, a.length]
+      uuid=SecureRandom.uuid
+      # 下载
+      open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+        begin
+          pic_file =open(c).read
+          file << pic_file
+          pic_file.close
+          @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+            # 替换content原图片链接并转化城IMG标签
+        rescue
         end
-        a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+      end
+      a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
     }
     respond_to do |format|
       if @announcement.save
@@ -130,7 +130,7 @@ class AnnouncementsController < ApplicationController
 
 
   def batch_check
-    @announcement = Announcement.where(:status => params[:status],:user_id=>current_user.id).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status], :user_id => current_user.id).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -145,7 +145,7 @@ class AnnouncementsController < ApplicationController
     announcement= Announcement.find(params[:announcement_id])
     announcement.status = 1
     announcement.save
-    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status], :created_at => {"$lt" => announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -160,7 +160,7 @@ class AnnouncementsController < ApplicationController
     announcement = Announcement.find(params[:announcement_id])
     announcement.status = -1
     announcement.save
-    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status], :created_at => {"$lt" => announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -177,7 +177,7 @@ class AnnouncementsController < ApplicationController
       FileUtils.rm_rf(picture_path)
     end
     announcement.destroy
-    @announcement = Announcement.where(:status => params[:status],:created_at=>{"$lt"=>announcement.created_at}).order('created_at DESC').first
+    @announcement = Announcement.where(:status => params[:status], :created_at => {"$lt" => announcement.created_at}).order('created_at DESC').first
     respond_to do |format|
       if @announcement.present?
         format.html { redirect_to announcement_path(@announcement) }
@@ -205,55 +205,16 @@ class AnnouncementsController < ApplicationController
 
 
   def batch
-    @announcement_category_id = params[:announcement_category_id]
+    announcement_category_id = params[:announcement_category_id]
     a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
-      @fwb = ""
-      #建立模型
-      announcement = Announcement.new
-      announcement.announcement_category_id = @announcement_category_id
-      b = announcement.id.to_s
-      FileUtils.makedirs('public/upload/image/announcements/'+ b)
-      announcement.title = x[0]
-      announcement.source = x[2]
-      announcement.release_time = x[3]
-      # 正文排版
-      line = x[1].split ("\n")
-      line.each do |l|
-        l = l.strip
-        if l.size > 0
-          if l.include? "jpg" or l.include? "png" or l.include? "jpeg"
-            pic_div = l.gsub(/http.*(jpg|png|jpeg)/) { |c|
-              uuid=SecureRandom.uuid
-              announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
-              # 下载
-              open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
-                begin
-                  pic_file =open(c).read
-                  file << pic_file
-                  pic_file.close
-                rescue
-                end
-              end
-
-              # # 替换content原图片链接并转化城IMG标签
-              c.replace "<div style = \"width:90%; margin:0 auto;\"><img style='width:100%;' src='/upload/image/announcements/#{b}/#{uuid}.jpg' /></div>"
-            }
-            @fwb << pic_div
-          else
-            l.insert(0, "<p>&nbsp;&nbsp;&nbsp;&nbsp;")
-            l.insert(-1, "</p>")
-            @fwb << l
-          end
-        end
+      begin
+        Resque.enqueue(AchieveAnnouncementsBatch, announcement_category_id, x)
+      rescue
       end
-      announcement.content = @fwb
-      announcement.user = current_user
-      #保存
-      announcement.save
     end
     respond_to do |format|
-      format.js { render_js announcements_path,'批量导入成功！' }
+      format.js { render_js announcements_path, '批量导入成功！' }
     end
   end
 

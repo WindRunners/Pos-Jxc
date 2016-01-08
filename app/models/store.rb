@@ -4,6 +4,7 @@ class Store
   include Mongoid::Attributes::Dynamic
   include Mongoid::Paperclip
   include Mongoid::Geospatial
+  include Math
 
   field :name, type: String #门店名称
   field :manager, type: String #负责人
@@ -62,20 +63,27 @@ class Store
 
     storeId = 0
     distance = 0
-    if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #定位有效
-      #查询离小C最近的门店
-      storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).limit(1).geo_near(order.location.to_a)
+    if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #
 
-      if storeResult.present? && storeResult['results']!=0
-         storeId = storeResult['results'][0]['obj']['_id']
-         distance = storeResult['results'][0]['dis']
+      location = [order.location.to_a[1],order.location.to_a[0]] #调整经纬度
+      # #查询离小C最近的门店
+      # storeResult = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>1}).geo_near(location)
+      # if storeResult.present? && storeResult['results']!=0
+      #    storeId = storeResult['results'][0]['obj']['_id']
+      #    distance = storeResult['results'][0]['dis']
+      # end
+
+      near_store = Store.near('location'=> location).first
+      if near_store.present?
+        storeId = near_store.id
+        distance = get_distance_for_points(near_store.location.to_a[0], near_store.location.to_a[1], order.location.to_a[1], order.location.to_a[0])
       end
     end
 
     #门店定位失败或找不到时,查询虚拟门店
     if storeId == 0
-      store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
-      storeId = store.id if store.present?
+      near_store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
+      storeId = near_store.id if near_store.present?
     end
 
     channels = []
@@ -94,6 +102,18 @@ class Store
 
     #更新订单门店及配送距离
     Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance})
+  end
+
+
+  #获取两坐标点的距离
+  def get_distance_for_points(lng1, lat1, lng2, lat2)
+
+    lat_diff = (lat1 - lat2)*PI/180.0
+    lng_diff = (lng1 - lng2)*PI/180.0
+    lat_sin = Math.sin(lat_diff/2.0) ** 2
+    lng_sin = Math.sin(lng_diff/2.0) ** 2
+    first = Math.sqrt(lat_sin + Math.cos(lat1*PI/180.0) * Math.cos(lat2*PI/180.0) * lng_sin)
+    Math.asin(first) * 2 * 6378137.0
   end
 
 end

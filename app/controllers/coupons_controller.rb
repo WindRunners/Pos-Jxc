@@ -39,6 +39,7 @@ class CouponsController < ApplicationController
   # GET /coupons/new
   def new
     @coupon = Coupon.new(:use_goods => "1", :order_amount_way => "1")
+    session[:select_product_ids] = []
   end
 
   # GET /coupons/1/edit
@@ -93,13 +94,13 @@ class CouponsController < ApplicationController
 
   def invalided
     @coupon = Coupon.find(params[:coupon_id])
-    if "invalided" != @coupon.aasm_state
+    if @coupon.may_to_invalid?
       @coupon.to_invalid
       @coupon.save
     end
     respond_to do |format|
       format.html { redirect_to :action => "index"}
-      if "invalided" == @coupon.aasm_state
+      if @coupon.invalided?
         format.json {render :json => {:success => true}.to_json}
       else
         format.json {render :json => {:success => false}.to_json}

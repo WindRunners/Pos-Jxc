@@ -66,7 +66,7 @@ class ProductV1API < Grape::API
     end
 
     products = Product.shop_id(params[:id]).where(where_params).order_by(:category_name => :desc)
-    #Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
+    # Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
     # products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) } #遍历递增曝光量太耗时
 
     present products, with: Entities::Product
@@ -119,7 +119,7 @@ class ProductV1API < Grape::API
     promotions = Array.new
     fullReductions = FullReduction.where(:userinfo_id => params[:id], :aasm_state => "beging")
     fullReductions.each do |f|
-      promotions.push({:title => f.name, :url => "#{f.url}#{params[:id]}/#{f.id}/", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.participateProductsById(params[:id])).to_json)})
+      promotions.push({:title => f.name, :url => "#{f.url}#{params[:id]}/#{f.id}/", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.participateProducts).to_json)})
     end
 
     promotionDiscount = PromotionDiscount.where(:userinfo_id => params[:id], :aasm_state => "beging")

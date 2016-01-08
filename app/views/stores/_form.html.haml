@@ -1,60 +1,81 @@
-
-:css
-  map_canvas img{
-    max-width: none;
-  }
-
-= form_for @store, remote:true do |f|
-  - if @store.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
-      %ul
-        - @store.errors.full_messages.each do |msg|
-          %li= msg
-
-  .field
-    = f.label :门店名称
-    = f.text_field :name
-  .field
-    = f.label :门店管理者
-    = f.text_field :manager
-  .field
-    = f.label :门店描述
-    = f.text_field :describe
-  .field
-    = f.label :门店类型
-    = f.radio_button(:type, 1)
-    = f.label(:type, '实体门店')
-    = f.radio_button(:type, 0)
-    = f.label(:type, '虚拟门店')
-  .field
-    = f.label :门店经度
-    = f.text_field :longitude,{:id => 'longitude'}
-  .field
-    = f.label :门店纬度
-    = f.text_field :latitude,{:id => 'latitude'}
-  .field
-    = f.label :门店位置
-    = f.text_field :position,{:id => 'position'}
-  #store-map{style:'width:630px;height:230px;border:1px solid gray'}
-
-  .field
-    = f.label :身份证正面照片
-    -if @store.bp.present?
-      = image_tag(@store.idpf.url, size: '200x200')
-    = f.file_field :idpf,{:id => 'store_idpf'}
-
-  .field
-    = f.label :身份证反面照片
-    -if @store.bp.present?
-      = image_tag(@store.idpb.url, size: "200x200")
-    = f.file_field :idpb,{:id => 'store_idpb'}
-
-  .field
-    = f.label :营业执照照片
-    -if @store.bp.present?
-      = image_tag(@store.bp.url, size: '200x200')
-    = f.file_field :bp,{:id => 'store_bp'}
-
-  .actions
-    = f.submit '保存',:class => 'btn btn-yellow'
+.hr.hr-16.hr-dotted
+.row
+  .container
+    = form_for @store, remote:true do |f|
+      - if @store.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@store.errors.count, 'error')} prohibited this store from being saved:"
+          %ul
+            - @store.errors.full_messages.each do |msg|
+              %li= msg
+      .col-xs-12
+        %form.form-horizontal
+          .form-group
+            .field
+              = f.label :门店名称,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :name,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :门店店长,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :manager,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :门店描述,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :describe,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :门店类型,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.radio_button(:type, 1)
+              = f.label(:type, '实体门店')
+              = f.radio_button(:type, 0)
+              = f.label(:type, '虚拟门店')
+          .form-group
+            .field
+              = f.label :门店经度,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :longitude,{:id => 'longitude',:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :门店纬度,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :latitude,{:id => 'latitude',:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :位置,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :position,{:id => 'position',:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :百度地图,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              #store-map{style:'width:630px;height:230px;border:1px solid gray'}
+          .form-group
+            .field
+              = f.label :身份证正面照片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.file_field :idpf,{:id => 'store_idpf'}
+              -if @store.bp.present?
+                = image_tag(@store.idpf.url, size: '300x200')
+          .form-group
+            .field
+              = f.label :身份证反面照片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.file_field :idpb,{:id => 'store_idpb'}
+              -if @store.bp.present?
+                = image_tag(@store.idpb.url, size: '300x200')
+          .form-group
+            .field
+              = f.label :营业执照照片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.file_field :bp,{:id => 'store_bp'}
+              -if @store.bp.present?
+                = image_tag(@store.bp.url, size: '300x200')
+              .hr.hr-16.hr-dotted
+            .actions.col-sm-1.col-sm-offset-3
+              = f.submit 'Save',:class=> 'btn btn btn-Success'
+            .actions.col-sm-8
+              = link_to 'Back','', 'data-href' => stores_path,:class=> 'btn btn-info'

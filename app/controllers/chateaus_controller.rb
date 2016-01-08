@@ -56,7 +56,9 @@ class ChateausController < ApplicationController
       # 下载
       open('public/upload/image/chateaus/'+ chateau_id + '/' + uuid + '.jpg', 'wb') do |file|
         begin
-          file << open(c).read
+          pic_file =open(c).read
+          file << pic_file
+          pic_file.close
           @chateau.pic_path << '/upload/image/chateaus/' + chateau_id + '/' + uuid + '.jpg'
         rescue
         end
@@ -89,7 +91,9 @@ class ChateausController < ApplicationController
         # 下载
         open('public/upload/image/chateaus/'+ @chateau.id + '/' + uuid + '.jpg', 'wb') do |file|
           begin
-            file << open(c).read
+            pic_file =open(c).read
+            file << pic_file
+            pic_file.close
             @chateau.pic_path << '/upload/image/chateaus/' + @chateau.id + '/' + uuid + '.jpg'
               # 替换content原图片链接并转化城IMG标签
           rescue
@@ -98,13 +102,12 @@ class ChateausController < ApplicationController
         a.replace 'src="/upload/image/chateaus/' + @chateau.id + '/' + uuid + '.jpg'
       else
         a.replace a
-        a.insert(5, '/')
+        a.insert(5, '/') if a[5]!='/'
       end
     }
     respond_to do |format|
       if @chateau.update(chateau_params)
-        format.js { render_js chateaus_path(@chateau) }
-        format.html { redirect_to @chateau, notice: 'Chateau was successfully updated.' }
+        format.js { render_js chateaus_path("page" => cookies['current_page']) }
         format.json { render :show, status: :ok, location: @chateau }
       else
         format.html { render :edit }
@@ -125,8 +128,7 @@ class ChateausController < ApplicationController
     @chateau.chateau_introduce.destroy
     @chateau.destroy
     respond_to do |format|
-      format.js { render_js chateaus_path }
-      format.html { redirect_to chateaus_url, notice: 'Chateau was successfully destroyed.' }
+      format.js { render_js chateaus_path("page" => cookies['current_page']) }
       format.json { head :no_content }
     end
   end
@@ -176,7 +178,9 @@ class ChateausController < ApplicationController
       @picture.type= params[:type]
       uuid=SecureRandom.uuid
       open('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg', 'wb') do |file|
-        file << open(c).read
+        pic_file =open(c).read
+        file << pic_file
+        pic_file.close
         @picture.pic = file
         File.delete('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg')
       end
@@ -300,7 +304,7 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.update_attribute(:status, 1)
     respond_to do |format|
-      format.html { redirect_to chateaus_path }
+      format.html { redirect_to chateaus_path("page" => cookies['current_page']) }
     end
   end
 
@@ -309,7 +313,7 @@ class ChateausController < ApplicationController
     @chateau = Chateau.find(params[:chateau_id])
     @chateau.update_attribute(:status, -1)
     respond_to do |format|
-      format.html { redirect_to chateaus_path }
+      format.html { redirect_to chateaus_path("page" => cookies['current_page']) }
     end
   end
 

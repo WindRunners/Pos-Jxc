@@ -14,7 +14,6 @@ class PromotionDiscountsController < ApplicationController
   # GET /promotion_discounts/1
   # GET /promotion_discounts/1.json
   def show
-    @selectProductHash = @promotion_discount.selectProductHash
   end
 
   def products
@@ -59,9 +58,7 @@ class PromotionDiscountsController < ApplicationController
   # POST /promotion_discounts.json
   def create
     @promotion_discount = PromotionDiscount.new(promotion_discount_params)
-    @selectProductHash = eval(params[:selectProductHash])
     @promotion_discount.createUserInfo = current_user.userinfo if current_user.userinfo.present?
-    # @promotion_discount.setParticipateProductIds(@selectProductHash)
     @promotion_discount.participate_product_ids = session[:promotion_select_product_ids]
     respond_to do |format|
       if @promotion_discount.save
@@ -82,9 +79,7 @@ class PromotionDiscountsController < ApplicationController
   # PATCH/PUT /promotion_discounts/1.json
   def update
     @update_promotion_discount = PromotionDiscount.new(promotion_discount_params)
-    @selectProductHash = eval(params[:selectProductHash])
     @promotion_discount.old_promotion_discount = @promotion_discount.clone
-    # @promotion_discount.setParticipateProductIds(@selectProductHash)
     @promotion_discount.participate_product_ids = session[:promotion_select_product_ids]
     respond_to do |format|
       if @promotion_discount.update(promotion_discount_params)

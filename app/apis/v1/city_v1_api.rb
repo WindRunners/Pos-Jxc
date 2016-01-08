@@ -47,22 +47,20 @@ class CityV1API < Grape::API
   end
 
   get 'push' do
-    ios_client = Baidu::CloudPush.new('QKWTjM7bZbc0vs6HsylLGnIO', 'h4VbnLpGDANQqW3oE7OQ0D4X2VtKHSh5')
-    android_client = Baidu::CloudPush.new('YSG5VESAS4QsuKhUoiAFdPuH', 'uK7R7g9fX1pvomK1cBMFEmsYjbrGEtT3')
+    ios_client = Baidu::CloudPush.new('9qKGVvWRL4dPvLX7h4UFlI2n', 'AI9fNO8dVHjZFM7FHsXjlRwKX5TZzmbW')
 
 
+    ios_msg = {}
 
-    android_msg = {
-        title: "小达快跑",
-        description: "您有新的订单,请注意查收",
-        notification_builder_id: 0,
-        notification_basic_style: "2",
-        open_type: 3
+    ios_msg[:aps] = {
+        :alert => "您有新的订单,请注意查收",
+        :sound => "neworder.mp3",
+        :badge => 1
     }
 
-    r = android_client.push_single_device('4466689857380983080', android_msg, {msg_type: 1})
+    r = ios_client.push_single_device('5206231975630492203', ios_msg, {msg_type: 1, deploy_status: 2})
 
-    {success:r}
+    {success: r}
 
   end
 

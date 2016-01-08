@@ -97,6 +97,14 @@ class Order
   end
 
 
+  def lng
+    return self.location[1].to_s if self.location.present?
+  end
+
+  def lat
+    return self.location[0].to_s if self.location.present?
+  end
+
   def load_workflow_state
     self[:workflow_state]
   end

@@ -1,9 +1,12 @@
 <%- model_class = Announcement -%>
-<div class="page-header">
+<div class="page-header alert alert-info">
   <h1>快讯编辑</h1>
 </div>
 
 <%= render :partial => 'form', :locals => { :type => "edit" }  %>
 
 <%= link_to 'Show', '', 'data-href' =>announcements_path(@announcement) %> |
-<%= link_to 'Back', '', 'data-href' =>announcements_path %>
+<%= link_to 'Back', '', 'data-href' =>announcements_path("page" => cookies['current_page']) %>
+
+
+

@@ -11,7 +11,7 @@ class AchieveOrderRefundOnlinePayment
       batch_no = Alipay::Utils.generate_batch_no # refund batch no, you SHOULD store it to db to avoid alipay duplicate refund
 
       begin
-        payment = AlipayPayment.find_by(out_trade_no:order.id)
+        payment = AlipayPayment.find_by(out_trade_no: order.id)
 
         r = Alipay::Service.refund_fastpay_by_platform_nopwd(
             batch_no: batch_no,
@@ -25,19 +25,16 @@ class AchieveOrderRefundOnlinePayment
         )
 
 
-
-        if r.success?
-          order.update_attribute(:request_refund_at, Time.now)
-          Rails.logger.info order
-        else
-          Resque.enqueue_at(30.seconds.from_now, AchieveOrderRefundOnlinePayment, orderid)
-        end
+        #if r.success?
+        order.update_attribute(:request_refund_at, Time.now)
+        Rails.logger.info order
+          #else
+          #  Resque.enqueue_at(30.seconds.from_now, AchieveOrderRefundOnlinePayment, orderid)
+          #end
 
       rescue
         Resque.enqueue_at(30.seconds.from_now, AchieveOrderRefundOnlinePayment, orderid)
       end
-
-
 
 
     elsif order.paymode == 2 #微信支付退款

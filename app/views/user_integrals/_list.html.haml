@@ -6,9 +6,6 @@
       %th= "状态"
       %th= "类型"
       %th= "操作日期"
-      %th
-      - if policy(:user).isAdmin?
-        %th= t '.actions', :default => t("helpers.actions")
   %tbody
 :javascript
   $(document).ready(function () {

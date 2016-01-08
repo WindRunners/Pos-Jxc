@@ -72,13 +72,20 @@ class Product
   end
 
   def main
-    self.main_url ||= 'missing.png'
-    RestConfig::IMG_SERVER + self.main_url
+    if self.main_url.present?
+      RestConfig::IMG_SERVER + self.main_url
+    else
+      'missing.png'
+    end
   end
 
   def desc
-    self.desc_url ||= 'missing.png'
-    RestConfig::IMG_SERVER + self.desc_url
+    if self.desc_url.present?
+      RestConfig::IMG_SERVER + self.desc_url
+    else
+      'missing.png'
+    end
+
   end
 
   def coupon

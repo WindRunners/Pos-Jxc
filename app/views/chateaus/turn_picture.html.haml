@@ -39,4 +39,4 @@
         = submit_tag '保存',:class => 'btn btn-yellow'
 
 %div{:style => "text_align:center;clear:both;"}
-= link_to '返回酒庄主页','', 'data-href' => chateaus_path,:class=>'btn btn-primary'
+= link_to '返回','', 'data-href' => chateaus_path("page" => cookies['current_page']),:class=>'btn btn-primary'

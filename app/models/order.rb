@@ -173,7 +173,7 @@ class Order
           if activitie.current_reduction >= activitie.quota && (activitie.condition == false)
             activitie.condition = true
             if "1" == activitie.preferential_way
-              self.totalcost -= activitie.quota
+              self.paycost -= activitie.reduction
             elsif "2" == activitie.preferential_way
               self.getintegral += activitie.integral
               self.userinfo.integral -= activitie.integral
@@ -197,9 +197,9 @@ class Order
     if self.useintegral > 0
       #扣除用户积分
       current_customer.update_attributes(:integral => current_customer.integral - self.useintegral)
-      self.paycost = self.totalcost - self.useintegral * 0.01
+      self.paycost += self.totalcost - self.useintegral * 0.01
     else
-      self.paycost = self.totalcost
+      self.paycost += self.totalcost
     end
   end
 
@@ -341,7 +341,7 @@ class Order
           if activitie.current_reduction >= activitie.quota && (activitie.condition == false)
             activitie.condition = true
             if "1" == activitie.preferential_way
-              self.totalcost -= activitie.quota
+              self.paycost -= activitie.reduction
             elsif "2" == activitie.preferential_way
               self.getintegral += activitie.integral
             elsif "3" == activitie.preferential_way

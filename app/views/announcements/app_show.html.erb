@@ -1,22 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-  <!-- 新 Bootstrap 核心 CSS 文件 -->
-  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-  <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-
-  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-  <meta name="viewport" content="width=device-width,
-                                     initial-scale=1.0,
-                                     maximum-scale=1.0,
-                                     user-scalable=no">
+  <%= javascript_include_tag "application"%>
+  <%= stylesheet_link_tag 'announcements' %>
   <script>
       function add_comment() {
           $.ajax({
@@ -56,6 +43,7 @@
       ;
 
 
+
       //      function stow() {
       //          var customer_id = $("#customer_id").val();
       //          var announcement_id= $("#announcement_id").val();
@@ -79,38 +67,93 @@
 </head>
 <body>
 
-<div class="container" id="">
-  <div class="row" id="">
-    <div class="col-xs-12" id="title">
-      <h1><%= @announcement.title %></h1>
+<div id="a_body">
+  <div class="col-xs-12" id="a_top">
+    <div id="a_title">
+      <%= @announcement.title %>
     </div>
-    <!--header-->
-    <div class="col-xs-12" id="">
-      <div class="col-xs-6" id="source">
+    <!--a_title缁撴潫-->
+    <div id="h_footer">
+      <div class="col-xs-6" id="a_source">
         <% if @announcement.source.present? %>
             <%= @announcement.source %>
         <% else %>
-            来源：小达快讯
-        <% end %></div>
-      <div class="col-xs-6" id="created_at">
-        <%= @announcement.created_at.to_s[5, 11] %>
+            鏉ユ簮锛氬皬杈惧揩璁�
+        <% end %>
       </div>
+
+      <div class="col-xs-6" id="a_time"><%= @announcement.created_at.to_s[5,11] %></div>
     </div>
   </div>
-  <!--row-->
-  <div class="row" id="">
-    <div class="col-xs-12" id="content">
-      <%= markdown @announcement.content %>
-    </div>
-    <!--content-->
+  <!--a_top-->
+  <div style = "height:10px; margin-top:-1px;clear: both;overflow:hidden;"> </div >
+  <div class="widget-body" id="announcement_content">
+    <%= markdown @announcement.content %>
   </div>
-  <!--row-->
+  <!--announcement_content缁撴潫-->
+
+  <% if @announcement.chateau_comments.present? %>
+      <div class="row" id="announcement_comments">
+        <div id="comment_title">
+          璇勮鍒楄〃(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
+
+          <!--<button class="btn_stow" id="btn_stows" onclick="stow()"></button>-->
+          <!--<p id="p_stows"></p>-->
+        </div>
+        <div id="comment_list">
+          <% if @announcement.chateau_comments.present? %>
+              <%- @announcement.chateau_comments.each do |c| %>
+                  <div class="" id="comment_body">
+                    <div class="" id="c_left">
+                      <div class="" id="u_avatar"><%= image_tag('avatar.png', :size => "120x120") %></div>
+                      <!--u_avatar-->
+                    </div>
+                    <!--c_lift-->
+                    <div class="" id="c_right">
+                      <div class="" id="c_top">
+                        <div class="" id="u_info">
+                          <div class="" id="u_name">娓告吵鍏ㄩ潬娴�
+                          </div>
+                          <!--u_name-->
+                          <div class="" id="c_time"><%= c.created_at.to_s[5, 11] %>
+                          </div>
+                          <!--c_time-->
+                        </div>
+                        <!--u_info-->
+                        <div class="" id="c_op">
+                          <div class="" id="op_hit">
+                            <button class="btn_hits" id="btn_hits<%= c.id.to_s %>" onclick="hit('<%= c.id.to_s %>')">
+                              <%= image_tag('avatar.png', :size => "40x40") %></button>
+                            <p id="p_hits<%= c.id.to_s %>"><%= c.hits %></p></div>
+                          <input id="input_chateau_comment_id<%= c.id.to_s %>" type="hidden" value="<%= c.id %>">
+                          <input id="input_chateau_comment_hits<%= c.id.to_s %>" type="hidden" value="<%= c.hits.to_s %>">
+                          <!--op_hit-->
+                        </div>
+                        <!--c_op-->
+                      </div>
+                      <!--c_top-->
+                      <div class="" id="c_content"><%= c.content %></div>
+                      <!--c_content-->
+                    </div>
+                    <!--c_right-->
+                  </div>
+                  <!--comment_body-->
+              <% end %>
+          <% end %>
+        </div>
+        <!--comment_list缁撴潫-->
+
+      </div>
+  <% end %>
+
 </div>
-<!--container-->
+<!--a_body缁撴潫-->
+
+
+
+
 <!--<input id="customer_id" type="hidden" value="567d20a1e1382376bc000000">-->
 <!--<input id="announcement_id" type="hidden" value="">-->
 </body>
 
 </html>
-
-

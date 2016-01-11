@@ -22,7 +22,7 @@
         %td= w.hits
         %td= w.created_at
         %td= w.status
-        %td= link_to '解除关联','', 'data-href' =>chateau_resolve_wine_path(:wine_id =>w.id),:method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+        %td= link_to '解除关联','', 'data-href' =>chateau_resolve_wine_path(:wine_id =>w.id), :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 %br
 %input{"type"=>"hidden","name"=>"btn_chateau_name","id"=>"btn_chateau_id","value"=>@data['chateau'].id}
 

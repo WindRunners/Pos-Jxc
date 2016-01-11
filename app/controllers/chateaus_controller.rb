@@ -353,8 +353,7 @@ class ChateausController < ApplicationController
     @chateau.wines.delete(@wine)
     respond_to do |format|
       if @chateau.save
-        format.js { render_js chateau_wines_url(@chateau) }
-        # format.html { redirect_to '/chateaus/'+@chateau.id+'/wines', notice: @chateau.name + '于' + @wine.name + '解除关联成功！' }
+        format.html { redirect_to chateau_wines_path(@chateau) }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }

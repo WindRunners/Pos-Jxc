@@ -3,7 +3,7 @@ class AchieveAnnouncementsBatch
   def self.perform(*args)
     announcement_category_id = args[0]
     x = args[1]
-    current_user = args[2]
+    current_user_id = args[2]
       @fwb = ""
       #建立模型
       announcement = Announcement.new
@@ -57,7 +57,7 @@ class AchieveAnnouncementsBatch
         end
       end
       announcement.content = @fwb
-      announcement.user = current_user
+      announcement.user_id = current_user_id
       #保存
       announcement.save
   end

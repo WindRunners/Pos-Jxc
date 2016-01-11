@@ -67,7 +67,7 @@
           <div class="con_group clearfix">
             <label for="" class="con_label one">验证码：</label>
             <div class="frm_controls">
-              <input name="_rucaptcha" autocomplete="off" type="text" autocomplete="off" id="input_code" placeholder="必填"><a class="rucaptcha-image-box" href="#"><%= rucaptcha_image_tag(alt: 'Captcha') %></a>
+              <input name="_rucaptcha" autocomplete="off" type="text" autocomplete="off" id="input_code" placeholder="必填"><a class="rucaptcha-image-box" href="#"><img alt="Captcha" class="rucaptcha-image" src="<%= root_url %>rucaptcha/"></a>
               <span class="error" style="float: left;margin: 0px"><% if flash[:rucaptcha_error].present? %><%= flash[:rucaptcha_error] %><% end %></span>
             </div>    <!--frm_controls-->
           </div>     <!--frm_control_group-->

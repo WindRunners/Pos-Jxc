@@ -29,9 +29,8 @@ class AchieveAnnouncementsBatch
                   announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
                   # 压缩图片
                   begin
-                  img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-                  width = img.columns
-                  height = img.rows
+                  img = MiniMagick::Image.from_file('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+                  width,height = img[:width],img[:height]
                   thumb = img.resize(width * 0.8, height * 0.8)
                   thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') {self.quality = 50} #compress压缩大小
                   # 将压缩图片地址存进数组

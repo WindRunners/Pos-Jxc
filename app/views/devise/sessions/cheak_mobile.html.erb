@@ -46,7 +46,7 @@
         <div class="con_grou clearfix">
           <label for="" class="label  one">验证码：&nbsp;</label>
           <div class="frm_control">
-            <input name="_rucaptcha" autocomplete="off" type="text" id="input2"  placeholder="必填"><a class="rucaptcha-image-box" href="#"><%= rucaptcha_image_tag(alt: 'Captcha',:class=>"unchanged01") %></a>
+            <input name="_rucaptcha" autocomplete="off" type="text" id="input2"  placeholder="必填"><a class="rucaptcha-image-box" href="#"><img alt="Captcha" class="rucaptcha-image" src="/rucaptcha/"></a>
             <span class="error" style="float: left;margin: 0px"><%= flash[:rucaptcha_error] %></span>
           </div>    <!--frm_controls-->
         </div>     <!--frm_control_group-->

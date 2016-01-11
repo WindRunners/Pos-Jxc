@@ -6,3 +6,4 @@ tmp/*
 public/system/
 public/upload/image/
 config/mongoid.yml
+dump.rdb

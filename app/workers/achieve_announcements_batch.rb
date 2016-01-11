@@ -1,8 +1,9 @@
 class AchieveAnnouncementsBatch
   @queue = :achieves_queue_announcements_batch
   def self.perform(*args)
-    announcement_category_id = args.first
-    x = args.last
+    announcement_category_id = args[0]
+    x = args[1]
+    current_user = args[2]
       @fwb = ""
       #建立模型
       announcement = Announcement.new
@@ -29,17 +30,11 @@ class AchieveAnnouncementsBatch
                   announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
                   # 压缩图片
                   begin
-                    img_path = 'public/upload/image/announcements/'+ b + '/' + uuid + '.jpg'
-                    img = MiniMagick::Image.open(img_path)
-                    w,h = img[:width],img[:height]
-                    percent = ((180/w.to_f) * 120).to_i
-                    img.combine_options do |c|
-                      c.sample "#{percent}%" # 缩放
-                    end
-                    img.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
-
-                    # 将压缩图片地址存进数组
-                    @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
+                  img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+                  width = img.columns
+                  height = img.rows
+                  thumb = img.resize(width * 0.8, height * 0.8)
+                  thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') {self.quality = 50} #compress压缩大小
                   # 将压缩图片地址存进数组
                   announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
                   rescue

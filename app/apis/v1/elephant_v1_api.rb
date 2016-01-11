@@ -105,6 +105,6 @@ class ElephantV1Api < Grape::API
 
 
 
-  add_swagger_documentation base_path: 'api/v1', hide_format: true
+  add_swagger_documentation base_path: '/api/v1', hide_format: true
 end
 

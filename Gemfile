@@ -147,7 +147,6 @@ gem 'wx_pay', :git => "git://github.com/jasl/wx_pay.git" #微信支付
 gem 'alipay', :git => "git://github.com/stockcode/alipay.git" #:path => "../alipay" #支付宝
 
 gem 'baidu-cloud_push' #百度推送
-gem 'rmagick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

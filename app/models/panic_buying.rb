@@ -9,6 +9,8 @@ class PanicBuying
   field :endTime, type: String #结束时间
   field :state,type: Integer # 0-未开始 1-进行中 2-已结束
 
+  field :avatar #活动图片
+
   def products
     @products ||= Product.shop_id(self.userinfo.id).where(:panic_buying => self)
   end
@@ -19,6 +21,12 @@ class PanicBuying
     time_cron = ["00:00-08:00","08:00-12:00","12:00-16:00","16:00-20:00","20:00-24:00"]
 
     panic_buying = nil
+
+    avatar = nil
+    begin
+      avatar = Warehouse::Promotion.where(:type => 'panic_buying').first.avatar
+    end
+
     time_cron.each do |time|
       timearr = time.split("-")
 
@@ -35,6 +43,9 @@ class PanicBuying
       elsif nowtime < timearr[0]
         panic_buying.state = 0
       end
+
+      panic_buying.avatar = avatar if !avatar.nil?
+
       panic_buying.save!
       panic_buying.set_corn
     end
@@ -63,7 +74,7 @@ class PanicBuying
     endTime = self.endTime.to_time.strftime('%S %M %H')
     scheduler.cron "#{endTime} * * *" do
       self.update!(:state => 2)
-      end_panic
+      self.end_panic
       self.to_progress
     end
   end
@@ -72,8 +83,5 @@ class PanicBuying
     Product.shop_id(self.userinfo.id).where(:panic_buying => self).update!(:panic_buying => nil,:panic_quantity => 0,:panic_price => 0,:panic_sale_count => 0)
   end
 
-  after_destroy do
-    end_panic
-  end
 end
 

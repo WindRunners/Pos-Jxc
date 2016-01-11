@@ -395,6 +395,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    rmagick (2.15.4)
     rolify (5.0.0)
     roo (2.3.0)
       nokogiri (~> 1)
@@ -597,6 +598,7 @@ DEPENDENCIES
   resque-pool
   resque-scheduler
   rest-client
+  rmagick
   rolify
   roo
   rspec-rails

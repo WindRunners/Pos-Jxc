@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,23 +44,23 @@
 
 
 
-//      function stow() {
-//          var customer_id = $("#customer_id").val();
-//          var announcement_id= $("#announcement_id").val();
-//          $.ajax({
-//              type: "POST",
-//              url: "/announcements/stow",
-//              data: {announcement_id: announcement_id,customer_id:customer_id},
-//              dataType: "json",
-//              success: function (data) {
-//                  var stows = parseInt($("#p_stows").text()) + 1;
-//                  $("#p_stows" + a).html(stows + "");
-//                  $("#btn_stow" + a).attr("disabled", true);
-//              }
-//          });
-//
-//      }
-//      ;
+      //      function stow() {
+      //          var customer_id = $("#customer_id").val();
+      //          var announcement_id= $("#announcement_id").val();
+      //          $.ajax({
+      //              type: "POST",
+      //              url: "/announcements/stow",
+      //              data: {announcement_id: announcement_id,customer_id:customer_id},
+      //              dataType: "json",
+      //              success: function (data) {
+      //                  var stows = parseInt($("#p_stows").text()) + 1;
+      //                  $("#p_stows" + a).html(stows + "");
+      //                  $("#btn_stow" + a).attr("disabled", true);
+      //              }
+      //          });
+      //
+      //      }
+      //      ;
 
   </script>
 
@@ -71,13 +72,13 @@
     <div id="a_title">
       <%= @announcement.title %>
     </div>
-    <!--a_title结束-->
+    <!--a_title缁撴潫-->
     <div id="h_footer">
       <div class="col-xs-6" id="a_source">
         <% if @announcement.source.present? %>
             <%= @announcement.source %>
         <% else %>
-            来源：小达快讯
+            鏉ユ簮锛氬皬杈惧揩璁�
         <% end %>
       </div>
 
@@ -86,15 +87,15 @@
   </div>
   <!--a_top-->
   <div style = "height:10px; margin-top:-1px;clear: both;overflow:hidden;"> </div >
-<div class="widget-body" id="announcement_content">
+  <div class="widget-body" id="announcement_content">
     <%= markdown @announcement.content %>
   </div>
-  <!--announcement_content结束-->
+  <!--announcement_content缁撴潫-->
 
   <% if @announcement.chateau_comments.present? %>
       <div class="row" id="announcement_comments">
         <div id="comment_title">
-          评论列表(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
+          璇勮鍒楄〃(<%= @announcement.chateau_comments.count if @announcement.chateau_comments.present? %>)
 
           <!--<button class="btn_stow" id="btn_stows" onclick="stow()"></button>-->
           <!--<p id="p_stows"></p>-->
@@ -111,7 +112,7 @@
                     <div class="" id="c_right">
                       <div class="" id="c_top">
                         <div class="" id="u_info">
-                          <div class="" id="u_name">游泳全靠浪
+                          <div class="" id="u_name">娓告吵鍏ㄩ潬娴�
                           </div>
                           <!--u_name-->
                           <div class="" id="c_time"><%= c.created_at.to_s[5, 11] %>
@@ -140,13 +141,13 @@
               <% end %>
           <% end %>
         </div>
-        <!--comment_list结束-->
+        <!--comment_list缁撴潫-->
 
       </div>
   <% end %>
 
 </div>
-<!--a_body结束-->
+<!--a_body缁撴潫-->
 
 
 
@@ -156,5 +157,3 @@
 </body>
 
 </html>
-
-

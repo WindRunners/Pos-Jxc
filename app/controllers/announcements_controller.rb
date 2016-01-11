@@ -37,28 +37,41 @@ class AnnouncementsController < ApplicationController
     @announcement.user = current_user
     @announcement.read_num = 0
     @announcement.status = 0
-    FileUtils.makedirs('public/upload/image/announcements/'+ @announcement.id.to_s)
+    b = @announcement.id.to_s
+    FileUtils.makedirs('public/upload/image/announcements/'+ b)
     i =params[:announcement]['content']
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
       c = a[5, a.length]
       uuid=SecureRandom.uuid
       # 下载
-      open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+      open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
         begin
           pic_file =open(c).read
           file << pic_file
+          # 将图片地址存进数组
+          @announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+          # 压缩图片
+          begin
+          img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+          width = img.columns
+          height = img.rows
+          thumb = img.resize(width * 0.8, height * 0.8)
+          thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
+          # 将压缩图片地址存进数组
+          @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
+          rescue
+            @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+          end
           pic_file.close
-          @announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
-            # 替换content原图片链接并转化城IMG标签
         rescue
         end
       end
+      # 替换content原图片链接并转化城IMG标签
       a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
     }
     respond_to do |format|
       if @announcement.save
         format.js { render_js announcements_path }
-        # format.html { redirect_to @announcement, notice: 'Announcement was successfully created.' }
         format.json { render :show, status: :created, location: @announcement }
       else
         format.html { render :new }
@@ -75,18 +88,31 @@ class AnnouncementsController < ApplicationController
     @announcement.announcement_category_id = params[:announcement]['announcement_category_id']
     @announcement.description = params[:announcement]['description']
     @announcement.is_top = params[:announcement]['is_top']
+    b = @announcement.id.to_s
     @announcement.content = i.gsub(/src.*(jpg|png|jpeg)/) { |a|
       if !a.include? 'upload/image/announcements'
         c = a[5, a.length]
         uuid=SecureRandom.uuid
         # 下载
-        open('public/upload/image/announcements/'+ @announcement.id + '/' + uuid + '.jpg', 'wb') do |file|
+        open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
           begin
             pic_file =open(c).read
             file << pic_file
+            # 将图片地址存进数组
+            @announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+            # 压缩图片
+            begin
+              img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+              width = img.columns
+              height = img.rows
+              thumb = img.resize(width * 0.8, height * 0.8)
+              thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
+              # 将压缩图片地址存进数组
+              @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
+            rescue
+              @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+            end
             pic_file.close
-            announcements.pic_path << '/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
-              # 替换content原图片链接并转化城IMG标签
           rescue
           end
         end

@@ -126,21 +126,21 @@ Rails.application.routes.draw do
   end
 
 
-  # resources :announcements do
-  #   get 'check'
-  #   get 'check_out'
-  #   post 'batch', :on => :collection
-  #   get 'app_show'
-  #
-  #   get 'warehouse_notice_index', :on => :collection
-  #   get 'batch_check', :on => :collection
-  #   get 'next_check', :on => :collection
-  #   get 'next_check_out', :on => :collection
-  #   get 'next_delete', :on => :collection
-  #   post 'stow', :on => :collection
-  # end
-  #
-  # resources :announcement_categories
+  resources :announcements do
+    get 'check'
+    get 'check_out'
+    post 'batch', :on => :collection
+    get 'app_show'
+
+    get 'warehouse_notice_index', :on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
+    get 'next_delete', :on => :collection
+    post 'stow', :on => :collection
+  end
+
+  resources :announcement_categories
 
 
   resources :pictures do
@@ -234,27 +234,27 @@ Rails.application.routes.draw do
   end
 
 
-  # resources :chateaus do
-  #   get 'turn_picture'
-  #   post 'turn_picture_add'
-  #   delete 'turn_picture_reduce'
-  #   post 'turn_picture_urls'
-  #   get 'introduce_show'
-  #   get 'chateau_mark'
-  #   post 'chateau_mark_add'
-  #   delete 'chateau_mark_reduce'
-  #   get 'check'
-  #   get 'check_out'
-  #   get 'search', :on => :collection
-  #   get 'wines'
-  #   get 'workload', :on => :collection
-  #   post 'relate_wine', :on => :collection
-  #   delete 'resolve_wine', :on => :collection
-  #   get 'ex_pic',:on => :collection
-  #   get 'batch_check', :on => :collection
-  #   get 'next_check', :on => :collection
-  #   get 'next_check_out', :on => :collection
-  # end
+  resources :chateaus do
+    get 'turn_picture'
+    post 'turn_picture_add'
+    delete 'turn_picture_reduce'
+    post 'turn_picture_urls'
+    get 'introduce_show'
+    get 'chateau_mark'
+    post 'chateau_mark_add'
+    delete 'chateau_mark_reduce'
+    get 'check'
+    get 'check_out'
+    get 'search', :on => :collection
+    get 'wines'
+    get 'workload', :on => :collection
+    post 'relate_wine', :on => :collection
+    delete 'resolve_wine', :on => :collection
+    get 'ex_pic',:on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
+  end
   resources :chateau_marks
 
 

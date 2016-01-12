@@ -61,7 +61,7 @@ class DeliveryOrderV1API < Grape::API
     post 'take_product' do
 
       # p "#参数信息为:#{declared(params)}"
-      p "#参数信息为product_img:#{params[:product_img]}"
+      logger.info "#参数信息为product_img:#{params[:product_img]}"
 
       order_id = params[:order_id] #获取订单列表
       order = Order.where({'_id'=>order_id}).first
@@ -69,6 +69,7 @@ class DeliveryOrderV1API < Grape::API
       return {msg: '订单状态不合法!', flag: 0} if order.current_state.name.to_s!='take'
       order['workflow_event'] = "take_product" #方便订单判断是否为接货状态
       order.take_product! #接货
+      logger.info "配送员接货完毕"
 
       #更改订单状态
       order_track = OrderTrack.new()

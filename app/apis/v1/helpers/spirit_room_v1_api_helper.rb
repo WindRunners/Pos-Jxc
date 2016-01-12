@@ -81,72 +81,37 @@ module SpiritRoomV1APIHelper
 
     return {msg: '密码输入错误,请重新输入', flag: 3} if !spiritRoom.authenticate(postInfo.password)
 
-    #获取酒库商品信息
-    product_info = SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom)
+    userinfo_id = postInfo['userinfo_id'] #小B id
+
+    #获取当前单位的酒库商品信息
+    product_info = SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom,userinfo_id)
     product_list = JSON.parse(postInfo.product_list.to_s)
 
     #检查库存数量是否足够
     product_list.each do |product_id, product_count|
       return {msg: '请移除无效商品!', flag: 0} if !product_info[product_id.to_s].present?
-      return {msg: '商品库存不够,请重新选择!', flag: 0} if product_info[product_id.to_s].to_i < product_count.to_i
+      return {msg: '当前单位商品库存不够,请重新选择!', flag: 0} if product_info[product_id.to_s].to_i < product_count.to_i
     end
-
-    b_product_order_info = {} #商品按小B分割后的订单信息
-    b_syn_spirit_product_info = {} #需要同步的酒库商品列表
+    syn_spirit_product_list = [] #需要同步的酒库商品列表
 
     #俺小B进行提取酒
     product_list.each do |product_id, product_count|
 
-      p_count = product_count
-
-      spirit_product_list = SpiritRoomProduct.where({:spirit_room_id => spiritRoom.id, :count.gt => 0, 'product_id' => product_id})
-      spirit_product_list.each do |spirit_product|
-
-        userinfo_id = spirit_product['userinfo_id'].to_s
-
-        break if p_count==0 #商品数量为零时跳出循环
-        if spirit_product.count > p_count
-          reduce_count = p_count
-        else
-          reduce_count = spirit_product.count
-        end
-        spirit_product.count -= reduce_count
-        p_count -= reduce_count
-
-        #单位的订单信息
-        order_info = {}
-        syn_product_list = []
-        if b_product_order_info[userinfo_id].present?
-          order_info = b_product_order_info[userinfo_id]
-        else
-          b_product_order_info[userinfo_id] = order_info
-        end
-
-        if b_syn_spirit_product_info[userinfo_id].present?
-          syn_product_list = b_syn_spirit_product_info[userinfo_id]
-        else
-          b_syn_spirit_product_info[userinfo_id] = syn_product_list
-        end
-
-        order_info[product_id] = reduce_count
-        syn_product_list << spirit_product
-      end
+      spirit_product = SpiritRoomProduct.where({:spirit_room_id => spiritRoom.id,:userinfo_id => BSON::ObjectId(userinfo_id), :count.gt => 0, 'product_id' => product_id}).first
+      spirit_product.count -= product_count
+      syn_spirit_product_list << spirit_product
     end
 
-    result_list = []
-    #循环小B商品订单,生成订单
-    b_product_order_info.each do |userinfo_id, product_info|
-
-      #按指定小B生成订单
-      result = SpiritRoomV1APIHelper.create_spirit_order(customerUser, userinfo_id, product_info, postInfo)
-      if result[:flag] == 1
-        b_syn_spirit_product_info[userinfo_id].each do |spirit_product|
-          spirit_product.save!
-        end
+    #按指定小B生成订单
+    result = SpiritRoomV1APIHelper.create_spirit_order(customerUser, userinfo_id, product_list, postInfo)
+    if result[:flag] == 1
+      syn_spirit_product_list.each do |spirit_product|
+        spirit_product.save!
       end
-      result_list << result
+      return {msg: '酒库提酒成功!', flag: 1, data: result['data']}
+    else
+      return {msg: '酒库提酒失败!', flag: 0}
     end
-    return {msg: '酒库提酒成功!', flag: 1, data: result_list}
   end
 
 
@@ -230,7 +195,7 @@ module SpiritRoomV1APIHelper
 
   private
   #获取酒库的商品信息{product_id:count}
-  def SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom)
+  def SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom,userinfo_id)
 
     all_product_info = {}
     map = %Q{
@@ -245,7 +210,7 @@ module SpiritRoomV1APIHelper
         }
       }
 
-    all_product_info_list = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :count.gt => 0).map_reduce(map, reduce).out(inline: true)
+    all_product_info_list = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id,:userinfo_id => BSON::ObjectId(userinfo_id), :count.gt => 0).map_reduce(map, reduce).out(inline: true)
     all_product_info_list.each do |v|
       all_product_info[v['_id']] = v['value']
     end

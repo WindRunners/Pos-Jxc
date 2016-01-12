@@ -231,11 +231,16 @@ class AnnouncementsController < ApplicationController
 
 
   def batch
-    announcement_category_id = params[:announcement_category_id]
+
+    resque_params = {}
+    resque_params['announcement_category_id'] = params[:announcement_category_id]
+    resque_params['current_user_id']= current_user.id.to_s
+
     a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
       begin
-        Resque.enqueue(AchieveAnnouncementsBatch, announcement_category_id, x,current_user.id)
+        resque_params['x'] = x
+        Resque.enqueue(AchieveAnnouncementsBatch, resque_params)
       rescue
       end
     end

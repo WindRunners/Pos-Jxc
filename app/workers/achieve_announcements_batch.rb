@@ -1,9 +1,10 @@
 class AchieveAnnouncementsBatch
   @queue = :achieves_queue_announcements_batch
   def self.perform(*args)
-    announcement_category_id = args[0]
-    x = args[1]
-    current_user_id = args[2]
+    p args
+    announcement_category_id = args['announcement_category_id']
+    x = args['x']
+    current_user_id = args['current_user_id']
       @fwb = ""
       #建立模型
       announcement = Announcement.new

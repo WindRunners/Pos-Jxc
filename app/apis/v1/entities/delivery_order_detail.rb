@@ -5,7 +5,9 @@ module Entities
     expose :orderno, documentation: {type: String, desc: '订单号码'}
     expose :ordertype, documentation: {type: String, desc: '订单类型  0-线下订单  1-线上订单'}
     expose :consignee, documentation: {type: String, desc: '收货人'}
-    expose :address, documentation: {type: String, desc: '收货人地址'}
+    expose :address, documentation: {type: String, desc: '收货人地址'}do |instance, options|
+      "#{instance.address}"
+    end
     expose :telephone, documentation: {type: String, desc: '收货电话'}
     expose :totalcost, documentation: {type: Float, desc: '总费用'}
     expose :fright, documentation: {type: Float, desc: '运费'}
@@ -13,7 +15,9 @@ module Entities
     expose :paycost, documentation: {type: Float, desc: '支付金额'}
     expose :paymode, documentation: {type: Integer, desc: '支付方式 0-货到付款 1-支付宝 2-微信支付'}
     expose :ordergoods, documentation: {type: Ordergood, desc: '订单商品信息'}
-    expose :remarks, documentation: {type: String, desc: '重要说明'}
+    expose :remarks, documentation: {type: String, desc: '重要说明'} do |instance, options|
+      "#{instance.remarks}"
+    end
     expose :workflow_state, documentation: {type: String, desc: '状态 generation:待付款,paid:待抢单,take:待接货,distribution:配送中,receive:配送完成,completed:确认收货,cancelled:取消订单'}
     expose :consignee_longitude, documentation: {type: Float, desc: '收货地址经度'}
     expose :consignee_latitude, documentation: {type: Float, desc: '收货地址纬度'}

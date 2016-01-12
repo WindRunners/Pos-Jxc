@@ -37,8 +37,6 @@ class ElephantV1Api < Grape::API
     #获取当前小C
     def current_customerUser
 
-      p "api跟路径：#{request.host_with_port}"
-
       begin
         customerUser = Customer.find(params[:customer_id])
       rescue Exception=>e #异常捕获
@@ -107,8 +105,6 @@ class ElephantV1Api < Grape::API
 
   mount CityV1API => 'city'
 
-  p Rails.root.basename.to_s
-
-  add_swagger_documentation base_path: '/api/v1', hide_format: true
+  add_swagger_documentation base_path: "#{ENV["ELEPHANT_HOST"]}/api/v1", hide_format: true
 end
 

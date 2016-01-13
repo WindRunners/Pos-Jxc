@@ -14,7 +14,7 @@ class ChateausController < ApplicationController
     @data['chateaus'] =Chateau.where(searchParams).page(params[:page]).order('created_at DESC')
     @data['count'] = Chateau.count
     @data['user_count'] = current_user.chateaus.count
-    @data['today_count'] = Chateau.where(:user_id => current_user.id,:created_at => {"$gt":Time.now.strftime("%Y/%m/%d")+ " 00:00:00"}).count
+    @data['today_count'] = Chateau.where(:user_id => current_user.id,:created_at => {"$gt"=>Time.now.strftime("%Y/%m/%d")+ " 00:00:00"}).count
     @data
   end
 
@@ -313,7 +313,7 @@ class ChateausController < ApplicationController
   def workload
     @data ={}
     @data['work_array'] = []
-    User.where(:role_ids=>{"$in":[Role.where({"name":"jiu_world"}).first.id]}).each do |u|
+    User.where(:role_ids=>{"$in"=>[Role.where({"name"=>"jiu_world"}).first.id]}).each do |u|
       if !u.chateaus.empty?
         work = {}
         work['user_id'] = u.id

@@ -181,3 +181,5 @@ gem 'jwt'
 gem 'wisper'
 
 gem 'rb-readline'
+
+gem 'rqrcode'

@@ -257,9 +257,9 @@ module SpiritRoomV1APIHelper
     order.ordergoods = ordergoods_list
 
     if order.spirit_order_creat!
-      return {'msg'=> '订单创建成功!', 'flag' => 1, 'data'=> order.orderno}
+      return {'msg'=> '订单创建成功!', 'flag' => 1, 'data'=> order.id}
     else
-      return {'msg'=> '订单创建失败!', 'flag' => 0, 'data'=> order.orderno}
+      return {'msg'=> '订单创建失败!', 'flag' => 0, 'data'=> order.id}
     end
   end
 

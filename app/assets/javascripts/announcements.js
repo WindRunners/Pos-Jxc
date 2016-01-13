@@ -1,4 +1,3 @@
-
 //jquery 初始化函数
 $(function () {
 
@@ -62,11 +61,36 @@ function search() {
 }
 
 
-
 function submit_form() {
     var excel_file = $('#excel_file_id');
     if (excel_file.val() == "" || excel_file.val() == undefined) {
         alert('请选择文件');
         return false;
+    }
+};
+
+
+function batch_delete() {
+    var announcement_id_array = [];
+    $('input[name="form-field-checkbox"]:checked').each(function () {
+        announcement_id_array.push($(this).val());
+
+    });
+    if (announcement_id_array.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: "/announcements/batch_delete",
+            data: {announcement_id_array: announcement_id_array},
+            dataType: "json",
+            success: function (data) {
+                alert(JSON.stringify(data.message));
+                $.each(announcement_id_array, function () {
+                    $("#tr_" + this).remove();
+                });
+            }
+        });
+    }
+    else {
+        alert(announcement_id_array.length == 0 ? '你还没有选择任何内容！' : announcement_id_array);
     }
 };

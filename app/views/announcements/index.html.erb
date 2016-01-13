@@ -1,6 +1,5 @@
-
 <div class="col-xs-12" style="">
-  <div class="col-xs-5" style=""> <h1>快讯管理 </h1></div>
+  <div class="col-xs-5" style=""><h1>快讯管理 </h1></div>
   <div class="col-xs-7" style="">
     <%= paginate @announcements %>
   </div>
@@ -38,7 +37,7 @@
 
       <div class="form-group">
         <label for="status">种类:</label>
-        <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }.insert(0,["--请选择--","0"])),:id=>"category") %>
+        <%= select_tag(:announcement_category_id, options_for_select(AnnouncementCategory.all.map { |c| [c.name, c.id] }.insert(0, ["--请选择--", "0"])), :id => "category") %>
       </div>
 
       <a class="btn btn-primary btn-sm" href="javascript:search();">搜索</a>
@@ -50,6 +49,7 @@
 <table class="table table-striped table-bordered table-hover">
   <thead>
   <tr>
+    <th>选中</th>
     <th>标题</th>
     <th>来源</th>
     <th>当前状态</th>
@@ -67,7 +67,15 @@
 
   <tbody>
   <% @announcements.each do |announcement| %>
-      <tr class="odd gradeX">
+      <tr class="odd gradeX" id="tr_<%=announcement.id%>">
+        <td>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="ace" name="form-field-checkbox" value="<%=announcement.id.to_s%>">
+              <span class="lbl"></span>
+            </label>
+          </div>
+        </td>
         <td><%= link_to announcement.title, announcement_app_show_path(announcement.id) %></td>
         <td><%= announcement.source %></td>
         <td id="statusstr">
@@ -96,6 +104,17 @@
                         :class => 'btn btn-xs btn-danger' %></td>
       </tr>
   <% end %>
+  <tr class="">
+    <td colspan="12">
+      <button class="btn btn-minier btn-danger btn-sm" id="" onclick="batch_delete();">
+        <i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
+        Delete
+      </button>
+    </td>
+    <td>
+     批量删除
+    </td>
+  </tr>
   </tbody>
 </table>
 

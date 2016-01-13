@@ -138,6 +138,7 @@ Rails.application.routes.draw do
     get 'next_check_out', :on => :collection
     get 'next_delete', :on => :collection
     post 'stow', :on => :collection
+    post 'batch_delete', :on => :collection
   end
 
   resources :announcement_categories

@@ -52,13 +52,13 @@ class AnnouncementsController < ApplicationController
           @announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
           # 压缩图片
           begin
-          img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-          width = img.columns
-          height = img.rows
-          thumb = img.resize(width * 0.5, height * 0.5)
-          thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
-          # 将压缩图片地址存进数组
-          @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
+            img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+            width = img.columns
+            height = img.rows
+            thumb = img.resize(width * 0.5, height * 0.5)
+            thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
+            # 将压缩图片地址存进数组
+            @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
           rescue
             @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
           end
@@ -235,7 +235,7 @@ class AnnouncementsController < ApplicationController
     a = Roo::Spreadsheet.open(params[:excel_file])
     a.each do |x|
       begin
-        Resque.enqueue(AchieveAnnouncementsBatch, announcement_category_id, x,current_user.id.to_s)
+        Resque.enqueue(AchieveAnnouncementsBatch, announcement_category_id, x, current_user.id.to_s)
       rescue
       end
     end
@@ -263,6 +263,26 @@ class AnnouncementsController < ApplicationController
         data['flag'] = 0
         data['message'] = '收藏失败！你已经收藏过了哦'
       end
+      format.json { render json: data }
+    end
+  end
+
+  def batch_delete
+    @s = 0
+    @f = 0
+    params[:announcement_id_array].each do |announcement_id|
+      @announcement = Announcement.find(announcement_id)
+      if @announcement.destroy
+        picture_path = 'public/upload/image/announcements/'+ @announcement.id
+        FileUtils.rm_rf(picture_path) if Dir.exist? picture_path
+        @s+=1
+      else
+        @f+=1
+      end
+    end
+    data = {}
+    respond_to do |format|
+      data['message'] = '共'+params[:announcement_id_array].size.to_s+'条，' +@s.to_s+'条成功，'+@f.to_s+'条失败。'
       format.json { render json: data }
     end
   end

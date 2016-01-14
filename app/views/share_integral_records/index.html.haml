@@ -1,0 +1,25 @@
+%h1 Listing share_integral_records
+
+%table
+  %thead
+    %tr
+      %th Shared customer
+      %th Register customer
+      %th Is confirm
+      %th
+      %th
+      %th
+
+  %tbody
+    - @share_integral_records.each do |share_integral_record|
+      %tr
+        %td= share_integral_record.shared_customer_id
+        %td= share_integral_record.register_customer_id
+        %td= share_integral_record.is_confirm
+        %td= link_to 'Show', share_integral_record
+        %td= link_to 'Edit', edit_share_integral_record_path(share_integral_record)
+        %td= link_to 'Destroy', share_integral_record, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Share integral record', new_share_integral_record_path

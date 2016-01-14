@@ -128,7 +128,7 @@ class ProductV1API < Grape::API
     end
 
     panic_buying = PanicBuying.where(:userinfo => Userinfo.find(params[:id]),:state => 1).each do |f|
-      promotions.push({:title => "#{f.beginTime}秒杀", :url => "/activities/skipe_one_index/#{params[:id]}", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.products).to_json)})
+      promotions.push({:title => "#{f.beginTime}秒杀", :url => "/activities/skipe_one_index/#{params[:id]}/", :img => f.avatar, :products => JSON.parse(Entities::Product.represent(f.products).to_json)})
     end
     
     promotions

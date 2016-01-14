@@ -137,7 +137,7 @@ class Ordercompleted
       statistic.quantity = og.quantity
       success &= statistic.save
     end
-    
+
     return success
 
   end

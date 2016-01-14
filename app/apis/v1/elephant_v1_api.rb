@@ -64,6 +64,7 @@ class ElephantV1Api < Grape::API
   end
 
   rescue_from :all do |e|
+    p e.message
     ahoy = Ahoy::Tracker.new
     ahoy.track "exception", {'exception'=> e, 'backtrace' =>e.backtrace}
     error!(e, 500)
@@ -104,6 +105,7 @@ class ElephantV1Api < Grape::API
   mount WineV1API => 'wine'
 
   mount CityV1API => 'city'
+  mount CommonV1API => 'common'
 
   add_swagger_documentation base_path: "#{ENV["ELEPHANT_HOST"]}/api/v1", hide_format: true
 end

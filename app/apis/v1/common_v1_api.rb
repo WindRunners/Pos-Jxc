@@ -1,9 +1,14 @@
 require 'grape'
+require 'helpers/common_v1_api_helper'
 
 =begin
  公共API,包括(注册,登陆,修改)
 =end
 class CommonV1API < Grape::API
+
+  format :json
+
+  include CommonV1APIHelper
 
   desc '小C登录成功回调接口' do
     detail '小C登录成功回调接口 {flag:{0:失败,1:成功},msg:提信息}'
@@ -15,12 +20,12 @@ class CommonV1API < Grape::API
 
     status 200
 
-    current_customerUser
-
     #分享积分逻辑处理
+    share_msg = CommonV1APIHelper.share_integral_syn(params[:customer_id])
 
     #分享酒劵逻辑处理
-    {msg: '小C登录回调成功!', flag: 1}
+    {msg: '小C登录回调成功!', flag: 1, share_integral: share_msg}
   end
+
 
 end

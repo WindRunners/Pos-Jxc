@@ -1,6 +1,6 @@
 class ShareIntegralsController < ApplicationController
   before_action :set_share_integral, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!, only: [:register]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check]
 
   # GET /share_integrals
   # GET /share_integrals.json
@@ -41,6 +41,7 @@ class ShareIntegralsController < ApplicationController
   # PATCH/PUT /share_integrals/1
   # PATCH/PUT /share_integrals/1.json
   def update
+    binding.pry
     respond_to do |format|
       if @share_integral.update(share_integral_params)
         format.js { render_js share_integrals_path, 'Share integral was successfully updated.' }
@@ -77,7 +78,7 @@ class ShareIntegralsController < ApplicationController
         share_integral_record = @share_integral.share_integral_records.build();
         share_integral_record['shared_customer_id'] = params[:shared_customer_id]
         share_integral_record['register_customer_id'] = customer.id
-        share_integral_record['is_confirm'] = false
+        share_integral_record['is_confirm'] = 0
         share_integral_record.save
         data['flag'] = 1
         data['message'] = '注册成功！'
@@ -93,14 +94,24 @@ class ShareIntegralsController < ApplicationController
   end
 
 
-  def exist_integral
-
-
-
-
+  def share_time_check
+    start_date = params[:share_integral]['start_date']
+    end_date = params[:share_integral]['end_date']
+    rows = ShareIntegral.where({"$or": [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}}, {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
+                                        {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
+                                        {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
+    data ={}
+    if rows > 0
+      data['flag'] = 0
+      data['message'] = '活动时间冲突！'
+    else
+      data['flag'] = 1
+      data['message'] = '活动时间正常'
+    end
+    respond_to do |format|
+      format.json { render json: data }
+    end
   end
-
-
 
 
   private

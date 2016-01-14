@@ -4,10 +4,10 @@ class ShareIntegralRecord
   include Mongoid::Attributes::Dynamic
   field :shared_customer_id, type: String
   field :register_customer_id, type: String
-  field :is_confirm, type: Mongoid::Boolean
-  field :is_receive, type: receive
-
+  field :is_confirm, type: Integer, default: 0
 
 
   belongs_to :share_integral
+
+
 end

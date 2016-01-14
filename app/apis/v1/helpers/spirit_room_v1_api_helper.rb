@@ -104,7 +104,7 @@ module SpiritRoomV1APIHelper
 
     #按指定小B生成订单
     result = SpiritRoomV1APIHelper.create_spirit_order(customerUser, userinfo_id, product_list, postInfo)
-    if result[:flag] == 1
+    if result['flag'] == 1
       syn_spirit_product_list.each do |spirit_product|
         spirit_product.save!
       end
@@ -224,12 +224,15 @@ module SpiritRoomV1APIHelper
     mobile = postInfo['mobile']
     longitude = postInfo['longitude']
     latitude = postInfo['latitude']
+    remarks = postInfo['remarks']
+
 
     #订单生成
     order = Order.new(:ordertype => 1,
                       :consignee => consignee,
                       :telephone => mobile,
                       :address => address,
+                      :remarks => remarks,
                       :location => [longitude, latitude],
                       :paymode => 3,
                       :userinfo_id => BSON::ObjectId(userinfo_id),
@@ -254,9 +257,9 @@ module SpiritRoomV1APIHelper
     order.ordergoods = ordergoods_list
 
     if order.spirit_order_creat!
-      return {msg: '订单创建成功!', flag: 1, data: order.orderno}
+      return {'msg'=> '订单创建成功!', 'flag' => 1, 'data'=> order.id}
     else
-      return {msg: '订单创建失败!', flag: 0, data: order.orderno}
+      return {'msg'=> '订单创建失败!', 'flag' => 0, 'data'=> order.id}
     end
   end
 

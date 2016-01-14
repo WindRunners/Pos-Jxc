@@ -75,6 +75,7 @@ class Ordercompleted
 
     orderjson["ordergoods"].each do |ordergoodcompleted|
       good = self.ordergoodcompleteds.build(ordergoodcompleted)
+
       product = good.product
       good.qrcode = product.qrcode
       good.title = product.title
@@ -95,6 +96,7 @@ class Ordercompleted
           self.userinfo.integral -= good.integral * good.quantity
         end
       end
+
     end
 
     if products.size > 0
@@ -125,7 +127,8 @@ class Ordercompleted
 
     success = true
     retailDate = time.strftime("%Y-%m-%d")
-    self.ordergoodscompleteds.each do |og|
+
+    self.ordergoodcompleteds.each do |og|
       statistic = Statistic.new(:retailDate => retailDate)
       statistic.qrcode = og.qrcode
       statistic.productName = og.title
@@ -134,7 +137,7 @@ class Ordercompleted
       statistic.quantity = og.quantity
       success &= statistic.save
     end
-
+    
     return success
 
   end

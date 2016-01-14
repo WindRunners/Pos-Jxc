@@ -34,6 +34,10 @@
               <br>
               最后修改时间：<%=  @announcement.updated_at.to_s %>
               <br>
+              图片数量：<%=  @announcement.pic_path.count %>
+              <br>
+              压缩图片数量：<%=  @announcement.pic_thumb_path.count %>
+              <br>
               上传人：<%=  @announcement.user.name if @announcement.user.present? %>
               <br>
               当前审核状态：<%=  @announcement.status_str %>

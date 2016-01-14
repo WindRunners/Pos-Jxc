@@ -12,13 +12,14 @@ class OrdersController < ApplicationController
 
     orderpar = JSON.parse(params[:order])
 
-    ordercompleted = Ordercompleted.new(:ordertype => 0, :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"])
+    ordercompleted = Ordercompleted.new(:ordertype => 0, :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"])
 
     respond_to do |format|
 
-      if ordercompleted.line_order_creat!(orderpar)
+      begin
+        ordercompleted.line_order_creat!(orderpar)
         format.json { render :json => {success: true} }
-      else
+      rescue
         format.json { render :json => {success: false} }
       end
     end

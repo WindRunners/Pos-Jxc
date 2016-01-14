@@ -2,48 +2,63 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 productsMap = {}
-
+is_clearing = false
 @cashiers = ->
   $("#qrcode").focus()
   $('#authenticity_token').val $('meta[name="csrf-token"]').attr 'content'
 
-#  $('#realMoney').on "mousewheel", -> $('#change').val (Number($('#realMoney').val()) - Number($('#receivablesMoney').val())).toFixed(2)
+  $(document).keyup (event) ->
+    if 27 == event.keyCode
+      clearTable()
+      return false
+    if 13 == event.keyCode
+      console.log "documen. 11111"
+      clearing()
+      return false
 
   $('#realMoney').keyup (event) ->
-    #alert event.keyCode
     if 13 == event.keyCode
-      clearing false
+      console.log "realMoney. 11111"
+      clearing()
       return false
     else
       $('#change').val (Number($('#realMoney').val()) - Number($('#receivablesMoney').val())).toFixed(2)
 
-  $("#qrcode").keydown (event) ->
+  $("#qrcode").keyup (event) ->
     if 13 == event.keyCode
-      $("#qrcode_search").submit()
+      console.log "qrcode. 11111"
+      searchQrcode()
+      return false
+
+  $("#mobile").keyup (event) ->
+    if 13 == event.keyCode
+      console.log "mobile. 11111"
+      checkMobile()
       return false
 
   $("#check_customer_search").on "ajax:success", (event, data) ->
     if data.exists
       $("#integral").text data.integral
       $("#customerId").val data.id
+      new Pop "", "javascript:void(0)", "该会员：#{$("#mobile").val()} 还有#{data.integral} 积分。"
+      $("#qrcode").focus()
     else
-      new Pop "温馨提示", "#", "该手机号：#{$("#mobile").val()}还不是会员！"
+      new Pop "", "javascript:void(0)", "该会员：#{$("#mobile").val()} 不存在"
       $("#mobile").focus()
-
 
   $("#qrcode_search").on "ajax:success", (event, data) ->
     #$("#qrcode_search").ajaxSuccess(event, data) ->
     btnAddRow data
     $("#qrcode").val ""
 
-@clearing = (printable) ->
+@clearing = ->
   if Number($('#realMoney').val()) < Number($('#receivablesMoney').val())
-    new Pop "温馨提示", "#", "金额不足！"
+    new Pop "", "javascript:void(0)", "金额不足！"
     $("#realMoney").focus()
     return
 
   if 0 == Number($('#receivablesMoney').val())
-    new Pop "温馨提示", "", "没有购买商品，无法结算！"
+    new Pop "", "javascript:void(0)", "没有购买商品，无法结算！"
     $("#realMoney").val ""
     $('#change').val "0.00"
     $("#qrcode").focus()
@@ -53,12 +68,20 @@ productsMap = {}
   $('#spanRealMoney').text Number($("#realMoney").val()).toFixed(2)
   $("#spanChange").text $("#change").val()
   ogs = []
-  for item, i in $("#cashierTable > tbody tr")
-    ogs.push {product_id: {$oid: $(item).attr "product_id" }, quantity: $("#spanQuantity#{$(item).attr "qrcode"}").text()}
+  today = new Date()
+  searialNumber = today.format("yyyyMMddhhmmss") + @uuid(6, 16)
+  for p of productsMap
+    ogs.push {product_id: p, quantity: $("##{p}_product_quantity").text()}
+  if 0 < Number($("#integral").val())
+    availableTheoryIntegral = Math.floor(Number($("#receivablesMoney").val()) * 0.1)
+    useIntegral = if availableTheoryIntegral > Number($("#integral").val()) then Number($("#integral").val()) else availableTheoryIntegral - Number($("#integral").val())
+  else
+    useIntegral = 0
   orderPara =
     telephone: $("#mobile").val()
     customer_id: $("#customerId").val()
-    useintegral: 10
+    useintegral: useIntegral
+    serial_number: searialNumber
     ordergoods: ogs
   $.post(
     "/orders/line_order_creat"
@@ -67,60 +90,55 @@ productsMap = {}
       if data.success
         do ->
             $("#popMoreLink").prop 'target', '_self'
-            new Pop "结算成功！", "/cashiers", "实收：#{$('#realMoney').val()} 找零：#{$('#change').val()}"
-            window.location.reload()
+            $("#spanClearing").text today.format("yyyy-MM-dd hh:mm:ss")
+            $("#member-mobile").text $("#mobile").val()
+            $("#serial-number").text searialNumber
+            $("#integral").val = Number($("#integral").val()) - useIntegral
+            new Pop "结算成功！", "#/cashiers|hash#{Math.random() * 10000}", "实收：#{$('#realMoney').val()} 找零：#{$('#change').val()} 使用了 #{useIntegral} 积分"
+            is_clearing = true
       else
-        do -> new Pop "结算失败！", "", "有可能是网络问题，请检查一下网络。"
+        do -> new Pop "结算失败！", "javascript:void(0)", "有可能是网络问题，请检查一下网络。"
     "json"
   )
-  setTimeout "printSmallTicket()", 20 if printable
   undefined
 
-@printSmallTicket = ->
-  today = new Date()
-  strDateTime = today.getFullYear() + "-"
-  strDateTime += (today.getMonth() + 1) + "-"
-  strDateTime += today.getDate() + " "
-  strDateTime += today.getHours() + ":"
-  strDateTime += today.getMinutes() + ":"
-  strDateTime += today.getSeconds()
-  $("#spanClearing").text strDateTime
-  $('#divSmallTicket').jqprint()
-  #setTimeout "window.location.reload()", 500
+@printSmallTicket = (username) ->
+  if !is_clearing
+    new Pop "", "javascript:void(0)", "没有结算不能打印小票!"
+  else
+    $("#small-ticket-cashier").text username
+    $('#divSmallTicket').jqprint()
   undefined
 
 @btnAddRow = (data) ->
   rowPrint = ""
   row = ""
   if data and data.qrcode
-      objTable = $("#cashierTable > tbody tr")
       data.price = 0.0 if "null" == data.price or !data.price
 
-      if !productsMap["#{data.qrcode}"]
-        rowPrint += "<tr id='smallTicketTr#{data.qrcode}'><td class='smallTicketName'>#{data.name}</td>"
-        rowPrint += "<td id='tdQuantity#{data.qrcode}'>1</td>"
+      if !productsMap["#{data.id}"]
+        rowPrint += "<tr id='small_ticket_#{data.id}_product_row'><td class='smallTicketName'>#{data.name}</td>"
+        rowPrint += "<td id='small_ticket_#{data.id}_product_quantity'>1</td>"
         rowPrint += "<td>#{data.price}</td></tr>"
-        row = "<tr id='cashierTr#{data.qrcode}' product_id='#{data.id}' qrcode='#{data.qrcode}'>"
-        productsMap["#{data.qrcode}"] = data.qrcode
-        row += "<td>#{data.qrcode}</td>"
-        row += "<td>#{data.name}</td>"
-        row += "<td class='tdPrice'>#{data.price}</td>"
-        row += "<td>0</td>"
-        row += "<td class='tdQuantity'>"
-        row += "<button onclick='minus($(this).parent())'>-</button>"
-        row += "<span id='spanQuantity#{data.qrcode}'>1</span>"
-        row += "<button onclick='add($(this).parent())'>+</button>"
-        row += "</td>"
-        row += "<td class='tdTotalPrice'>#{Number(data.price).toFixed 2}</td>"
-        row += "<td><button onclick='btnDeleteRow($(this).parent().parent())'>删除</button></td>"
-        row += "</tr>"
 
-        $("#cashierTable > tbody").append row
+        productsMap["#{data.id}"] = data.id
+        productInfo = "<div class='product-row' id='#{data.id}_product_row'><div class='col-xs-2 center'>#{data.qrcode}</div>"
+        productInfo += "<div class='col-xs-4 center'>#{data.name}</div>"
+        productInfo += "<div class='col-xs-1 center' id='#{data.id}_product_price'>#{Number(data.price).toFixed 2}</div>"
+        productInfo += "<div class='col-xs-1 center product-quantity' id='#{data.id}_product_quantity'>1</div>"
+        productInfo += "<div class='col-xs-1 center product-total-price' id='#{data.id}_product_total_price'>#{Number(data.price).toFixed 2}</div>"
+        productInfo += "<div class='col-xs-3 center product-operat'>"
+        productInfo += "<span onclick='plus(\"#{data.id}\")'><i class='fa fa-plus-square-o fa-2x'></i></span>"
+        productInfo += "<span onclick='minus(\"#{data.id}\")'><i class='fa fa-minus-square-o fa-2x'></i></span>"
+        productInfo += "<span onclick='deleteRow(\"#{data.id}\")'><i class='fa fa-trash-o fa-2x'></i></span>"
+        productInfo += "</div></div>"
+
         $("#tableSmallTicket > tbody").append rowPrint
+        $("#select-products-body").append productInfo
       else
-        $("#spanQuantity#{data.qrcode}").text Number($("#spanQuantity#{data.qrcode}").text()) + 1
-        $("#tdQuantity#{data.qrcode}").text $("#spanQuantity#{data.qrcode}").text()
-        calculationPrice $("#spanQuantity#{data.qrcode}").parent()
+        $("##{data.id}_product_quantity").text Number($("##{data.id}_product_quantity").text()) + 1
+        $("#small_ticket_#{data.id}_product_quantity").text $("##{data.id}_product_quantity").text()
+        calculationPrice data.id
 
       calculation()
       undefined
@@ -128,8 +146,8 @@ productsMap = {}
 @calculation = ->
   quantity = 0
   totalMoney = 0.0
-  $("#cashierTable .tdQuantity").each -> quantity += parseInt($(this).find("span:first").text())
-  $("#cashierTable .tdTotalPrice").each -> totalMoney += Number($(this).text())
+  $("#select-products-body .product-quantity").each -> quantity += parseInt($(this).text())
+  $("#select-products-body .product-total-price").each -> totalMoney += Number($(this).text())
   $("#productQuantity").text quantity
   $("#tdProductQuantity").text quantity
   $("#totalPrice").text totalMoney.toFixed(2)
@@ -137,51 +155,62 @@ productsMap = {}
   $(".spanReceivablesMoney").text totalMoney.toFixed(2)
   undefined
 
-@calculationPrice = (tdObj) ->
-  quantity = Number tdObj.find("span:first").text()
-  price = Number tdObj.parent().find(".tdPrice:first").text()
-  totalPriceObj = tdObj.parent().find ".tdTotalPrice:first"
-  totalPriceObj.text (quantity * price).toFixed 2
+@calculationPrice = (product_id) ->
+  totalPriceObj = $("##{product_id}_product_total_price")
+  quantityObj = $("##{product_id}_product_quantity")
+  priceObj = $("##{product_id}_product_price")
+  totalPriceObj.text (Number(quantityObj.text()) * Number(priceObj.text())).toFixed 2
   undefined
 
-@btnDeleteRow = (trObj) ->
-  if trObj
-    trObj.remove()
-    qrcode = trObj.attr('id').substr 9
-    $("#smallTicketTr#{qrcode}").remove()
-    productsMap["#{qrcode}"] = undefined
-  else
-    rownum = $("#cashierTable > tbody tr").length
-    if 0 < rownum
-      $("#cashierTable tr").last().remove()
-
+@deleteRow = (product_id) ->
+  rowObj = $("##{product_id}_product_row")
+  rowObj.remove()
+  $("#small_ticket_#{product_id}_product_row").remove()
+  delete productsMap["#{product_id}"]
   calculation()
   undefined
 
 @clearTable = ->
-  $("#cashierTable > tbody").empty()
-  calculation()
+  $("#select-products-body").empty()
+  $("#tableSmallTicket > tbody").empty()
+  $("#realMoney").val ""
+  $("#change").val "0.00"
+  $("#receivablesMoney").val "0.00"
+  $("#customerId").val ""
+  $("#integral").text "0"
+  $("#mobile").val ""
+  $("#qrcode").val ""
+  $("#qrcode").focus()
+  $(".spanReceivablesMoney").text ""
+  $("#spanRealMoney").text ""
+  $("#spanChange").text ""
+  $("#productQuantity").text "0"
+  $("#totalPrice").text "0.00"
+  $("#tdProductQuantity").text ""
   productsMap = {}
+  is_clearing = false
   undefined
 
-@add = (tdObj) ->
-  spanObj = tdObj.find "span:first"
-  qrcode = tdObj.parent().attr('id').substr 9
-  quantity = Number spanObj.text()
-  spanObj.text quantity + 1
-  $("#tdQuantity" + qrcode).text quantity + 1
-  calculationPrice tdObj
+@searchQrcode = ->
+  $('#qrcode_search').submit() if !$('#qrcode').val().isBlank()
+
+@checkMobile = ->
+  $('#check_customer_search').submit() if !$('#mobile').val().isBlank()
+
+@plus = (product_id) ->
+  quantityObj = $("##{product_id}_product_quantity")
+  console.log "1111#{quantityObj.text()}"
+  quantityObj.text Number(quantityObj.text()) + 1
+  console.log "2222#{quantityObj.text()}"
+  calculationPrice product_id
   calculation()
   undefined
 
-@minus = (tdObj) ->
-  spanObj = tdObj.find "span:first"
-  qrcode = tdObj.parent().attr('id').substr 9
-  quantity = Number spanObj.text()
+@minus = (product_id) ->
+  quantityObj = $("##{product_id}_product_quantity")
+  quantity = Number quantityObj.text()
   if 1 < quantity
-    spanObj.text quantity - 1
-    $("#tdQuantity#{qrcode}").text quantity - 1
-    calculationPrice tdObj
+    quantityObj.text quantity - 1
+    calculationPrice product_id
     calculation()
-
   undefined

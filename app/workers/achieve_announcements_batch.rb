@@ -1,8 +1,9 @@
 class AchieveAnnouncementsBatch
   @queue = :achieves_queue_announcements_batch
   def self.perform(*args)
-    announcement_category_id = args.first
-    x = args.last
+    announcement_category_id = args[0]
+    x = args[1]
+    current_user_id = args[2]
       @fwb = ""
       #建立模型
       announcement = Announcement.new
@@ -23,16 +24,23 @@ class AchieveAnnouncementsBatch
               # 下载
               open('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg', 'wb') do |file|
                 begin
-                  file << open(c).read
+                  pic_file =open(c).read
+                  file << pic_file
+                  # 将图片地址存进数组
+                  announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
                   # 压缩图片
+                  begin
                   img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
                   width = img.columns
                   height = img.rows
                   thumb = img.resize(width * 0.8, height * 0.8)
                   thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') {self.quality = 50} #compress压缩大小
-                  # 将图片地址存进数组
-                  announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+                  # 将压缩图片地址存进数组
                   announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
+                  rescue
+                    announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
+                  end
+                  pic_file.close
                 rescue
                 end
               end
@@ -49,7 +57,7 @@ class AchieveAnnouncementsBatch
         end
       end
       announcement.content = @fwb
-      announcement.user = current_user
+      announcement.user_id = current_user_id
       #保存
       announcement.save
   end

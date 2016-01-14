@@ -53,7 +53,7 @@
         %th  审核状态
       %th 创建时间
       %th  上传人
-      %th{:colspan => "6"} op
+      %th{:colspan => "7"} op
 
   %tbody
     -  @data['chateaus'].each do |chateau|
@@ -72,10 +72,11 @@
             不通过
         %td= chateau.created_at.strftime('%Y-%m-%d %H:%M:%S').to_s if chateau.created_at.present?
         %td= chateau.user.name if chateau.user.present?
+        %td= link_to '详细', '', 'data-href' =>chateau_path(chateau),class:'btn btn-xs btn-Inverse'
         %td= link_to '编辑', '', 'data-href' =>edit_chateau_path(chateau),class:'btn btn-xs btn-info'
         -if current_user.has_role?(:admin)
           - if chateau.status ==0 || chateau.status ==-1
-            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check',class:'btn btn-xs btn-Success'
+            %td= link_to '审核通过','', 'data-href' => '/chateaus/'+chateau.id+'/check',class:'btn btn-xs btn-success'
           - else
             %td= link_to '审核不通过','', 'data-href' =>'/chateaus/'+chateau.id+'/check_out',class:'btn btn-xs btn-warning'
         %td= link_to '标签管理', '', 'data-href' =>chateau_chateau_mark_path(chateau),class:'btn btn-xs btn-purple'

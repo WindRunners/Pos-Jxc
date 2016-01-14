@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   resources :user_integrals
   resources :wines
 
@@ -107,37 +108,38 @@ Rails.application.routes.draw do
     get 'distribution_completed'
     get 'receive_order'
 
-    get 'order_state_count',:on => :collection
-    get 'orders_table_data',:on => :collection
+    get 'order_state_count', :on => :collection
+    get 'orders_table_data', :on => :collection
 
     get 'statistic', :on => :collection
     get 'statisticData', :on => :collection
     post "wx_notify", :on => :member
     post "alipay_notify", :on => :member
     post "alipay_refund_notify", :on => :member
-    post "alipay_dback_notify",  :on => :member
+    post "alipay_dback_notify", :on => :member
   end
 
 
   resources :userinfo_orders do
     post 'binduserinfo', :on => :collection
-    get  'getcode',:on => :collection
+    get 'getcode', :on => :collection
     get 'bind_form', :on => :collection
   end
 
 
   resources :announcements do
-    #get 'check'
-    #get 'check_out'
-    #post 'batch', :on => :collection
+    get 'check'
+    get 'check_out'
+    post 'batch', :on => :collection
     get 'app_show'
 
     get 'warehouse_notice_index', :on => :collection
-    #get 'batch_check', :on => :collection
-    #get 'next_check', :on => :collection
-    #get 'next_check_out', :on => :collection
-    #get 'next_delete', :on => :collection
-    #post 'stow', :on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
+    get 'next_delete', :on => :collection
+    post 'stow', :on => :collection
+    post 'batch_delete', :on => :collection
   end
 
   resources :announcement_categories
@@ -158,9 +160,9 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get "users/sessions/password_reset", to: "users/sessions#password_reset"
-    get "users/sessions/cheak_mobile",to: "users/sessions#cheak_mobile"
-    get "users/send_message",to: "users/registrations#send_message"
-    post "users/sessions/fix_password",to: "users/sessions#fix_password"
+    get "users/sessions/cheak_mobile", to: "users/sessions#cheak_mobile"
+    get "users/send_message", to: "users/registrations#send_message"
+    post "users/sessions/fix_password", to: "users/sessions#fix_password"
     post "users/mobile_sign_in", to: "users/mobile_sessions#create"
     post "users/mobile_sign_out", to: "users/mobile_sessions#destroy"
   end
@@ -234,34 +236,34 @@ Rails.application.routes.draw do
   end
 
 
-  # resources :chateaus do
-  #   get 'turn_picture'
-  #   post 'turn_picture_add'
-  #   delete 'turn_picture_reduce'
-  #   post 'turn_picture_urls'
-  #   get 'introduce_show'
-  #   get 'chateau_mark'
-  #   post 'chateau_mark_add'
-  #   delete 'chateau_mark_reduce'
-  #   get 'check'
-  #   get 'check_out'
-  #   get 'search', :on => :collection
-  #   get 'wines'
-  #   get 'workload', :on => :collection
-  #   post 'relate_wine', :on => :collection
-  #   delete 'resolve_wine', :on => :collection
-  #   get 'ex_pic',:on => :collection
-  #   get 'batch_check', :on => :collection
-  #   get 'next_check', :on => :collection
-  #   get 'next_check_out', :on => :collection
-  # end
+  resources :chateaus do
+    get 'turn_picture'
+    post 'turn_picture_add'
+    delete 'turn_picture_reduce'
+    post 'turn_picture_urls'
+    get 'introduce_show'
+    get 'chateau_mark'
+    post 'chateau_mark_add'
+    delete 'chateau_mark_reduce'
+    get 'check'
+    get 'check_out'
+    get 'search', :on => :collection
+    get 'wines'
+    get 'workload', :on => :collection
+    post 'relate_wine'
+    get 'resolve_wine'
+    get 'ex_pic', :on => :collection
+    get 'batch_check', :on => :collection
+    get 'next_check', :on => :collection
+    get 'next_check_out', :on => :collection
+  end
   resources :chateau_marks
 
 
   resources :chateau_comments do
   end
-  post 'chateau_comments/add_comment'=> 'chateau_comments#add_comment'
-  post 'chateau_comments/hit'=> 'chateau_comments#hit'
+  post 'chateau_comments/add_comment' => 'chateau_comments#add_comment'
+  post 'chateau_comments/hit' => 'chateau_comments#hit'
   resources :regions do
     get 'children'
     post 'add_children'
@@ -270,7 +272,7 @@ Rails.application.routes.draw do
   end
 
   resources :wines do
-    post 'table',:on => :collection
+    post 'table', :on => :collection
     get 'turn_picture'
     post 'turn_picture_add'
     delete 'turn_picture_reduce'
@@ -283,7 +285,13 @@ Rails.application.routes.draw do
     get 'check_out'
     get 'search', :on => :collection
   end
-  post 'ckeditor/pictures'=> 'wines#upload'
+  post 'ckeditor/pictures' => 'wines#upload'
+
+  resources :share_integral_records
+  resources :share_integrals do
+    post 'register'
+    post 'share_time_check'
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -339,9 +347,9 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
-  get 'dashboards/index'=> 'dashboards#index'
+  get 'dashboards/index' => 'dashboards#index'
   post 'dashboards/store_order_data' => "dashboards#store_order_data"
   post 'dashboards/exposure_product_data' => "dashboards#exposure_product_data"
   post 'dashboards/sale_product_data' => "dashboards#sale_product_data"
-
+  get 'common/create_qrcode_image' => "common#create_qrcode_image"
 end

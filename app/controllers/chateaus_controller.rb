@@ -10,16 +10,11 @@ class ChateausController < ApplicationController
     name_condition=params[:name] || ''
     searchParams['status'] = status_condition if status_condition.present?
     searchParams['name'] = /#{name_condition}/ if name_condition.present?
-    @user_chateaus= Chateau.where(:user_id => current_user.id)
-    i = 0
-    @user_chateaus.each do |c|
-      i +=1 if c.created_at.today?
-    end
     @data ={}
     @data['chateaus'] =Chateau.where(searchParams).page(params[:page]).order('created_at DESC')
     @data['count'] = Chateau.count
     @data['user_count'] = current_user.chateaus.count
-    @data['today_count'] = i
+    @data['today_count'] = Chateau.where(:user_id => current_user.id,:created_at => {"$gt"=>Time.now.strftime("%Y/%m/%d")+ " 00:00:00"}).count
     @data
   end
 
@@ -178,9 +173,7 @@ class ChateausController < ApplicationController
       @picture.type= params[:type]
       uuid=SecureRandom.uuid
       open('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg', 'wb') do |file|
-        pic_file =open(c).read
-        file << pic_file
-        pic_file.close
+        file << open(c).read
         @picture.pic = file
         File.delete('public/upload/image/chateaus/'+ params[:chateau_id] + '/' + uuid + '.jpg')
       end
@@ -319,9 +312,8 @@ class ChateausController < ApplicationController
 
   def workload
     @data ={}
-    @users = User.all
     @data['work_array'] = []
-    User.all.each do |u|
+    User.where(:role_ids=>{"$in"=>[Role.where({"name"=>"jiu_world"}).first.id]}).each do |u|
       if !u.chateaus.empty?
         work = {}
         work['user_id'] = u.id
@@ -361,8 +353,7 @@ class ChateausController < ApplicationController
     @chateau.wines.delete(@wine)
     respond_to do |format|
       if @chateau.save
-        format.js { render_js chateau_wines_url(@chateau) }
-        # format.html { redirect_to '/chateaus/'+@chateau.id+'/wines', notice: @chateau.name + '于' + @wine.name + '解除关联成功！' }
+        format.html { redirect_to chateau_wines_path(@chateau) }
         format.json { head :no_content }
       else
         format.json { render json: @chateau.errors, status: :unprocessable_entity }

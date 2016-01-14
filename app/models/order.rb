@@ -466,12 +466,35 @@ class Order
       self.subscribe(Store.new)
       broadcast(:set_order_store,self.id)
 
+
+      #添加积分日志
+      if self.useintegral>0
+        self.subscribe(IntegralLog.new)
+        broadcast(:set_order_integral_log,self.id)
+      end
     elsif workflow_state == 'cancelled' #取消订单
 
       if self.paymode == 3 #酒库提酒
         #退换酒库商品
         subscribe(SpiritRoom.new)
         broadcast(:back_spiritroom_product,self.id)
+      end
+
+      #添加积分日志
+      if self.useintegral>0
+        self.subscribe(IntegralLog.new)
+        broadcast(:set_order_integral_log,self.id)
+      end
+    elsif workflow_state == 'completed' #完成订单
+
+      #添加积分日志
+      self.subscribe(IntegralLog.new)
+      broadcast(:set_order_integral_log,self.id)
+
+      #添加积分日志
+      if self.getintegral>0
+        self.subscribe(IntegralLog.new)
+        broadcast(:set_order_integral_log,self.id)
       end
     end
 

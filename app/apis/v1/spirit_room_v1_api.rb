@@ -44,10 +44,11 @@ class SpiritRoomV1API < Grape::API
     end
     params do
       requires :customer_id, type: String, desc: '小Cid'
+      requires :userinfo_id, type: String, desc: '小Bid'
     end
     post 'product_list' do
 
-      data = SpiritRoomV1APIHelper.product_list(current_customerUser)
+      data = SpiritRoomV1APIHelper.product_list(current_customerUser,declared(params))
       return data if data.class==Hash
       present data, with: Entities::SpiritRoomProduct
     end
@@ -114,6 +115,19 @@ class SpiritRoomV1API < Grape::API
       return SpiritRoomV1APIHelper.get_reset_pwd_verifycode(current_customerUser)
     end
 
+
+    desc '获取酒库区域列表 ' do
+      detail '获取酒库区域列表'
+      success Entities::City
+    end
+    params do
+      requires :customer_id, type: String, desc: '小Cid'
+    end
+    post 'city_list' do
+
+      status 200
+      present SpiritRoomV1APIHelper.city_list(current_customerUser), with: Entities::City
+    end
 
   end
 

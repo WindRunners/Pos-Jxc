@@ -17,7 +17,7 @@ class OrderTrack
 
     state = self.order.current_state.name.to_s
     if state == 'paid'
-      self.remarks = "待配送"
+      self.remarks = "待抢单"
     elsif state == 'generation'
       self.remarks = "待付款"
     elsif state=='take'

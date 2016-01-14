@@ -37,7 +37,7 @@ module DeliveryOrderV1APIHelper
     order_id = postInfo['order_id'] #获取订单列表
     order = Order.where({'_id'=>order_id}).first
     return {msg: '当前订单不存在!', flag: 0} if !order.present?
-    return {msg: '订单状态不合法!', flag: 0} if order.current_state.name.to_s!='paid'
+    return {msg: '下手慢了，当前订单已被抢!', flag: 0} if order.current_state.name.to_s!='paid'
 
     #接单
     order.take_order!

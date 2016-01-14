@@ -1,0 +1,187 @@
+.hr.hr-16.hr-dotted
+.row
+  .container
+    = form_for @share_integral, remote:true do |f|
+      - if @share_integral.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@share_integral.errors.count, "error")} prohibited this share_integral from being saved:"
+          %ul
+            - @share_integral.errors.full_messages.each do |msg|
+              %li= msg
+      .col-xs-12
+        %form.form-horizontal
+          .form-group
+            .field
+              = f.label :标题,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :title
+          .form-group
+            - if params[:action] == "new"
+              .field
+                = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
+              .col-sm-9
+                %input#start_date.input-sm{:name => "share_integral[start_date]",:type => "datetime"}
+                  至
+                %input#end_date.input-sm{:name => "share_integral[end_date]",:type => "datetime"}
+
+            - if params[:action] == "edit"
+              .field
+                = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
+              .col-sm-9
+                %input#start_date.input-sm{:name => "share_integral[start_date]",:type => "datetime",:value =>@share_integral.start_date}
+                  至
+                %input#end_date.input-sm{:name => "share_integral[end_date]",:type => "datetime",:value =>@share_integral.end_date}
+          .form-group
+            .field
+              = f.label :分享人获赠积分,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :shared_give_integral
+          .form-group
+            .field
+              = f.label :注册人获赠积分,:class=>'col-sm-2 control-label no-padding-right',:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :register_give_integral
+          .form-group
+            .field
+              = f.label :分享logo图片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :logo
+            .col-sm-6
+              %img#img_share_integral_logo{:style => "height:50px;width:50px"}
+          .form-group
+            .field
+              = f.label :app分享页面图,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :share_app_pic
+            .col-sm-6
+              %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px"}
+          .form-group
+            .field
+              = f.label :第三方页面图,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :share_out_pic
+            .col-sm-6
+              %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px"}
+          .form-group
+            .field
+              = f.label :是否启用,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.check_box :status
+          .form-group
+            .field
+              = f.label :规则,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              - if params[:action] == 'edit'
+                = f.text_area :desc,:class => "tinymce", :rows => 20, :cols => 120,:value=>"#{@share_integral.desc}"
+              - else
+                = f.text_area :desc, :class => "tinymce", :rows => 20, :cols => 120
+
+
+            .hr.hr-16.hr-dotted
+            .actions.col-sm-1.col-sm-offset-3
+              = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'
+            .actions.col-sm-8
+              = link_to 'Back','', 'data-href' => share_integrals_path,:class=> 'btn btn-info'
+
+
+:javascript
+
+  //初始化加载方法
+    $(function () {
+
+        $('#start_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+        $('#end_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+
+    //TinyMCE初始化
+    tinymce.init({
+        selector: 'textarea.tinymce',
+        height: 500,
+        plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+    });
+
+    });
+
+    function save_check(){
+
+
+
+
+    };
+
+    //上传图片预览
+
+    $("#share_integral_logo").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_share_integral_logo").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+
+    $("#share_integral_share_app_pic").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_share_integral_share_app_pic").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+    $("#share_integral_share_out_pic").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_share_integral_share_out_pic").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }

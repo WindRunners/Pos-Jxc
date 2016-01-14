@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Shared customer:
+  = @share_integral_record.shared_customer_id
+%p
+  %b Register customer:
+  = @share_integral_record.register_customer_id
+%p
+  %b Is confirm:
+  = @share_integral_record.is_confirm
+
+= link_to 'Edit', edit_share_integral_record_path(@share_integral_record)
+\|
+= link_to 'Back', share_integral_records_path

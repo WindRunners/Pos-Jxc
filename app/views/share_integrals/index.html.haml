@@ -1,0 +1,31 @@
+%h1 活动列表
+
+%table.table
+  %thead
+    %tr
+      %th 标题
+      %th 开始时间
+      %th 结束时间
+      %th 分享人获赠积分
+      %th 注册人获赠积分
+      %th 当前状态
+      %th
+      %th
+      %th
+
+  %tbody
+    - @share_integrals.each do |share_integral|
+      %tr
+        %td= share_integral.title
+        %td= share_integral.start_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= share_integral.end_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= share_integral.shared_give_integral
+        %td= share_integral.register_give_integral
+        %td= share_integral.status_str
+        %td= link_to 'Show','','data-href' => share_integral_path(share_integral)
+        %td= link_to 'Edit','','data-href' =>  edit_share_integral_path(share_integral)
+        %td= link_to 'Destroy',share_integral_path(share_integral), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to '新建活动','','data-href' => new_share_integral_path

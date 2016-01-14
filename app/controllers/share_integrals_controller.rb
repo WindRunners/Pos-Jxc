@@ -41,7 +41,6 @@ class ShareIntegralsController < ApplicationController
   # PATCH/PUT /share_integrals/1
   # PATCH/PUT /share_integrals/1.json
   def update
-    binding.pry
     respond_to do |format|
       if @share_integral.update(share_integral_params)
         format.js { render_js share_integrals_path, 'Share integral was successfully updated.' }

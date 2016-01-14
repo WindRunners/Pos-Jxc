@@ -66,7 +66,7 @@ class SearchV1API < Grape::API
     requires :keyword, type: String, desc: '关键词'
   end
   get 'keyword' do
-    keyword = params[:keyword]
+    keyword = params[:keyword].downcase
 
     userinfo = Userinfo.find(params[:id])
     keywords = userinfo.keywords.or({:word => /#{keyword}/}).or({:pinyin => /#{keyword}/}).or({:py => /#{keyword}/})

@@ -13,7 +13,8 @@ module Entities
     expose :fright, documentation: {type: Float, desc: '运费'}
     expose :useintegral, documentation: {type: Integer, desc: '使用积分数量'}
     expose :paycost, documentation: {type: Float, desc: '支付金额'}
-    expose :paymode, documentation: {type: Integer, desc: '支付方式 0-货到付款 1-支付宝 2-微信支付'}
+    expose :paymode, documentation: {type: Integer, desc: '支付方式 0-货到付款 1-支付宝 2-微信支付 3-酒库提酒'}
+    expose :online_paid, documentation: {type: Integer, desc: '线上支付 0-未付款 1-已付款 2-已退款'}
     expose :ordergoods, documentation: {type: Ordergood, desc: '订单商品信息'}
     expose :remarks, documentation: {type: String, desc: '重要说明'} do |instance, options|
       "#{instance.remarks}"

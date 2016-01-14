@@ -89,12 +89,10 @@ class Ordercompleted
       else
         #计算货值
         self.goodsvalue += good.price * good.quantity
-        #库存核销
-        product.shop_id(self.userinfo.id).stock_reduce(ordergood.quantity)
         #本次购买积分
         if current_customer != nil
           current_customer.integral += good.integral * good.quantity
-          self.user.userinfo.integral -= good.integral * good.quantity
+          self.userinfo.integral -= good.integral * good.quantity
         end
       end
     end

@@ -75,6 +75,7 @@ class Ordercompleted
 
     orderjson["ordergoods"].each do |ordergoodcompleted|
       good = self.ordergoodcompleteds.build(ordergoodcompleted)
+
       product = good.product
       good.qrcode = product.qrcode
       good.title = product.title
@@ -89,14 +90,13 @@ class Ordercompleted
       else
         #计算货值
         self.goodsvalue += good.price * good.quantity
-        #库存核销
-        product.shop_id(self.userinfo.id).stock_reduce(ordergood.quantity)
         #本次购买积分
         if current_customer != nil
           current_customer.integral += good.integral * good.quantity
-          self.user.userinfo.integral -= good.integral * good.quantity
+          self.userinfo.integral -= good.integral * good.quantity
         end
       end
+
     end
 
     if products.size > 0
@@ -127,7 +127,8 @@ class Ordercompleted
 
     success = true
     retailDate = time.strftime("%Y-%m-%d")
-    self.ordergoodscompleteds.each do |og|
+
+    self.ordergoodcompleteds.each do |og|
       statistic = Statistic.new(:retailDate => retailDate)
       statistic.qrcode = og.qrcode
       statistic.productName = og.title

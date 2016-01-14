@@ -112,11 +112,11 @@ module GiftBagV1APIHelper
     return {msg: '收礼人不存在,请检查账号!', flag: 0} if !receiver_customerUser.present?
 
     return {msg: '收礼人不能和送礼人相同!', flag: 0} if postInfo.receiver_mobile == customerUser.mobile
-    # userinfo_id = postInfo.userinfo_id #运营商id
+    userinfo_id = postInfo.userinfo_id #运营商id
 
 
     #获取酒库商品信息
-    product_info = GiftBagV1APIHelper.get_spirit_product_info(spiritRoom)
+    product_info = GiftBagV1APIHelper.get_spirit_product_info(spiritRoom,userinfo_id)
 
     gif_bag = GiftBag.new()
     gif_bag.receiver_mobile = postInfo.receiver_mobile
@@ -137,7 +137,7 @@ module GiftBagV1APIHelper
       return {msg: '商品库存不够,请重新选择!', flag: 0} if product_info[product_id.to_s].to_i < product_count.to_i
     end
     product_list.each do |product_id, product_count|
-      GiftBagV1APIHelper.update_spirit_product_info(spiritRoom, product_id, product_count.to_i, gif_bag_product_list)
+      GiftBagV1APIHelper.update_spirit_product_info(spiritRoom, product_id, product_count.to_i, gif_bag_product_list,userinfo_id)
     end
 
     gif_bag.product_list = gif_bag_product_list
@@ -192,7 +192,7 @@ module GiftBagV1APIHelper
   private
 
   #获取酒库的商品信息{product_id:count}
-  def GiftBagV1APIHelper.get_spirit_product_info(spiritRoom)
+  def GiftBagV1APIHelper.get_spirit_product_info(spiritRoom,userinfo_id)
 
     all_product_info = {}
     map = %Q{
@@ -207,7 +207,7 @@ module GiftBagV1APIHelper
         }
       }
 
-    all_product_info_list = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :count.gt => 0).map_reduce(map, reduce).out(inline: true)
+    all_product_info_list = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id,:userinfo_id=>BSON::ObjectId(userinfo_id), :count.gt => 0).map_reduce(map, reduce).out(inline: true)
     all_product_info_list.each do |v|
       all_product_info[v['_id']] = v['value']
     end
@@ -215,14 +215,13 @@ module GiftBagV1APIHelper
   end
 
   #更新酒库商品数量
-  def GiftBagV1APIHelper.update_spirit_product_info(spiritRoom, product_id, count, gif_bag_product_list)
+  def GiftBagV1APIHelper.update_spirit_product_info(spiritRoom, product_id, count, gif_bag_product_list,userinfo_id)
 
     #减少酒库商品库存
-    spiritRoomProducts = SpiritRoomProduct.where({:spirit_room_id => spiritRoom.id, :product_id => product_id, :count.gt => 0})
+    spiritRoomProducts = SpiritRoomProduct.where({:spirit_room_id => spiritRoom.id,:userinfo_id=>BSON::ObjectId(userinfo_id), :product_id => product_id, :count.gt => 0})
 
     spiritRoomProducts.each do |spiritRoomProduct|
 
-      send_count = 0 #发送的数量
       if spiritRoomProduct.count < count
 
         #赋值礼包商品列表

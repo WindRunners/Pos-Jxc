@@ -95,11 +95,13 @@ class ShareIntegralsController < ApplicationController
 
 
   def share_time_check
-    start_date = params[:start_date]
-    end_date = params[:end_date]
-    rows = ShareIntegral.where({"$or": [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}}, {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
-                                        {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
-                                        {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
+
+    start_date = params[:share_integral]['start_date']
+    end_date = params[:share_integral]['end_date']
+    rows = ShareIntegral.where({"$or" => [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}},
+                                          {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
+                                          {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
+                                          {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
     data ={}
     if rows > 0
       data['flag'] = 0

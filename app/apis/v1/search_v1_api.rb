@@ -69,7 +69,7 @@ class SearchV1API < Grape::API
     keyword = params[:keyword]
 
     userinfo = Userinfo.find(params[:id])
-    keywords = userinfo.keywords.or({:word => /#{keyword}/}).or({:pinyin => /#{keyword}/}).or({:py => /#{keyword}/})
+    keywords = userinfo.keywords.or({:word => /#{keyword}/i}).or({:pinyin => /#{keyword}/i}).or({:py => /#{keyword}/i})
     keywords.map(&:word).join(",")
   end
 end

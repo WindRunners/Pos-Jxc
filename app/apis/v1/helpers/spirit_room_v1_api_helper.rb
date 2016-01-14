@@ -49,27 +49,29 @@ module SpiritRoomV1APIHelper
   end
 
   #酒库商品类型列表
-  def SpiritRoomV1APIHelper.product_list(customerUser)
+  def SpiritRoomV1APIHelper.product_list(customerUser,postInfo)
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
     return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
 
-    spiritRoomProducts = spiritRoom.spirit_room_products.where(:count.gt => 0).order('updated_at desc')
+    userinfo_id = postInfo['userinfo_id'] #小B id
 
-    productMap = {}
+    spiritRoomProducts = spiritRoom.spirit_room_products.where({'userinfo_id'=>BSON::ObjectId(userinfo_id),:count.gt => 0}).order('updated_at desc')
+
+    product_count_info = {}
+    product_ids_list = []
     spiritRoomProducts.each do |spiritRoomProduct|
-
-      product = productMap[spiritRoomProduct.product_id]
-      if product.present?
-        product['store_count'] += spiritRoomProduct.count
-      else
-        product = Product.shop_id(spiritRoomProduct['userinfo_id']).where({'id'=>spiritRoomProduct.product_id}).first #商品
-        next if !product.present?
-        product['store_count'] = spiritRoomProduct.count
-        productMap[spiritRoomProduct.product_id] = product
-      end
+      product_count_info[spiritRoomProduct.product_id] = spiritRoomProduct.count
+      product_ids_list << BSON::ObjectId(spiritRoomProduct.product_id)
     end
-    productMap.values
+
+    product_list = Product.shop_id(userinfo_id).where({'id'=>{'$in'=>product_ids_list}})
+    result_list = []
+    product_list.each do |product|
+      product['store_count'] = product_count_info[product.id.to_s]
+      result_list << product
+    end
+    result_list
   end
 
 
@@ -86,6 +88,9 @@ module SpiritRoomV1APIHelper
     #获取当前单位的酒库商品信息
     product_info = SpiritRoomV1APIHelper.get_spirit_product_info(spiritRoom,userinfo_id)
     product_list = JSON.parse(postInfo.product_list.to_s)
+
+    Rails.logger.info "酒库提酒参数为：#{postInfo}"
+    Rails.logger.info "酒库提酒商品列表：#{product_list}"
 
     #检查库存数量是否足够
     product_list.each do |product_id, product_count|
@@ -189,6 +194,37 @@ module SpiritRoomV1APIHelper
     # 通用接口
     ChinaSMS.to mobile, '【酒运达】您的酒库密码重置验证码是' + veriycode
     {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
+  end
+
+
+
+  #酒库城市列表
+  def SpiritRoomV1APIHelper.city_list(customerUser)
+
+    # puts "小C信息为:#{Customer.all.first.to_json}"
+
+    spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
+    return {msg: '当前会员未开通酒库!', flag: 2} if !spiritRoom.present?
+
+    map = %Q{
+        function(){
+          emit(this.userinfo_id,this.count)
+        }
+      }
+
+    reduce = %Q{
+
+        function(key,values){
+          return Array.sum(values);
+        }
+      }
+
+    info_list = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :count.gt => 0).map_reduce(map, reduce).out(inline: true)
+    userinfo_id_list = []
+    info_list.each do |v|
+      userinfo_id_list << v['_id']
+    end
+    return Userinfo.where({'_id'=>{'$in'=>userinfo_id_list}})
   end
 
 

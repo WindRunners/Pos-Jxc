@@ -57,6 +57,7 @@ class GiftBagV1API < Grape::API
     end
     params do
       requires :customer_id, type: String, desc: '小Cid'
+      requires :userinfo_id, type: String, desc: '小Bid'
       requires :password, type: String, desc: '密码'
       requires :receiver_mobile, type: String, desc: '收礼人手机号'
       requires :expiry_days, type: Integer, desc: '失效天数',values:[1,2,7]

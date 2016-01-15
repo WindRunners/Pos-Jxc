@@ -1,7 +1,6 @@
 function save_check(){
 
     var share_integral_title = $("#share_integral_title").val();
-    var share_integral_rule_content = $("#share_integral_rule_content").val();
 
 
     var start_date = $("#start_date").val();
@@ -32,10 +31,7 @@ function save_check(){
     };
 
 
-    if (share_integral_rule_content == undefined || share_integral_rule_content == "") {
-        alert("请输入活动规则！")
-        return false;
-    };
+
 
 
 

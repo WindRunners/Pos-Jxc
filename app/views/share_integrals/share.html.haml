@@ -3,79 +3,85 @@
   %head
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
     %meta{:charset => "utf-8"}
-    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
+    %meta{:content => "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no", :name => "viewport"}
+    = stylesheet_link_tag "share_integrals", :media => "all"
+    %script{:src => "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"}
+    %script{:src => "//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"}
     %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css", :rel => "stylesheet"}
-      %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
-        %script{:src => "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"}
-        %script{:src => "//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"}
+    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
     %title
       =@share_integral.title
   %body
-    .container
-      .banner-box
-        %img{:src => @share_integral.share_out_pic.url}
-      .register-box
-        .con-box
-          .register-content
-            %form.form-horizontal
-              %input#mobile.form-control{:name => "mobile", :type => "text"}
-              .xiazai
-                %button.btn01#btn_register{onclick: 'return register()'} 领取礼包
-      .con-box
-        .content-box
-          %p
-            %br
-            您已领取积分礼包#{@share_integral.register_give_integral}积分
-            %br
-              快快使用吧
+    .banner-box
+      %img{:src => @share_integral.share_out_pic.url}
+
+    .register2-box
+      %img{:src =>"/images/logo1024.png" }
+      .aa_box01
+        恭喜你获得酒运达积分礼包
+      %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号"}
       .xiazai
-        %button.btn01 下载酒运达APP品味人生
-      .hd-box
-        .hd
-          %p 活动规则
-          %img.i1{:src => "/images/share_down.png"}
-          %img.i2{:src => "/images/share_up.png"}
-      .text-box
-        = markdown @share_integral.rule_content if @share_integral.rule_content.present?
+        %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
+
+
+    .con-box{:style=>"display:none"}
+      .content-box
+        %p
+          %br
+          您已领取积分礼包#{@share_integral.register_give_integral}积分
+          %br
+            快快使用吧
+      .xiazai
+        %a.btn01#app_path0 下载酒运达APP品味人生
+
+
+    .friend-box{:style=>"display:none"}
+      .content-box
+        %p
+          %br
+          您已是老朋友，登录APP进行推荐有奖
+          %br
+            即获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+      .xiazai
+        %a.btn01#app_path1 下载酒运达APP品味人生
+
+    .hd-box
+      .hd
+        %p 活动规则
+        %img.role_down{:src => "/images/share_down.png"}
+    .text-box{:style=>"display:none"}
+      = markdown @share_integral.rule_content if @share_integral.rule_content.present?
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
-    :css
-      @charset "utf-8";
-      /* CSS Document */
-
-      body,img,{margin:0;padding:0;border:0;}
-      *{ margin:0px; padding:0px; font-family:"SimHei"}
-      .container{ width:100%; margin:0; padding:0;}
-      .banner-box img{width:100%}
-
-      .con-box{background-image:url("/images/share_bg.png");background-repeat:no-repeat;width:100%;background-size:100% 100%;overflow:hidden}
-      .content-box{background-image:url("/images/share_content.png"); opacity:0.9;background-repeat:no-repeat;margin-left:auto;margin-right:auto;width:65%;height:60%;background-size:100% 100%;margin-top:15%;margin-bottom:15%}
-
-      .content-box p{font-family:"SimHei";font-size:120%;text-align:center;color:#FFF; padding-top:5%;padding-bottom:15%}
-
-      .btn01{ display:block; width:70%; height:40px; border-radius:5px; background-color:#fa6261; border:none; margin-left:auto; margin-right:auto; margin-top:5%; line-height:40px; text-align:center; color:#ffffff; font-size:120%;}
-
-      .hd-box{width:100%; margin-top:20%; margin-bottom:2%}
-      .hd{display:table; margin-left:auto; margin-right:auto;}
-      .hd p{ float:left; font-size:125%;}
-      .hd img{ float:left; margin-top:3px; margin-left:10px;}
-
-      .text-box{width:100%}
-      .text-box p{text-align:center;margin-bottom:5%;font-family:"SimHei";font-size:125%}
-      .register-content{margin-left:auto;margin-right:auto;width:65%;height:60%;background-size:100% 100%;margin-top:15%;margin-bottom:15%}
-
-
 
 
 :javascript
   $(function(){
-     $(".i2").hide();
-     $(".text-box").hide();
-     $(".hd").click(function(){$(".text-box").toggle();});
-     $(".hd").click(function(){$(".hd img").toggle();});
-     $('.hd').click(function(){$('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);});
 
+     $("#btn_mobile").click(function(){
+
+     $("#btn_mobile").val("");
+     });
+
+      var user_system;
+   if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+      user_system ="iOS"
+      $("#app_path0").attr("href","http://fir.im/jydnew");
+      $("#app_path1").attr("href","http://fir.im/jydnew");
+    } else if (/(Android)/i.test(navigator.userAgent)) {
+      user_system ="Android"
+      $("#app_path0").attr("href","http://fir.im/hnjyd");
+      $("#app_path1").attr("href","http://fir.im/hnjyd");
+    } else {
+      alert("PC不能直接下载！");
+    };
    });
+
+  $(".hd").click(function(){$(".text-box").toggle();});
+  $(".hd").click(function(){$(".hd img").toggle();});
+  $('.hd').click(function(){$('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);});
+
+
   function register(){
     var mobile = $("input:text").val();
     var share_integral_id = $("#share_integral_id").val();
@@ -90,12 +96,22 @@
         data: {mobile: mobile,share_integral_id: share_integral_id },
         dataType: "json",
         success: function (data) {
-          alert(data.message);
+          $(".register2-box").hide();
+          if(data.flag==0){
+            $(".friend-box").show();
+          }
+          else{
+            $(".con-box").show();
+          }
         }
     });
 
-
+      $("#btn_register").attr("disabled", true);
   };
+
+
+
+
 
 
 

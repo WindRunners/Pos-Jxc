@@ -10,6 +10,7 @@ class ShareIntegral
   field :register_give_integral, type: Integer
   field :status, type: Integer,default: 0
   field :desc, type: String
+  field :rule_content, type: String
 
 
 
@@ -31,6 +32,7 @@ class ShareIntegral
 
 
   has_many :share_integral_records
+  belongs_to :userinfo
 
   def status_str
     if self.status==0

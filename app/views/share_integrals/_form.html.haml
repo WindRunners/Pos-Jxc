@@ -16,6 +16,11 @@
             .col-sm-9
               = f.text_field :title
           .form-group
+            .field
+              = f.label :链接页面描述,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :desc
+          .form-group
             - if params[:action] == "new"
               .field
                 = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
@@ -81,9 +86,9 @@
               = f.label :规则,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-9
               - if params[:action] == 'edit'
-                = f.text_area :desc,:class => "tinymce", :rows => 20, :cols => 120,:value=>"#{@share_integral.desc}"
+                = f.text_area :rule_content,:class => "tinymce", :rows => 20, :cols => 120,:value=>"#{@share_integral.rule_content}"
               - else
-                = f.text_area :desc, :class => "tinymce", :rows => 20, :cols => 120
+                = f.text_area :rule_content, :class => "tinymce", :rows => 20, :cols => 120
 
 
             .hr.hr-16.hr-dotted
@@ -125,62 +130,7 @@
 
     });
 
-    function save_check(){
 
-    var share_integral_title = $("#share_integral_title").val();
-
-
-    var start_date = $("#start_date").val();
-    var end_date = $("#end_date").val();
-
-
-
-
-
-    if (share_integral_title == undefined || share_integral_title == "") {
-        alert("请输入标题！")
-        return false;
-    };
-
-
-    if (start_date == undefined || start_date == "" ) {
-        alert("请输入开始日期！")
-        return false;
-    };
-
-
-
-    if (end_date == undefined || end_date == "" ) {
-        alert("请输入结束日期！")
-        return false;
-    };
-
-
-    if (start_date > end_date) {
-        alert("开始时间不能大于结束时间！")
-        return false;
-    };
-
-
-    $.ajax({
-        type: "post",
-        url: "share_integrals/share_time_check",
-        data: {start_date: start_date,end_date: end_date},
-        dataType: "json",
-        success: function (data) {
-
-        if (data.flag ==0){
-        alert(data.message);
-        return false;
-        };
-
-        },
-    });
-
-    return true;
-
-
-    };
 
     //上传图片预览
 

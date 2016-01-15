@@ -17,8 +17,8 @@
     - @share_integrals.each do |share_integral|
       %tr
         %td= share_integral.title
-        %td= share_integral.start_date.strftime('%Y-%m-%d %H:%M:%S').to_s
-        %td= share_integral.end_date.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= share_integral.start_date.strftime('%Y-%m-%d %H:%M:%S').to_s if share_integral.start_date.present?
+        %td= share_integral.end_date.strftime('%Y-%m-%d %H:%M:%S').to_s if share_integral.end_date.present?
         %td= share_integral.shared_give_integral
         %td= share_integral.register_give_integral
         %td= share_integral.status_str

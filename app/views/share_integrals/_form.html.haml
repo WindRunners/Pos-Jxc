@@ -43,25 +43,34 @@
               = f.number_field :register_give_integral
           .form-group
             .field
-              = f.label :分享logo图片,:class=>'col-sm-2 control-label no-padding-right'
+              = f.label :分享logo图片400400,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-3
               = f.file_field :logo
             .col-sm-6
-              %img#img_share_integral_logo{:style => "height:50px;width:50px"}
+              -if @share_integral.logo.present?
+                %img#img_share_integral_logo{:style => "height:50px;width:50px",:src=>@share_integral.logo.url}
+              -if @share_integral.logo.nil?
+                %img#img_share_integral_logo{:style => "height:50px;width:50px"}
           .form-group
             .field
-              = f.label :app分享页面图,:class=>'col-sm-2 control-label no-padding-right'
+              = f.label :app分享页面图640280,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-3
               = f.file_field :share_app_pic
             .col-sm-6
-              %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px"}
+              -if @share_integral.share_app_pic.present?
+                %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px",:src=>@share_integral.share_app_pic.url}
+              -if @share_integral.share_app_pic.nil?
+                %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px"}
           .form-group
             .field
-              = f.label :第三方页面图,:class=>'col-sm-2 control-label no-padding-right'
+              = f.label :第三方页面图640280,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-3
               = f.file_field :share_out_pic
             .col-sm-6
-              %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px"}
+              -if @share_integral.share_out_pic.present?
+                %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px",:src=>@share_integral.share_out_pic.url}
+              -if @share_integral.share_app_pic.nil?
+                %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px"}
           .form-group
             .field
               = f.label :是否启用,:class=>'col-sm-2 control-label no-padding-right'
@@ -118,7 +127,57 @@
 
     function save_check(){
 
+    var share_integral_title = $("#share_integral_title").val();
 
+
+    var start_date = $("#start_date").val();
+    var end_date = $("#end_date").val();
+
+
+
+
+
+    if (share_integral_title == undefined || share_integral_title == "") {
+        alert("请输入标题！")
+        return false;
+    };
+
+
+    if (start_date == undefined || start_date == "" ) {
+        alert("请输入开始日期！")
+        return false;
+    };
+
+
+
+    if (end_date == undefined || end_date == "" ) {
+        alert("请输入结束日期！")
+        return false;
+    };
+
+
+    if (start_date > end_date) {
+        alert("开始时间不能大于结束时间！")
+        return false;
+    };
+
+
+    $.ajax({
+        type: "post",
+        url: "share_integrals/share_time_check",
+        data: {start_date: start_date,end_date: end_date},
+        dataType: "json",
+        success: function (data) {
+
+        if (data.flag ==0){
+        alert(data.message);
+        return false;
+        };
+
+        },
+    });
+
+    return true;
 
 
     };

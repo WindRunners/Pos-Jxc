@@ -121,7 +121,7 @@
 
 
 
-<% if @announcement.chateau_comments.present? %>
+<% if !@announcement.chateau_comments.present? %>
     <div class="col-xs-12" id="double_hr" style="border-bottom-style:solid; border-bottom-width:2px; border-bottom-color: #cccccc;">评论列表</div>
 
     <% 20.times do %>

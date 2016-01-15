@@ -1,6 +1,6 @@
 class ShareIntegralsController < ApplicationController
   before_action :set_share_integral, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!, only: [:register, :share_time_check]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
 
   # GET /share_integrals
   # GET /share_integrals.json
@@ -41,7 +41,6 @@ class ShareIntegralsController < ApplicationController
   # PATCH/PUT /share_integrals/1
   # PATCH/PUT /share_integrals/1.json
   def update
-    binding.pry
     respond_to do |format|
       if @share_integral.update(share_integral_params)
         format.js { render_js share_integrals_path, 'Share integral was successfully updated.' }
@@ -95,11 +94,13 @@ class ShareIntegralsController < ApplicationController
 
 
   def share_time_check
+
     start_date = params[:share_integral]['start_date']
     end_date = params[:share_integral]['end_date']
-    rows = ShareIntegral.where({"$or"=> [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}}, {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
-                                        {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
-                                        {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
+    rows = ShareIntegral.where({"$or" => [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}},
+                                          {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
+                                          {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
+                                          {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
     data ={}
     if rows > 0
       data['flag'] = 0
@@ -111,6 +112,12 @@ class ShareIntegralsController < ApplicationController
     respond_to do |format|
       format.json { render json: data }
     end
+  end
+
+
+  def share
+    @share_integral = ShareIntegral.find(params[:share_integral_id])
+    render :layout => nil
   end
 
 

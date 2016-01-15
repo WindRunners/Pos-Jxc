@@ -1,5 +1,5 @@
 class CommonController < ApplicationController
-
+  skip_before_action :authenticate_user!
   def create_qrcode_image
 
     qrcode_url = params[:qrcode_url].present? ? params[:qrcode_url] : 'http://fir.im/hnjyd'

@@ -15,10 +15,15 @@ $(function () {
     };
     pagination_ajax();
 
+
+
 });
 
 
-
+var scripts = [null, null]
+$('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+    //inline scripts related to this page
+});
 
 
 var map = new BMap.Map("store-map");//初始化地图

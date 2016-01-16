@@ -94,9 +94,8 @@ class ShareIntegralsController < ApplicationController
 
 
   def share_time_check
-
-    start_date = params[:share_integral]['start_date']
-    end_date = params[:share_integral]['end_date']
+    start_date = params[:start_date]
+    end_date = params[:end_date]
     rows = ShareIntegral.where({"$or" => [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}},
                                           {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
                                           {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
@@ -116,7 +115,7 @@ class ShareIntegralsController < ApplicationController
 
 
   def share
-    @share_integral = ShareIntegral.where(:userinfo_id=>params[:userinfo_id],:start_date => {"$lte" => Time.now}, :end_date => {"$gte" => Time.now}).first
+    @share_integral = ShareIntegral.where(:start_date => {"$lte" => Time.now}, :end_date => {"$gte" => Time.now}).first
     render :layout => false
   end
 

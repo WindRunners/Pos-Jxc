@@ -116,8 +116,8 @@ class ShareIntegralsController < ApplicationController
 
 
   def share
-    @share_integral = ShareIntegral.find(params[:share_integral_id])
-    render :layout => nil
+    @share_integral = ShareIntegral.where(:userinfo_id=>params[:userinfo_id],:start_date => {"$lte" => Time.now}, :end_date => {"$gte" => Time.now}).first
+    render :layout => false
   end
 
 
@@ -129,6 +129,6 @@ class ShareIntegralsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def share_integral_params
-    params.require(:share_integral).permit(:title, :start_date, :end_date, :shared_give_integral, :register_give_integral, :logo, :share_app_pic, :share_out_pic, :status, :desc)
+    params.require(:share_integral).permit(:title, :start_date, :end_date, :shared_give_integral, :register_give_integral, :logo, :share_app_pic, :share_out_pic, :status, :desc, :rule_content)
   end
 end

@@ -287,12 +287,18 @@ Rails.application.routes.draw do
   end
   post 'ckeditor/pictures' => 'wines#upload'
 
+  get 'share_integrals/share' => 'share_integrals#share'
+
   resources :share_integral_records
   resources :share_integrals do
     post 'register'
     post 'share_time_check', :on => :collection
-    get 'share'
+
   end
+
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

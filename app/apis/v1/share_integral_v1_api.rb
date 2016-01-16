@@ -15,7 +15,7 @@ class ShareIntegralV1API < Grape::API
     share_integral = ShareIntegral.where({'userinfo_id' => BSON::ObjectId(params[:userinfo_id]), 'start_date' => {'$lte' => now_date}, 'end_date' => {'$gte' => now_date}, 'status' => 1}).first()
 
     if share_integral.present?
-      share_integral['share_url'] = '/userinfos/567cabaac2fb4e05b6000011/products/568b9071af484356f3000397/desc'
+      share_integral['share_url'] = "/share_integrals/share?userinfo_id=#{params[:userinfo_id]}"
       present share_integral, with: Entities::ShareIntegral
     else
       {}

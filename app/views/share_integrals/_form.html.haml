@@ -91,6 +91,9 @@
                 = f.text_area :rule_content, :class => "tinymce", :rows => 20, :cols => 120
 
 
+
+          %input{"type"=>"hidden","id"=>"form_type","value"=>params[:action]}
+
             .hr.hr-16.hr-dotted
             .actions.col-sm-1.col-sm-offset-3
               = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'

@@ -4,7 +4,7 @@ class ShareIntegralRecordsController < ApplicationController
   # GET /share_integral_records
   # GET /share_integral_records.json
   def index
-    @share_integral_records = ShareIntegralRecord.all
+    @share_integral_records = ShareIntegralRecord.all.page(params[:page]).order('created_at DESC')
   end
 
   # GET /share_integral_records/1

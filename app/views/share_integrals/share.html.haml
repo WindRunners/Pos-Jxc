@@ -53,6 +53,7 @@
       = markdown @share_integral.rule_content if @share_integral.rule_content.present?
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
+    %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
 
 
 :javascript
@@ -93,6 +94,7 @@
   function register(){
     var mobile = $("input:text").val();
     var share_integral_id = $("#share_integral_id").val();
+    var shared_customer_id = $("#shared_customer_id").val();
     if (mobile == undefined || mobile == ""|| mobile.length!=11) {
      alert("请输入正确的手机号码！")
      return false;
@@ -101,7 +103,7 @@
     $.ajax({
         type: "POST",
         url: "/share_integrals/"+ share_integral_id +"/register",
-        data: {mobile: mobile,share_integral_id: share_integral_id },
+        data: {mobile: mobile,share_integral_id: share_integral_id ,shared_customer_id: shared_customer_id},
         dataType: "json",
         success: function (data) {
           $(".register2-box").hide();

@@ -48,7 +48,7 @@
     .hd-box
       .hd
         %p 活动规则
-        %img.role_down{:src => "/images/share_down.png"}
+        %img.role_pic{:src => "/images/share_down.png"}
     .text-box{:style=>"display:none"}
       = markdown @share_integral.rule_content if @share_integral.rule_content.present?
 
@@ -58,28 +58,36 @@
 :javascript
   $(function(){
 
-     $("#btn_mobile").click(function(){
+     $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
 
-     $("#btn_mobile").val("");
-     });
 
-      var user_system;
-   if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-      user_system ="iOS"
-      $("#app_path0").attr("href","http://fir.im/jydnew");
-      $("#app_path1").attr("href","http://fir.im/jydnew");
-    } else if (/(Android)/i.test(navigator.userAgent)) {
-      user_system ="Android"
-      $("#app_path0").attr("href","http://fir.im/hnjyd");
-      $("#app_path1").attr("href","http://fir.im/hnjyd");
-    } else {
-      alert("PC不能直接下载！");
-    };
+     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        var user_system ="iOS"
+        $("#app_path0").attr("href","http://fir.im/jydnew");
+        $("#app_path1").attr("href","http://fir.im/jydnew");
+      } else if (/(Android)/i.test(navigator.userAgent)) {
+        var user_system ="Android"
+        $("#app_path0").attr("href","http://fir.im/hnjyd");
+        $("#app_path1").attr("href","http://fir.im/hnjyd");
+      } else {
+        alert("PC不能直接下载！");
+      };
+
+
+      $(".hd").click(function(){
+
+        $(".role_pic").attr("src","/images/share_up.png");
+        $(".text-box").toggle();
+        $('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);
+
+      });
+
+
+
+
    });
 
-  $(".hd").click(function(){$(".text-box").toggle();});
-  $(".hd").click(function(){$(".hd img").toggle();});
-  $('.hd').click(function(){$('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);});
+
 
 
   function register(){

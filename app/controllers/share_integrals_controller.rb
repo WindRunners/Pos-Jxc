@@ -116,7 +116,7 @@ class ShareIntegralsController < ApplicationController
 
 
   def share
-    @share_integral = ShareIntegral.find(params[:share_integral_id])
+    @share_integral = ShareIntegral.where(:userinfo_id=>params[:userinfo_id],:start_date => {"$lte" => Time.now}, :end_date => {"$gte" => Time.now}).first
     render :layout => false
   end
 

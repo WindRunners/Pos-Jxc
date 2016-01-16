@@ -5,7 +5,7 @@ body,img,{margin:0;padding:0;border:0;}
 *{ margin:0px; padding:0px; font-family:"SimHei"}
 .container{ width:100%; margin:0; padding:0;}
 .banner-box img{width:100%}
-
+a{text-decoration:none;}
 .con-box{background-image:url("/images/share_bg.png");background-repeat:no-repeat;width:100%;background-size:100% 100%;overflow:hidden}
 .content-box{background-image:url("/images/share_content.png"); opacity:0.9;background-repeat:no-repeat;margin-left:auto;margin-right:auto;width:65%;height:60%;background-size:100% 100%;margin-top:15%;margin-bottom:15%}
 

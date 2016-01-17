@@ -10,7 +10,6 @@ class ShareIntegralRecord
   belongs_to :share_integral
 
 
-
   after_save do
 
     if self.is_confirm == 1 #登录回执
@@ -26,4 +25,17 @@ class ShareIntegralRecord
       register_interalLog.save
     end
   end
+
+  def is_confirm_str
+
+    if self.is_confirm ==0
+      p "未确认"
+
+    else
+      p "已确认"
+    end
+
+  end
+
+
 end

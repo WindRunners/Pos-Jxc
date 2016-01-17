@@ -289,10 +289,10 @@ Rails.application.routes.draw do
 
   get 'share_integrals/share' => 'share_integrals#share'
 
-  resources :share_integral_records
   resources :share_integrals do
     post 'register'
     post 'share_time_check', :on => :collection
+    resources :share_integral_records
 
   end
 

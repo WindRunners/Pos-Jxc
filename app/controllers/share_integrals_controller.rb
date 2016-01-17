@@ -101,7 +101,7 @@ class ShareIntegralsController < ApplicationController
                                           {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
                                           {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
     data ={}
-    if rows > 0
+    if rows > 0 || params[:form_type]== "edit"
       data['flag'] = 0
       data['message'] = '活动时间冲突！'
     else
@@ -116,6 +116,7 @@ class ShareIntegralsController < ApplicationController
 
   def share
     @share_integral = ShareIntegral.where(:start_date => {"$lte" => Time.now}, :end_date => {"$gte" => Time.now}).first
+    @shared_customer_id = params[:shared_customer_id]
     render :layout => false
   end
 

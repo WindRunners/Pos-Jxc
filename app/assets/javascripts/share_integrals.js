@@ -1,7 +1,7 @@
 function save_check(){
 
     var share_integral_title = $("#share_integral_title").val();
-
+    var form_type = $("#form_type").val();
 
     var start_date = $("#start_date").val();
     var end_date = $("#end_date").val();
@@ -38,7 +38,7 @@ function save_check(){
     $.ajax({
         type: "post",
         url: "share_integrals/share_time_check",
-        data: {start_date: start_date,end_date: end_date},
+        data: {start_date: start_date,end_date: end_date,form_type: form_type},
         dataType: "json",
         success: function (data) {
 

@@ -15,8 +15,12 @@
     .banner-box
       %img{:src => @share_integral.share_out_pic.url}
 
+
+    .logo-box
+      .logo
+        %img{:src => @share_integral.logo.url }
+
     .register2-box
-      %img{:src =>"/images/logo1024.png" }
       .aa_box01
         恭喜你获得酒运达积分礼包
       %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号"}
@@ -39,20 +43,21 @@
       .content-box
         %p
           %br
-          您已是老朋友，登录APP进行推荐有奖
+          您已是老朋友，登录APP
           %br
-            即获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+            进行推荐有奖即获得#{@share_integral.shared_give_integral}积分赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
     .hd-box
       .hd
         %p 活动规则
-        %img.role_pic{:src => "/images/share_down.png"}
+        %img.role_pic{:src => "/images/share_integrals/share_down.png"}
     .text-box{:style=>"display:none"}
       = markdown @share_integral.rule_content if @share_integral.rule_content.present?
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
+    %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
 
 
 :javascript
@@ -76,7 +81,7 @@
 
       $(".hd").click(function(){
 
-        $(".role_pic").attr("src","/images/share_up.png");
+        $(".role_pic").attr("src","/images/share_integrals/share_up.png");
         $(".text-box").toggle();
         $('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);
 
@@ -93,6 +98,7 @@
   function register(){
     var mobile = $("input:text").val();
     var share_integral_id = $("#share_integral_id").val();
+    var shared_customer_id = $("#shared_customer_id").val();
     if (mobile == undefined || mobile == ""|| mobile.length!=11) {
      alert("请输入正确的手机号码！")
      return false;
@@ -101,7 +107,7 @@
     $.ajax({
         type: "POST",
         url: "/share_integrals/"+ share_integral_id +"/register",
-        data: {mobile: mobile,share_integral_id: share_integral_id },
+        data: {mobile: mobile,share_integral_id: share_integral_id ,shared_customer_id: shared_customer_id},
         dataType: "json",
         success: function (data) {
           $(".register2-box").hide();

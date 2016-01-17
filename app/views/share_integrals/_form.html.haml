@@ -54,7 +54,7 @@
             .col-sm-6
               -if @share_integral.logo.present?
                 %img#img_share_integral_logo{:style => "height:50px;width:50px",:src=>@share_integral.logo.url}
-              -if @share_integral.logo.nil?
+              -else @share_integral.logo.nil?
                 %img#img_share_integral_logo{:style => "height:50px;width:50px"}
           .form-group
             .field
@@ -64,7 +64,7 @@
             .col-sm-6
               -if @share_integral.share_app_pic.present?
                 %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px",:src=>@share_integral.share_app_pic.url}
-              -if @share_integral.share_app_pic.nil?
+              -else @share_integral.share_app_pic.nil?
                 %img#img_share_integral_share_app_pic{:style => "height:50px;width:100px"}
           .form-group
             .field
@@ -74,7 +74,7 @@
             .col-sm-6
               -if @share_integral.share_out_pic.present?
                 %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px",:src=>@share_integral.share_out_pic.url}
-              -if @share_integral.share_app_pic.nil?
+              -else
                 %img#img_share_integral_share_out_pic{:style => "height:50px;width:100px"}
           .form-group
             .field
@@ -90,6 +90,9 @@
               - else
                 = f.text_area :rule_content, :class => "tinymce", :rows => 20, :cols => 120
 
+
+
+          %input{"type"=>"hidden","id"=>"form_type","value"=>params[:action]}
 
             .hr.hr-16.hr-dotted
             .actions.col-sm-1.col-sm-offset-3

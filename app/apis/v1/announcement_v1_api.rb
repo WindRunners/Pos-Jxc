@@ -17,7 +17,6 @@ class AnnouncementV1API < Grape::API
   get 'list' do
     announcement_category_id = params[:announcement_category_id]
     present Announcement.where(:status => 1, :announcement_category_id => announcement_category_id).page(params[:page]).per(params[:per_page]), with: Entities::Announcement
-    # present Announcement.all.skip(params[:page]*params[:per_page]).limit(params[:page]),with: Entities::Announcement
   end
 
 

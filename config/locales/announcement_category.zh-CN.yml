@@ -7,3 +7,4 @@ zh-CN:
         id: "ID"
         name: "名字"
         description: "描述"
+        sequence: "排序字段"

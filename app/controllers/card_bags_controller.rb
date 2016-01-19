@@ -1,5 +1,6 @@
 class CardBagsController < ApplicationController
   before_action :set_card_bag, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
 
   # GET /card_bags
   # GET /card_bags.json
@@ -60,6 +61,11 @@ class CardBagsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+
+
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

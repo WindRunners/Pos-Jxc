@@ -26,6 +26,7 @@ class ProductTicketsController < ApplicationController
   def create
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
+    @product_ticket.userinfo.id = current_user.userinfo.id
     respond_to do |format|
       if @product_ticket.save
         format.js { render_js product_tickets_path, 'Product ticket was successfully created.' }
@@ -102,7 +103,6 @@ class ProductTicketsController < ApplicationController
 
 
   def build_card_bag
-    binding.pry
     product_ticket = ProductTicket.find(params[:product_ticket_id])
     product_ticket.customer_ids.each do |customer_id|
       begin
@@ -125,6 +125,41 @@ class ProductTicketsController < ApplicationController
       format.json { render json: data }
     end
   end
+
+  def share
+    @product_ticket = ProductTicket.find(params[:product_ticket_id])
+    @shared_customer_id = "568bd0b0af484356f300333c"
+    render :layout => false
+  end
+
+  def register
+    data = {}
+    product_ticket = ProductTicket.find(params[:product_ticket_id])
+    customer = Customer.find_by_mobile(params[:mobile])
+    if customer.present?
+      data['flag'] = 0
+      data['message'] = '该用户已注册！'
+    else
+      customer = Customer.new(:mobile => params[:mobile])
+      if customer.save
+        share_integral_record = product_ticket.share_integral_records.build();
+        share_integral_record['shared_customer_id'] = params[:shared_customer_id]
+        share_integral_record['register_customer_id'] = customer.id
+        share_integral_record['is_confirm'] = 0
+        share_integral_record.save
+        data['flag'] = 1
+        data['message'] = '注册成功！'
+
+      else
+        data['flag'] = -1
+        data['message'] = '注册失败！'
+      end
+    end
+    respond_to do |format|
+      format.json { render json: data }
+    end
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

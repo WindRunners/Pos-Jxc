@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
 
+  resources :card_bags do
 
-  resources :card_bags
+  end
+
   resources :product_tickets do
     # post 'import_customers', :on => :collection
     post 'customer_add'
     post 'customer_reduce'
     post 'build_card_bag'
     post 'share_time_check', :on => :collection
+    get 'share'
+    post 'register'
   end
   resources :user_integrals
   resources :wines

@@ -16,7 +16,7 @@ class AnnouncementV1API < Grape::API
   end
   get 'list' do
     announcement_category_id = params[:announcement_category_id]
-    present Announcement.where(:status => 1, :announcement_category_id => announcement_category_id).page(params[:page]).per(params[:per_page]), with: Entities::Announcement
+    present Announcement.where(:status => 1, :announcement_category_id => announcement_category_id).page(params[:page]).per(params[:per_page]).order('created_at DESC'), with: Entities::Announcement
   end
 
 
@@ -45,7 +45,7 @@ class AnnouncementV1API < Grape::API
 
   desc '获取分类'
   get 'category' do
-    category = AnnouncementCategory.all
+    category = AnnouncementCategory.all.order('sequence DESC')
     category
   end
 

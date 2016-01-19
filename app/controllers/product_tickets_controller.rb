@@ -113,6 +113,7 @@ class ProductTicketsController < ApplicationController
       rescue
       end
     end
+    data ={}
     if product_ticket.save
       data['flag'] = 1
       data['message'] = '发布成功！'

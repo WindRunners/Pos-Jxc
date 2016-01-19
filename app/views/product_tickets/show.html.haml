@@ -1,0 +1,72 @@
+%p#notice= notice
+
+%p
+  %b Title:
+  = @product_ticket.title
+%p
+  %b Start date:
+  = @product_ticket.start_date
+%p
+  %b End date:
+  = @product_ticket.end_date
+%p
+  %b Product list:
+  = @product_ticket.product_id
+%p
+  %b Status:
+  = @product_ticket.status
+%p
+  %b Desc:
+  = @product_ticket.desc
+%p
+  %b Rule content:
+  = @product_ticket.rule_content
+
+
+
+= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(@product_ticket)
+\|
+= link_to 'Back',  '', 'data-href' =>product_tickets_path
+
+
+:javascript
+
+  //
+  //var product_ticket_id = $("#product_ticket_id").val();
+  //
+  //function customer_check(customer_id){
+  //  $.ajax({
+  //      type: "post",
+  //      url: "product_tickets/"+product_ticket_id+"/customer_check",
+  //      data: {customer_id: customer_id,product_ticket_id: product_ticket_id},
+  //      dataType: "json",
+  //      success: function (data) {
+  //          if (data.flag ==1){
+  //              alert(data.message);
+  //              $("#tr_" + customer_id).remove();
+  //          };
+  //
+  //      },
+  //  });
+  //
+  //
+  //};
+  //
+  //
+  //function customer_checkout(customer_id){
+  //      $.ajax({
+  //      type: "post",
+  //      url: "product_tickets/"+product_ticket_id+"/customer_checkout",
+  //      data: {customer_id: customer_id,product_ticket_id: product_ticket_id},
+  //      dataType: "json",
+  //      success: function (data) {
+  //          if (data.flag ==1){
+  //              alert(data.message);
+  //              $("#tr_" + customer_id).remove();
+  //          };
+  //
+  //      },
+  //  });
+  //
+  //
+  //};

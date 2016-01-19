@@ -1,0 +1,29 @@
+%h1 Listing card_bags
+
+%table
+  %thead
+    %tr
+      %th Customer
+      %th Status
+      %th Register customer count
+      %th Login customer count
+      %th Source
+      %th
+      %th
+      %th
+
+  %tbody
+    - @card_bags.each do |card_bag|
+      %tr
+        %td= card_bag.customer_id
+        %td= card_bag.status
+        %td= card_bag.register_customer_count
+        %td= card_bag.login_customer_count
+        %td= card_bag.source
+        %td= link_to 'Show', card_bag
+        %td= link_to 'Edit', edit_card_bag_path(card_bag)
+        %td= link_to 'Destroy', card_bag, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Card bag', new_card_bag_path

@@ -1,0 +1,137 @@
+.hr.hr-16.hr-dotted
+.row
+  .container
+    = form_for @product_ticket , remote:true do |f|
+      - if @product_ticket.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@product_ticket.errors.count, "error")} prohibited this product_ticket from being saved:"
+          %ul
+            - @product_ticket.errors.full_messages.each do |msg|
+              %li= msg
+      .col-xs-12
+        %form.form-horizontal
+          .form-group
+            .field
+              = f.label :分享标题,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :title
+            .form-group
+            .field
+              = f.label :分享logo图片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :logo
+            .col-sm-6
+              -if @product_ticket.logo.present?
+                %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
+              -else @product_ticket.logo.nil?
+                %img#img_product_ticket_logo{:style => "height:50px;width:50px"}
+            .form-group
+            .field
+              = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              %input#start_date.input-sm{:name => "product_ticket[start_date]",:type => "datetime"}
+              至
+              %input#end_date.input-sm{:name => "product_ticket[end_date]",:type => "datetime"}
+            .form-group
+            .field
+              = f.label :状态,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :status
+            .form-group
+            .field
+              = f.label :分享描述,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :desc
+            .field
+              = f.label :商品列表,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :product_id
+            .field
+              = f.label :小C数组,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :customer_ids
+            .form-group
+            .field
+              = f.label :规则,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+            - if params[:action] == 'edit'
+              = f.text_area :rule_content,:class => "tinymce", :rows => 20, :cols => 120,:value=>"#{@product_ticket.rule_content}"
+            - else
+              = f.text_area :rule_content, :class => "tinymce", :rows => 20, :cols => 120
+
+
+            %input{"type"=>"hidden","id"=>"customer_ids","value"=> ""}
+            %input{"type"=>"hidden","id"=>"product_list","value"=> ""}
+
+
+            .hr.hr-16.hr-dotted
+            .actions.col-sm-1.col-sm-offset-3
+              = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'
+            .actions.col-sm-8
+              = link_to 'Back','', 'data-href' => product_tickets_path,:class=> 'btn btn-info'
+
+
+
+
+:javascript
+
+  //初始化加载方法
+    $(function () {
+
+        $('#start_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+        $('#end_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+
+
+      //TinyMCE初始化
+      tinymce.init({
+          selector: 'textarea.tinymce',
+          height: 500,
+          plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table contextmenu paste code'
+          ],
+          toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+      });
+
+    });
+
+
+
+  //上传图片预览
+
+    $("#product_ticket_logo").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_product_ticket_logo").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+  function save_check(){
+
+
+
+  };

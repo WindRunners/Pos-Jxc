@@ -4,6 +4,6 @@
   %b 名称:
   = @region.name
 
-= link_to '编辑', edit_region_path(@region)
+= link_to '编辑',  '', 'data-href' =>edit_region_path(@region)
 \|
-= link_to '返回', regions_path
+= link_to '返回',  '', 'data-href' =>regions_path

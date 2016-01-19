@@ -20,9 +20,9 @@
         %td= region.parent.name
         %td= region.children.count
         %td= eval region.descendants_and_self.map{|c|c.chateaus.count}.join('+')
-        %td= link_to '下级管理', region_children_path(region)
-        %td= link_to '编辑', edit_region_path(region)
-        %td= link_to '删除', region, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to '下级管理',  '', 'data-href' => region_children_path(region)
+        %td= link_to '编辑',  '', 'data-href' => edit_region_path(region)
+        %td= link_to '删除', region, :method => :delete, :remote =>true, :data => { :confirm => 'Are you sure?' }
 
 %br
 

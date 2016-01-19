@@ -35,7 +35,8 @@ class RegionsController < ApplicationController
     @region.parent = Region.root
     respond_to do |format|
       if @region.save
-        format.html { redirect_to @region, notice: 'Region was successfully created.' }
+        format.js { render_js regions_path,'Region was successfully updated.' }
+        # format.html { redirect_to @region, notice: 'Region was successfully created.' }
         format.json { render :show, status: :created, location: @region }
       else
         format.html { render :new }
@@ -49,7 +50,8 @@ class RegionsController < ApplicationController
   def update
     respond_to do |format|
       if @region.update(region_params)
-        format.html { redirect_to @region, notice: 'Region was successfully updated.' }
+        format.js { render_js regions_path,'Region was successfully updated.' }
+        # format.html { redirect_to @region, notice: 'Region was successfully updated.' }
         format.json { render :show, status: :ok, location: @region }
       else
         format.html { render :edit }
@@ -63,7 +65,8 @@ class RegionsController < ApplicationController
   def destroy
     @region.destroy
     respond_to do |format|
-      format.html { redirect_to region_children_url(@region.parent.id), notice: 'Region was successfully destroyed.' }
+      format.js { render_js regions_path,'Region was successfully updated.' }
+      # format.html { redirect_to region_children_url(@region.parent.id), notice: 'Region was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -73,10 +76,17 @@ class RegionsController < ApplicationController
     children.parent = Region.find(params[:region_id])
     children.save
     redirect_to :region_children
+    respond_to do |format|
+      format.js { render_js regions_path,"增加下级成功！" }
+      format.json { head :no_content }
+    end
   end
 
   def reduce_children
-    redirect_to :region_children
+    respond_to do |format|
+      format.js { render_js regions_path,"增加下级成功！" }
+      format.json { head :no_content }
+    end
   end
 
 

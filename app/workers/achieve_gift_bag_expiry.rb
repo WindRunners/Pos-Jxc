@@ -23,6 +23,12 @@ class AchieveGiftBagExpiry
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id.to_s}).first
     return if !spiritRoom.present?
 
+    spiritRoomLog = SpiritRoomLog.new
+    spiritRoomLog.spirit_room = spiritRoom
+    spiritRoomLog.gift_bag = giftBag
+    spiritRoomLog.remarks = "礼包失效返回酒库"
+    spiritRoomLog.save
+
     #遍历礼包商品信息
     giftBag.product_list.each do |k, v|
 

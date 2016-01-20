@@ -187,7 +187,28 @@ class DeliveryUserV1API < Grape::API
 
       {msg: "注销成功!", flag: 1}
     end
-  end
 
+
+    desc '配送员在岗离岗' do
+      detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
+    end
+    params do
+      requires :token, type: String, desc: '身份认证token'
+      requires :work_status, type: Integer, desc: '0:离岗 1:在岗',values:[1,0]
+    end
+    post 'update_work_status' do
+
+      status 200 #修改post默认返回状态
+      status = params[:work_status]
+      #更新配送员状态
+      if current_deliveryUser.update({'work_status'=>status})
+        {msg: status==1? '在岗成功!':'离岗成功！' , flag: 1}
+      else
+        {msg: '操作失败！' , flag: 0}
+      end
+
+    end
+
+  end
 
 end

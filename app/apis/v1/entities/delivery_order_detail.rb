@@ -27,8 +27,12 @@ module Entities
 
 
     expose :take_product_imgs,documentation: {type: Array, desc: '接货图片'}
-    expose :current_distance, documentation: {type: Float, desc: '当前位置距离门店距离'}
-    expose :distance, documentation: {type: Float, desc: '配送距离'}
+    expose :current_distance, documentation: {type: Float, desc: '当前位置距离门店距离'}do |instance, options|
+      instance.current_distance.present? ? (instance.current_distance/1000).round(1) : 0
+    end
+    expose :distance, documentation: {type: Float, desc: '配送距离'}do |instance, options|
+      instance.distance.present? ?  (instance.distance/1000).round(1) : 0
+    end
     expose :store_address, documentation: {type: String, desc: '门店地址'}
   end
 end

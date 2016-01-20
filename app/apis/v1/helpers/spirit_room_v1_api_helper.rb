@@ -115,6 +115,14 @@ module SpiritRoomV1APIHelper
       syn_spirit_product_list.each do |spirit_product|
         spirit_product.save!
       end
+
+      #添加酒库日志
+      spiritRoomLog = SpiritRoomLog.new
+      spiritRoomLog.spirit_room = spiritRoom
+      spiritRoomLog['order_id'] = result['data']
+      spiritRoomLog.remarks = "酒库提酒"
+      spiritRoomLog.save
+
       return {msg: '酒库提酒成功!', flag: 1, data: result['data']}
     else
       return {msg: '酒库提酒失败!', flag: 0}

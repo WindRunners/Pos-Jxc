@@ -43,4 +43,10 @@ class SpiritRoom
     end
 
   end
+
+
+
+
+
+
 end

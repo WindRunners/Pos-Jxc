@@ -24,9 +24,9 @@ class ProductTicketsController < ApplicationController
   # POST /product_tickets
   # POST /product_tickets.json
   def create
+    binding.pry
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
-    binding.pry
     @product_ticket.userinfo = current_user.userinfo
     respond_to do |format|
       if @product_ticket.save
@@ -114,6 +114,7 @@ class ProductTicketsController < ApplicationController
       rescue
       end
     end
+    product_ticket.status = 1
     data ={}
     if product_ticket.save
       data['flag'] = 1
@@ -158,6 +159,17 @@ class ProductTicketsController < ApplicationController
     end
     respond_to do |format|
       format.json { render json: data }
+    end
+  end
+
+
+
+  # GET /customer
+  # GET /customer.json
+  def customer
+    respond_to do |format|
+      format.html
+      format.json { render json: CustomerDatatable.new(view_context, current_user) }
     end
   end
 

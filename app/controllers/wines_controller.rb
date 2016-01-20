@@ -36,6 +36,7 @@ class WinesController < ApplicationController
   # POST /wines.json
   def create
     @wine = Wine.new(wine_params)
+    @wine.chateau_introduce = ChateauIntroduce.new(:introduce=>params[:introduce])
     @wine.user = current_user
     respond_to do |format|
       if @wine.save
@@ -69,7 +70,8 @@ class WinesController < ApplicationController
   def destroy
     @wine.destroy
     respond_to do |format|
-      format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
+      format.js { render_js wines_path }
+      # format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

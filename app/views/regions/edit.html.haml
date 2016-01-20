@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to '详细', @region
+= link_to '详细',  '', 'data-href' =>region_path(@region)
 \|
-= link_to '返回', regions_path
+= link_to '返回',  '', 'data-href' =>regions_path

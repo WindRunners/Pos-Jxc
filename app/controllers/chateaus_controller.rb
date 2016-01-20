@@ -123,7 +123,7 @@ class ChateausController < ApplicationController
     @chateau.chateau_introduce.destroy
     @chateau.destroy
     respond_to do |format|
-      format.js { render_js chateaus_path("page" => cookies['current_page'])}
+      format.js { render_js chateaus_path("page" => cookies['current_page']) }
       format.json { head :no_content }
     end
   end

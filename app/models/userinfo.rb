@@ -12,6 +12,7 @@ class Userinfo
   has_many :user_integrals
   has_many :userinfo_oppenids
   has_many :share_integrals
+  has_many :product_tickets
 
 
   has_and_belongs_to_many :keywords

@@ -64,7 +64,6 @@ class ChateauCommentsController < ApplicationController
 
 
   def add_comment
-    # binding.pry
     @announcement = Announcement.find(params[:announcement_id])
     @chateau_comment = @announcement.chateau_comments.build();
     @chateau_comment.content = params[:content]
@@ -88,7 +87,6 @@ class ChateauCommentsController < ApplicationController
 
 
   def hit
-    # binding.pry
     @chateau_comment = ChateauComment.find(params[:chateau_comment_id])
     @chateau_comment.hits+=1
     data ={}

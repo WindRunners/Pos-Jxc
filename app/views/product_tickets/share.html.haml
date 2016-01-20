@@ -10,20 +10,19 @@
     %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css", :rel => "stylesheet"}
     %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
     %title
-      =@share_integral.title
+      =@product_ticket.title
   %body
     .banner-box
-      %img.img_banner{:src => @share_integral.share_out_pic.url}
 
 
     .logo-box
-      %img{:src => @share_integral.logo.url }
+      %img{:src => @product_ticket.logo.url }
 
     .register2-box
       .aa_box00
         Hi,我是酒运达小伙伴!
       .aa_box01
-        送你#{@share_integral.register_give_integral}积分大礼包
+        送你#{@product_ticket.product_id}积分大礼包
       %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号"}
       .xiazai
         %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
@@ -34,7 +33,7 @@
         .aa_box01
           %p
             %br
-            您已领取积分礼包#{@share_integral.register_give_integral}积分
+            您已领取积分礼包#{@product_ticket.product_id}积分
             %br
               快快使用吧
       .xiazai
@@ -47,7 +46,7 @@
           %br
           您已是老朋友，登录APP
           %br
-            进行推荐有奖即获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+            进行推荐有奖即获得#{@product_ticket.product_id}积分赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
@@ -56,9 +55,9 @@
         %p 活动规则
         %img.role_pic{:src => "/images/share_integrals/share_down.png"}
     .text-box{:style=>"display:none"}
-      = markdown @share_integral.rule_content if @share_integral.rule_content.present?
+      = markdown @product_ticket.rule_content if @product_ticket.rule_content.present?
 
-    %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
+    %input#product_ticket_id{:type => "hidden", :value => @product_ticket.id.to_s }
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
 
 
@@ -98,7 +97,7 @@
 
   function register(){
     var mobile = $("input:text").val();
-    var share_integral_id = $("#share_integral_id").val();
+    var product_ticket_id = $("#product_ticket_id").val();
     var shared_customer_id = $("#shared_customer_id").val();
     if (mobile == undefined || mobile == ""|| mobile.length!=11) {
      alert("请输入正确的手机号码！")
@@ -107,8 +106,8 @@
 
     $.ajax({
         type: "POST",
-        url: "/share_integrals/"+ share_integral_id +"/register",
-        data: {mobile: mobile,share_integral_id: share_integral_id ,shared_customer_id: shared_customer_id},
+        url: "/product_tickets/"+ product_ticket_id +"/register",
+        data: {mobile: mobile,product_ticket_id: product_ticket_id ,shared_customer_id: shared_customer_id},
         dataType: "json",
         success: function (data) {
           $(".register2-box").hide();

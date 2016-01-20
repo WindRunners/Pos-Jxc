@@ -96,12 +96,14 @@ class ShareIntegralsController < ApplicationController
   def share_time_check
     start_date = params[:start_date]
     end_date = params[:end_date]
+    edit_share_integral_id = params[:edit_share_integral_id]
     rows = ShareIntegral.where({"$or" => [{:start_date => {"$gte" => start_date}, :end_date => {"$lte" => end_date}},
                                           {:start_date => {"$lte" => start_date}, :end_date => {"$gte" => end_date}},
                                           {:start_date => {"$lte" => start_date}, :end_date => {"$lte" => end_date}},
-                                          {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}]}).count
+                                          {:start_date => {"$gte" => start_date}, :end_date => {"$gte" => end_date}}],
+                                          :id => {"$ne" => edit_share_integral_id}} ).count
     data ={}
-    if rows > 0 || params[:form_type]== "edit"
+    if rows > 0
       data['flag'] = 0
       data['message'] = '活动时间冲突！'
     else

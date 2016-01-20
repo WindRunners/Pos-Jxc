@@ -5,9 +5,12 @@ class ShareIntegralRecord
   field :shared_customer_id, type: String
   field :register_customer_id, type: String
   field :is_confirm, type: Integer, default: 0
+  field :source, type: String
 
 
   belongs_to :share_integral
+  belongs_to :product_ticket
+
 
 
   after_save do

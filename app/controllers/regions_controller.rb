@@ -65,7 +65,7 @@ class RegionsController < ApplicationController
   def destroy
     @region.destroy
     respond_to do |format|
-      format.js { render_js regions_path,'Region was successfully updated.' }
+      format.js { render_js regions_path,'Region was successfully destroyed.' }
       # format.html { redirect_to region_children_url(@region.parent.id), notice: 'Region was successfully destroyed.' }
       format.json { head :no_content }
     end
@@ -75,7 +75,6 @@ class RegionsController < ApplicationController
     children = Region.new(name:params[:name])
     children.parent = Region.find(params[:region_id])
     children.save
-    redirect_to :region_children
     respond_to do |format|
       format.js { render_js regions_path,"增加下级成功！" }
       format.json { head :no_content }

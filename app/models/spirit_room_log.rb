@@ -10,7 +10,8 @@ class SpiritRoomLog
 
   belongs_to :spirit_room #某个酒库
   belongs_to :gift_bag #隶属于某个礼包
-  belongs_to :order #隶属于某个礼包
+  belongs_to :order #隶属于某个订单
+  belongs_to :product_ticket #隶属于摸个商品卷
 
 
 end

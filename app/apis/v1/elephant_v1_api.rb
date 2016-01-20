@@ -40,7 +40,7 @@ class ElephantV1Api < Grape::API
       begin
         customerUser = Customer.find(params[:customer_id])
       rescue Exception=>e #异常捕获
-        puts e
+        puts e.message
         error!('小C认证失败',401)
       end
       customerUser

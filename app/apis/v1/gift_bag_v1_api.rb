@@ -97,7 +97,7 @@ class GiftBagV1API < Grape::API
 
 
     desc '同步小Ｃ失效礼包列表' do
-      detail '{flag:{0:失败,1:成功},msg:提示信息,data:同步数量}'
+      detail '{flag:{0:失败,1:成功},msg:提示信息,data:}'
     end
     params do
 

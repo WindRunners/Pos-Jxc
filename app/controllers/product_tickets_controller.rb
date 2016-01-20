@@ -26,7 +26,8 @@ class ProductTicketsController < ApplicationController
   def create
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
-    @product_ticket.userinfo.id = current_user.userinfo.id
+    binding.pry
+    @product_ticket.userinfo = current_user.userinfo
     respond_to do |format|
       if @product_ticket.save
         format.js { render_js product_tickets_path, 'Product ticket was successfully created.' }

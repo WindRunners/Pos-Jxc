@@ -33,7 +33,7 @@ module CommonV1APIHelper
 
       share_customer = Customer.find(share_integral_record.shared_customer_id)
       register_customer = Customer.find(share_integral_record.register_customer_id)
-      #分享者奖励商品入酒库
+      #分享者奖励商品入酒库，卡包内酒券失效
       share_customer.integral+= share_integral_record.share_integral.shared_give_integral
       share_customer.save
       #分享者酒券卡包生成

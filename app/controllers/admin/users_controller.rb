@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
 
   def index
     @current_user = current_user
-    @users = User.all.page params[:page]
+    @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
   end
 
   def new
@@ -35,6 +35,8 @@ class Admin::UsersController < ApplicationController
       params[:user][:password] ||= params[:password]
     end
     @user = User.new(user_params)
+    @user['userinfo_id'] = current_user['userinfo_id']
+
     if @app_key.present?
       @user.userinfo=Userinfo.create(pdistance: 1)
     end
@@ -44,6 +46,7 @@ class Admin::UsersController < ApplicationController
           # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           format.json { render :show, status: :ok }
         else
+          format.js {render_js admin_users_path}
           format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           format.json { render :show, status: :ok }
         end

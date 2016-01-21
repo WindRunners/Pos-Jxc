@@ -3,7 +3,6 @@ require 'grape'
 class ProductTicketV1API < Grape::API
   format :json
 
-
   desc '酒券列表'
   params do
     requires :customer_id, type: String, desc: '小c的ID'

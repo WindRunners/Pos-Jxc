@@ -1,0 +1,27 @@
+:css
+  .row_config {
+    max-width: 200px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .dont_show {
+    display: none;
+  }
+
+%table#wines_table.table.table-hover{"data-source" => "/wines.json"}
+.row
+  .separator
+
+    %br
+
+    .medium-12.columns
+
+      %table#wines_table
+        %thead
+          %tr
+            %th{style: 'display: none'} ID
+            %th Name
+            %th AD
+        %tbody

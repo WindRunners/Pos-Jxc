@@ -57,9 +57,9 @@
 
       .form-group
         .field
-          = f.label :introduce,:class=>'col-sm-2 control-label no-padding-right'
+          = f.label :介绍,:class=>'col-sm-2 control-label no-padding-right'
         .col-sm-9
-          = f.text_area :chateau_introduce['introduce'],:class => 'ckeditor'
+          %textarea{:class => 'ckeditor',:cols => "24", :name => "introduce", :rows => "6"}
 
       .actions.col-sm-1.col-sm-offset-3
         = f.submit 'Save',:class=> 'btn btn-success'

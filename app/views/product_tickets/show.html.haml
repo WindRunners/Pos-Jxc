@@ -1,32 +1,38 @@
 %p#notice= notice
 
 %p
-  %b Title:
+  %b 分享标题:
   = @product_ticket.title
 %p
-  %b Start date:
+  %b logo:
+  %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
+%p
+  %b 开始时间:
   = @product_ticket.start_date
 %p
-  %b End date:
+  %b 结束时间:
   = @product_ticket.end_date
 %p
-  %b Product list:
+  %b 商品:
   = @product_ticket.product_id
 %p
-  %b Status:
-  = @product_ticket.status
+  %b 状态:
+  = @product_ticket.status_str
 %p
-  %b Desc:
+  %b 分享描述:
   = @product_ticket.desc
 %p
-  %b Rule content:
+  %b 规则:
   = @product_ticket.rule_content
+%p
+  %b 小C数量:
+  = @product_ticket.customer_ids.count
 
 
 
-= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(@product_ticket)
+= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(@product_ticket),class:'btn btn-xs btn-info'
 \|
-= link_to 'Back',  '', 'data-href' =>product_tickets_path
+= link_to 'Back',  '', 'data-href' =>product_tickets_path,:class=>'btn btn-xs btn-primary'
 
 
 :javascript

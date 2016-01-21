@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :card_bags do
 
   end
-
   resources :product_tickets do
     # post 'import_customers', :on => :collection
     post 'customer_add'

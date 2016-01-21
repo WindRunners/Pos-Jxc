@@ -1,15 +1,13 @@
-%h1 Listing product_tickets
+%h1 酒券列表
 
-%table
+%table.table
   %thead
     %tr
-      %th Title
-      %th Start date
-      %th End date
-      %th Product list
-      %th Status
-      %th Desc
-      %th Rule content
+      %th 标题
+      %th 开始时间
+      %th 结束时间
+      %th 状态
+      %th
       %th
       %th
       %th
@@ -18,28 +16,23 @@
     - @product_tickets.each do |product_ticket|
       %tr
         %td= product_ticket.title
-        %td= product_ticket.start_date
-        %td= product_ticket.end_date
-        %td= product_ticket.product_id
+        %td= product_ticket.start_date_str
+        %td= product_ticket.end_date_str
         %td= product_ticket.status
-        %td= product_ticket.desc
-        %td= product_ticket.rule_content
-        %td= link_to 'Show',  '', 'data-href' =>product_ticket_path(product_ticket)
-        %td= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket)
+        %td= link_to 'Show',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-Inverse'
+        %td= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
         %td
           %input{"type"=>"button",:class=>"btn btn-xs btn-pink",:value=>"发布",:onclick=>"publish('#{product_ticket.id}')"}
-        %td= link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' }
+        %td= link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
 %br
 
-= link_to 'New Product ticket', '', 'data-href' => new_product_ticket_path
+= link_to '新建酒券', '', 'data-href' => new_product_ticket_path,:class=>'btn btn-xs btn-Inverse'
 
 :javascript
 
   function publish(product_ticket_id){
-
-    alert(product_ticket_id);
-
+    alert("");
     $.ajax({
         type: "POST",
         url: "/product_tickets/"+product_ticket_id+"/build_card_bag",

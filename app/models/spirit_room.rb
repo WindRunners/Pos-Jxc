@@ -54,7 +54,7 @@ class SpiritRoom
   end
 
 
-  def save_product_ticket_product(product_ticket_id,customer_id)
+  def self.save_product_ticket_product(product_ticket_id,customer_id)
 
     product_ticket = ProductTicket.find(product_ticket_id)
     spiritRoom = SpiritRoom.where({'customer_id' => customer_id}).first
@@ -73,7 +73,7 @@ class SpiritRoom
   private
 
   #增加酒库商品
-  def add_spirit_room_product(spiritRoom,userinfo_id,product_id,count)
+  def self.add_spirit_room_product(spiritRoom,userinfo_id,product_id,count)
 
     spiritRoomProduct = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :product_id => product_id, :userinfo_id => userinfo_id).first #酒库商品
     product = Product.shop_id(userinfo_id).where(:id => product_id).first #商品

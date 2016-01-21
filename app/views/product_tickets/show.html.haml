@@ -14,10 +14,7 @@
   = @product_ticket.end_date_str
 %p
   %b 商品:
-  -#= Product.find(@product_ticket.product_id).title
-%p
-  %b 商品logo:
-  -#%img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>Product.find(@product_ticket.product_id).avatar.url}
+  =@product_ticket.product_id
 %p
   %b 状态:
   = @product_ticket.status_str

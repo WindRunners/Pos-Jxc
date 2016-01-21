@@ -1,0 +1,1 @@
+json.extract! @jxc_purchase_stock_in_bill, :id, :bill_no, :customize_bill_no, :payment_date, :stock_in_date, :current_payment, :remark, :total_amount, :discount, :discount_amount, :payable_amount, :bill_status, :created_at, :updated_at

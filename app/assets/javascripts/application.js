@@ -95,3 +95,6 @@
 //= require message-bus
 
 //= require ace/jquery.jplayer.min.js
+
+//= require JxcJs/jxcCommon.js
+//= require JxcJs/pinyinInitial.js

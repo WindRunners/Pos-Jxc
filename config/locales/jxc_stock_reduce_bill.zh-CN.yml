@@ -1,0 +1,15 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_stock_reduce_bill: '报损单'
+    attributes:
+      jxc_stock_reduce_bill:
+        bill_no: '单据编号'
+        customize_bill_no: '自定义单据编号'
+        reduce_date: '报损日期'
+        remark: '备注'
+        jxc_storage: '报损仓库'
+        handler: '经手人'
+
+        bill_status: '单据状态'
+        bill_maker: '制单人'

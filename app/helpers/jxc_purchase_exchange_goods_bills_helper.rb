@@ -1,0 +1,2 @@
+module JxcPurchaseExchangeGoodsBillsHelper
+end

@@ -1,0 +1,1 @@
+json.extract! @jxc_purchase_order, :id, :order_no, :customize_order_no, :receive_goods_date, :order_date, :down_payment, :remark, :total_amount, :discount, :discount_amount, :payable_amount, :bill_status, :created_at, :updated_at

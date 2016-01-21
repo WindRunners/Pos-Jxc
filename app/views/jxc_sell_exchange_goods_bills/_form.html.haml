@@ -1,0 +1,10 @@
+= form_for @jxc_sell_exchange_goods_bill do |f|
+  - if @jxc_sell_exchange_goods_bill.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_sell_exchange_goods_bill.errors.count, "error")} prohibited this jxc_sell_exchange_goods_bill from being saved:"
+      %ul
+        - @jxc_sell_exchange_goods_bill.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

@@ -32,4 +32,8 @@
 
  *= require select2
  *= require select2-bootstrap
+
+
+ *= require jxc_contacts_units
+ *= require jxc_inventory_query
  */

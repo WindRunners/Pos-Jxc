@@ -1,0 +1,31 @@
+= form_for @jxc_dictionary do |f|
+  - if @jxc_dictionary.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_dictionary.errors.count, "error")} prohibited this jxc_dictionary from being saved:"
+      %ul
+        - @jxc_dictionary.errors.full_messages.each do |msg|
+          %li= msg
+  %table{class: "table table-bordered table-hover"}
+    %tr
+      %td
+        = f.label :dic
+      %td
+        = f.text_field :dic,:class=>'form-control',onblur:'generatePinyinCode("jxc_dictionary_dic","jxc_dictionary_pinyin_code")'
+      %td
+        = f.label :pinyin_code
+      %td
+        = f.text_field :pinyin_code,:class=>'form-control'
+    %tr
+      %td
+        = f.label :dic_desc
+      %td
+        = f.text_field :dic_desc,:class=>'form-control'
+      %td
+        = f.label :sort
+      %td
+        = f.text_field :sort,:class=>'form-control'
+  .actions
+    = f.submit '保存',class:'btn btn-info'
+    &nbsp;&nbsp;&nbsp;
+    %a{class:'btn',:href => jxc_dictionaries_path}
+      %i{class:'ace-icon fa fa-return bigger-110'}返回

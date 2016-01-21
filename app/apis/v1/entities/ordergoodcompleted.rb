@@ -1,5 +1,6 @@
 module Entities
   class Ordergoodcompleted < Grape::Entity
+    expose :product_id, documentation: {type: String, desc: '商品id'}
     expose :qrcode, documentation: {type: String, desc: '条码'}
     expose :specification, documentation: {type: String, desc: '产品规格'}
     expose :title, documentation: {type: String, desc: '品名'}

@@ -25,7 +25,6 @@ class ProductTicketsController < ApplicationController
   # POST /product_tickets
   # POST /product_tickets.json
   def create
-    binding.pry
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
     @product_ticket.userinfo = current_user.userinfo

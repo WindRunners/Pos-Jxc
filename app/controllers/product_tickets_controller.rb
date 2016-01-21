@@ -1,5 +1,6 @@
 class ProductTicketsController < ApplicationController
   before_action :set_product_ticket, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
 
   # GET /product_tickets
   # GET /product_tickets.json
@@ -24,9 +25,9 @@ class ProductTicketsController < ApplicationController
   # POST /product_tickets
   # POST /product_tickets.json
   def create
+    binding.pry
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
-    binding.pry
     @product_ticket.userinfo = current_user.userinfo
     respond_to do |format|
       if @product_ticket.save
@@ -114,6 +115,7 @@ class ProductTicketsController < ApplicationController
       rescue
       end
     end
+    product_ticket.status = 1
     data ={}
     if product_ticket.save
       data['flag'] = 1
@@ -160,6 +162,9 @@ class ProductTicketsController < ApplicationController
       format.json { render json: data }
     end
   end
+
+
+
 
 
   private

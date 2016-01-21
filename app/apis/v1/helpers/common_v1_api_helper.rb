@@ -34,16 +34,28 @@ module CommonV1APIHelper
       share_customer = Customer.find(share_integral_record.shared_customer_id)
       register_customer = Customer.find(share_integral_record.register_customer_id)
       #分享者奖励商品入酒库，卡包内酒券失效
-      share_customer.integral+= share_integral_record.share_integral.shared_give_integral
-      share_customer.save
-      #分享者酒券卡包生成
-      register_customer.integral+= share_integral_record.share_integral.register_give_integral
-      register_customer.save
-      #更新记录表状态
-      share_integral_record.is_confirm = 1
-      share_integral_record.save
+      card_bags = CardBag.where(:customer_id => share_customer.id, :status => 0)
+      if card_bags.count > 0
+        card_bags.each do |card_bag|
+          SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id,customer_id)
+          card_bag.status = -1
+          card_bag.save
 
 
+          #注册者酒券卡包生成
+          register_card_bag =card_bag.product_ticket.card_bag.build()
+          register_card_bag.customer_id = register_customer.id
+          register_card_bag.source = 1
+          register_card_bag.save
+
+          #更新记录表状态
+          share_integral_record.is_confirm = 1
+          share_integral_record.save
+
+
+        end
+
+      end
 
       data['message']="推荐奖励增加成功！"
       data['flag']=1

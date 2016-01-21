@@ -14,7 +14,7 @@
   <tbody>
   <% @users.each do |user| %>
       <tr>
-        <% if user.id == @current_user.id %>
+        <% if policy(user).isAdmin?  %>
         <% if policy(user).show? %>
         <td><%= link_to user.name,'',"data-href"=> admin_user_path(user) %></td>
             <% else	  %>
@@ -78,9 +78,9 @@
   </div>
 </div>
 
- <% if @current_user.step.nil?  %>
-          <%= link_to t('.new', :default => t("helpers.links.new")),
-                      new_admin_user_path,
+ <% if @current_user.has_role?(:admin)  %>
+          <%= link_to t('.new', :default => t("helpers.links.new")),'',
+                      'data-href' => new_admin_user_path,
                       :class => 'btn btn-primary' %>
  <% end %>
 

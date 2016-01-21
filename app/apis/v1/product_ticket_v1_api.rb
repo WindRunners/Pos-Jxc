@@ -3,10 +3,7 @@ require 'grape'
 class ProductTicketV1API < Grape::API
   format :json
 
-
-  desc '酒券列表' do
-    success Entities::CardBagList
-  end
+  desc '酒券列表'
   params do
     requires :customer_id, type: String, desc: '小c的ID'
   end
@@ -14,14 +11,12 @@ class ProductTicketV1API < Grape::API
     card_bags = CardBag.where(:customer_id => params[:customer_id])
     card_bag_list = []
     card_bags.each do |card_bag|
-
       product_ticket = card_bag.product_ticket
-      product = Product.find(card_bag.product_ticket.product_id)
+      product = Product.shop_id(product_ticket.userinfo_id).find(card_bag.product_ticket.product_id)
       product_ticket['product_id'] = product.id
       product_ticket['product_title'] = product.title
       product_ticket['product_avatar_url'] = product.avatar_url
       product_ticket['product_price'] = product.price
-
       card_bag_list << product_ticket
     end
     present card_bag_list, with: Entities::CardBagList
@@ -37,7 +32,7 @@ class ProductTicketV1API < Grape::API
   end
   get 'product_ticket_detail' do
     product_ticket = ProductTicket.where(:id => params[:product_ticket_id]).first
-    product = Product.find(product_ticket.product_id)
+    product = Product.shop_id(product_ticket.userinfo_id).find(product_ticket.product_id)
     product_ticket['product_id'] = product.id
     product_ticket['product_title'] = product.title
     product_ticket['product_avatar_url'] = product.avatar_url

@@ -8,13 +8,13 @@
   %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
 %p
   %b 开始时间:
-  = @product_ticket.start_date
+  = @product_ticket.start_date_str
 %p
   %b 结束时间:
-  = @product_ticket.end_date
+  = @product_ticket.end_date_str
 %p
   %b 商品:
-  = @product_ticket.product_id
+  =@product_ticket.product_id
 %p
   %b 状态:
   = @product_ticket.status_str
@@ -23,10 +23,10 @@
   = @product_ticket.desc
 %p
   %b 规则:
-  = @product_ticket.rule_content
+  =markdown @product_ticket.rule_content
 %p
   %b 小C数量:
-  = @product_ticket.customer_ids.count
+  = @product_ticket.customer_ids
 
 
 

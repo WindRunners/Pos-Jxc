@@ -1,5 +1,6 @@
 class ProductTicketsController < ApplicationController
   before_action :set_product_ticket, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
 
   # GET /product_tickets
   # GET /product_tickets.json
@@ -24,7 +25,6 @@ class ProductTicketsController < ApplicationController
   # POST /product_tickets
   # POST /product_tickets.json
   def create
-    binding.pry
     @product_ticket = ProductTicket.new(product_ticket_params)
     @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
     @product_ticket.userinfo = current_user.userinfo
@@ -164,14 +164,6 @@ class ProductTicketsController < ApplicationController
 
 
 
-  # GET /customer
-  # GET /customer.json
-  def customer
-    respond_to do |format|
-      format.html
-      format.json { render json: CustomerDatatable.new(view_context, current_user) }
-    end
-  end
 
 
   private

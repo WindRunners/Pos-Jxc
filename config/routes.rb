@@ -281,7 +281,6 @@ Rails.application.routes.draw do
     delete 'reduce_children'
     post 'get_children'
   end
-
   resources :wines do
     post 'table', :on => :collection
     get 'turn_picture'

@@ -37,6 +37,7 @@ module CommonV1APIHelper
       card_bags = CardBag.where(:customer_id => share_customer.id, :status => 0)
       if card_bags.count > 0
         card_bags.each do |card_bag|
+          SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id,customer_id)
           card_bag.status = -1
           card_bag.save
 

@@ -1,5 +1,6 @@
 class ProductTicketsController < ApplicationController
   before_action :set_product_ticket, only: [:show, :edit, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
 
   # GET /product_tickets
   # GET /product_tickets.json
@@ -164,14 +165,6 @@ class ProductTicketsController < ApplicationController
 
 
 
-  # GET /customer
-  # GET /customer.json
-  def customer
-    respond_to do |format|
-      format.html
-      format.json { render json: CustomerDatatable.new(view_context, current_user) }
-    end
-  end
 
 
   private

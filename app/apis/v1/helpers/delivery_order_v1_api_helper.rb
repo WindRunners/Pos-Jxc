@@ -6,6 +6,7 @@ module DeliveryOrderV1APIHelper
 
     current_lng = postInfo.longitude
     current_lat = postInfo.latitude
+    page = postInfo['page']
 
     store_ids = deliveryUser['store_ids'] #获取配送员负责的门店
     return [] if !store_ids.present? || store_ids.empty?
@@ -13,7 +14,7 @@ module DeliveryOrderV1APIHelper
     take_orders = []
     store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'].to_s)
     #获取门店待接单列表
-    orders = Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).order('created_at desc')
+    orders = Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).order('created_at desc').page(page).per(20)
     orders.each do |order|
 
       store = store_info[order['store_id']]
@@ -106,13 +107,22 @@ module DeliveryOrderV1APIHelper
   #我的订单列表
   def DeliveryOrderV1APIHelper.my_order_list(deliveryUser, postInfo)
 
+    current_lng = postInfo.longitude
+    current_lat = postInfo.latitude
+    page = postInfo['page']
+
     #包括状态[待接货,配送中,配送完成]
-    orders = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).order('updated_at desc')
+    orders = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).order('updated_at desc').page(page).per(20)
     my_orders = []
     store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|
       store = store_info[order['store_id']]
       order['store_address'] = store.position
+      if current_lng.present? && current_lat.present?
+        order['current_distance'] = DeliveryOrderV1APIHelper.get_distance_for_points(current_lng, current_lat,store.location[0],store.location[1])
+      else
+        order['current_distance'] = 0
+      end
       my_orders << order
     end
     my_orders
@@ -124,7 +134,7 @@ module DeliveryOrderV1APIHelper
 
     page = postInfo['page']
     #包括状态[确认收货,取消的]
-    orders = Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).order('created_at desc').skip((page-1)*10).limit(10)
+    orders = Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).order('created_at desc').page(page).per(20)
     my_his_orders = []
     store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|

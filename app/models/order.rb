@@ -431,6 +431,20 @@ class Order
 
   after_save do
 
+    #更新订单状态记录表
+    begin
+      OrderStateChange.find(self.id).update!(:state => self.workflow_state)
+    rescue
+      OrderStateChange.new(:id => self.id,
+                           :customer_id => self.customer_id,
+                           :state => self.workflow_state,
+                           :userinfo => self.userinfo,
+                           :paymode => self.paymode,
+                           :orderno => self.orderno,
+                           :ordertype => self.ordertype,
+                           :created_at => self.created_at).save!
+    end
+
     paid_count = self.userinfo.orders.where(:workflow_state => :paid).count
 
     if workflow_state == 'paid'

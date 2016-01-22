@@ -275,10 +275,11 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_unpaid' do
     orders = Rails.cache.fetch([self, 'search_orders_unpaid']) do
-      Order.where(:customer_id => params[:customer_id], :workflow_state => :generation).sort{|a, b| b["created_at"] <=> a["created_at"]}
+      Order.where(:customer_id => params[:customer_id], :workflow_state => :generation, :ordertype => 1).order(created_at: :desc).page(params[:page]).per(20)
     end
     present orders, with: Entities::Order
   end
@@ -289,10 +290,11 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_finish' do
     ordercompleteds = Rails.cache.fetch([self, 'search_orders_finish']) do
-      Ordercompleted.where(:customer_id => params[:customer_id], :workflow_state => :completed).sort{|a, b| b["created_at"] <=> a["created_at"]}
+      Ordercompleted.where(:customer_id => params[:customer_id], :workflow_state => :completed).order(created_at: :desc).page(params[:page]).per(20)
     end
     present ordercompleteds, with: Entities::Ordercompleted
   end
@@ -302,10 +304,11 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_receive' do
     orders = Rails.cache.fetch([self, 'search_orders_receive']) do
-      Order.where(:customer_id => params[:customer_id], :workflow_state => :receive).sort{|a, b| b["created_at"] <=> a["created_at"]}
+      Order.where(:customer_id => params[:customer_id], :workflow_state => :receive).order(created_at: :desc).page(params[:page]).per(20)
     end
     present orders, with: Entities::Order
   end
@@ -316,10 +319,11 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_cancel' do
     ordercompleteds = Rails.cache.fetch([self, 'search_orders_cancel']) do
-      Ordercompleted.where(:customer_id => params[:customer_id], :workflow_state => :cancelled).sort{|a, b| b["created_at"] <=> a["created_at"]}
+      Ordercompleted.where(:customer_id => params[:customer_id], :workflow_state => :cancelled).order(created_at: :desc).page(params[:page]).per(20)
     end
     present ordercompleteds, with: Entities::Ordercompleted
   end
@@ -331,10 +335,11 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_distribution' do
     orders = Rails.cache.fetch([self, 'search_orders_distribution']) do
-       Order.where(:customer_id => params[:customer_id], :workflow_state => :distribution).sort{|a, b| b["created_at"] <=> a["created_at"]}
+       Order.where(:customer_id => params[:customer_id], :workflow_state => :distribution).order(created_at: :desc).page(params[:page]).per(20)
     end
     present orders, with: Entities::Order
   end
@@ -346,22 +351,30 @@ class OrderV1API < Grape::API
   end
   params do
     requires :customer_id,type: String, desc: '小C的id'
+    optional :page, type: Integer, desc: '页码', default: 1
   end
   get 'search_orders_all' do
 
-    Rails.cache.fetch([self, 'search_orders_all']) do
-      ordresarray = []
-      orders = Order.where(:customer_id => params[:customer_id], :ordertype => 1)
-      orders.each do |order|
-        ordresarray << order.as_json(:include => {:ordergoods => {:except => [:_id,:product_id,:created_at,:updated_at]}},:except => :updated_at)
+    orders = Rails.cache.fetch([self, 'search_orders_all']) do
+      orderarray = []
+
+      complete_ids = []
+      uncomplete_ids = []
+      orderStateChanges = OrderStateChange.where({:customer_id => params[:customer_id]}).order(created_at: :desc).page(params[:page]).per(20)
+      orderStateChanges.each do |orderStateChange|
+        if "cancelled" == orderStateChange.state || "completed" == orderStateChange.state
+          complete_ids << orderStateChange.id
+        else
+          uncomplete_ids << orderStateChange.id
+        end
       end
 
-      ordercompleteds = Ordercompleted.where(:customer_id => params[:customer_id], :ordertype => 1)
-      ordercompleteds.each do |ordercompleted|
-        ordresarray << ordercompleted.as_json(:include => {:ordergoodcompleteds => {:except => [:_id,:created_at,:updated_at]}},:except => :updated_at)
-      end
-      present ordresarray.sort{|a, b| b["created_at"] <=> a["created_at"]}
+      orderarray.concat(Order.where({'_id' => {"$in" => uncomplete_ids}}).order(created_at: :desc)) if !uncomplete_ids.empty?
+      orderarray.concat(Ordercompleted.where({'_id' => {"$in" => complete_ids}}).order(created_at: :desc)) if !complete_ids.empty?
+      orderarray
     end
+
+    present orders,with: Entities::Order
   end
 
   desc '查询订单历史状态' do
@@ -378,8 +391,8 @@ class OrderV1API < Grape::API
   end
 
 
-  desc '催单' do
-    detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
+  desc '' do
+
   end
   params do
     requires :orderid, type: String, desc: '订单ID'
@@ -389,7 +402,7 @@ class OrderV1API < Grape::API
     order = Order.where({"_id" => BSON::ObjectId(params[:orderid])}).first()
     if order.present? && order.workflow_state == 'paid'
       channels = []
-      dusers = DeliveryUser.where(:store_ids => order.store_id , :work_status => 1)
+      dusers = DeliveryUser.where(:store_ids => order.store_id)
       dusers.each do |user|
         channels.concat user.channel_ids if user.channel_ids.present?
       end

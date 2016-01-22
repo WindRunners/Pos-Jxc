@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :roles
   resources :card_bags do
 
   end

@@ -21,10 +21,10 @@ class CommonV1API < Grape::API
     status 200
 
     #分享积分逻辑处理
-    CommonV1APIHelper.share_integral_syn(params[:customer_id])
-    CommonV1APIHelper.product_ticket_syn(params[:customer_id])
+    a =  CommonV1APIHelper.share_integral_syn(params[:customer_id])
+    b = CommonV1APIHelper.product_ticket_syn(params[:customer_id])
     #分享酒劵逻辑处理
-    {msg: '小C登录回调成功!', flag: 1}
+    {msg: '小C登录回调成功!', flag: 1,a:a,b:b}
   end
 
 

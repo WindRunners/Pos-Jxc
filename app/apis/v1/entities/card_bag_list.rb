@@ -6,7 +6,7 @@ module Entities
     expose :register_customer_count, documentation: {type: Integer, desc: '酒券领取需要达到的注册用户数'}
     expose :start_date, documentation: {type: DateTime, desc: '酒券开始时间'}
     expose :end_date, documentation: {type: DateTime, desc: '酒券结束时间'}
-    expose :status, documentation: {type: String, Integer: '小C卡包内酒券当前状态#0,未失效，-1，失效'}
+    expose :status, documentation: {type: String, Integer: '小C卡包内酒券当前状态#0,未失效，1，邀请成功，-1，已失效'}
     expose :product_id, documentation: {type: String, desc: '酒券附赠商品ID'}, safe: true
     expose :product_title, documentation: {type: String, desc: '酒券附赠商品标题'}, safe: true
     expose :product_avatar_url, documentation: {type: String, desc: '酒券附赠商品logo_url'}, safe: true

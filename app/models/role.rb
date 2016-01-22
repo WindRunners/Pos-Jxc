@@ -9,11 +9,11 @@ class Role
   field :name, :type => String
 
   index({
-    :name => 1,
-    :resource_type => 1,
-    :resource_id => 1
-  },
-  { :unique => true})
+            :name => 1,
+            :resource_type => 1,
+            :resource_id => 1
+        },
+        { :unique => true})
 
   validates :resource_type,
             :inclusion => { :in => Rolify.resource_types },

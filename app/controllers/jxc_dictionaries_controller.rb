@@ -20,11 +20,11 @@ class JxcDictionariesController < ApplicationController
 
     respond_to do |format|
       if @jxc_dictionary.save
-        # format.html { redirect_to @jxc_dictionary, notice: 'Jxc dictionary was successfully created.' }
-        format.html { redirect_to jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
+        # format.html { redirect_to jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
+        format.js { render_js jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
         format.json { render :show, status: :created, location: @jxc_dictionary }
       else
-        format.html { render :new }
+        format.js { render_js new_jxc_dictionary_path }
         format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
       end
     end
@@ -33,10 +33,11 @@ class JxcDictionariesController < ApplicationController
   def update
     respond_to do |format|
       if @jxc_dictionary.update(jxc_dictionary_params)
-        format.html { redirect_to @jxc_dictionary, notice: '进销存字典更新成功.' }
+        # format.html { redirect_to @jxc_dictionary, notice: '进销存字典更新成功.' }
+        format.js { render_js jxc_dictionaries_path(@jxc_dictionary), notice: '进销存字典更新成功.' }
         format.json { render :show, status: :ok, location: @jxc_dictionary }
       else
-        format.html { render :edit }
+        format.js { render_js edit_jxc_dictionary_path }
         format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
       end
     end
@@ -45,8 +46,8 @@ class JxcDictionariesController < ApplicationController
   def destroy
     @jxc_dictionary.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_dictionaries_url, notice: '进销存字典删除成功.' }
-      format.json { head :no_content }
+      format.js { render_js jxc_dictionaries_path, notice: '进销存字典删除成功.'  }
+      format.json { head :show, location: @jxc_dictionary }
     end
   end
 

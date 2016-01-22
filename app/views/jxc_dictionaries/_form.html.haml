@@ -1,4 +1,4 @@
-= form_for @jxc_dictionary do |f|
+= form_for @jxc_dictionary,remote:true do |f|
   - if @jxc_dictionary.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_dictionary.errors.count, "error")} prohibited this jxc_dictionary from being saved:"
@@ -27,5 +27,5 @@
   .actions
     = f.submit '保存',class:'btn btn-info'
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_dictionaries_path}
+    %a{class:'btn','data-href': jxc_dictionaries_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回

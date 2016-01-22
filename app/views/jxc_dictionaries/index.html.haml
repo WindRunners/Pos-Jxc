@@ -30,9 +30,9 @@
         %td= jxc_dictionary.sort
         %td= jxc_dictionary.pinyin_code
         %td
-          = link_to '查看', jxc_dictionary,class:'btn btn-xs btn-info'
-          = link_to '编辑', edit_jxc_dictionary_path(jxc_dictionary),class:'btn btn-xs btn-warning'
-          = link_to '删除', jxc_dictionary, :method => :delete, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
+          = link_to '查看', '', 'data-href' => jxc_dictionary_path(jxc_dictionary),class:'btn btn-xs btn-info'
+          = link_to '编辑', '', 'data-href' => edit_jxc_dictionary_path(jxc_dictionary),class:'btn btn-xs btn-warning'
+          = link_to '删除', jxc_dictionary_path(jxc_dictionary), :method => :delete,remote:true, :data => { :confirm => '您确定删除此条信息吗?' },class:'btn btn-xs btn-danger'
 
 %br
-= link_to '添加', new_jxc_dictionary_path,class:'btn btn-xs btn-success'
+= link_to '添加', '', 'data-href' => new_jxc_dictionary_path , :class=>'btn btn-xs btn-success'

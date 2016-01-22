@@ -14,18 +14,18 @@ class ElephantV1Api < Grape::API
 
         if token.present?
 
-          payload,header = JWT.decode(params[:token],'key')
+          payload, header = JWT.decode(params[:token], 'key')
           @current_deliveryUser = DeliveryUser.where(_id: payload['user_id']).first
-          error!({msg: 'token is nil',flag: 401},401) if !@current_deliveryUser.authentication_token.present? || @current_deliveryUser.authentication_token != params[:token]
+          error!({msg: 'token is nil', flag: 401}, 401) if !@current_deliveryUser.authentication_token.present? || @current_deliveryUser.authentication_token != params[:token]
         else
-          error!({msg: 'token is nil',flag: 401},401)
+          error!({msg: 'token is nil', flag: 401}, 401)
         end
 
       rescue Exception #异常捕获
-        error!({msg: 'unauthorized access',flag: 401},401)
+        error!({msg: 'unauthorized access', flag: 401}, 401)
       end
       #配送员不存在
-      error!({msg: 'unauthorized access',flag: 401},401) if !@current_deliveryUser.present?
+      error!({msg: 'unauthorized access', flag: 401}, 401) if !@current_deliveryUser.present?
     end
 
     #获取当前配送员方法
@@ -39,26 +39,25 @@ class ElephantV1Api < Grape::API
 
       begin
         customerUser = Customer.find(params[:customer_id])
-      rescue Exception=>e #异常捕获
+      rescue Exception => e #异常捕获
         puts e.message
-        error!('小C认证失败',401)
+        error!('小C认证失败', 401)
       end
       customerUser
     end
 
 
     #文件上传
-    def upload_file(file,save_dir)
+    def upload_file(file, save_dir)
 
-        FileUtils.makedirs("public/#{save_dir}") if !File::directory?("public/#{save_dir}") #创建文件夹
-        save_url = save_dir+file.filename
-        #向dir目录写入文件
-        File.open("public/#{save_url}", "wb") do |f|
-          f.write(file[:tempfile].read)
-        end
-        save_url
+      FileUtils.makedirs("public/#{save_dir}") if !File::directory?("public/#{save_dir}") #创建文件夹
+      save_url = save_dir+file.filename
+      #向dir目录写入文件
+      File.open("public/#{save_url}", "wb") do |f|
+        f.write(file[:tempfile].read)
+      end
+      save_url
     end
-
 
 
   end
@@ -66,7 +65,7 @@ class ElephantV1Api < Grape::API
   rescue_from :all do |e|
     p e.message
     ahoy = Ahoy::Tracker.new
-    ahoy.track "exception", {'exception'=> e, 'backtrace' =>e.backtrace}
+    ahoy.track "exception", {'exception' => e, 'backtrace' => e.backtrace}
     error!(e, 500)
   end
 
@@ -94,7 +93,7 @@ class ElephantV1Api < Grape::API
   mount FullReductionV1API => 'fullReduction'
   mount CouponV1API => 'coupon'
   mount PromotionDiscountV1API => 'promotionDiscount'
-  mount CashRequestV1API =>'cashRequest'
+  mount CashRequestV1API => 'cashRequest'
   mount StatisticV1API => 'statistic'
   mount DeliveryOrderV1API => 'deliveryOrder'
   mount UintegralV1API => 'uintegral'

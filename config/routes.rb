@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :feedbacks
   resources :roles
   resources :card_bags do
 
-  resources :feedbacks
   end
   resources :product_tickets do
     # post 'import_customers', :on => :collection

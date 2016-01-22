@@ -3,6 +3,8 @@ module Entities
     expose :id, documentation: {type: String, desc: '酒券ID'}
     expose :title, documentation: {type: String, desc: '酒券标题'}
     expose :logo, documentation: {type: String, desc: '酒券logo_url'}
+    expose :desc, documentation: {type: String, desc: '酒券描述'}
+    expose :url, documentation: {type: String, desc: '分享链接'}
     expose :register_customer_count, documentation: {type: Integer, desc: '酒券领取需要达到的注册用户数'}
     expose :start_date, documentation: {type: DateTime, desc: '酒券开始时间'} do |product_ticket, options|
       product_ticket.start_date = product_ticket.start_date.strftime("%Y-%m-%d %H:%M:%S") if !product_ticket.start_date.nil?

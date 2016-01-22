@@ -2,6 +2,7 @@ module Entities
   class ProductTicket < Grape::Entity
     expose :id, documentation: {type: String, desc: '酒券id'}
     expose :title, documentation: {type: String, desc: '标题'}
+    expose :desc, documentation: {type: String, desc: '酒券描述'}
     expose :start_date, documentation: {type: DateTime, desc: '酒券开始时间'} do |product_ticket, options|
       product_ticket.start_date = product_ticket.start_date.strftime("%Y-%m-%d %H:%M:%S") if !product_ticket.start_date.nil?
     end

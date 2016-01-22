@@ -4,7 +4,7 @@ module CommonV1APIHelper
   def CommonV1APIHelper.share_integral_syn(customer_id)
     data = {}
     begin
-      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:share_integral_id=>{"$exsits":"true"}).first
+      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:share_integral_id=>{"$exists"=>"true"}).first
       if share_integral_record.present?
         share_customer = Customer.find(share_integral_record.shared_customer_id)
         register_customer = Customer.find(share_integral_record.register_customer_id)
@@ -30,7 +30,7 @@ module CommonV1APIHelper
   def CommonV1APIHelper.product_ticket_syn(customer_id)
     data = {}
     begin
-      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:product_ticket_id=>{"$exsits":"true"}).first
+      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:product_ticket_id=>{"$exists"=>"true"}).first
 
 
       if share_integral_record.present?

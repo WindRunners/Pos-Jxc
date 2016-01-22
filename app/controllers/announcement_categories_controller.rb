@@ -76,6 +76,6 @@ class AnnouncementCategoriesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def announcement_category_params
-    params.require(:announcement_category).permit(:description, :name)
+    params.require(:announcement_category).permit(:description, :name, :sequence)
   end
 end

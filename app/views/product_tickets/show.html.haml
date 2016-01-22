@@ -1,0 +1,78 @@
+%p#notice= notice
+
+%p
+  %b 分享标题:
+  = @product_ticket.title
+%p
+  %b logo:
+  %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
+%p
+  %b 开始时间:
+  = @product_ticket.start_date_str
+%p
+  %b 结束时间:
+  = @product_ticket.end_date_str
+%p
+  %b 商品:
+  =@product_ticket.product_id
+%p
+  %b 状态:
+  = @product_ticket.status_str
+%p
+  %b 分享描述:
+  = @product_ticket.desc
+%p
+  %b 规则:
+  =markdown @product_ticket.rule_content
+%p
+  %b 小C数量:
+  = @product_ticket.customer_ids
+
+
+
+= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(@product_ticket),class:'btn btn-xs btn-info'
+\|
+= link_to 'Back',  '', 'data-href' =>product_tickets_path,:class=>'btn btn-xs btn-primary'
+
+
+:javascript
+
+  //
+  //var product_ticket_id = $("#product_ticket_id").val();
+  //
+  //function customer_check(customer_id){
+  //  $.ajax({
+  //      type: "post",
+  //      url: "product_tickets/"+product_ticket_id+"/customer_check",
+  //      data: {customer_id: customer_id,product_ticket_id: product_ticket_id},
+  //      dataType: "json",
+  //      success: function (data) {
+  //          if (data.flag ==1){
+  //              alert(data.message);
+  //              $("#tr_" + customer_id).remove();
+  //          };
+  //
+  //      },
+  //  });
+  //
+  //
+  //};
+  //
+  //
+  //function customer_checkout(customer_id){
+  //      $.ajax({
+  //      type: "post",
+  //      url: "product_tickets/"+product_ticket_id+"/customer_checkout",
+  //      data: {customer_id: customer_id,product_ticket_id: product_ticket_id},
+  //      dataType: "json",
+  //      success: function (data) {
+  //          if (data.flag ==1){
+  //              alert(data.message);
+  //              $("#tr_" + customer_id).remove();
+  //          };
+  //
+  //      },
+  //  });
+  //
+  //
+  //};

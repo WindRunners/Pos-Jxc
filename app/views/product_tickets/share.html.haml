@@ -1,0 +1,136 @@
+<!doctype html>
+%html
+  %head
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
+    %meta{:charset => "utf-8"}
+    %meta{:content => "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no", :name => "viewport"}
+    = stylesheet_link_tag "share_integrals", :media => "all"
+    %script{:src => "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"}
+    %script{:src => "//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"}
+    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css", :rel => "stylesheet"}
+    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
+    %title
+      =@product_ticket.title
+  %body
+    .banner-box
+
+
+    .logo-box
+      %img{:src => @product_ticket.logo.url }
+
+    .register2-box
+      .aa_box00
+        Hi,我是酒运达小伙伴!
+      .aa_box01
+        送你#{@product_ticket.product_id}积分大礼包
+      %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号"}
+      .xiazai
+        %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
+
+
+    .con-box{:style=>"display:none"}
+      .content-box
+        .aa_box01
+          %p
+            %br
+            您已领取积分礼包#{@product_ticket.product_id}积分
+            %br
+              快快使用吧
+      .xiazai
+        %a.btn01#app_path0 下载酒运达APP品味人生
+
+
+    .friend-box{:style=>"display:none"}
+      .content-box
+        %p
+          %br
+          您已是老朋友，登录APP
+          %br
+            进行推荐有奖即获得#{@product_ticket.product_id}积分赶快行动吧！
+      .xiazai
+        %a.btn01#app_path1 下载酒运达APP品味人生
+
+    .hd-box
+      .hd
+        %p 活动规则
+        %img.role_pic{:src => "/images/share_integrals/share_down.png"}
+    .text-box{:style=>"display:none"}
+      = markdown @product_ticket.rule_content if @product_ticket.rule_content.present?
+
+    %input#product_ticket_id{:type => "hidden", :value => @product_ticket.id.to_s }
+    %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
+
+
+:javascript
+  $(function(){
+
+     $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
+
+
+     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        var user_system ="iOS"
+        $("#app_path0").attr("href","http://fir.im/jydnew");
+        $("#app_path1").attr("href","http://fir.im/jydnew");
+      } else if (/(Android)/i.test(navigator.userAgent)) {
+        var user_system ="Android"
+        $("#app_path0").attr("href","http://fir.im/hnjyd");
+        $("#app_path1").attr("href","http://fir.im/hnjyd");
+      } else {
+      };
+
+
+      $(".hd").click(function(){
+
+        $(".role_pic").attr("src","/images/share_integrals/share_up.png");
+        $(".text-box").toggle();
+        $('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);
+
+      });
+
+
+
+
+   });
+
+
+
+
+  function register(){
+    var mobile = $("input:text").val();
+    var product_ticket_id = $("#product_ticket_id").val();
+    var shared_customer_id = $("#shared_customer_id").val();
+    if (mobile == undefined || mobile == ""|| mobile.length!=11) {
+     alert("请输入正确的手机号码！")
+     return false;
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "/product_tickets/"+ product_ticket_id +"/register",
+        data: {mobile: mobile,product_ticket_id: product_ticket_id ,shared_customer_id: shared_customer_id},
+        dataType: "json",
+        success: function (data) {
+          $(".register2-box").hide();
+          if(data.flag==0){
+            $(".friend-box").show();
+          }
+          else{
+            $(".con-box").show();
+          }
+        }
+    });
+
+      $("#btn_register").attr("disabled", true);
+  };
+
+
+
+
+
+
+
+
+
+
+
+

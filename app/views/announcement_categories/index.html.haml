@@ -6,6 +6,7 @@
       %th#id{:style=>'display:none'} ID
       %th= model_class.human_attribute_name(:name)
       %th= model_class.human_attribute_name(:description)
+      %th= model_class.human_attribute_name(:sequence)
       %th 详细
       %th 修改
       %th 删除
@@ -14,6 +15,7 @@
     %tr
       %td= category.name
       %td= category.description
+      %td= category.sequence
       %td= link_to '详细','','data-href' => announcement_category_path(category), :class => 'btn btn-primary'
       %td= link_to '修改','','data-href' => edit_announcement_category_path(category), :class => 'btn btn-pink'
       %td= link_to '删除', announcement_category_path(category), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger'

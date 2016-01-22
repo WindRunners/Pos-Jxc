@@ -1,7 +1,20 @@
 Rails.application.routes.draw do
 
+  resources :roles
+  resources :card_bags do
 
   resources :feedbacks
+  end
+  resources :product_tickets do
+    # post 'import_customers', :on => :collection
+    post 'customer_add'
+    post 'customer_reduce'
+    post 'build_card_bag'
+    post 'share_time_check', :on => :collection
+    get 'share'
+    post 'register'
+  end
+
   resources :user_integrals
   resources :wines
 
@@ -271,7 +284,6 @@ Rails.application.routes.draw do
     delete 'reduce_children'
     post 'get_children'
   end
-
   resources :wines do
     post 'table', :on => :collection
     get 'turn_picture'
@@ -290,10 +302,10 @@ Rails.application.routes.draw do
 
   get 'share_integrals/share' => 'share_integrals#share'
 
-  resources :share_integral_records
   resources :share_integrals do
     post 'register'
     post 'share_time_check', :on => :collection
+    resources :share_integral_records
 
   end
 

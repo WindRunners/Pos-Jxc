@@ -1,0 +1,272 @@
+.hr.hr-16.hr-dotted
+.row
+  .container
+    = form_for @product_ticket , remote:true do |f|
+      - if @product_ticket.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@product_ticket.errors.count, "error")} prohibited this product_ticket from being saved:"
+          %ul
+            - @product_ticket.errors.full_messages.each do |msg|
+              %li= msg
+      .col-xs-12
+        %form.form-horizontal
+          .form-group
+            .field
+              = f.label :分享标题,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :title
+          .form-group
+            .field
+              = f.label :分享logo图片,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :logo
+            .col-sm-6
+              -if params[:action] =='edit'
+                %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
+              -else
+                %img#img_product_ticket_logo{:style => "height:50px;width:50px"}
+          .form-group
+            .field
+              = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              -if params[:action] == 'new'
+                %input#start_date.input-sm{:name => "product_ticket[start_date]",:type => "datetime"}
+                至
+                %input#end_date.input-sm{:name => "product_ticket[end_date]",:type => "datetime"}
+              -if params[:action] =='edit'
+                %input#start_date.input-sm{:name => "product_ticket[start_date]",:type => "datetime", :value=>"#{@product_ticket.start_date_str}"}
+                至
+                %input#end_date.input-sm{:name => "product_ticket[end_date]",:type => "datetime", :value=>"#{@product_ticket.end_date_str}"}
+          .form-group
+            .field
+              = f.label :分享描述,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :desc
+          .form-group
+            .field
+              = f.label :小C数组,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :customer_ids
+          .form-group
+            .field
+              = f.label :规则,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              - if params[:action] == 'edit'
+                = f.text_area :rule_content,:class => "tinymce", :rows => 20, :cols => 120,:value=>"#{@product_ticket.rule_content}"
+              - else
+                = f.text_area :rule_content, :class => "tinymce", :rows => 20, :cols => 120
+
+          .hr.hr-16.hr-dotted
+
+          .form-group
+            .col-sm-2{"style"=>"text-align:right"}
+              %a.btn.btn-primary.btn-lg#bag_product_select_btn{'data-toggle'=>'modal','data-target'=>'#myModal'} 选择商品
+            .col-sm-10
+              %table#product_table.table.table-striped.table-bordered.table-hover
+                %thead
+                  %tr
+                    %th 缩略图
+                    %th 商品名称
+                %tbody
+                  %tr#product_tr
+                    %td#product_avatar
+                    %td#product_name
+                  %input{"type"=>"hidden","id"=>"product_id","name"=>"product_ticket[product_id]","value"=> ""}
+
+
+            .hr.hr-16.hr-dotted
+            .actions.col-sm-1.col-sm-offset-3
+              = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'
+            .actions.col-sm-8
+              = link_to 'Back','', 'data-href' => product_tickets_path,:class=>'btn btn-primary'
+
+%input{"type"=>"hidden","id"=>"img_server","value"=>"#{RestConfig::IMG_SERVER}"}
+
+/模态框
+.modal.fade.bs-example-modal-lg#myModal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}
+  .modal-dialog.modal-lg{'role'=>'document'}
+    .modal-content
+      %table#products_table.table.table-striped.table-bordered.table-hover
+        %thead
+          %tr
+            %th 缩略图
+            %th 名称
+            %th 类型
+            %th 价格
+    .modal-footer
+      %button.btn.btn-primary{'onclick'=>'add_select_product()'} 确定
+      %button.btn.btn-default{'data-dismiss'=>'modal'} 关闭
+
+
+:javascript
+    function save_check(){
+     var product_ticket_title =  $('#product_ticket_title').val();
+     var start_date =  $('#start_date').val();
+     var end_date =  $('#end_date').val();
+     var product_ticket_logo =  $('#product_ticket_logo').val();
+     var product_ticket_customer_ids =  $('#product_ticket_customer_ids').val();
+     var product_id =  $('#product_id').val();
+    if (product_ticket_title == undefined || product_ticket_title == "" ) {
+        alert("请输入酒券标题！")
+        return false;
+    };
+    if (start_date == undefined || start_date == "" ) {
+        alert("请输入开始日期！")
+        return false;
+    };
+    if (end_date == undefined || end_date == "" ) {
+        alert("请输入结束日期！")
+        return false;
+    };
+    if (product_ticket_logo == undefined || product_ticket_logo == "" ) {
+        alert("请输入酒券logo！")
+        return false;
+    };
+    if (product_ticket_customer_ids == undefined || product_ticket_customer_ids == "" ) {
+        alert("请输入酒券分发用户！")
+        return false;
+    };
+
+    if (product_id == undefined || product_id == "" ) {
+        alert("请选择酒券捆绑商品！")
+        return false;
+    };
+
+    };
+  var table = null;
+  //初始化加载方法
+    $(function () {
+
+        $('#start_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+        $('#end_date').datetimepicker({
+            sideBySide: true,
+            locale: "zh-cn",
+            format: "YYYY-MM-DD HH:mm:ss"
+        });
+
+
+
+      //TinyMCE初始化
+      tinymce.init({
+          selector: 'textarea.tinymce',
+          height: 500,
+          plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table contextmenu paste code'
+          ],
+          toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+      });
+
+
+    var img_server = $("#img_server").val();
+
+    //初始化商品选择窗口
+    table = $('#products_table').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url":"/import_bags/products/table/data/",
+            "type":"POST"
+        },
+        "columns" : [
+            { "data": "avatar_url" },
+            { "data": "title" },
+            { "data": "mobile_category_name" },
+            { "data": "price" }
+        ],
+        "createdRow": function ( row, data, index ) {
+
+            //$("tr").attr("_data","test123");
+            //alert("row:"+JSON.stringify(row));
+            //alert("data:"+JSON.stringify(data));
+            //alert("index:"+JSON.stringify(index));
+        },
+        "columnDefs": [ {
+            "targets": 0,
+            "data": "avatar_url",
+            "render": function ( data, type, full, meta ) {
+                return "<img class='product_avatar' src='"+img_server+data+"'/>";
+            }
+        } ],
+        "scrollY": "300px",
+        "drawCallback": function( settings ) {
+
+        }
+    } );
+
+
+    $('#products_table tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+
+        //alert("选中行数:"+table.row('.selected').length);
+        //alert(JSON.stringify(table.row('.selected').data()));
+    } );
+
+    });
+
+
+
+  //上传图片预览
+
+    $("#product_ticket_logo").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_product_ticket_logo").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+
+
+
+
+
+
+
+
+  $('#myModal').on('show.bs.modal', function (event) {
+
+    $(".dataTables_scrollHead").css("width","90%");
+    $("#products_table_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner").css({"width":"100%"});
+    $("#products_table_wrapper .dataTables_scroll .dataTables_scrollHead .dataTables_scrollHeadInner table").css({"width":"100%"});
+  })
+
+
+  function add_select_product(){
+    $('#myModal').modal('hide');
+    add_tr(table.row('.selected').data());
+  }
+
+  //增加行
+  function add_tr(data){
+
+    var img_server = $("#img_server").val();
+    $("#product_id").val(data._id);
+    $("#product_avatar").val(data.avatar_url);
+    $("#product_name").html(data.title);
+    $("#product_avatar").html("<img src='"+img_server+data.avatar_url+"'>");
+  }

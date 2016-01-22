@@ -1,7 +1,7 @@
 class AnnouncementCategory
   include Mongoid::Document
   include Mongoid::Timestamps
-  included Mongoid::Attributes::Dynamic
+  include Mongoid::Attributes::Dynamic
   field :name, type: String
   field :description, type: String
   field :sequence, type: Integer, default: 0 #排序字段

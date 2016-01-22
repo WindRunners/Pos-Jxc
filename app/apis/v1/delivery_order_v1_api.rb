@@ -32,6 +32,7 @@ class DeliveryOrderV1API < Grape::API
       requires :token, type: String, desc: '身份认证token'
       optional :longitude, type: Float, desc: '位置经度'
       optional :latitude, type: Float, desc: '位置纬度'
+      optional :page, type: Integer, desc: '页码', default: 1
     end
     post 'take_order_list' do
 
@@ -121,6 +122,10 @@ class DeliveryOrderV1API < Grape::API
     end
     params do
       requires :token, type: String, desc: '身份认证token'
+      optional :page, type: Integer, desc: '页码'
+      optional :longitude, type: Float, desc: '位置经度'
+      optional :latitude, type: Float, desc: '位置纬度'
+      optional :page, type: Integer, desc: '页码', default: 1
     end
     post 'my_order_list' do
 
@@ -133,7 +138,7 @@ class DeliveryOrderV1API < Grape::API
     end
     params do
       requires :token, type: String, desc: '身份认证token'
-      requires :page, type: Integer, desc: '页码'
+      requires :page, type: Integer, desc: '页码', default: 1
     end
     post 'my_order_hi_list' do
 

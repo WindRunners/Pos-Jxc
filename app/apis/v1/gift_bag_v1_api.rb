@@ -95,6 +95,18 @@ class GiftBagV1API < Grape::API
       list << {value:7,text:"一周"}
     end
 
+
+    desc '同步小Ｃ失效礼包列表' do
+      detail '{flag:{0:失败,1:成功},msg:提示信息,data:}'
+    end
+    params do
+
+    end
+    post 'syn_expiry_gift_bags' do
+
+      return GiftBagV1APIHelper.syn_expiry_gift_bags()
+    end
+
   end
 
 end

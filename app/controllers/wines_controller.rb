@@ -1,6 +1,6 @@
 class WinesController < ApplicationController
   before_action :set_wine, only: [:show, :edit, :update, :destroy]
-
+  skip_before_action :authenticate_user!, only: [:datatable, :wines_datatable]
   # GET /wines
   # GET /wines.json
   def index
@@ -36,6 +36,7 @@ class WinesController < ApplicationController
   # POST /wines.json
   def create
     @wine = Wine.new(wine_params)
+    @wine.chateau_introduce = ChateauIntroduce.new(:introduce => params[:introduce])
     @wine.user = current_user
     respond_to do |format|
       if @wine.save
@@ -69,7 +70,8 @@ class WinesController < ApplicationController
   def destroy
     @wine.destroy
     respond_to do |format|
-      format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
+      format.js { render_js wines_path }
+      # format.html { redirect_to wines_url, notice: 'Wine was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -101,7 +103,6 @@ class WinesController < ApplicationController
       format.json { render json: data }
     end
   end
-
 
 
   def turn_picture
@@ -215,25 +216,14 @@ class WinesController < ApplicationController
     end
   end
 
-
-
-  def upload
-  p '1'
-  @picture = Picture.new
-  @picture.pic = params['upload']
-  @picture.type = 2
-  @picture.save
-  @picture.pic.url
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_wine
+    @wine = Wine.find(params[:id])
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_wine
-      @wine = Wine.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def wine_params
-      params.require(:wine).permit(:name, :category, :description, :price, :hits, :sequence, :status, :logo,:ad)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def wine_params
+    params.require(:wine).permit(:name, :category, :description, :price, :hits, :sequence, :status, :logo, :ad)
+  end
 end

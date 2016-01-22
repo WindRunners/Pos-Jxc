@@ -78,6 +78,8 @@ module SpiritRoomV1APIHelper
   #酒库提酒
   def SpiritRoomV1APIHelper.take_product(customerUser, postInfo)
 
+    Rails.logger.info "酒库提酒参数为：#{postInfo}"
+
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
     return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
 
@@ -113,6 +115,14 @@ module SpiritRoomV1APIHelper
       syn_spirit_product_list.each do |spirit_product|
         spirit_product.save!
       end
+
+      #添加酒库日志
+      spiritRoomLog = SpiritRoomLog.new
+      spiritRoomLog.spirit_room = spiritRoom
+      spiritRoomLog['order_id'] = result['data']
+      spiritRoomLog.remarks = "酒库提酒"
+      spiritRoomLog.save
+
       return {msg: '酒库提酒成功!', flag: 1, data: result['data']}
     else
       return {msg: '酒库提酒失败!', flag: 0}

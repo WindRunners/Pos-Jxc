@@ -2,6 +2,8 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Paperclip
+  include Mongoid::Attributes::Dynamic
+
 
   rolify
 

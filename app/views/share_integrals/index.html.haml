@@ -12,6 +12,7 @@
       %th
       %th
       %th
+      %th
 
   %tbody
     - @share_integrals.each do |share_integral|
@@ -22,9 +23,10 @@
         %td= share_integral.shared_give_integral
         %td= share_integral.register_give_integral
         %td= share_integral.status_str
-        %td= link_to 'Show','','data-href' => share_integral_path(share_integral)
-        %td= link_to 'Edit','','data-href' =>  edit_share_integral_path(share_integral)
-        %td= link_to 'Destroy',share_integral_path(share_integral), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to '详细','','data-href' => share_integral_path(share_integral)
+        %td= link_to '编辑','','data-href' =>  edit_share_integral_path(share_integral)
+        %td= link_to '删除',share_integral_path(share_integral), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to '参与人员查看','','data-href' => share_integral_share_integral_records_path(share_integral.id)
 
 %br
 

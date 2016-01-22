@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Customer:
+  = @card_bag.customer_id
+%p
+  %b Status:
+  = @card_bag.status
+%p
+  %b Register customer count:
+  = @card_bag.register_customer_count
+%p
+  %b Login customer count:
+  = @card_bag.login_customer_count
+%p
+  %b Source:
+  = @card_bag.source
+
+= link_to 'Edit', edit_card_bag_path(@card_bag)
+\|
+= link_to 'Back', card_bags_path

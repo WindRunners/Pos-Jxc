@@ -87,7 +87,7 @@ class Store
     end
 
     channels = []
-    dusers = DeliveryUser.where(:store_ids => storeId)
+    dusers = DeliveryUser.where(:store_ids => storeId, :work_status => 1)
 
     dusers.each do |user|
       channels.concat user.channel_ids if user.channel_ids.present?

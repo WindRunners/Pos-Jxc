@@ -50,6 +50,12 @@ module GiftBagV1APIHelper
     giftBag.sign_time = Time.now
     giftBag.save! #更新礼包状态
 
+    spiritRoomLog = SpiritRoomLog.new
+    spiritRoomLog.spirit_room = spiritRoom
+    spiritRoomLog.gift_bag = giftBag
+    spiritRoomLog.remarks = "签收礼包"
+    spiritRoomLog.save
+
     #移除定时队列
     Resque.remove_delayed(AchieveGiftBagExpiry, gift_bag_id)
     #酒库信息保存
@@ -143,6 +149,13 @@ module GiftBagV1APIHelper
     gif_bag.product_list = gif_bag_product_list
     gif_bag.customer_id = customerUser.id.to_s
     if gif_bag.save!
+
+      spiritRoomLog = SpiritRoomLog.new
+      spiritRoomLog.spirit_room = spiritRoom
+      spiritRoomLog.gift_bag = gif_bag
+      spiritRoomLog.remarks = "赠送礼包"
+      spiritRoomLog.save
+
       Resque.enqueue_at(gif_bag.expiry_days.to_i.days.from_now, AchieveGiftBagExpiry, gif_bag.id.to_s)
       {msg: '礼包已发送成功!', flag: 1}
     else
@@ -188,6 +201,20 @@ module GiftBagV1APIHelper
     giftBag
   end
 
+  #同步失效礼包列表
+  def GiftBagV1APIHelper.syn_expiry_gift_bags()
+
+    expiry_list = GiftBag.where({"sign_status"=>0,"expiry_time"=>{"$lt"=> Time.now}}).limit(500)
+    num = 0
+    expiry_list.each do |gift_bag|
+      #移除現有隊列
+      Resque.remove_delayed(AchieveGiftBagExpiry, gift_bag.id.to_s)
+      #添加隊列
+      Resque.enqueue(AchieveGiftBagExpiry, gift_bag.id.to_s)
+      num+=1
+    end
+    {msg: '同步失效礼包成功!', flag: 1, data: num}
+  end
 
   private
 

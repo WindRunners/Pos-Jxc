@@ -5,9 +5,11 @@ class ShareIntegralRecord
   field :shared_customer_id, type: String
   field :register_customer_id, type: String
   field :is_confirm, type: Integer, default: 0
+  field :source, type: String
 
 
   belongs_to :share_integral
+  belongs_to :product_ticket
 
 
 
@@ -26,4 +28,17 @@ class ShareIntegralRecord
       register_interalLog.save
     end
   end
+
+  def is_confirm_str
+
+    if self.is_confirm ==0
+      p "未确认"
+
+    else
+      p "已确认"
+    end
+
+  end
+
+
 end

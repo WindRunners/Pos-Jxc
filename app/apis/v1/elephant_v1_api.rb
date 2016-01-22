@@ -40,7 +40,7 @@ class ElephantV1Api < Grape::API
       begin
         customerUser = Customer.find(params[:customer_id])
       rescue Exception=>e #异常捕获
-        puts e
+        puts e.message
         error!('小C认证失败',401)
       end
       customerUser
@@ -107,7 +107,10 @@ class ElephantV1Api < Grape::API
   mount CityV1API => 'city'
   mount CommonV1API => 'common'
   mount ShareIntegralV1API => 'shareIntegral'
+
   mount UserFeedbackV1API => 'userFeedback'
+
+  mount ProductTicketV1API => 'productTicket'
 
   add_swagger_documentation base_path: "#{ENV["ELEPHANT_HOST"]}/api/v1", hide_format: true
 end

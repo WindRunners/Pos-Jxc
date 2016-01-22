@@ -1,0 +1,20 @@
+.panel.panel-default
+  .panel-heading
+    %h3 用户反馈信息详情
+  %table.table
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 配送员手机号:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @feedback.mobile
+    %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 配送员姓名:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @feedback.real_name
+        %tr
+      %td.col-sm-2{"style"=>"text-align:right"} 反馈信息:
+      %td.col-sm-8{"style"=>"text-align:left"}
+        = @feedback.feedback_content
+  %br
+  =link_to '编辑反馈信息','','data-href'=> edit_feedback_path(@feedback),class:'btn btn-xs btn-warning'
+  &nbsp;&nbsp;
+  =link_to '返回用户反馈列表','','data-href'=> feedbacks_path,class:'btn btn-xs btn-info'

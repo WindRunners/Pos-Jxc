@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   get 'jxc_common_info/checkInventoryChangeLog' #查询库存变更日志
   ##
 
+  resources :feedbacks
+  resources :roles
   resources :card_bags do
 
   end
@@ -63,6 +65,7 @@ Rails.application.routes.draw do
     get 'share'
     post 'register'
   end
+
   resources :user_integrals
   resources :wines
 

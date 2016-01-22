@@ -59,6 +59,7 @@ class ProductTicketsController < ApplicationController
   # DELETE /product_tickets/1.json
   def destroy
     @product_ticket.destroy
+    @product_ticket.card_bags.destroy
     respond_to do |format|
       format.js { render_js product_tickets_path, 'Product ticket was successfully destroyed.' }
       format.html { redirect_to product_tickets_url, notice: 'Product ticket was successfully destroyed.' }
@@ -109,6 +110,8 @@ class ProductTicketsController < ApplicationController
       begin
         card_bag = product_ticket.card_bags.build()
         card_bag.customer_id = customer_id
+        card_bag.start_date = product_ticket.start_date
+        card_bag.end_date = product_ticket.end_date
         card_bag.source = 0
         card_bag.save
       rescue

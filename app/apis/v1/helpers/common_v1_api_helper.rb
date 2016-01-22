@@ -32,6 +32,7 @@ module CommonV1APIHelper
     begin
       share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:product_ticket_id=>{"$exsits":"true"}).first
 
+
       if share_integral_record.present?
 
         share_customer = Customer.find(share_integral_record.shared_customer_id)

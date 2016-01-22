@@ -24,6 +24,7 @@ class ProductTicketV1API < Grape::API
       product_ticket['product_title'] = product.title
       product_ticket['product_avatar_url'] = product.avatar_url
       product_ticket['product_price'] = product.price
+      product_ticket['product_num'] = 1
       card_bag_list << product_ticket
     end
     present card_bag_list, with: Entities::CardBagList
@@ -44,6 +45,7 @@ class ProductTicketV1API < Grape::API
     product_ticket['product_title'] = product.title
     product_ticket['product_avatar_url'] = product.avatar_url
     product_ticket['product_price'] = product.price
+    product_ticket['product_num'] = 1
     product_ticket['url']= "product_tickets/"+product_ticket.id+"/share?customer_id="+params[:customer_id]
     present product_ticket, with: Entities::ProductTicket
   end

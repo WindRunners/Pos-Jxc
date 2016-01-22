@@ -11,5 +11,8 @@ module Entities
     expose :product_title, documentation: {type: String, desc: '酒券附赠商品标题'}, safe: true
     expose :product_avatar_url, documentation: {type: String, desc: '酒券附赠商品logo_url'}, safe: true
     expose :product_price, documentation: {type: Integer, desc: '酒券附赠商品价格'}, safe: true
+    expose :product_num, documentation: {type: Integer, desc: '酒券附赠商品数量'}, safe: true
+
+
   end
 end

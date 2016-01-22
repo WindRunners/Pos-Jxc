@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+  resources :feedbacks
   resources :user_integrals
   resources :wines
 

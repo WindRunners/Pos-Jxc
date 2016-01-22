@@ -1,0 +1,7 @@
+%h1 编辑用户反馈信息
+
+= render 'form'
+
+= link_to '查看反馈信息', '','data-href'=>feedback_path(@feedback),class:'btn btn-xs btn-info'
+&nbsp;&nbsp;&nbsp;&nbsp
+= link_to '返回用户反馈列表', '','data-href'=>feedbacks_path,class:'btn btn-xs btn-info'

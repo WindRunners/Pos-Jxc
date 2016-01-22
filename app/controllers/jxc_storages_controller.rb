@@ -6,6 +6,7 @@ class JxcStoragesController < ApplicationController
   end
 
   def show
+    @operation = 'show'
   end
 
   def new
@@ -20,10 +21,12 @@ class JxcStoragesController < ApplicationController
 
     respond_to do |format|
       if @jxc_storage.save
-        format.html { redirect_to jxc_storages_path, notice: '仓库信息成功创建.' }
+        # format.html { redirect_to jxc_storages_path, notice: '仓库信息成功创建.' }
+        format.js { render_js jxc_storages_path, notice: '仓库信息成功创建.' }
         format.json { render :show, status: :created, location: @jxc_storage }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_dictionary_path}
         format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
       end
     end
@@ -32,10 +35,12 @@ class JxcStoragesController < ApplicationController
   def update
     respond_to do |format|
       if @jxc_storage.update(jxc_storage_params)
-        format.html { redirect_to jxc_storages_path, notice: '仓库信息成功更新.' }
+        # format.html { redirect_to jxc_storages_path, notice: '仓库信息成功更新.' }
+        format.js { render_js jxc_storages_path, notice: '仓库信息成功更新.' }
         format.json { render :show, status: :ok, location: @jxc_storage }
       else
-        format.html { render :edit }
+        # format.html { render :edit }
+        format.js { render_js edit_jxc_dictionary_path(@jxc_storage) }
         format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
       end
     end
@@ -44,7 +49,8 @@ class JxcStoragesController < ApplicationController
   def destroy
     @jxc_storage.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_storages_url, notice: '仓库信息成功删除.' }
+      # format.html { redirect_to jxc_storages_url, notice: '仓库信息成功删除.' }
+      format.js { render_js jxc_storages_url, notice: '仓库信息成功删除.' }
       format.json { head :no_content }
     end
   end

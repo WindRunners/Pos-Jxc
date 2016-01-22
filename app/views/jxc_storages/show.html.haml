@@ -1,33 +1,7 @@
-%p#notice= notice
-
-%p
-  %b Storage name:
-  = @jxc_storage.storage_name
-%p
-  %b Spell code:
-  = @jxc_storage.spell_code
-%p
-  %b Storage code:
-  = @jxc_storage.storage_code
-%p
-  %b Status:
-  = @jxc_storage.status
-%p
-  %b Memo:
-  = @jxc_storage.memo
-%p
-  %b Data 1:
-  = @jxc_storage.data_1
-%p
-  %b Data 2:
-  = @jxc_storage.data_2
-%p
-  %b Data 3:
-  = @jxc_storage.data_3
-%p
-  %b Data 4:
-  = @jxc_storage.data_4
-
-= link_to 'Edit', edit_jxc_storage_path(@jxc_storage)
-\|
-= link_to 'Back', jxc_storages_path
+%div{class:'col-sm-6',style:'width:100%;'}
+  %div{class:'widget-box widget-color-blue2'}
+    %div{class:'widget-header'}
+      %h4{class:'widget-title lighter smaller'}查看仓库详情
+    %div{class:'widget-body'}
+      %div{class:'widget-main padding-8'}
+        = render 'form'

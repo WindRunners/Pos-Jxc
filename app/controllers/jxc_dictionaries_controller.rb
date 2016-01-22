@@ -47,7 +47,7 @@ class JxcDictionariesController < ApplicationController
     @jxc_dictionary.destroy
     respond_to do |format|
       format.js { render_js jxc_dictionaries_path, notice: '进销存字典删除成功.'  }
-      format.json { head :show, location: @jxc_dictionary }
+      format.json { head :no_content }
     end
   end
 

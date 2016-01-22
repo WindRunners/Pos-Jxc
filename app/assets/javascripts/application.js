@@ -98,3 +98,4 @@
 
 //= require JxcJs/jxcCommon.js
 //= require JxcJs/pinyinInitial.js
+//= require zTree/jquery.ztree.all-3.5.min.js

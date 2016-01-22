@@ -22,14 +22,14 @@
     %tr
       %th=t('mongoid.attributes.jxc_product_classify_standard.class_name')
       %th=t('mongoid.attributes.jxc_product_classify_standard.standard')
-      %th=t('mongoid.links.operation')
+      %th=t('helpers.actions')
 
   %tbody#standardList
     - @jxc_product_classify_standards.each do |jxc_product_classify_standard|
       %tr
         %td= jxc_product_classify_standard.class_name
         %td= jxc_product_classify_standard.standard.inspect + '%'
-        %td= link_to t('helpers.links.destroy'), jxc_product_classify_standard, :method => :delete, class:'btn btn-xs btn-danger', :data => { :confirm => '确定删除此条数据?' }
+        %td= link_to t('helpers.links.destroy'), jxc_product_classify_standard, :method => :delete,remote:true, class:'btn btn-xs btn-danger', :data => { :confirm => '您确定删除此条数据吗?' }
 
 .modal.fade#addStandardModal{tabindex:'-1',role:'dialog','aria-labelledby':'addClassifyStandardLabel'}
   .modal-dialog{role:'document'}

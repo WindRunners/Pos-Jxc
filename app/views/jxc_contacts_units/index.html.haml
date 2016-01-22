@@ -25,8 +25,8 @@
       %th=t('mongoid.attributes.jxc_contacts_unit.contact_name')
       %th=t('mongoid.attributes.jxc_contacts_unit.contact_call')
       %th=t('mongoid.attributes.jxc_contacts_unit.contact_mobile')
-      %th=t('mongoid.attributes.jxc_contacts_unit.department')
-      %th=t('mongoid.attributes.jxc_contacts_unit.clerk')
+      -#%th=t('mongoid.attributes.jxc_contacts_unit.department')
+      -#%th=t('mongoid.attributes.jxc_contacts_unit.clerk')
       %th=t('helpers.actions')
       %th
       %th
@@ -39,15 +39,15 @@
         %td= jxc_contacts_unit.contact_name
         %td= jxc_contacts_unit.contact_call
         %td= jxc_contacts_unit.contact_mobile
-        %td= jxc_contacts_unit.department.title unless jxc_contacts_unit.department.nil?
-        %td= jxc_contacts_unit.clerk.name unless jxc_contacts_unit.clerk.nil?
-        %td= link_to t('helpers.links.show'), jxc_contacts_unit,class:'btn btn-xs btn-info'
-        %td= link_to t('helpers.links.edit'), edit_jxc_contacts_unit_path(jxc_contacts_unit),class:'btn btn-xs btn-warning'
-        %td= link_to t('helpers.links.destroy'), jxc_contacts_unit,class:'btn btn-xs btn-danger',:method => :delete, :data => { :confirm => 'Are you sure?' }
+        -#%td= jxc_contacts_unit.department.title unless jxc_contacts_unit.department.nil?
+        -#%td= jxc_contacts_unit.clerk.name unless jxc_contacts_unit.clerk.nil?
+        %td= link_to t('helpers.links.show'), '', 'data-href' => jxc_contacts_unit_path(jxc_contacts_unit),class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'), '', 'data-href' => edit_jxc_contacts_unit_path(jxc_contacts_unit),class:'btn btn-xs btn-warning'
+        %td= link_to t('helpers.links.destroy'),jxc_contacts_unit,:method => :delete,remote: true, :data => { :confirm => '您确定删除此条数据吗?' }, class:'btn btn-xs btn-danger'
 
 %br
 
-= link_to t('helpers.links.new'), new_jxc_contacts_unit_path,:class => 'btn btn-primary'
+= link_to t('helpers.links.new'),'', 'data-href' => new_jxc_contacts_unit_path,:class => 'btn btn-primary'
 
 = render 'jxc_modal/jxc_addDictionary_modal'
 

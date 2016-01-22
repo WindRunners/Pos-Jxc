@@ -2,7 +2,6 @@ class JxcPurchaseExchangeGoodsBill
   ##  采购换货单
   include Mongoid::Document
   include Mongoid::Timestamps
-  include JxcSettings
 
   field :bill_no, type: String            #单据编号
   field :customize_bill_no, type: String  #自定义单据编号

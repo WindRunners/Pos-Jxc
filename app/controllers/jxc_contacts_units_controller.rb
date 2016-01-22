@@ -2,10 +2,12 @@ class JxcContactsUnitsController < ApplicationController
   before_action :set_jxc_contacts_unit, only: [:show, :edit, :update, :destroy]
 
   def index
-    @jxc_contacts_units = JxcContactsUnit.includes(:department,:clerk).order_by(:created_at => :desc).page(params[:page]).per(10)
+    # @jxc_contacts_units = JxcContactsUnit.includes(:department,:clerk).order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_contacts_units = JxcContactsUnit.order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show
+    @operation = 'show'
   end
 
   def new
@@ -17,15 +19,15 @@ class JxcContactsUnitsController < ApplicationController
 
   def create
     @jxc_contacts_unit = JxcContactsUnit.new(jxc_contacts_unit_params)
-    department_id = params[:jxc_contacts_unit][:department_id]
-    clerk_id = params[:jxc_contacts_unit][:clerk_id]
-
-    @jxc_contacts_unit.department_id = department_id
-    @jxc_contacts_unit.clerk_id = clerk_id
+    # department_id = params[:jxc_contacts_unit][:department_id]
+    # clerk_id = params[:jxc_contacts_unit][:clerk_id]
+    # @jxc_contacts_unit.department_id = department_id
+    # @jxc_contacts_unit.clerk_id = clerk_id
 
     respond_to do |format|
       if @jxc_contacts_unit.save
-        format.html { redirect_to jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
+        # format.html { redirect_to jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
+        format.js { render_js jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
         format.json { render :show, status: :created, location: @jxc_contacts_unit }
       else
         format.html { render :new }
@@ -36,14 +38,14 @@ class JxcContactsUnitsController < ApplicationController
 
   def update
     respond_to do |format|
-      department_id = params[:jxc_contacts_unit][:department_id]
-      clerk_id = params[:jxc_contacts_unit][:clerk_id]
-
-      @jxc_contacts_unit.department_id = department_id
-      @jxc_contacts_unit.clerk_id = clerk_id
+      # department_id = params[:jxc_contacts_unit][:department_id]
+      # clerk_id = params[:jxc_contacts_unit][:clerk_id]
+      # @jxc_contacts_unit.department_id = department_id
+      # @jxc_contacts_unit.clerk_id = clerk_id
 
       if @jxc_contacts_unit.update(jxc_contacts_unit_params)
-        format.html { redirect_to @jxc_contacts_unit, notice: '进销存往来单位已成功更新.' }
+        # format.html { redirect_to @jxc_contacts_unit, notice: '进销存往来单位已成功更新.' }
+        format.js { render_js jxc_contacts_unit_path(@jxc_contacts_unit), notice: '进销存往来单位已成功更新.' }
         format.json { render :show, status: :ok, location: @jxc_contacts_unit }
       else
         format.html { render :edit }
@@ -55,7 +57,8 @@ class JxcContactsUnitsController < ApplicationController
   def destroy
     @jxc_contacts_unit.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_contacts_units_url, notice: '进销存往来单位已经成功删除.' }
+      # format.html { redirect_to jxc_contacts_units_url, notice: '进销存往来单位已经成功删除.' }
+      format.js { render_js jxc_contacts_units_url, notice: '进销存往来单位已经成功删除.' }
       format.json { head :no_content }
     end
   end

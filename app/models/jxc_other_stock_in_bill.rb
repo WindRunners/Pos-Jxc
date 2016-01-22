@@ -1,4 +1,4 @@
-class JxcOtherStockInBill < JxcBase
+class JxcOtherStockInBill
   ## 进销存 其他入库单
   include Mongoid::Document
   include Mongoid::Timestamps

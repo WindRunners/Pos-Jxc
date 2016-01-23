@@ -75,6 +75,15 @@ class ApplicationController < ActionController::Base
       render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
 
     end
+
+    def get_render_json(flag,data={},path='')
+
+      result={}
+      result['flag'] = flag
+      result['data'] = data
+      result['path'] = "location.hash = '##{path}|hash#{rand(1000)}'"
+      result
+    end
   
 
 end

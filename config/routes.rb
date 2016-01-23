@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
 
+  resources :feedbacks
   resources :roles
   resources :card_bags do
 
   end
   resources :product_tickets do
     # post 'import_customers', :on => :collection
+    get 'customers_import'
+    get 'get_customers'
     post 'customer_add'
     post 'customer_reduce'
     post 'build_card_bag'
@@ -13,6 +16,7 @@ Rails.application.routes.draw do
     get 'share'
     post 'register'
   end
+
   resources :user_integrals
   resources :wines
 

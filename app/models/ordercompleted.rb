@@ -11,6 +11,9 @@ class Ordercompleted
   has_many :ordergoodcompleteds,:autosave => true
   has_many :order_tracks
 
+  field :coupons, type: Array, default: [] #优惠券列表
+  field :activities, type: Array
+
   field :customer_id                 #个人用户ID
   field :orderno, type: String      #订单号码
   field :ordertype, type: Integer    #订单类型  0-线下订单  1-线上订单
@@ -21,6 +24,7 @@ class Ordercompleted
   field :useintegral,type: Integer, default: 0   #使用积分数量
   field :getintegral,type: Integer, default: 0   #获赠积分数量
   field :coupon_id, default: ""   #优惠券id
+  field :customer_integral   #小C总积分
   field :totalquantity,type: Integer, default: 0  #商品总数量
   field :totalcost,type: Float, default: 0.00      #总费用
   field :goodsvalue,type: Float, default: 0.00     #总货值
@@ -50,6 +54,14 @@ class Ordercompleted
 
     # 已完成
     state :completed
+  end
+
+  def lng
+    return self.location[1].to_s if self.location.present?
+  end
+
+  def lat
+    return self.location[0].to_s if self.location.present?
   end
 
 
@@ -157,6 +169,7 @@ class Ordercompleted
                                         :useintegral => order.useintegral,
                                         :getintegral => order.getintegral,
                                         :coupon_id => order.coupon_id,
+                                        :customer_integral => order.customer_integral,
                                         :totalquantity => order.totalquantity,
                                         :totalcost => order.totalcost,
                                         :cost_price => order.cost_price,
@@ -170,7 +183,9 @@ class Ordercompleted
                                         :paymode => order.paymode,
                                         :store_id => order.store_id,
                                         :distance => order.distance,
-                                        :delivery_user_id => order.delivery_user_id
+                                        :delivery_user_id => order.delivery_user_id,
+                                        :coupons => order.coupons,
+                                        :activities => order.activities
                                          )
 
     order.ordergoods.each do |ordergood|

@@ -31,10 +31,7 @@ module CommonV1APIHelper
     data = {}
     begin
       share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:product_ticket_id=>{"$exists"=>"true"}).first
-
-
       if share_integral_record.present?
-
         share_customer = Customer.find(share_integral_record.shared_customer_id)
         register_customer = Customer.find(share_integral_record.register_customer_id)
         #分享者奖励商品入酒库，卡包内酒券失效

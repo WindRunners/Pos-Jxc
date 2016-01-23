@@ -86,6 +86,7 @@ class ProductTicketsController < ApplicationController
 
   def customer_reduce
 
+
     product_ticket = ProductTicket.find(params[:product_ticket_id])
     product_ticket.customer_ids.delete(params[:customer_id])
     data = {}
@@ -162,6 +163,33 @@ class ProductTicketsController < ApplicationController
     end
   end
 
+
+  def share_log_init
+
+  end
+
+
+  def share_log
+
+      respond_to do |format|
+        format.html
+        format.json { render json: ShareIntegralRecordDatatable.new(view_context, current_user)}
+      end
+  end
+
+
+  def customers_import
+
+    @product_ticket = ProductTicket.find(params[:product_ticket_id])
+  end
+
+  def get_customers
+
+    respond_to do |format|
+      format.html
+      format.json { render json: CustomersDatatable.new(view_context, current_user)}
+    end
+  end
 
 
 

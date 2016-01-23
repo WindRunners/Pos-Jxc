@@ -28,7 +28,7 @@
       %th=t("mongoid.attributes.jxc_purchase_order.discount_amount")
       %th=t("mongoid.attributes.jxc_purchase_order.payable_amount")
       %th=t("mongoid.attributes.jxc_purchase_order.bill_status")
-      %th=t("mongoid.links.operation")
+      %th=t('helpers.actions')
       %th
 
   %tbody
@@ -46,10 +46,10 @@
         %td= jxc_purchase_order.payable_amount
         %td{style:'color:red;font-weight:bold;'}
           = jxc_purchase_order.bill_status == '0' ? '已创建' : (jxc_purchase_order.bill_status == '1' ? '已审核' : '已红冲')
-        %td= link_to t("helpers.links.show"), jxc_purchase_order,class:'btn btn-xs btn-info'
-        %td= link_to t("helpers.links.edit"), edit_jxc_purchase_order_path(jxc_purchase_order),class:'btn btn-xs btn-warning',disabled:jxc_purchase_order.bill_status == '0' ? false:true
+        %td= link_to t("helpers.links.show"), '','data-href':jxc_purchase_order_path(jxc_purchase_order),class:'btn btn-xs btn-info'
+        %td= link_to t("helpers.links.edit"), '','data-href':edit_jxc_purchase_order_path(jxc_purchase_order),class:'btn btn-xs btn-warning',disabled:jxc_purchase_order.bill_status == '0' ? false:true
         -#%td= link_to t("helpers.links.destroy"), jxc_purchase_order,class:'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' }
 
       %br
 
-= link_to t("helpers.links.new"), new_jxc_purchase_order_path, :class => 'btn btn-primary'
+= link_to t("helpers.links.new"), '','data-href': new_jxc_purchase_order_path, :class => 'btn btn-primary'

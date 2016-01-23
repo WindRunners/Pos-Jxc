@@ -87,7 +87,7 @@ class User
 
   ## 进销存
   #采购单
-  has_many :jxc_purchase_orders
+  has_and_belongs_to_many :jxc_purchase_orders
   has_many :jxc_purchase_stock_in_bills
   has_many :jxc_purchase_returns_bills
   has_many :jxc_purchase_exchange_goods_bills

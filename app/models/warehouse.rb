@@ -1,6 +1,8 @@
 module Warehouse
   class Product < ActiveResource::Base
-    self.site = "http://pic.ibuluo.me:3001/"
+    # self.site = "http://pic.ibuluo.me:3001/"
+    self.site = "http://pic.xianglema.cn:3001/"
+
     #self.site = "http://localhost:3001/"
 
     self.headers['Authorization'] = 'Token token="564ec5f4c3666e5c6b000000"'

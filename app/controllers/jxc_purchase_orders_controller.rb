@@ -28,7 +28,7 @@ class JxcPurchaseOrdersController < ApplicationController
     @jxc_purchase_order.order_no = @jxc_purchase_order.generate_order_no
     @jxc_purchase_order.order_date = Time.now
     @jxc_purchase_order.receive_goods_date = Time.now
-    @jxc_purchase_order.handler = current_user.staff
+    @jxc_purchase_order.handler << current_user
   end
 
   def edit
@@ -95,10 +95,12 @@ class JxcPurchaseOrdersController < ApplicationController
 
     respond_to do |format|
       if @jxc_purchase_order.save
-        format.html { redirect_to jxc_purchase_orders_path, notice: '采购订单已成功创建.' }
+        # format.html { redirect_to jxc_purchase_orders_path, notice: '采购订单已成功创建.' }
+        format.js { render_js jxc_purchase_orders_path, notice: '采购订单已成功创建.' }
         format.json { render :show, status: :created, location: @jxc_purchase_order }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_purchase_order_path }
         format.json { render json: @jxc_purchase_order.errors, status: :unprocessable_entity }
       end
     end
@@ -177,10 +179,12 @@ class JxcPurchaseOrdersController < ApplicationController
 
       respond_to do |format|
         if @jxc_purchase_order.update
-          format.html { redirect_to jxc_purchase_orders_path, notice: '采购订单已经成功更新.' }
+          # format.html { redirect_to jxc_purchase_orders_path, notice: '采购订单已经成功更新.' }
+          format.js { render_js jxc_purchase_orders_path, notice: '采购订单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_purchase_order }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_purchase_order_path(@jxc_purchase_order) }
           format.json { render json: @jxc_purchase_order.errors, status: :unprocessable_entity }
         end
       end
@@ -193,11 +197,11 @@ class JxcPurchaseOrdersController < ApplicationController
 
   def destroy
     #删除单据时，对应的单据详情也一并删除
-    # @jxc_purchase_order.jxc_bill_details.destroy
     JxcBillDetail.where(purchase_order_id: @jxc_purchase_order.id).destroy
     @jxc_purchase_order.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_purchase_orders_url, notice: '采购订单已经成功删除.' }
+      # format.html { redirect_to jxc_purchase_orders_url, notice: '采购订单已经成功删除.' }
+      format.js { render_js jxc_purchase_orders_url, notice: '采购订单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -221,12 +225,10 @@ class JxcPurchaseOrdersController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_jxc_purchase_order
     @jxc_purchase_order = JxcPurchaseOrder.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_purchase_order_params
     params.require(:jxc_purchase_order).permit(:order_no, :customize_order_no, :receive_goods_date, :order_date, :down_payment, :remark, :total_amount, :discount, :discount_amount, :payable_amount, :bill_status, :jxc_account_id)
   end

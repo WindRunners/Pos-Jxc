@@ -37,4 +37,6 @@
  *= require jxc_contacts_units
  *= require jxc_inventory_query
  *= require zTree/metro
+ *= require easyui/themes/bootstrap/easyui
+ *= require easyui/themes/icon
  */

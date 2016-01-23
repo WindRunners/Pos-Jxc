@@ -7,7 +7,7 @@
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_purchase_order.bill_status == '0'? false : true }
       作废
 %p#notice= notice
-= form_for @jxc_purchase_order do |f|
+= form_for @jxc_purchase_order, remote:true do |f|
   - if @jxc_purchase_order.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_purchase_order.errors.count, "error")} prohibited this jxc_purchase_order from being saved:"
@@ -55,11 +55,11 @@
           %i.ace-icon.fa.fa-leaf.green
         = f.hidden_field :storage_id
     %tr
-      %td
-        = f.button t('mongoid.attributes.jxc_purchase_order.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
-      %td
-        %input.form-control#jxc_purchase_order_jxc_account{value: @jxc_purchase_order.jxc_account.nil? ? '':@jxc_purchase_order.jxc_account.account_name,readonly:true }
-        = f.hidden_field :account_id
+      -#%td
+      -#  = f.button t('mongoid.attributes.jxc_purchase_order.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
+      -#%td
+      -#  %input.form-control#jxc_purchase_order_jxc_account{value: @jxc_purchase_order.jxc_account.nil? ? '':@jxc_purchase_order.jxc_account.account_name,readonly:true }
+      -#  = f.hidden_field :account_id
 
       %td
         = f.label :down_payment
@@ -69,7 +69,7 @@
       %td
         = f.label :handler
       %td
-        %input.form-control#jxc_purchase_order_handler{value: @jxc_purchase_order.handler.nil? ? '':@jxc_purchase_order.handler.name,readonly:true }
+        %input.form-control#jxc_purchase_order_handler{value: @jxc_purchase_order.handler[0].nil? ? '':@jxc_purchase_order.handler[0].name,readonly:true }
         = f.hidden_field :handler_id
       %td
         = f.label :remark
@@ -168,7 +168,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_purchase_orders_path}
+    %a{class:'btn','data-href': jxc_purchase_orders_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'
@@ -354,8 +354,7 @@
       onClick: function(event,treeId,treeNode){
         tableSetting.queryParams = {
           category_id:treeNode._id,
-          unit_id:supplier_id,
-          storage_id:storage_id
+          unit_id:supplier_id
         };
         initDataGrid(tableSetting);
       }
@@ -367,7 +366,7 @@
       url:'/jxc_common_info/getBillDetailInfo',
       width:600,
       singleSelect:false,
-      queryParams:{},
+      queryParams:{storage_id:storage_id},
       columns:[[
         {title:'名称',field:'title',width:'25%'},
         {title:'品牌',field:'brand',width:'15%'},

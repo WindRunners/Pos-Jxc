@@ -93,7 +93,7 @@ class JxcCommonInfoController < ApplicationController
 
   #商品分类
   def getProductCategoriesInfo
-    render json: Category.all
+    render json: MobileCategory.all
   end
 
   #商品
@@ -150,7 +150,8 @@ class JxcCommonInfoController < ApplicationController
       end
       render json: {'total':Category.find(category_id).products.where(:title => /#{product_param}/).count,'rows':detailList}
     else
-      productList = Product.where(:title => /#{product_param}/).page(page).per(rows)
+      # productList = Warehouse::Product.where(:title => /#{product_param}/).page(page).per(rows)
+      productList = Warehouse::Product.find( :all, params: { :title => /#{product_param}/ , :page => page, :per => rows})
       productList.each do |product|
 
         begin
@@ -175,7 +176,7 @@ class JxcCommonInfoController < ApplicationController
         detailList << product
       end
 
-      render json: {'total':Product.where(:title => /#{product_param}/).count,'rows':detailList}
+      render json: {'total':Warehouse::Product.find(:all, params: { :title => /#{product_param}/ }).count,'rows':detailList}
     end
 
   end

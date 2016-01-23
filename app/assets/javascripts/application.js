@@ -99,3 +99,5 @@
 //= require JxcJs/jxcCommon.js
 //= require JxcJs/pinyinInitial.js
 //= require zTree/jquery.ztree.all-3.5.min.js
+//= require easyui/jquery.easyui.min
+//= require easyui/locale/easyui-lang-zh_CN

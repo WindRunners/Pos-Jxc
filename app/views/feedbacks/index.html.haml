@@ -1,0 +1,55 @@
+%h1 用户建议反馈信息列表
+
+%form#search-scope.form-inline
+  .form-group
+    %label{"for"=>"real_name"} 配送员姓名:
+    %input#real_name.form-control{'placeholder'=>'配送员姓名'}
+  .form-group
+    %label{"for"=>"mobile"} 手机号:
+    %input#mobile.form-control{'placeholder'=>'手机号'}
+
+  %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+
+-#= form_tag feedbacks_path, method: 'get',style:'padding:10px;' do
+-#  配送员姓名:
+-#  = text_field_tag(:real_name)
+-#  手机号:
+-#  = date_field_tag(:mobile)
+-#  = submit_tag '搜索',class:'btn btn-xs btn-success'
+
+
+%br
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th 配送员手机号
+      %th 配送员真实姓名
+      %th 反馈信息
+      %th 操作
+
+
+  %tbody
+    - @feedbacks.each do |feedback|
+      %tr
+        %td= feedback.mobile
+        %td= feedback.real_name
+        %td= feedback.feedback_content
+        %td
+          = link_to '查看','','data-href'=> feedback_path(feedback),class:'btn btn-xs btn-info'
+          &nbsp;&nbsp;
+          = link_to '编辑','','data-href'=> edit_feedback_path(feedback),class:'btn btn-xs btn-warning'
+          &nbsp;&nbsp;
+          = link_to '删除', feedback, :method => :delete,:remote=>true, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
+
+%div.row
+  %div.col-xs-6
+    %div#dynamic-table_info.dataTables_info
+      = page_entries_info @feedbacks, :entry_name => '用户反馈信息'
+  %div.col-xs-6
+    %div#dynamic-table_paginate.dataTables_info.dataTables_paginate.paging_simple_numbers
+      = paginate @feedbacks
+    %br
+
+= link_to '新建用户反馈建议','','data-href'=>new_feedback_path,class:'btn btn-xs btn-info'
+-#= link_to 'New Feedback', '','data-href'=>new_feedback_path

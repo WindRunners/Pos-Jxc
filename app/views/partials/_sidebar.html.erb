@@ -439,6 +439,28 @@
         </li>
       </ul>
     </li>
+
+    <li class="">
+      <a href="#" class="dropdown-toggle">
+        <i class="menu-icon fa fa-desktop"></i>
+        <span class="menu-text">用户建议与反馈</span>
+        <b class="arrow fa fa-angle-down"></b>
+      </a>
+
+      <b class="arrow"></b>
+      <ul class="submenu">
+
+        <li class="">
+          <a data-href="<%= feedbacks_path %>">
+            <i class="menu-icon fa fa-caret-right"></i>
+            小达快跑建议反馈
+          </a>
+
+          <b class="arrow"></b>
+        </li>
+      </ul>
+    </li>
+
     <% if current_user.has_role?(:business) || current_user.has_role?(:admin)%>
     <li class="">
       <a href="#" class="dropdown-toggle">

@@ -14,6 +14,7 @@ class ProductTicket
   field :register_customer_count, type: Integer,default: 1
   field :login_customer_count, type: Integer,default: 1
 
+
   #LOGO图片
   has_mongoid_attached_file :logo,
                             :default_url => '/missing.png'

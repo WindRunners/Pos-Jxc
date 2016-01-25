@@ -4,6 +4,10 @@ class StoresController < ApplicationController
   # GET /stores
   # GET /stores.json
   def index
+    @manage_store=params[:state]
+    @current_user = current_user
+    @store_ids = @current_user['store_ids']
+    @store_ids = [] if !@store_ids.present?
 
     name_condition=params[:name] || ''
     conditionParams = {}

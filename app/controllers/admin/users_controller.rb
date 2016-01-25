@@ -46,7 +46,7 @@ class Admin::UsersController < ApplicationController
           # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           format.json { render :show, status: :ok }
         else
-          format.js {render_js admin_users_path}
+          format.js { render_js admin_users_path }
           format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           format.json { render :show, status: :ok }
         end
@@ -68,8 +68,8 @@ class Admin::UsersController < ApplicationController
     @user.avatar= params[:user][:avatar]
     @user.save
     respond_to do |format|
-      format.html{redirect_to "/#/userinfos/#{current_user.userinfo_id}"}
-      format.js{render_js "/#/userinfos/#{current_user.userinfo_id}"}
+      format.html { redirect_to "/#/userinfos/#{current_user.userinfo_id}" }
+      format.js { render_js "/#/userinfos/#{current_user.userinfo_id}" }
     end
 
   end
@@ -102,12 +102,12 @@ class Admin::UsersController < ApplicationController
         end
         format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok }
-        format.js{ render_js admin_user_path(@user) }
+        format.js { render_js admin_user_path(@user) }
 
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
-        format.js{ render_js edit_admin_user_path(@user) }
+        format.js { render_js edit_admin_user_path(@user) }
       end
     end
   end
@@ -120,6 +120,31 @@ class Admin::UsersController < ApplicationController
     end
   end
 
+
+  #用户负责门店
+  def manage_store
+    begin
+      op = params[:op] #add 添加  ,remove 移除
+      store_id = params[:store_id]
+      object_store_id = BSON::ObjectId(store_id)
+      @current_user = current_user
+      # binding.pry
+      if (op=="add")
+        @current_user.add_to_set({"store_ids" => object_store_id})
+      else
+        @current_user.pull({"store_ids" => object_store_id})
+      end
+      respond_to do |format|
+        format.json { render json: {"flag" => 1, "msg" => "门店操作成功！"} }
+      end
+    rescue Exception => e #异常捕获
+      puts e.message
+      respond_to do |format|
+        format.json { render json: {"flag" => 0, "msg" => "门店操作失败，服务器出现异常！"} }
+      end
+    end
+  end
+
   private
 
   def set_user
@@ -127,7 +152,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:mobile, :password, :password_confirmation,:userinfo_id ,:name, :admin, :role, :email, :step, :audit_desc,:name_condition)
+    params.require(:user).permit(:mobile, :password, :password_confirmation, :userinfo_id, :name, :admin, :role, :email, :step, :audit_desc, :name_condition)
   end
 
   def auth?

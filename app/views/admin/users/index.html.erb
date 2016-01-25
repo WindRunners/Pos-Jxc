@@ -53,6 +53,9 @@
                             :method => :delete,
                             :data => { :confirm => '你确定删除该用户吗?'},
                             :class => 'btn btn-xs btn-danger' %>
+              <a class="btn btn-xs btn-info" data-href="<%= stores_path(state:"manage_store") %>">
+              <i class="ace-icon fa fa-pencil bigger-130">门店管理</i>
+            </a>
           </div>
         </td>
         <% end %>

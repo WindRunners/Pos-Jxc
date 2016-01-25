@@ -6,7 +6,7 @@
       红冲
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_purchase_stock_in_bill.bill_status == '0'? false : true }
       作废
-= form_for @jxc_purchase_stock_in_bill do |f|
+= form_for @jxc_purchase_stock_in_bill, remote:true do |f|
   - if @jxc_purchase_stock_in_bill.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_purchase_stock_in_bill.errors.count, "error")} prohibited this jxc_purchase_stock_in_bill from being saved:"
@@ -50,11 +50,11 @@
         %input.form-control#jxc_purchase_stock_in_bill_jxc_storage{value: @jxc_purchase_stock_in_bill.jxc_storage.nil? ? '':@jxc_purchase_stock_in_bill.jxc_storage.storage_name,readonly:true }
         = f.hidden_field :storage_id
     %tr
-      %td
-        = f.button t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
-      %td
-        %input.form-control#jxc_purchase_stock_in_bill_jxc_account{value: @jxc_purchase_stock_in_bill.jxc_account.nil? ? '':@jxc_purchase_stock_in_bill.jxc_account.account_name,readonly:true }
-        = f.hidden_field :account_id
+      -#%td
+      -#  = f.button t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
+      -#%td
+      -#  %input.form-control#jxc_purchase_stock_in_bill_jxc_account{value: @jxc_purchase_stock_in_bill.jxc_account.nil? ? '':@jxc_purchase_stock_in_bill.jxc_account.account_name,readonly:true }
+      -#  = f.hidden_field :account_id
 
       %td
         = f.label :current_payment
@@ -64,7 +64,7 @@
       %td
         = f.label :handler
       %td
-        %input.form-control#jxc_purchase_stock_in_bill_handler{value: @jxc_purchase_stock_in_bill.handler.nil? ? '':@jxc_purchase_stock_in_bill.handler.name,readonly:true }
+        %input.form-control#jxc_purchase_stock_in_bill_handler{value: @jxc_purchase_stock_in_bill.handler[0].nil? ? '':@jxc_purchase_stock_in_bill.handler[0].name,readonly:true }
         = f.hidden_field :handler_id
       %td
         = f.label :remark
@@ -169,7 +169,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_purchase_stock_in_bills_path}
+    %a{class:'btn','data-href': jxc_purchase_stock_in_bills_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'
@@ -189,7 +189,8 @@
     },
     data: {
       key:{
-        name:""
+        name:"",
+        url:"#"
       },
       simpleData: {
         enable:true,
@@ -344,7 +345,7 @@
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
         tableSetting.queryParams = {
-          category_id:treeNode._id
+          category_name:treeNode.title
         };
         initDataGrid(tableSetting);
       }
@@ -374,7 +375,6 @@
     //初始化树和表
     initZTree(zTreeSetting);
     initDataGrid(tableSetting);
-
   }
 
 

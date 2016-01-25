@@ -20,9 +20,9 @@ class JxcSellReturnsBill
 
   belongs_to :consumer, class_name:'JxcContactsUnit', foreign_key: :consumer_id #客户
   belongs_to :jxc_storage, foreign_key: :storage_id    #退货仓库
-  # belongs_to :handler, class_name:'Staff', foreign_key: :handler_id #经手人
   # belongs_to :jxc_account, foreign_key: :account_id    #退款账户
-  belongs_to :bill_maker, class_name:'User', foreign_key: :maker_id    #制单人
+  has_and_belongs_to_many :handler, class_name:'User', foreign_key: :handler_id #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User', foreign_key: :maker_id    #制单人
 
   has_many :jxc_bill_details  #单据商品详细
 

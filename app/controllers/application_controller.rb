@@ -68,13 +68,22 @@ class ApplicationController < ActionController::Base
   end
 
 
-    def render_js(path, notice = '')
+  def render_js(path, notice = '')
 
-      flash[:notice] = notice if notice.present?
+    flash[:notice] = notice if notice.present?
 
-      render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
+    render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
 
+  end
+
+  def stringParseDate(string)
+    begin
+      date = Date.strptime(string,'%m/%d/%Y')
+    rescue
+      date = Time.now.to_date
     end
-  
+    return date
+  end
+
 
 end

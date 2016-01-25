@@ -93,7 +93,7 @@ class JxcCommonInfoController < ApplicationController
 
   #商品分类
   def getProductCategoriesInfo
-    render json: MobileCategory.all
+    render json: Warehouse::MobileCategory.JYD
   end
 
   #商品
@@ -114,7 +114,7 @@ class JxcCommonInfoController < ApplicationController
 
   #单据明细
   def getBillDetailInfo
-    category_id = params[:category_id]  #商品分类
+    category_name = params[:category_name]  #商品分类
     storage_id = params[:storage_id]   #仓库
     product_param = params[:searchParam] || '' #检索商品条件
 
@@ -122,8 +122,9 @@ class JxcCommonInfoController < ApplicationController
     rows = params[:rows]
 
     detailList = []
-    if category_id.present?
-      productList = Category.find(category_id).products.where(:title => /#{product_param}/).page(page).per(rows)
+    if category_name.present?
+      # productList = Category.find(category_name).products.where(:title => /#{product_param}/).page(page).per(rows)
+      productList = Warehouse::Product.find(:all,params: {title: /#{product_param}/, mobile_category_name: category_name}, page: page, per: rows)
       productList.each do |product|
 
         begin
@@ -148,7 +149,7 @@ class JxcCommonInfoController < ApplicationController
 
         detailList << product
       end
-      render json: {'total':Category.find(category_id).products.where(:title => /#{product_param}/).count,'rows':detailList}
+      render json: {'total':Warehouse::Product.find(:all,params: {title: /#{product_param}/, mobile_category_name: category_name}).count,'rows':detailList}
     else
       # productList = Warehouse::Product.where(:title => /#{product_param}/).page(page).per(rows)
       productList = Warehouse::Product.find( :all, params: { :title => /#{product_param}/ , :page => page, :per => rows})

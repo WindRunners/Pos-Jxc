@@ -14,8 +14,10 @@ class JxcBillDetail
   field :amount, type: BigDecimal, default:0.00 #金额
   field :remark, type: String #备注
 
+  field :resource_product_id, type: String
+
   ## 进销存属性
-  belongs_to :product, foreign_key: :product_id #所属商品
+  # belongs_to :product, class_name:'JxcProduct',foreign_key: :product_id #所属商品
   belongs_to :jxc_storage, foreign_key: :storage_id #仓库
   belongs_to :jxc_contacts_unit, foreign_key: :unit_id #所属供应商 | 客户
 
@@ -33,11 +35,11 @@ class JxcBillDetail
   belongs_to :jxc_stock_count_bill, foreign_key: :stock_count_bill_id #盘点单
   belongs_to :jxc_stock_overflow_bill, foreign_key: :stock_overflow_bill_id #报溢单
   belongs_to :jxc_stock_reduce_bill, foreign_key: :stock_reduce_bill_id #报损单
-  belongs_to :jxc_entering_stock, foreign_key: :entering_stock_id #期初库存录入
+  # belongs_to :jxc_entering_stock, foreign_key: :entering_stock_id #期初库存录入
 
   belongs_to :jxc_cost_adjust_bill, foreign_key: :cost_adjust_bill_id #成本调整单
 
-  has_many :traceabilities #产品溯源条码
+  # has_many :traceabilities #产品溯源条码
 
   #计算商品金额
   def calculate_amount(price,count)
@@ -53,6 +55,10 @@ class JxcBillDetail
   #计算 未到货/未发货 数量
   def calc_other_count(count,have_done_count)
     other_count = (count.to_d - have_done_count.to_d).round(2) #(未到货/未发货)数量 = 总数 - 已(收货/到货)数
+  end
+
+  def product
+    @product = JxcProduct.find(self.resource_product_id)
   end
 
   #获取

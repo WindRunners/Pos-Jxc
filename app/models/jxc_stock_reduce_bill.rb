@@ -12,8 +12,8 @@ class JxcStockReduceBill
   field :bill_status, type: String, default: '0'    #单据状态 ( -1:已作废 | 0:已创建 | 1:已审核 | 2:已红冲 )
 
   belongs_to :jxc_storage, foreign_key: :storage_id  #报损仓库
-  # belongs_to :handler, class_name:'Staff', foreign_key: :handler_id  #经手人
-  belongs_to :bill_maker, class_name:'User', foreign_key: :maker_id  #制单人
+  has_and_belongs_to_many :handler, class_name:'User', foreign_key: :handler_id  #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User', foreign_key: :maker_id  #制单人
 
   belongs_to :jxc_stock_count_bill  #盘点单
 

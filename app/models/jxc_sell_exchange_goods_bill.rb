@@ -20,9 +20,9 @@ class JxcSellExchangeGoodsBill
   belongs_to :consumer, class_name:'JxcContactsUnit' #客户
   has_and_belongs_to_many :exchange_out_stock, class_name:'JxcStorage'  #换出仓库
   has_and_belongs_to_many :exchange_in_stock, class_name:'JxcStorage'   #换入仓库
-  belongs_to :handler, class_name:'Staff'   #经手人
   belongs_to :jxc_account    #收款账户
-  belongs_to :bill_maker, class_name:'User'  #制单人
+  has_and_belongs_to_many :handler, class_name:'User'   #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User'  #制单人
 
   has_many :in_products, class_name:'Product'   #换入商品明细
   has_many :out_products, class_name: 'Product'   #换出商品明细

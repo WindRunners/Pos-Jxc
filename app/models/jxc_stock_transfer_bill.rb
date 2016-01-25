@@ -14,8 +14,8 @@ class JxcStockTransferBill
 
   has_and_belongs_to_many :transfer_out_stock, class_name:'JxcStorage' #调出仓库
   has_and_belongs_to_many :transfer_in_stock, class_name:'JxcStorage' #调入仓库
-  # belongs_to :handler, class_name:'Staff'  #经手人
-  belongs_to :bill_maker, class_name:'User' #制单人
+  has_and_belongs_to_many :handler, class_name:'User'  #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User' #制单人
 
   has_many :jxc_transfer_bill_details    #调拨单 商品明细
 

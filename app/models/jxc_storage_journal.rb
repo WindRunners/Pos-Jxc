@@ -19,7 +19,7 @@ class JxcStorageJournal
 
   belongs_to :jxc_storage #流水明细所属仓库
   belongs_to :product #流水明细包含的商品
-  belongs_to :staff #经手人
+  belongs_to :user #经手人
 
   belongs_to :jxc_purchase_stock_in_bill #采购入库单
   belongs_to :jxc_sell_stock_out_bill #销售出库单
@@ -31,6 +31,6 @@ class JxcStorageJournal
   belongs_to :jxc_stock_reduce_bill #报损单
   belongs_to :jxc_stock_transfer_bill #调拨单
   belongs_to :jxc_cost_adjust_bill #成本调整单
-  belongs_to :jxc_entering_stock #期初库存录入
+  # belongs_to :jxc_entering_stock #期初库存录入
   belongs_to :jxc_stock_assign_bill #要货单
 end

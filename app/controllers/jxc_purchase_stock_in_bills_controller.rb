@@ -28,7 +28,7 @@ class JxcPurchaseStockInBillsController < ApplicationController
     @jxc_purchase_stock_in_bill.bill_no = @jxc_purchase_stock_in_bill.generate_bill_no
     @jxc_purchase_stock_in_bill.payment_date = Time.now
     @jxc_purchase_stock_in_bill.stock_in_date = Time.now
-    @jxc_purchase_stock_in_bill.handler = current_user.staff
+    @jxc_purchase_stock_in_bill.handler << current_user
   end
 
   def edit
@@ -41,16 +41,16 @@ class JxcPurchaseStockInBillsController < ApplicationController
     #仓库
     storage_id = bill_info[:storage_id]
     #付款账户
-    account_id = bill_info[:account_id]
+    # account_id = bill_info[:account_id]
 
     @jxc_purchase_stock_in_bill = JxcPurchaseStockInBill.new(jxc_purchase_stock_in_bill_params)
     @jxc_purchase_stock_in_bill.supplier_id = supplier_id
     @jxc_purchase_stock_in_bill.storage_id =  storage_id
-    @jxc_purchase_stock_in_bill.account_id =  account_id
+    # @jxc_purchase_stock_in_bill.account_id =  account_id
     #制单人
-    @jxc_purchase_stock_in_bill.bill_maker =  current_user
+    @jxc_purchase_stock_in_bill.maker_id << current_user.id
     #经手人
-    @jxc_purchase_stock_in_bill.handler = current_user.staff
+    @jxc_purchase_stock_in_bill.handler_id << current_user.id
 
     @jxc_purchase_stock_in_bill.payment_date = stringParseDate(bill_info[:payment_date])
     @jxc_purchase_stock_in_bill.stock_in_date = stringParseDate(bill_info[:stock_in_date])
@@ -96,7 +96,7 @@ class JxcPurchaseStockInBillsController < ApplicationController
       tempBillDetail.amount = amount
 
       #商品ID
-      tempBillDetail.product = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #备注
       tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -126,10 +126,13 @@ class JxcPurchaseStockInBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_purchase_stock_in_bill.save
-        format.html { redirect_to jxc_purchase_stock_in_bills_path, notice: '采购入库单已成功创建.' }
+        # format.html { redirect_to jxc_purchase_stock_in_bills_path, notice: '采购入库单已成功创建.' }
+        format.js { render_js jxc_purchase_stock_in_bills_path, notice: '采购入库单已成功创建.' }
         format.json { render :show, status: :created, location: @jxc_purchase_stock_in_bill }
       else
-        format.html { render :new }
+        JxcBillDetail.where(purchase_in_bill_id: @jxc_purchase_stock_in_bill.id).destroy
+
+        format.js { render_js new_jxc_purchase_stock_in_bill_path }
         format.json { render json: @jxc_purchase_stock_in_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -143,16 +146,16 @@ class JxcPurchaseStockInBillsController < ApplicationController
       supplier_id = bill_info[:supplier_id]
       #仓库
       storage_id = bill_info[:storage_id]
-      #付款账户
-      account_id = bill_info[:account_id]
+      # 付款账户
+      # account_id = bill_info[:account_id]
 
       @jxc_purchase_stock_in_bill.supplier_id = supplier_id
       @jxc_purchase_stock_in_bill.storage_id =  storage_id
-      @jxc_purchase_stock_in_bill.account_id =  account_id
+      # @jxc_purchase_stock_in_bill.account_id =  account_id
       #制单人
-      @jxc_purchase_stock_in_bill.bill_maker = current_user
+      @jxc_purchase_stock_in_bill.maker_id << current_user.id
       #经手人
-      @jxc_purchase_stock_in_bill.handler = current_user.staff
+      @jxc_purchase_stock_in_bill.handler_id << current_user.id
 
 
       @jxc_purchase_stock_in_bill.customize_bill_no = bill_info[:customize_bill_no]
@@ -205,7 +208,7 @@ class JxcPurchaseStockInBillsController < ApplicationController
         tempBillDetail.amount = amount
 
         #商品ID
-        tempBillDetail.product = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #备注
         tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -235,16 +238,18 @@ class JxcPurchaseStockInBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_purchase_stock_in_bill.update
-          format.html { redirect_to @jxc_purchase_stock_in_bill, notice: '采购入库单已经成功修改.' }
+          # format.html { redirect_to @jxc_purchase_stock_in_bill, notice: '采购入库单已经成功修改.' }
+          format.js { render_js jxc_purchase_stock_in_bill_path(@jxc_purchase_stock_in_bill), notice: '采购入库单已经成功修改.' }
           format.json { render :show, status: :ok, location: @jxc_purchase_stock_in_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_purchase_stock_in_bill_path(@jxc_purchase_stock_in_bill) }
           format.json { render json: @jxc_purchase_stock_in_bill.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to jxc_purchase_stock_in_bills_path, notice: '采购入库单当前状态无法更新。'}
+        format.js { render_js jxc_purchase_stock_in_bills_path, notice: '采购入库单当前状态无法更新。'}
       end
     end
   end
@@ -252,7 +257,8 @@ class JxcPurchaseStockInBillsController < ApplicationController
   def destroy
     @jxc_purchase_stock_in_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_purchase_stock_in_bills_url, notice: '采购入库单已经成功删除.' }
+      # format.html { redirect_to jxc_purchase_stock_in_bills_url, notice: '采购入库单已经成功删除.' }
+      format.js { render_js jxc_purchase_stock_in_bills_url, notice: '采购入库单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -288,6 +294,6 @@ class JxcPurchaseStockInBillsController < ApplicationController
 
   # 单据商品详情
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(:purchase_in_bill_id => @jxc_purchase_stock_in_bill.id)
+    @bill_details = JxcBillDetail.where(:purchase_in_bill_id => @jxc_purchase_stock_in_bill.id)
   end
 end

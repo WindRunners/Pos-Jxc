@@ -239,6 +239,7 @@ Rails.application.routes.draw do
   namespace :admin do
     post 'users/upload'
     resources :users
+    post 'users/manage_store'
   end
 
   resources :mobile_categories

@@ -1,14 +1,15 @@
 %h1 门店列表
 %br
 %div{class:'row',style:'background-color:#EFF3F8'}
-%div{class:'col-xs-9'}
-  = link_to '新建门店',"##{new_store_path}",'data-href' =>new_store_path,:class => 'btn btn-info'
-%div{class:'col-xs-3'}
-  %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>stores_path,'data-remote'=>'true'}
-    .form-group
-      %label{"for"=>"qrcode"} 店名:
-      %input#name.form-control{'name'=>'名称'}
-    %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+  -if @manage_store!="manage_store"
+    %div{class:'col-xs-9'}
+      = link_to '新建门店',"##{new_store_path}",'data-href' =>new_store_path,:class => 'btn btn-info'
+    %div{class:'col-xs-3'}
+      %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>stores_path,'data-remote'=>'true'}
+        .form-group
+          %label{"for"=>"qrcode"} 店名:
+          %input#name.form-control{'name'=>'名称'}
+        %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
 %table.table
   %thead
     %tr
@@ -32,10 +33,18 @@
         %td= store.position
         %td= store.created_at
         %td
-          = link_to '详细',"##{store_path(store)}",'data-href' => store_path(store),:class => 'btn btn-minier btn-yellow'
-          = link_to '编辑',"##{edit_store_path(store)}",'data-href' => edit_store_path(store),:class => 'btn btn-minier btn-primary'
-          = link_to '配送员管理',"##{store_delivery_users_path(store)}",'data-href' => store_delivery_users_path(store),:class => 'btn btn-minier btn-primary'
-          = link_to '删除', store_path(store), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
-%br
+          -if @manage_store=="manage_store"
+            -if @store_ids.include?(store.id)
+              = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "unmanage_store_href#{store.id.to_s}"
+              = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "manage_store_href#{store.id.to_s}",style: 'display: none'
+            -else
+              = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "unmanage_store_href#{store.id.to_s}",style: 'display: none'
+              = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "manage_store_href#{store.id.to_s}"
+          -else
+            = link_to '详细',"##{store_path(store)}",'data-href' => store_path(store),:class => 'btn btn-minier btn-yellow'
+            = link_to '编辑',"##{edit_store_path(store)}",'data-href' => edit_store_path(store),:class => 'btn btn-minier btn-primary'
+            = link_to '配送员管理',"##{store_delivery_users_path(store)}",'data-href' => store_delivery_users_path(store),:class => 'btn btn-minier btn-primary'
+            = link_to '删除', store_path(store), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+          %br
 = paginate @stores
 

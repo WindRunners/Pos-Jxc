@@ -46,7 +46,7 @@ class AchieveAnnouncementsBatch
               end
 
               # # 替换content原图片链接并转化城IMG标签
-              c.replace "<div style = \"width:90%; margin:0 auto;\"><img style='width:100%;' src='/upload/image/announcements/#{b}/#{uuid}.jpg' /></div>"
+              c.replace "<div  class = \"pic_div\"><img style='width:100%;' src='/upload/image/announcements/#{b}/#{uuid}.jpg' /></div>"
             }
             @fwb << pic_div
           else

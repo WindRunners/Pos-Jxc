@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', @role
+= link_to 'Show', '', 'data-href' =>role_path(@role)
 \|
-= link_to 'Back', roles_path
+= link_to 'Back', '', 'data-href' =>roles_path

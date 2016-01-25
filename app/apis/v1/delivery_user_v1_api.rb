@@ -179,12 +179,15 @@ class DeliveryUserV1API < Grape::API
 
       status 200 #修改post默认返回状态
 
+      Rails.logger.info  "配送员注销参数为:#{declared(params)}"
+
       channel = params[:channel_type] + "|" + params[:channel_id]
 
       current_deliveryUser.channel_ids.delete channel
       current_deliveryUser.authentication_token = ''
       current_deliveryUser.save
 
+      Rails.logger.info  "配送员注销成功"
       {msg: "注销成功!", flag: 1}
     end
 

@@ -22,7 +22,37 @@
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <style type="text/css">
+        .container {
 
+          font-family: SimHei;
+        }
+        #head_title {
+          font-size: 140%;
+          font-weight:200;
+          color: #202020;
+        }
+
+        #head_source{
+            margin:5px -10px 15px -10px;
+          color: #505050;
+        }
+
+        #source {
+
+          font-size: 70%;
+          text-align: justify;
+        }
+
+        #created_at {
+
+          font-size: 70%;
+          text-align: right;
+        }
+        #content {
+          font-size: 120%;
+          color: #505050;
+            text-align: left;
+        }
   </style>
 
   <script>
@@ -81,87 +111,54 @@
 
       }
       ;
+//      $(document).ready(function(){
+//          $('#content').find('img').each(function(){
+//
+//              this.style.width = "100%";
+//
+//          });
+//      });
 
   </script>
 
 </head>
-<body class="container" style="color: #282828;font-family: SimHei;">
+<body class="container">
 
 
-<div class="row" id="">
-  <div class="col-xs-12 text-center" id="title" style="font-size:150%;">
-    <strong><%= @announcement.title %></strong>
+<div class="row" id="head_title">
+  <div class="col-xs-12">
+    <%= @announcement.title %>
   </div>
-  <!--header-->
-  <div class="col-xs-12" id="">
-    <div class="col-xs-6 text-left" id="source" style="font-size:120%;">
-        <% if @announcement.source.present? %>
-            <%= @announcement.source %>
-        <% else %>
-            小达快讯
-        <% end %></div>
-    <div class="col-xs-6 text-right" id="created_at">
-        <%= @announcement.created_at.to_s[5, 11] %>
-    </div>
-  </div>
+  <!--title-->
 </div>
-<!--row-->
+<!--head_title-->
 
 
-<hr/>
+
+<div class="row" id="head_source">
+
+    <div class="col-xs-6" id="source">
+      <% if @announcement.source.present? %>
+          <%= @announcement.source %>
+      <% else %>
+          小达快讯
+      <% end %></div>
+    <div class="col-xs-6" id="created_at">
+      <%= @announcement.created_at.to_s[5, 11] %>
+    </div>
+
+</div>
 
 
-<div class="row" id="content" style="font-size:120%;">
-  <div class="col-xs-12 " id="content">
+
+
+<div class="row" id="content">
+  <div class="col-xs-12">
     <%= markdown @announcement.content %>
   </div>
   <!--content-->
 </div>
 <!--row_content-->
-
-
-
-<% if @announcement.chateau_comments.present? %>
-    <div class="col-xs-12" id="double_hr" style="border-bottom-style:solid; border-bottom-width:2px; border-bottom-color: #cccccc;">评论列表</div>
-
-    <% 20.times do %>
-        <hr/>
-        <div class="row" id="comments">
-          <div class="col-xs-2 " id="avatar">
-            <%= image_tag("avatar.png", :class => "img-circle", size: "50x50") %>
-          </div>
-          <!--avatar-->
-
-          <div class="col-xs-10 " id="comments_right">
-
-            <div class="row" id="comment_info">
-              <div class="col-xs-8 " id="">游泳全靠浪</br>45分钟前</div>
-              <div class="col-xs-1 " id=""><%= image_tag("avatar.png", :class => "img-circle", size: "30x30") %></div>
-              <div class="col-xs-1 " id=""><%= image_tag("avatar.png", :class => "img-circle", size: "30x30") %></div>
-            </div>
-            <div class="row" id="comment_content">
-              我担心你不快乐。虽然我也常常不快乐，但是，我还是希望你能永远快乐，天天有灿烂的笑容。你总是担心这个，担心那个，因为这个世界有太多的不确定性，你又那么缺乏安全感。但你总要长大，学会应付这一切，对自己说：Don't
-              worry，be happy。
-            </div>
-          </div>
-          <!--comments_right-->
-        </div>
-        <!--row-->
-    <% end %>
-<% end %>
-
-
-<!--隐藏按钮-->
-<input id="customer_id" type="hidden" value="567d20a1e1382376bc000000">
-<input id="announcement_id" type="hidden" value="">
-
-
-
-
-
-
-<!--添加评论模态框-->
-
 
 
 

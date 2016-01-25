@@ -1,6 +1,6 @@
 class DeliveryUsersController < ApplicationController
   before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save,:store_index,:store_save]
-
+  skip_before_action :authenticate_user!, only: [:datatable]
   # GET /delivery_users
   # GET /delivery_users.json
   def index
@@ -137,6 +137,38 @@ class DeliveryUsersController < ApplicationController
       respond_to do |format|
         format.json {render json: {"flag"=> 0,"msg"=> "门店操作失败，服务器出现异常！"} }
       end
+    end
+  end
+
+
+  #配送员datatable
+  def datatable
+    length = params[:length].to_i #页显示记录数
+    start = params[:start].to_i #记录跳过的行数
+
+
+
+
+    searchValue = params[:search][:value] #查询
+    searchParams = {}
+    searchParams['mobile'] = /#{searchValue}/
+    searchParams['authentication_token'] = {"$exists":true}
+    orinfo = []
+    current_user['store_ids'].each do |store_id|
+      orinfo << {'store_ids' => store_id}
+    end
+
+    searchParams['$or'] = orinfo
+
+    tabledata = {}
+    totalRows = DeliveryUser.where(searchParams).count
+    tabledata['data'] = DeliveryUser.where(searchParams).page((start/length)+1).per(length)
+    tabledata['draw'] = params[:draw] #访问的次数
+    tabledata['recordsTotal'] = totalRows
+    tabledata['recordsFiltered'] = totalRows
+
+    respond_to do |format|
+      format.json { render json: tabledata }
     end
   end
 

@@ -58,6 +58,8 @@ Rails.application.routes.draw do
   end
   resources :product_tickets do
     # post 'import_customers', :on => :collection
+    get 'customers_import'
+    get 'get_customers'
     post 'customer_add'
     post 'customer_reduce'
     post 'build_card_bag'
@@ -88,6 +90,7 @@ Rails.application.routes.draw do
   get 'import_bags/workflow/deal_list' => "import_bags#deal_list"
 
   resources :delivery_users
+  post 'delivery_users/datatable'=> "delivery_users#datatable"
   get 'delivery_users/:id/check' => "delivery_users#check"
   post 'delivery_users/:id/check_save' => "delivery_users#check_save"
   get 'delivery_users/:id/store_index' => "delivery_users#store_index"
@@ -287,6 +290,7 @@ Rails.application.routes.draw do
   namespace :admin do
     post 'users/upload'
     resources :users
+    post 'users/manage_store'
   end
 
   resources :mobile_categories

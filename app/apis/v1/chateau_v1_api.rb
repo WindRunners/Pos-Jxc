@@ -51,28 +51,37 @@ class ChateauV1API < Grape::API
   end
 
 
-  desc 'chateau_list'
+  desc 'chateau_list'do
+    success Entities::Chateau
+  end
 
   params do
     requires :region_id, type: String, desc: 'region_id'
-    # requires :page, type: String, desc: '当前页'
-    # requires :per_page, type: String, desc: '每页纪录数目'
+    requires :page, type: String, desc: '当前页'
+    requires :per_page, type: String, desc: '每页纪录数目'
   end
 
   get 'chateau_list' do
-    region_id = params[:region_id]
-    ChateauV1APIHelper.chateau_list(region_id)
+    @chateaus_array = []
+
+    region_id_array = []
+    @region = Region.find(params[:region_id])
+    region_id_array << @region['_id']
+    @region.descendants_and_self.each do |r|
+      region_id_array << r['_id']
+    end
+    present Chateau.where({:status => 1, 'region_id' => {"$in" => region_id_array}}).page(params[:page]).per(params[:per_page]).order('created_at DESC'), with: Entities::Chateau
   end
 
 
-  desc 'region_all'
+  desc '产地一级目录'
 
-  get 'region_all' do
-    @region = Region.all
+  get 'region_root' do
+    Region.root.children
   end
 
 
-  desc 'region_children'
+  desc '产地下级目录'
 
   params do
     requires :region_id, type: String, desc: 'region_id'

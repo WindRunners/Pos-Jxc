@@ -4,7 +4,7 @@ class Chateau
   include Mongoid::Attributes::Dynamic
   include Mongoid::Paperclip
 
-  field :category, type: Integer #1:红酒酒庄 2:白酒酒厂
+  field :category, type: Integer #1:红酒 2:白酒 3啤酒 4洋酒 5黄酒 6养生酒 7预调酒
   field :name, type: String #名字
   field :owner, type: String #所有者
   field :address, type: String #详细地址

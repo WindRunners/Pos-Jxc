@@ -137,7 +137,6 @@ function unmanage_store(store_id) {
     $.post("/admin/users/manage_store", data,
         function (data, status) {
             if (data.flag == 1) {
-                alert("121131")
                 //$("#manage_store_href"+store_id).parent().prev().html("取消负责门店成功");
                 $("#unmanage_store_href"+store_id).hide();
                 $("#manage_store_href"+store_id).show();

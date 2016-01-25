@@ -120,7 +120,6 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-
   #用户负责门店
   def manage_store
     begin

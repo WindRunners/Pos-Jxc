@@ -1,7 +1,9 @@
 module Entities
 
   class DeliveryOrderTake < Grape::Entity
+    format_with(:iso_timestamp) { |dt| dt.strftime("%Y-%m-%d %H:%M:%S") if dt.present? }
     expose :id, documentation: {type: String, desc: '订单id'}
+    expose :orderno, documentation: {type: String, desc: '订单号'}
     expose :address, documentation: {type: String, desc: '收货人地址'}
     expose :current_distance, documentation: {type: Float, desc: '当前位置距离门店距离'}do |instance, options|
       instance.current_distance.present? ? (instance.current_distance/1000).round(1) : 0
@@ -16,5 +18,8 @@ module Entities
     end
 
     expose :store_address, documentation: {type: String, desc: '门店地址'}
+    with_options(format_with: :iso_timestamp) do
+      expose :created_at, documentation: {type: DateTime, desc: '更新时间'}
+    end
   end
 end

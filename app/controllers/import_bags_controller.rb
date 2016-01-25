@@ -58,16 +58,22 @@ class ImportBagsController < ApplicationController
 
     puts "礼包创建2"
 
+
     respond_to do |format|
       if @import_bag.save
-        puts "礼包创建3"
-        format.js {render_js import_bag_path(@import_bag) }
+
+        # result['flag'] = 1
+        # result['data'] = get_render_js import_bag_path(@import_bag)
+        # format.js {render_js import_bag_path(@import_bag) }
         # format.html { redirect_to @import_bag, notice: '礼包创建成功!' }
-        format.json { render :show, status: :created, location: @import_bag }
+        # get_render_json(flag,data={},path='')
+        format.json { render json: get_render_json(1,nil,import_bag_path(@import_bag)) }
       else
-        get_post_product_list
-        format.html { render :new }
-        format.json { render json: @import_bag.errors, status: :unprocessable_entity }
+        # result['flag'] = 0
+        # result['data'] = @import_bag.errors.messages
+        # get_post_product_list
+        # format.html { render :new }
+        format.json { render json: get_render_json(0,@import_bag.errors.messages) }
       end
     end
   end
@@ -82,15 +88,21 @@ class ImportBagsController < ApplicationController
     @import_bag.product_list = get_product_list
     @import_bag.userinfo = current_user.userinfo
     @import_bag.user = current_user
+
     respond_to do |format|
       if @import_bag.update(import_bag_params)
-        format.js {render_js import_bag_path(@import_bag) }
-        # format.html { redirect_to @import_bag, notice: '礼包更新成功!' }
-        format.json { render :show, status: :ok, location: @import_bag }
+
+        format.json { render json: get_render_json(1,nil,import_bag_path(@import_bag)) }
+        # result['flag'] = 1
+        # result['data'] = get_render_js import_bag_path(@import_bag)
+        # format.js {render_js import_bag_path(@import_bag) }
+        # # format.html { redirect_to @import_bag, notice: '礼包更新成功!' }
+        # format.json { render :show, status: :ok, location: @import_bag }
       else
-        get_post_product_list
-        format.html { render :edit }
-        format.json { render json: @import_bag.errors, status: :unprocessable_entity }
+        # get_post_product_list
+        # format.html { render :edit }
+        format.json { render json: get_render_json(0,@import_bag.errors.messages) }
+        # format.json { render json: @import_bag.errors, status: :unprocessable_entity }
       end
     end
   end

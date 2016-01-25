@@ -1,6 +1,6 @@
 %h1 Listing roles
 
-%table
+%table.table
   %thead
     %tr
       %th Name
@@ -12,10 +12,10 @@
     - @roles.each do |role|
       %tr
         %td= role.name
-        %td= link_to 'Show', role
-        %td= link_to 'Edit', edit_role_path(role)
-        %td= link_to 'Destroy', role, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to 'Show', '', 'data-href' =>role_path(role)
+        %td= link_to 'Edit', '', 'data-href' =>edit_role_path(role)
+        %td= link_to 'Destroy', role, :method => :delete, :remote =>true, :data => { :confirm => 'Are you sure?' }
 
 %br
 
-= link_to 'New Role', new_role_path
+= link_to 'New Role', '', 'data-href' =>new_role_path

@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   end
   resources :product_tickets do
     # post 'import_customers', :on => :collection
+    get 'customers_import'
+    get 'get_customers'
     post 'customer_add'
     post 'customer_reduce'
     post 'build_card_bag'

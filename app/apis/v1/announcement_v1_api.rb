@@ -45,8 +45,7 @@ class AnnouncementV1API < Grape::API
 
   desc '获取分类'
   get 'category' do
-    category = AnnouncementCategory.all.order('sequence DESC')
-    category
+    present AnnouncementCategory.all.order('sequence DESC'),with: Entities::AnnouncementCategory
   end
 
 

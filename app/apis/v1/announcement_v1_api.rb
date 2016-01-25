@@ -24,15 +24,15 @@ class AnnouncementV1API < Grape::API
 
   params do
     requires :announcement_id, type: String, desc: 'announcement_id'
-    # requires :user_id, type: Integer, desc: 'user_id'
+    # requires :customer_id, type: Integer, desc: 'customer_id'
   end
 
   get 'app_show' do
     announcement = Announcement.where(:status => 1).find(params[:announcement_id])
-    customer_id = '未知游客'
-    if !customer_id.nil?
-      announcement.reader << customer_id
-    end
+    # customer_id = '未知游客'
+    # if !customer_id.nil? && !announcement.reader.include?(customer_id)
+    #   announcement.reader << customer_id
+    # end
     announcement.read_num = announcement.read_num+1
     announcement.save
     showHash = Hash.new()

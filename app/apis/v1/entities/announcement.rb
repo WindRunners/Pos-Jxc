@@ -11,12 +11,11 @@ module Entities
         announcement.pic_path = announcement.pic_thumb_path
       else
         announcement.pic_path = announcement.pic_path
-
       end
     end
     # expose :announcement_category_id, documentation: {type: String, desc: '分类ID'}
     expose :created_at, documentation: {type: String, desc: '创建时间'} do |announcement, options|
-      announcement.created_at = announcement.created_at
+        announcement.created_at =announcement.created_at.strftime("%Y-%m-%d %H:%M")
       end
   end
 end

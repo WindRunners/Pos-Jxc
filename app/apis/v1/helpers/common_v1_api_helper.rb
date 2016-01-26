@@ -4,7 +4,7 @@ module CommonV1APIHelper
   def CommonV1APIHelper.share_integral_syn(customer_id)
     data = {}
     begin
-      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:share_integral_id=>{"$exists"=>"true"}).first
+      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0, :share_integral_id => {"$exists" => "true"}).first
       if share_integral_record.present?
         share_customer = Customer.find(share_integral_record.shared_customer_id)
         register_customer = Customer.find(share_integral_record.register_customer_id)
@@ -30,43 +30,39 @@ module CommonV1APIHelper
   def CommonV1APIHelper.product_ticket_syn(customer_id)
     data = {}
     begin
-      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0,:product_ticket_id=>{"$exists"=>"true"}).first
+      share_integral_record = ShareIntegralRecord.where(:register_customer_id => customer_id, :is_confirm => 0, :product_ticket_id => {"$exists" => "true"}).first
       if share_integral_record.present?
+
         share_customer = Customer.find(share_integral_record.shared_customer_id)
         register_customer = Customer.find(share_integral_record.register_customer_id)
         #分享者奖励商品入酒库，卡包内酒券失效
-        card_bags = CardBag.where(:customer_id => share_customer.id, :status => 0)
-        if card_bags.count > 0
-          card_bags.each do |card_bag|
-            SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id, customer_id)
-            card_bag.status = 1
-            card_bag.save
+        card_bag = CardBag.where(:customer_id => share_customer.id, :product_ticket_id => share_integral_record.product_ticket_id, :status => 0).first
+        if card_bag.present?
+          SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id, share_customer.id)
+          card_bag.status = 1
+          card_bag.save
 
 
-            #注册者酒券卡包生成
-            register_card_bag =card_bag.product_ticket.card_bag.build()
-            register_card_bag.customer_id = register_customer.id
-            register_card_bag.source = 1
-            register_card_bag.save
+          #注册者酒券卡包生成
+          register_card_bag =card_bag.product_ticket.card_bag.build()
+          register_card_bag.customer_id = register_customer.id
+          register_card_bag.source = 1
+          register_card_bag.save
 
-            #更新记录表状态
-            share_integral_record.is_confirm = 1
-            share_integral_record.save
+          #更新记录表状态
+          share_integral_record.is_confirm = 1
+          share_integral_record.save
 
 
-          end
-
+          data['message']="酒券回调成功！"
+          data['flag']=1
         end
-
-
-        data['message']="酒券回调成功！"
-        data['flag']=1
-
       else
         data['message']="无有效酒券记录！"
         data['flag']=0
       end
-    rescue
+    rescue Exception => e
+      Rails.logger e.message
       data['message']="异常！"
       data['flag']=-1
     end

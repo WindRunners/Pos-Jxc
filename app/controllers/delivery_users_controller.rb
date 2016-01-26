@@ -152,7 +152,7 @@ class DeliveryUsersController < ApplicationController
     searchValue = params[:search][:value] #查询
     searchParams = {}
     searchParams['mobile'] = /#{searchValue}/
-    searchParams['authentication_token'] = {"$exists":true}
+    searchParams['authentication_token'] = {"$exists" => true}
     orinfo = []
     current_user['store_ids'].each do |store_id|
       orinfo << {'store_ids' => store_id}

@@ -11,8 +11,7 @@ class AnnouncementV1API < Grape::API
   end
   params do
     requires :announcement_category_id, type: String, desc: '分类ID'
-    requires :page, type: String, desc: '当前页'
-    requires :per_page, type: String, desc: '每页纪录数目'
+    requires :page, type: String, desc: '第几页从0开始'
   end
   get 'list' do
     announcement_category_id = params[:announcement_category_id]

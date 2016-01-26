@@ -5,7 +5,7 @@ class Wine
   include Mongoid::Paperclip
 
   field :name, type: String
-  field :category, type: Integer#1葡萄酒  2白酒 3啤酒 4洋酒 5黄酒 6养生酒 7预调酒
+  field :category, type: Integer#1葡萄酒  2白酒 3啤酒 4洋酒 5黄酒/养生酒 6其他
   field :ad, type: String
   field :description, type: String
   field :price, type: Integer,default: 0 #1:100元以下2:101-200元3:201-300元4:301-500元5:501-1000元6:1001-3000元7:3001-5000元8:5001-10000元9:10000元以上

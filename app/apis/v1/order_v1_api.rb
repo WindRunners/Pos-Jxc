@@ -397,8 +397,8 @@ class OrderV1API < Grape::API
   end
 
 
-  desc '' do
-
+  desc '催单接口' do
+    detail '返回结果:{flag:(1:成功,0:失败),msg:提示信息}'
   end
   params do
     requires :orderid, type: String, desc: '订单ID'

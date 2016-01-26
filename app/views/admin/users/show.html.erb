@@ -31,14 +31,15 @@
   <% end %>
 </dl>
 
-<%= link_to t('.back', :default => t("helpers.links.back")),
-            '',
-            "data-href" => admin_users_path,
-            :class => 'btn btn-default'  %>
+
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
             '',
             "data-href" =>edit_admin_user_path(@user),
-            :class => 'btn btn-default' %>
+            :class => 'btn btn-primary' %>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+            '',
+            "data-href" => admin_users_path,
+            :class => 'btn btn-primary'  %>
 <!--
 <% if policy(@user).isAdmin? %>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),

@@ -412,7 +412,7 @@ class OrderV1API < Grape::API
       dusers.each do |user|
         channels.concat user.channel_ids if user.channel_ids.present?
       end
-      push_log = PushLog.create(order_id:order_id, userinfo_id:order['userinfo_id'])
+      push_log = PushLog.create(:order_id => params[:orderid], :userinfo_id => order['userinfo_id'])
       Resque.enqueue(AchieveOrderPushChannels, channels, 0, push_log.id)
       return {'flag'=>1,'msg'=>'催单成功，请耐心等待！'}
     else

@@ -149,20 +149,19 @@ module DeliveryOrderV1APIHelper
   #配送员接单列表
   def DeliveryOrderV1APIHelper.order_rows(deliveryUser, postInfo)
 
-    flag = postInfo.flag
-    if flag==0 #待接单
+    result = {}
 
-      store_ids = deliveryUser['store_ids'] #获取配送员负责的门店
-      return 0 if !store_ids.present? || store_ids.empty?
+    #待接单列表
+    store_ids = deliveryUser['store_ids'] #获取配送员负责的门店
+    result['deal_list'] = 0
+    if store_ids.present? && !store_ids.empty?
       #获取门店待接单列表
-      return Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).count
-    elsif flag==1 #我的订单
-
-      return Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).count
-    else #历史订单
-
-      return Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).count
+      result['deal_list'] = Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).count
     end
+
+    result['my_list'] = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).count
+    result['hi_list'] =  Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).count
+    result
   end
 
 

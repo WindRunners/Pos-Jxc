@@ -85,11 +85,9 @@ class ProductTicketCustomerInitsController < ApplicationController
 
     set_product_ticket
 
-    start_date = "2015-06"
-    end_date = "2016-01"
+    userinfo_id = current_user()['userinfo_id']
 
-
-    reduce = %Q{
+    wherejs = %Q{
           function(){
             var count = 0;
             var obj = this;
@@ -101,20 +99,17 @@ class ProductTicketCustomerInitsController < ApplicationController
                 if(obj[year][month][userinfo] == undefined) return count_inner;
                 return obj[year][month][userinfo];
             };
-            count += getcount("2014","01","b1");
-            count += getcount("2014","02","b1");
-            count += getcount("2014","03","b1");
-            return count >= 6;
+            count += getcount("2016","01","#{userinfo_id}");
+            count += getcount("2015","10","#{userinfo_id}");
+            count += getcount("2015","11","#{userinfo_id}");
+            count += getcount("2015","12","#{userinfo_id}");
+            return count >= 1;
           }
-      }
-
-
-    count = CustomerOrderStatic.where({'userinfo_ids'=>current_user()['userinfo_id']}).count()
+    }
+    count = CustomerOrderStatic.for_js(wherejs).count()
     Rails.logger.info "导入订单数量：#{count}"
 
-
-
-    CustomerOrderStatic.where({'userinfo_ids'=>current_user()['userinfo_id']}).each do |customerOrderStatic|
+    CustomerOrderStatic.for_js(wherejs).each do |customerOrderStatic|
 
       product_ticket_customer_init = ProductTicketCustomerInit.new
       product_ticket_customer_init.product_ticket = @product_ticket.id

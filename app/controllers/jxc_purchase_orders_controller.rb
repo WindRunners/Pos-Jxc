@@ -6,7 +6,7 @@ class JxcPurchaseOrdersController < ApplicationController
   end
 
   def show
-    @bill_details = JxcBillDetail.includes(:product).where(purchase_order_id: @jxc_purchase_order.id)
+    @bill_details = JxcBillDetail.where(purchase_order_id: @jxc_purchase_order.id)
     @operation = 'show'
     #单据状态展示
     billStatus = @jxc_purchase_order.bill_status
@@ -32,23 +32,23 @@ class JxcPurchaseOrdersController < ApplicationController
   end
 
   def edit
-    @bill_details = JxcBillDetail.includes(:product).where(purchase_order_id: @jxc_purchase_order.id)
+    @bill_details = JxcBillDetail.where(purchase_order_id: @jxc_purchase_order.id)
   end
 
   def create
     purchase_order_info = params[:jxc_purchase_order]
     supplier_id = purchase_order_info[:supplier_id]   #供应商ID
     storage_id = purchase_order_info[:storage_id]    #入货仓库ID
-    handler_id = purchase_order_info[:handler_id]   #经手人ID
-    account_id = purchase_order_info[:account_id]   #付款账户ID
+    # account_id = purchase_order_info[:account_id]   #付款账户ID
 
     @jxc_purchase_order = JxcPurchaseOrder.new(jxc_purchase_order_params)
     @jxc_purchase_order.supplier_id = supplier_id
     @jxc_purchase_order.storage_id = storage_id
-    @jxc_purchase_order.handler_id = handler_id
-    @jxc_purchase_order.account_id = account_id
+    # @jxc_purchase_order.account_id = account_id
     #制单人
-    @jxc_purchase_order.bill_maker = current_user
+    @jxc_purchase_order.bill_maker << current_user
+    #经手人
+    @jxc_purchase_order.handler << current_user
 
     @jxc_purchase_order.order_date = stringParseDate(purchase_order_info[:order_date])
     @jxc_purchase_order.receive_goods_date = stringParseDate(purchase_order_info[:receive_goods_date])
@@ -65,7 +65,7 @@ class JxcPurchaseOrdersController < ApplicationController
       count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #采购数量
       amount = tempBillDetail.calculate_discount_amount(purchasePrice,count,discount)  #金额
 
-      tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
       tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
       tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -113,15 +113,15 @@ class JxcPurchaseOrdersController < ApplicationController
       purchase_order_info = params[:jxc_purchase_order]
       supplier_id = purchase_order_info[:supplier_id]   #供应商ID
       storage_id = purchase_order_info[:storage_id]    #入货仓库ID
-      handler_id = purchase_order_info[:handler_id]   #经手人ID
-      account_id = purchase_order_info[:account_id]   #付款账户ID
+      # account_id = purchase_order_info[:account_id]   #付款账户ID
 
       @jxc_purchase_order.supplier_id = supplier_id
       @jxc_purchase_order.storage_id = storage_id
-      @jxc_purchase_order.handler_id = handler_id
-      @jxc_purchase_order.account_id = account_id
+      # @jxc_purchase_order.account_id = account_id
       #制单人
-      @jxc_purchase_order.bill_maker = current_user
+      @jxc_purchase_order.bill_maker << current_user
+      #经手人
+      @jxc_purchase_order.handler << current_user
 
       @jxc_purchase_order.customize_order_no = purchase_order_info[:customize_order_no]
       @jxc_purchase_order.order_date = stringParseDate(purchase_order_info[:order_date])
@@ -134,7 +134,6 @@ class JxcPurchaseOrdersController < ApplicationController
       discount_amount = purchase_order_info[:discount_amount] == '' ? 0 : purchase_order_info[:discount_amount]   #整单优惠
 
       #先删除单据修改前的商品详情
-      # @jxc_purchase_order.jxc_bill_details.destroy
       JxcBillDetail.where(purchase_order_id: @jxc_purchase_order.id).destroy
 
       #保存修改后的单据商品详情
@@ -147,7 +146,7 @@ class JxcPurchaseOrdersController < ApplicationController
         count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #采购数量
         amount = tempBillDetail.calculate_discount_amount(purchasePrice,count,discount)  #金额
 
-        tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
         tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
         tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -210,12 +209,20 @@ class JxcPurchaseOrdersController < ApplicationController
   def audit
     result = @jxc_purchase_order.audit
     render json:result
+    # respond_to do |format|
+    #   format.js { render_js jxc_purchase_orders_url, notice: result[:msg] }
+    #   format.json { head :no_content }
+    # end
   end
 
   #审核后的单据 红冲
   def strike_a_balance
     result = @jxc_purchase_order.strike_a_balance
     render json:result
+    # respond_to do |format|
+    #   format.js { render_js jxc_purchase_orders_url, notice: result[:msg] }
+    #   format.json { head :no_content }
+    # end
   end
 
   #单据 作废

@@ -1,0 +1,313 @@
+= form_for @jxc_contacts_unit , remote:true do |f|
+  - if @jxc_contacts_unit.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_contacts_unit.errors.count, "error")} prohibited this jxc_contacts_unit from being saved:"
+      %ul
+        - @jxc_contacts_unit.errors.full_messages.each do |msg|
+          %li= msg
+  %table{class: "table table-bordered table-hover"}
+    %tr{class:'attr-category'}
+      %td
+        %label{class:'attr-category'}
+          基本信息
+      %td{colspan:3}
+    %tr
+      %td
+        = f.label :unit_name
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :unit_name,:class=>'form-control',onblur:'generatePinyinCode("jxc_contacts_unit_unit_name","jxc_contacts_unit_spell_code")'
+          %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.label :spell_code
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :spell_code,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
+
+    %tr
+      %td
+        = f.label :unit_property
+      %td
+        %i.ace-icon.fa.fa-leaf.green
+        = f.select :unit_property,[['客户','1'],['供应商','0']]
+      %td
+        = f.button t('mongoid.attributes.jxc_contacts_unit.unit_type'),type:'button',class:'btn btn-white btn-success',onclick:'getUnitCategoryInfo()'
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :unit_type,:class=>'form-control',readonly:true
+          %i.ace-icon.fa.fa-leaf.green
+    -#%tr
+      %td
+        = f.button t('mongoid.attributes.jxc_contacts_unit.department'),type:'button',class:'btn btn-white btn-success',onclick:'getDepartmentsInfo()'
+      %td
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_contacts_unit_department{value:@jxc_contacts_unit.department.nil? ? '':@jxc_contacts_unit.department.title,readonly:true }
+          %i.ace-icon.fa.fa-leaf.green
+        = f.hidden_field :department_id
+      %td
+        = f.label t('mongoid.attributes.jxc_contacts_unit.clerk'),type:'button',class:'btn btn-white btn-success',onclick:'getClerksInfo()'
+      %td
+        %span.input-icon{style:'width:100%;'}
+          -#%input.form-control#jxc_contacts_unit_clerk{value: @jxc_contacts_unit.clerk.nil? ? '':@jxc_contacts_unit.clerk.name,readonly:true }
+          %i.ace-icon.fa.fa-leaf.green
+        = f.hidden_field :clerk_id
+    %tr
+      %td
+        = f.label :unit_address
+      %td
+        = f.text_field :unit_address,:class=>'form-control'
+      %td
+        = f.label :unit_code
+      %td
+        = f.text_field :unit_code,:class=>'form-control'
+    %tr{class:'attr-category'}
+      %td
+        %label{class:'attr-category'}
+          首要联系人
+      %td{colspan:3}
+    %tr
+      %td
+        = f.label :contact_name
+      %td
+        = f.text_field :contact_name,:class=>'form-control'
+      %td
+        = f.label :contact_call
+      %td
+        = f.text_field :contact_call,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :contact_mobile
+      %td
+        = f.text_field :contact_mobile,:class=>'form-control'
+      %td
+        = f.label :contact_fax
+      %td
+        = f.text_field :contact_fax,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :contact_address
+      %td
+        = f.text_field :contact_address,:class=>'form-control'
+      %td
+        = f.label :contact_postcode
+      %td
+        = f.text_field :contact_postcode,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :contact_email
+      %td
+        = f.text_field :contact_email,:class=>'form-control'
+
+    %tr{class:'attr-category'}
+      %td
+        %label{class:'attr-category'}
+          账务信息
+      %td{colspan:3}
+    %tr
+      %td
+        = f.label :start_receivable
+      %td
+        = f.text_field :start_receivable,:class=>'form-control'
+      %td
+        = f.label :start_payable
+      %td
+        = f.text_field :start_payable,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :total_receivable
+      %td
+        = f.text_field :total_receivable,:class=>'form-control'
+      %td
+        = f.label :total_payable
+      %td
+        = f.text_field :total_payable,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :receivable_credit
+      %td
+        = f.text_field :receivable_credit,:class=>'form-control'
+      %td
+        = f.label :payable_credit
+      %td
+        = f.text_field :payable_credit,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :receive_deadline
+      %td
+        = f.text_field :receive_deadline,:class=>'form-control'
+      %td
+        = f.label :payment_deadline
+      %td
+        = f.text_field :payment_deadline,:class=>'form-control'
+
+
+  .actions
+    = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
+    &nbsp;&nbsp;&nbsp;
+    %a{class:'btn','data-href': jxc_contacts_units_path}
+      %i{class:'ace-icon fa fa-return bigger-110'}返回
+
+=render 'jxc_modal/jxc_common_modal'
+
+:javascript
+
+  //zTree默认设置
+  var zTreeSetting = {
+    async:{
+      url:'',
+      type:'get',
+      enable:true
+    },
+    view: {
+      dblClickExpand: false,
+      showLine: true,
+      selectedMulti: false
+    },
+    data: {
+      key:{
+        name:""
+      },
+      simpleData: {
+        enable:true,
+        idKey: "_id",
+        pIdKey: "parent_id",
+        rootPId: ""
+      }
+    },
+    callback: {}
+  };
+
+  //EasyUI DataGrid设置
+  var tableSetting = {};
+
+  //选择单位类别信息
+  function getUnitCategoryInfo(){
+    //模态框样式
+    $('.modal-title').text('选择往来单位类别');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-tree').removeClass('jxc-select-tree');
+    $('#jxc-select-tree').addClass('jxc-tree');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#jxc-select-table').addClass('jxc-disappear-table');
+    $('#confirm-button').attr('data-type','unitCategory');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getJxcUnitCategoriesInfo';
+    zTreeSetting.data.key.name = 'dic';
+
+    $('#selectModal').modal('show');
+
+    //初始化树
+    initZTree(zTreeSetting);
+  }
+
+  //选择部门信息
+  function getDepartmentsInfo(){
+    //模态框样式
+    $('.modal-title').text('选择部门');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-tree').removeClass('jxc-select-tree');
+    $('#jxc-select-tree').addClass('jxc-tree');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#jxc-select-table').addClass('jxc-disappear-table');
+    $('#confirm-button').attr('data-type','department');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getDepartmentsInfo';
+    zTreeSetting.data.key.name = 'title';
+
+    $('#selectModal').modal('show');
+
+    //初始化树
+    initZTree(zTreeSetting);
+  }
+
+  //选择业务员信息
+  function getClerksInfo(){
+    $('.modal-title').text('选择业务员');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-tree').removeClass('jxc-tree');
+    $('#jxc-select-tree').addClass('jxc-select-tree');
+    $('#jxc-select-table').removeClass('jxc-disappear-table');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','clerk');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getDepartmentsInfo';
+    zTreeSetting.data.key.name = 'title';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          department_id:treeNode._id
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '职员信息',
+      url:'/jxc_common_info/getHandlersInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'员工编号',field:'sid',width:'18%'},
+        {title:'姓名',field:'name',width:'18%'},
+        {title:'性别',field:'sex',width:'18%'},
+        {title:'手机号码',field:'mobile',width:'18%'},
+        {title:'Email',field:'email',width:'28%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+  function selectData(){
+    var dataType = $('#confirm-button').attr('data-type');
+
+    if(dataType == 'unitCategory'){
+      if(zTree.getSelectedNodes().length > 0){
+        var node = zTree.getSelectedNodes(zTree)[0];
+        $('#jxc_contacts_unit_unit_type').val(node.dic);
+      }else{
+        alert('请单击选择数据');
+        return;
+      }
+    }else if(dataType == 'department'){
+      if(zTree.getSelectedNodes().length > 0){
+        var node = zTree.getSelectedNodes(zTree)[0];
+        $('#jxc_contacts_unit_department').val(node.title);
+        $('#jxc_contacts_unit_department_id').val(node._id);
+      }else{
+        alert('请单击选择数据');
+        return;
+      }
+    }else if(dataType == 'clerk'){
+      var selectData = $('#dataTable').datagrid('getSelections');
+      if (selectData.length > 0){
+        $('#jxc_contacts_unit_clerk').val(selectData[0].name);
+        $('#jxc_contacts_unit_clerk_id').val(selectData[0]._id);
+      }else{
+        alert('请选择业务员');
+        return;
+      }
+    }
+
+    //模态框隐藏
+    $('#selectModal').modal('hide');
+  }

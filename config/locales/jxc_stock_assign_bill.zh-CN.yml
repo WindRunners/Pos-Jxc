@@ -1,0 +1,17 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_stock_assign_bill: '要货单'
+    attributes:
+      jxc_stock_assign_bill:
+        bill_no:  '单据编号'
+        customize_bill_no: '自定义单据编号'
+        assign_date: '要货日期'
+        remark: '备注'
+
+        assign_out_stock: '总库'
+        assign_in_stock: '要货仓库'
+
+        handler: '经手人'
+        bill_maker: '制单人'
+        bill_status: '单据状态'

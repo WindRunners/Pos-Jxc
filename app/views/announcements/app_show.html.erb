@@ -27,13 +27,13 @@
           font-family: SimHei;
         }
         #head_title {
-          font-size: 130%;
+          font-size: 140%;
           font-weight:200;
           color: #202020;
         }
 
         #head_source{
-
+            margin:5px -10px 15px -10px;
           color: #505050;
         }
 
@@ -48,15 +48,10 @@
           font-size: 70%;
           text-align: right;
         }
-        .custom_hr1{
-            height: 5px;
-        }
-        .custom_hr2{
-            height: 15px;
-        }
         #content {
-          font-size: 110%;
+          font-size: 120%;
           color: #505050;
+            text-align: left;
         }
   </style>
 
@@ -138,7 +133,7 @@
 </div>
 <!--head_title-->
 
-<div class="custom_hr1"></div>
+
 
 <div class="row" id="head_source">
 
@@ -154,7 +149,7 @@
 
 </div>
 
-<div class="custom_hr2"></div>
+
 
 
 <div class="row" id="content">
@@ -165,44 +160,6 @@
 </div>
 <!--row_content-->
 
-
-
-<% if @announcement.chateau_comments.present? %>
-    <div class="col-xs-12" id="double_hr" style="border-bottom-style:solid; border-bottom-width:2px; border-bottom-color: #cccccc;">评论列表</div>
-
-    <% 20.times do %>
-        <hr/>
-        <div class="row" id="comments">
-          <div class="col-xs-2 " id="avatar">
-            <%= image_tag("avatar.png", :class => "img-circle", size: "50x50") %>
-          </div>
-          <!--avatar-->
-
-          <div class="col-xs-10 " id="comments_right">
-
-            <div class="row" id="comment_info">
-              <div class="col-xs-8 " id="">游泳全靠浪</br>45分钟前</div>
-              <div class="col-xs-1 " id=""><%= image_tag("avatar.png", :class => "img-circle", size: "30x30") %></div>
-              <div class="col-xs-1 " id=""><%= image_tag("avatar.png", :class => "img-circle", size: "30x30") %></div>
-            </div>
-            <div class="row" id="comment_content">
-              我担心你不快乐。虽然我也常常不快乐，但是，我还是希望你能永远快乐，天天有灿烂的笑容。你总是担心这个，担心那个，因为这个世界有太多的不确定性，你又那么缺乏安全感。但你总要长大，学会应付这一切，对自己说：Don't
-              worry，be happy。
-            </div>
-          </div>
-          <!--comments_right-->
-        </div>
-        <!--row-->
-    <% end %>
-<% end %>
-
-
-<!--隐藏按钮-->
-<input id="customer_id" type="hidden" value="567d20a1e1382376bc000000">
-<input id="announcement_id" type="hidden" value="">
-
-
-<!--添加评论模态框-->
 
 
 </body>

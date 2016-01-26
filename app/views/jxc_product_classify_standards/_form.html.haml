@@ -1,0 +1,16 @@
+= form_for @jxc_product_classify_standard do |f|
+  - if @jxc_product_classify_standard.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_product_classify_standard.errors.count, "error")} prohibited this jxc_product_classify_standard from being saved:"
+      %ul
+        - @jxc_product_classify_standard.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :class_name
+    = f.text_field :class_name
+  .field
+    = f.label :standard
+    = f.number_field :standard
+  .actions
+    = f.submit 'Save'

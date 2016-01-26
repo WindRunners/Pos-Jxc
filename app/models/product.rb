@@ -62,6 +62,12 @@ class Product
 
   after_save :set_keywords
 
+  ##进销存属性
+  has_many :jxc_bill_details  #进销存单据商品详情
+  has_many :jxc_transfer_bill_details #进销存 调拨单，要货单 商品信息
+  has_many :jxc_storage_journal #仓库变更明细中的 商品信息
+  has_many :jxc_storage_product_detail   #仓库商品明细中的 商品信息
+
   def pid
     id
   end

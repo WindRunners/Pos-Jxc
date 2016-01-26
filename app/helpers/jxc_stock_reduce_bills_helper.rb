@@ -1,0 +1,2 @@
+module JxcStockReduceBillsHelper
+end

@@ -1,0 +1,27 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_storage: '仓库'
+    attributes:
+      jxc_storage:
+        storage_name: '仓库名称'
+        spell_code: '拼音码'
+        storage_code: '仓库编码'
+        storage_type: '仓库类别'
+        status: '仓库状态'
+        capacity: '仓库库容'
+        current_capacity: '当前存量'
+
+        address: '仓库地址'
+        telephone: '仓库固话'
+        admin: '负责人'
+        admin_phone: '负责人电话'
+        longitude: '仓库地址 经度'
+        latitude: '仓库地址 纬度'
+
+        memo: '备注'
+        status: '仓库状态'
+        data_1: '扩展属性1'
+        data_2: '扩展属性2'
+        data_3: '扩展属性3'
+        data_4: '扩展属性4'

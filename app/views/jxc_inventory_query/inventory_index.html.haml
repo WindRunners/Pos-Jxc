@@ -1,0 +1,284 @@
+.panel.panel-default
+  .panel-heading
+    %h2.panel-title
+      仓库库存查询
+  .panel-body
+    .panel.panel-tree
+      %ul#inventoryTree.ztree
+    .panel.panel-table
+      #query_condition.query_option
+        %button.btn.btn-white.btn-success{onclick:'selectStorageInfo()'}
+          选择仓库
+        %input#storage.inventory-storage.form-control{readonly:true,placeholder:'请选择仓库'}
+        %input#storage_id{type:'hidden'}
+
+        %button.btn.btn-success.btn-white{onclick:'checkInventoryChangeLog()',style:'float:right;width:auto;'}
+          查看库存变更日志
+
+      %table#inventoryTable
+
+=render 'jxc_modal/jxc_common_modal'
+
+:javascript
+  //zTree默认设置
+  var zTreeSetting = {
+    async:{
+      url:'',
+      type:'get',
+      enable:true
+    },
+    view: {
+      dblClickExpand: false,
+      showLine: true,
+      selectedMulti: false
+    },
+    data: {
+      key:{
+        name:""
+      },
+      simpleData: {
+        enable:true,
+        idKey: "_id",
+        pIdKey: "parent_id",
+        rootPId: ""
+      }
+    },
+    callback: {}
+  };
+
+  //EasyUI DataGrid设置
+  var tableSetting = {};
+  var inventoryTableSetting = {};
+
+  $(document).ready(function(){
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getProductCategoriesInfo';
+    zTreeSetting.data.key.name = 'title';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        var storage_id = $('#storage_id').val();
+        inventoryTableSetting.queryParams = {
+          category_id:treeNode._id,
+          storage_id:storage_id
+        };
+        initInventoryGrid(inventoryTableSetting);
+      }
+    };
+
+    //dataGrid设置
+    inventoryTableSetting = {
+      title: '商品信息',
+      url:'/jxc_inventory_query/inventory_query',
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'名称',field:'title',width:'20%'},
+        {title:'品牌',field:'brand',width:'15%'},
+        {title:'规格',field:'specification',width:'15%'},
+        {title:'单位',field:'unit',width:'10%'},
+        {title:'数量',field:'count',width:'10%'},
+        {title:'成本单价',field:'cost_price',width:'10%'},
+        {title:'库存金额',field:'amount',width:'10%'}
+      ]]
+    };
+
+    //初始化树和表
+    initInventoryZTree(zTreeSetting);
+    initInventoryGrid(inventoryTableSetting);
+
+
+  });
+
+  //展示商品分类
+  function initInventoryZTree(zTreeSetting){
+    var tree = $('#inventoryTree');
+    $.fn.zTree.init(tree,zTreeSetting,[]);
+  }
+
+  //展示库存数据
+  function initInventoryGrid(inventoryTableSetting){
+    $('#inventoryTable').datagrid({
+      title:inventoryTableSetting.title,
+      pagination:true,
+      rownumbers:true,
+      url:inventoryTableSetting.url,
+      queryParams:inventoryTableSetting.queryParams,
+      method:'get',
+      width:'100%',
+      height:'92%',
+      singleSelect:inventoryTableSetting.singleSelect,
+      columns:inventoryTableSetting.columns
+    });
+
+  }
+
+
+
+  //选择仓库信息
+  function selectStorageInfo(){
+    $('.modal-title').text('选择仓库');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storage');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getStorageTypesInfo';
+    zTreeSetting.data.key.name = 'dic';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          storage_type:treeNode.dic
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '仓库信息',
+      url:'/jxc_common_info/getStorageInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'仓库名称',field:'storage_name',width:'18%'},
+        {title:'管理人',field:'admin',width:'18%'},
+        {title:'联系电话',field:'admin_phone',width:'18%'},
+        {title:'仓库地址',field:'address',width:'28%'},
+        {title:'备注',field:'memo',width:'18%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+  //选择数据
+  function selectData(){
+    var dataType = $('#confirm-button').attr('data-type');
+    var selectData = $('#dataTable').datagrid('getSelections');
+
+    if(selectData.length == 0){
+      alert('请选择数据');
+    }else{
+      if(dataType == 'storage'){
+          $('#storage').val(selectData[0].storage_name);
+          $('#storage_id').val(selectData[0]._id);
+      }
+
+      //模态框隐藏
+      $('#selectModal').modal('hide');
+    }
+
+  }
+
+
+  //查询库存变动日志
+  function checkInventoryChangeLog(){
+
+    var storage_id = $('#storage_id').val();
+    var selectData = $('#inventoryTable').datagrid('getSelected');
+
+    if( storage_id == '' || selectData == null ){
+      alert('请先选择仓库和商品信息!');
+      return;
+    }
+
+    $('.modal-title').text('库存变更日志');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').addClass('jxc-disappear-tree');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','inventoryChangeLog');
+
+    //dataGrid设置
+    tableSetting = {
+      title: '库存变更日志',
+      url:'/jxc_common_info/checkInventoryChangeLog',
+      singleSelect:true,
+      width:919,
+      queryParams:{
+        storage_id:storage_id,
+        product_id:selectData.product_id
+      },
+      columns:[[
+        {title:'单据编号',field:'bill_no',width:'240',resizable:true},
+        {title:'单据类型',field:'bill_type',width:'100',resizable:true,
+          formatter: function(value,row,index){
+            switch(row.bill_type)
+            {
+              case 'purchase_stock_in':
+                return '采购入库单';
+                break;
+              case  'purchase_returns':
+                return '采购退货单';
+                break;
+              case  'sell_stock_out':
+                return '销售出库单';
+                break;
+              case  'sell_returns':
+                return '销售退货单';
+                break;
+              case  'stock_overflow':
+                return '报溢单';
+                break;
+              case  'stock_reduce':
+                return '报损单';
+                break;
+              case  'stock_transfer':
+                return '调拨单';
+                break;
+              case  'stock_assign':
+                return '要货单';
+                break;
+              case  'cost_adjust':
+                return '成本调整单';
+                break;
+              case  'other_stock_in':
+                return '其他入库单';
+                break;
+              case  'other_stock_out':
+                return '其他出库单';
+                break;
+              case  'entering_stock':
+                return '期初库存录入';
+                break;
+              default :
+                return '未知单据';
+            }
+          }
+        },
+        {title:'单据状态',field:'bill_status',width:'100',resizable:true,
+          formatter: function(value,row,index){
+            if(row.bill_status == 1){
+              return '已审核';
+            }else if(row.bill_status == 2){
+              return '已红冲';
+            }
+          }
+        },
+        {title:'单据日期',field:'bill_create_date',width:'100',resizable:true},
+        {title:'仓库',field:'storage_title',width:'150',resizable:true},
+        {title:'商品名称',field:'product_title',width:'300',resizable:true},
+        {title:'单位',field:'unit',width:'50',resizable:true},
+        {title:'原库存数量',field:'previous_count',width:'80',resizable:true},
+        {title:'变更数量',field:'count',width:'80',resizable:true},
+        {title:'变更后数量',field:'after_count',width:'80',resizable:true},
+        {title:'成本单价',field:'price',width:'80',resizable:true},
+        {title:'调整后单价',field:'adjusted_price',width:'80',resizable:true},
+        {title:'库存金额变动',field:'amount',width:'100',resizable:true},
+        {title:'经手人',field:'staff_name',width:'100',resizable:true}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initDataGrid(tableSetting);
+
+  }
+

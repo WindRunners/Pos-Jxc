@@ -27,38 +27,57 @@
               / 轮播（Carousel）导航
               %a.carousel-control.left{"data-slide" => "prev", :href => "#myCarousel"}
               %a.carousel-control.right{"data-slide" => "next", :href => "#myCarousel"}
-      .row
-        .infos.col-xs-12{:style => "font-size:280%;"}
-          %strong
-            =@data['chateau'].name
-          .dl-horizontal
-            %dt
-              酒庄主人:
-            %dd
-              =@data['chateau'].owner
-            %dt
-              所在产区:
-            %dd
-              =@data['chateau'].region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
-            %dt
-              详细地址:
-            %dd
-              =@data['chateau'].address
-            %dt
-              联系电话:
-            %dd
-              =@data['chateau'].phone
-            %dt
-              酒庄网址:
-            %dd
-              =@data['chateau'].urls
-            - @data['mark'].each do |m|
-              - m.each do |k,v|
-                %dt
-                  = k + ':'
-                %dd
-                  = v.to_s.strip
+
+
+
+
+        .row
+          .li_name.col-xs-2
+            酒庄主人:
+          .li_content.col-xs-10
+            =@data['chateau'].owner
+        .row
+          .li_name.col-xs-2
+            所在产区:
+          .li_content.col-xs-10
+            =@data['chateau'].region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+        .row
+          .li_name.col-xs-2
+            详细地址:
+          .li_content.col-xs-10
+            =@data['chateau'].address
+        .row
+          .li_name.col-xs-2
+            联系电话:
+          .li_content.col-xs-10
+            =@data['chateau'].phone
+        .row
+          .li_name.col-xs-2
+            酒庄网址:
+          .li_content.col-xs-10
+            =@data['chateau'].urls
+        - @data['mark'].each do |m|
+          .row
+            - m.each do |k,v|
+              .li_name.col-xs-2
+                = k + ':'
+              .li_content.col-xs-10
+                = v.to_s.strip
+
+
+
+
 
       .row
-        #introduce.col-xs-12{:style => "line-height:160%; color:#282828; border-top:5px solid #d6d6d6;"}
+        #introduce.col-xs-12
           = markdown  @data['introduce']
+
+:css
+  body{
+    font-family: SimHei;
+
+  }
+  #introduce{
+  margin: 10px 10px 0px 0px;
+  }
+

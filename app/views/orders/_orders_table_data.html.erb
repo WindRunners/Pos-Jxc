@@ -44,11 +44,8 @@
             <div class="hidden-sm hidden-xs action-buttons">
               <h4>
                 <% if :paid == workflow_state %>
-                    <%= link_to raw('<i class="ace-icon">接&nbsp;&nbsp;单</i>'), "##{order_receive_order_path(order.id)}?tab=#{params[:workflow_state]}",
-                                                                                :class => "btn btn-minier btn-warning"%>&nbsp;
-                <% elsif :distribution == workflow_state %>
-                    <%= link_to raw('<i class="ace-icon">配送完成</i>'), "##{order_distribution_completed_path(order.id)}?tab=#{params[:workflow_state]}",
-                                                                        :class => "btn btn-minier btn-success"%>&nbsp;
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-minier btn-warning" data-toggle="modal" data-target="#myModal" onclick="set_btn_order_id('<%=order.id%>');"><i class="ace-icon">接&nbsp;&nbsp;单</i></button>
                 <% end %>
                 <%= link_to '查看详情',
                             "##{order_path(order.id)}?tab=#{params[:workflow_state]}", 'data-url' => order_path(order.id),
@@ -139,3 +136,11 @@
 <% def format_encryption(str) %>
     <%   return str[0,str.length / 2] + "*" * (str.length % 2 == 0 ? str.length / 2 : str.length / 2 + 1) %>
 <% end %>
+
+
+
+
+
+
+
+

@@ -22,7 +22,7 @@ class User
   has_many :comments
   has_many :announcements
 
-  has_many :stores #有多个配送员
+  has_many :stores #有多个门店
 
   has_many :searches
   has_many :wines
@@ -85,6 +85,31 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or :both
   # field :locked_at,       type: Time
 
+
+  ## 进销存
+  #采购单
+  has_and_belongs_to_many :jxc_purchase_orders
+  has_and_belongs_to_many :jxc_purchase_stock_in_bills
+  has_and_belongs_to_many :jxc_purchase_returns_bills
+  has_and_belongs_to_many :jxc_purchase_exchange_goods_bills
+  #销售单
+  has_and_belongs_to_many :jxc_sell_orders
+  has_and_belongs_to_many :jxc_sell_stock_out_bills
+  has_and_belongs_to_many :jxc_sell_returns_bills
+  has_and_belongs_to_many :jxc_sell_exchange_goods_bills
+  #库存变更单
+  has_and_belongs_to_many :jxc_stock_count_bills #盘点单
+  has_and_belongs_to_many :jxc_stock_overflow_bills  #报溢单
+  has_and_belongs_to_many :jxc_stock_reduce_bills  #报损单
+  has_and_belongs_to_many :jxc_stock_transfer_bills  #调拨单
+  has_and_belongs_to_many :jxc_stock_assign_bills  #要货单
+  #其他出入库单据
+  has_and_belongs_to_many :jxc_other_stock_in_bills
+  has_and_belongs_to_many :jxc_other_stock_out_bills
+  #其他单据
+  has_and_belongs_to_many :jxc_cost_adjust_bills #成本调整单
+
+  has_many :jxc_storage_journals  #仓库变更明细中的 创建人
 
   #addby dfj
  # def send_password_reset

@@ -1,0 +1,44 @@
+%div{class:'page-header'}
+  %h1
+    =t("mongoid.models.jxc_stock_transfer_bill")
+    (总共
+    = @jxc_stock_transfer_bills.size
+    条)
+%div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
+      = page_entries_info @jxc_stock_transfer_bills
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @jxc_stock_transfer_bills
+.space.space-4
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
+    %tr
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.bill_no')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_date')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.remark')
+      -#%th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_way')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.bill_status')
+      %th=t("mongoid.links.operation")
+      %th
+
+  %tbody
+    - @jxc_stock_transfer_bills.each do |jxc_stock_transfer_bill|
+      %tr
+        %td= jxc_stock_transfer_bill.bill_no
+        %td= jxc_stock_transfer_bill.customize_bill_no
+        %td= jxc_stock_transfer_bill.transfer_date.strftime('%m/%d/%Y') unless jxc_stock_transfer_bill.transfer_date.blank?
+        %td= jxc_stock_transfer_bill.remark
+        -#%td= jxc_stock_transfer_bill.transfer_way
+        %td{style:'color:red;font-weight:bold;'}
+          = jxc_stock_transfer_bill.bill_status == '0' ? '已创建' : (jxc_stock_transfer_bill.bill_status == '1' ? '已审核' : '已红冲')
+        %td= link_to t('helpers.links.show'), jxc_stock_transfer_bill,class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'), edit_jxc_stock_transfer_bill_path(jxc_stock_transfer_bill),class:'btn btn-xs btn-warning',disabled:jxc_stock_transfer_bill.bill_status == '0' ? false:true
+
+%br
+
+= link_to t("helpers.links.new"), new_jxc_stock_transfer_bill_path,:class => 'btn btn-primary'

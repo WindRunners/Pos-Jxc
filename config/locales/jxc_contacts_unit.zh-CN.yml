@@ -1,0 +1,53 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_contacts_unit: '往来单位'
+    attributes:
+      jxc_contacts_unit:
+
+        unit_name: '单位名称'
+        unit_property: '单位性质'
+        unit_type: '单位类别'
+        spell_code: '拼音编码'
+        unit_address: '单位地址'
+        unit_code:  '单位编码'
+
+        department: '部门'
+        clerk: '业务员'
+
+        data_1: '扩展属性1'
+        data_2: '扩展属性2'
+        data_3: '扩展属性3'
+        data_4: '扩展属性4'
+
+
+        contact_name: '联系人'
+        contact_call: '联系电话'
+        contact_mobile: '手机'
+        contact_fax: '传真'
+        contact_address: '所属地区'
+        contact_postcode: '邮政编码'
+        contact_email: '电子邮箱'
+
+        legal_person: '法人代表'
+        registered_capital: '注册资金'
+        bank_info: '开户银行'
+        bank_account: '银行账号'
+        company_type: '经济类型'
+        tax_number: '税号'
+
+        business_range: '业务范围'
+        consumer_overview: '客户概况'
+
+        start_receivable: '期初应收款'
+        start_payable: '期初应付款'
+
+        total_receivable: '累计应收款'
+        total_payable: '累计应付款'
+
+        receivable_credit: '应收信用额'
+        payable_credit: '应付信用额'
+
+        receive_deadline: '收款期限(天)'
+        payment_deadline: '付款期限(天)'
+

@@ -1,0 +1,1 @@
+json.extract! @jxc_sell_stock_out_bill, :id, :bill_no, :customize_bill_no, :collection_date, :stock_out_date, :current_collection, :remark, :total_amount, :discount, :discount_amount, :receivable_amount, :bill_status, :created_at, :updated_at

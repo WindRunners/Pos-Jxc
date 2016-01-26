@@ -220,6 +220,7 @@ class Ordercompleted
         subscribe(Statistic.new)
         subscribe(OrderStatistic.new)
         subscribe(StatisticTotal.new)
+        subscribe(CustomerOrderStatic.new)
 
         broadcast(:completed_order_successful, id.to_s)
       begin

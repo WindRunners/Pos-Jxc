@@ -151,7 +151,7 @@
             <img class="nav-user-photo" src="/images/avatar.png" alt="Jason's Photo"/>
 								<span class="user-info">
 									<small>欢迎您,</small>
-									<%= current_user.userinfo.name %>
+									<%= current_user.userinfo.present? ? current_user.userinfo.name : '' %>
 								</span>
 
             <i class="ace-icon fa fa-caret-down"></i>

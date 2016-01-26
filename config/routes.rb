@@ -110,6 +110,7 @@ Rails.application.routes.draw do
     post 'share_time_check', :on => :collection
     get 'share'
     post 'register'
+    resources :product_ticket_customer_inits, shallow: true
   end
 
   resources :user_integrals
@@ -335,6 +336,7 @@ Rails.application.routes.draw do
     post 'users/upload'
     resources :users
     post 'users/manage_store'
+    get 'users/:id/reset_password' => 'users#reset_password'
   end
 
   resources :mobile_categories

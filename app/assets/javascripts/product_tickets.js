@@ -1,5 +1,3 @@
-var customer_data = null;
-
 //jquery 初始化函数
 $(function () {
 
@@ -16,7 +14,7 @@ $(function () {
 
     var product_ticket_id = $("#product_tickets_id").val();
 
-    customer_data = $('#customer_data').DataTable({
+    var customer_data = $('#customer_data').DataTable({
         pageLength: 25,
         bProcessing: false,
         bServerSide: false,
@@ -31,5 +29,5 @@ $(function () {
 
 function refresh_datetable(){
 
-    customer_data.url('/product_tickets/'+$("#product_tickets_id").val()+'/get_customers').load();
+    customer_data.url('/product_tickets/'+product_ticket_id+'/get_customers').load();
 }

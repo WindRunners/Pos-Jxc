@@ -1,3 +1,37 @@
+<script>
+
+
+
+
+    function take_order() {
+        $('#delivery_users_modal').modal('hide');
+        var data = $('#delivery_users_table').DataTable().row('.selected').data();
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/deliveryOrder/take_order",
+            data: {
+                token: data.authentication_token,
+                order_id: $("#btn_order_id").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                alert(JSON.stringify(data));
+                window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
+            }
+        });
+    }
+    ;
+
+
+    function set_btn_order_id(order_id) {
+        $("#btn_order_id").val(order_id);
+    }
+    ;
+
+
+</script>
+
+
 <% workflow_state = @order.workflow_state.to_sym %>
 <% def format_encryption(str) %>
     <% return str[0, str.length / 2] + "*" * (str.length % 2 == 0 ? str.length / 2 : str.length / 2 + 1) %>
@@ -236,13 +270,10 @@
               <div class="hidden-sm hidden-xs action-buttons">
                 <p>
                   <% if :paid == workflow_state %>
-                      <a data-href="<%= "#{order_receive_order_path(@order.id)}?tab=#{params[:tab]}" %>" class="btn btn-sm btn-warning"><i class="ace-icon">接&nbsp;&nbsp;单</i></a>
-                      &nbsp;
-                  <% elsif :distribution == workflow_state %>
-                      <a data-href="<%= "#{order_distribution_completed_path(@order.id)}?tab=#{params[:tab]}" %>" class="btn btn-sm btn-success"><i class="ace-icon">配送完成</i></a>
-                      &nbsp;
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal" onclick="set_btn_order_id('<%=@order.id%>');"><i class="ace-icon">接&nbsp;&nbsp;单</i></button>
                   <% end %>
-                  <a data-href="<%= orders_path(:workflow_state => params[:tab]) %>" class="btn btn-sm btn-info"><i class="ace-icon">返&nbsp;回</i></a>
+                  <a data-href="<%= orders_path(:workflow_state =>"paid") %>" class="btn btn-sm btn-info"><i class="ace-icon">返&nbsp;回</i></a>
                 </p>
               </div>
             </td>
@@ -330,3 +361,28 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">选择配送员</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'delivery_users' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="take_order();">接单</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<button type="hidden" id="btn_order_id" value="order_id"></button>

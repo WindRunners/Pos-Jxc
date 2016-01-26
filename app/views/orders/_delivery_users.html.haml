@@ -6,3 +6,42 @@
       %th 手机号
       %th{:style => "display:none;"} token
   %tbody
+
+
+
+:javascript
+          //初始化配送员选择窗口
+        var table = $('#delivery_users_table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "/delivery_users/datatable",
+                "type": "Post",
+            },
+            "columns": [
+                {"data": "_id", "visible": false},
+                {"data": "real_name"},
+                {"data": "mobile"},
+                {"data": "authentication_token", "visible": false},
+            ],
+            "createdRow": function (row, data, index) {
+
+                //$("tr").attr("_data","test123");
+                //alert("row:"+JSON.stringify(row));
+                //alert("data:"+JSON.stringify(data));
+                //alert("index:"+JSON.stringify(index));
+            },
+            "drawCallback": function (settings) {
+
+            }
+        });
+
+        table.on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });

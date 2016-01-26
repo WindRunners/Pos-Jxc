@@ -38,10 +38,12 @@ class Admin::UsersController < ApplicationController
 
   #创建用户
   def create
-    if params[:password].present?
-      params[:user][:password] ||= params[:password]
-    end
+    # if params[:password].present?
+    #   params[:user][:password] ||= params[:password]
+    # end
     @user = User.new(user_params)
+    #初始化密码: 123456
+    @user.password = "123456"
     @user['userinfo_id'] = current_user['userinfo_id']
     if @app_key.present?
       @user.userinfo=Userinfo.create(pdistance: 1)

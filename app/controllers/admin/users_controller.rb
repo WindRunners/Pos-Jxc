@@ -163,7 +163,7 @@ class Admin::UsersController < ApplicationController
   def reset_password
     set_user
     # binding.pry
-    @user.password= '345678'
+    @user.password= '123456'
     respond_to do |format|
       begin
         if @user.save

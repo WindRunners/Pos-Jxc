@@ -3,37 +3,55 @@ Rails.application.routes.draw do
   ## 进销存
   #各单据
 
-
+  post 'jxc_stock_transfer_bills/audit'
+  post 'jxc_stock_transfer_bills/strike_a_balance'
+  post 'jxc_stock_transfer_bills/invalid'
   resources :jxc_stock_transfer_bills
 
-
+  post 'jxc_stock_reduce_bills/audit'
+  post 'jxc_stock_reduce_bills/strike_a_balance'
+  post 'jxc_stock_reduce_bills/invalid'
   resources :jxc_stock_reduce_bills
 
-
+  post 'jxc_stock_overflow_bills/audit'
+  post 'jxc_stock_overflow_bills/strike_a_balance'
+  post 'jxc_stock_overflow_bills/invalid'
   resources :jxc_stock_overflow_bills
 
-
+  post 'jxc_stock_count_bills/audit'
+  post 'jxc_stock_count_bills/strike_a_balance'
+  post 'jxc_stock_count_bills/invalid'
   resources :jxc_stock_count_bills
 
-
+  post 'jxc_stock_assign_bills/audit'
+  post 'jxc_stock_assign_bills/strike_a_balance'
+  post 'jxc_stock_assign_bills/invalid'
   resources :jxc_stock_assign_bills
 
 
   resources :jxc_sell_exchange_goods_bills
 
-
+  post 'jxc_sell_returns_bills/audit'
+  post 'jxc_sell_returns_bills/strike_a_balance'
+  post 'jxc_sell_returns_bills/invalid'
   resources :jxc_sell_returns_bills
 
-
+  post 'jxc_sell_stock_out_bills/audit'
+  post 'jxc_sell_stock_out_bills/strike_a_balance'
+  post 'jxc_sell_stock_out_bills/invalid'
   resources :jxc_sell_stock_out_bills
 
-
+  post 'jxc_sell_orders/audit'
+  post 'jxc_sell_orders/strike_a_balance'
+  post 'jxc_sell_orders/invalid'
   resources :jxc_sell_orders
 
 
   resources :jxc_purchase_exchange_goods_bills
 
-
+  post 'jxc_purchase_returns_bills/audit'
+  post 'jxc_purchase_returns_bills/strike_a_balance'
+  post 'jxc_purchase_returns_bills/invalid'
   resources :jxc_purchase_returns_bills
 
   post 'jxc_purchase_stock_in_bills/audit'
@@ -46,13 +64,19 @@ Rails.application.routes.draw do
   post 'jxc_purchase_orders/invalid'
   resources :jxc_purchase_orders
 
-
+  post 'jxc_other_stock_out_bills/audit'
+  post 'jxc_other_stock_out_bills/strike_a_balance'
+  post 'jxc_other_stock_out_bills/invalid'
   resources :jxc_other_stock_out_bills
 
-
+  post 'jxc_other_stock_in_bills/audit'
+  post 'jxc_other_stock_in_bills/strike_a_balance'
+  post 'jxc_other_stock_in_bills/invalid'
   resources :jxc_other_stock_in_bills
 
-
+  post 'jxc_cost_adjust_bills/audit'
+  post 'jxc_cost_adjust_bills/strike_a_balance'
+  post 'jxc_cost_adjust_bills/invalid'
   resources :jxc_cost_adjust_bills
 
 

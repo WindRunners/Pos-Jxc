@@ -52,6 +52,12 @@ class Admin::UsersController < ApplicationController
       begin
 
         if @user.save
+
+          unless params[:user][:roles].blank?
+            params[:user][:roles].each do |role|
+              @user.add_role role
+            end
+          end
           # if @app_key.present?
             # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
             # format.json { render :show, status: :ok }

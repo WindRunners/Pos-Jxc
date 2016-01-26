@@ -1,0 +1,26 @@
+%h1 酒劵初始化会员列表
+
+%a.btn.btn-primary.btn-lg#import_customer 导入会员
+
+%table.table.table-striped.table-bordered.table-hover#product_ticket_customer{"data-source" => "#{product_ticket_product_ticket_customer_inits_path(@product_ticket)}"}
+  %thead
+    %tr
+      %th 手机号
+  %tbody
+
+%br
+
+%a.btn.btn-primary.btn-lg#bag_product_select_btn{'data-toggle'=>'modal','data-target'=>'#product_ticket_customer_modal'} 新建酒劵会员
+/= link_to '新建酒劵会员','','data-href'=>new_product_ticket_product_ticket_customer_init_path(@product_ticket),class: 'btn btn-default'
+
+/模态框
+.modal.fade.bs-example-modal-sm#product_ticket_customer_modal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}
+  .modal-dialog.modal-lg{'role'=>'document'}
+    .modal-content
+      .modal-header
+        %button{'class'=>'close','data-dismiss'=>'modal','aria-label'=>'Close'}
+          %span{'aria-hidden'=>'true'}
+            &times;
+        %h4.modal-title#exampleModalLabel 新建酒劵会员
+      .modal-body
+        = render 'form'

@@ -1,0 +1,10 @@
+= form_for @product_ticket_customer_init ,remote:true,url:{action: @action},html: {class: "form-horizontal",id: "new_product_ticket_customer"} do |f|
+  #error_explanation
+    %ul
+  .form-group
+    = f.label :mobile,'手机号:',class: 'col-sm-2 control-label'
+    .col-sm-8
+      = f.text_field :mobile,class: 'form-control',placeholder:'输入会员手机号'
+  .form-group
+    .col-sm-offset-2.col-sm-8
+      = f.submit '保存',class: 'btn btn-default'

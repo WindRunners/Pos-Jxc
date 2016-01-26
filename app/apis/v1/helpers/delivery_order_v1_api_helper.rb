@@ -146,6 +146,25 @@ module DeliveryOrderV1APIHelper
   end
 
 
+  #配送员接单列表
+  def DeliveryOrderV1APIHelper.order_rows(deliveryUser, postInfo)
+
+    result = {}
+
+    #待接单列表
+    store_ids = deliveryUser['store_ids'] #获取配送员负责的门店
+    result['deal_list'] = 0
+    if store_ids.present? && !store_ids.empty?
+      #获取门店待接单列表
+      result['deal_list'] = Order.where({'workflow_state' => 'paid', 'store_id' => {"$in" => store_ids}}).count
+    end
+
+    result['my_list'] = Order.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['take','distribution','receive']}}).count
+    result['hi_list'] =  Ordercompleted.where({'delivery_user_id'=> deliveryUser.id.to_s,'workflow_state'=>{'$in'=>['cancelled','completed']}}).count
+    result
+  end
+
+
   private
 
   #获取两坐标点的距离

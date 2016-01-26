@@ -1,4 +1,4 @@
-class JxcPurchaseOrder
+class JxcPurchaseOrder < JxcBaseModel
   ## 采购订单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -44,9 +44,9 @@ class JxcPurchaseOrder
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #更新单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -66,9 +66,9 @@ class JxcPurchaseOrder
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
       #更新单据状态
-      self.bill_status = '2'  #<红冲>
+      self.bill_status = BillStatus_StrikeBalance  #<红冲>
       self.update
 
       #审核结果返回
@@ -87,8 +87,8 @@ class JxcPurchaseOrder
     #处理结果
     result = {}
 
-    if self.bill_status == '0'
-      self.bill_status = '-1'
+    if self.bill_status == BillStatus_Create
+      self.bill_status = BillStatus_Invalid
       self.update
       result[:flag] = 1
       result[:msg] = '单据已作废'

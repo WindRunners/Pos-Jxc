@@ -54,7 +54,7 @@ class User
 
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
-  validates :name, presence: true,length: { maximum: 10, too_long: "名称最大长度为%{count}" }
+  validates :name, presence: true,length: { maximum: 20, too_long: "名称最大长度为%{count}" }
   validates :mobile, presence: true, uniqueness: true,format: {with: /\A\d{11}\z/, message: "手机号不合法!"}
   validates :email, presence: true
 

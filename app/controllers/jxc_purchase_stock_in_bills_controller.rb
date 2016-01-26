@@ -48,9 +48,9 @@ class JxcPurchaseStockInBillsController < ApplicationController
     @jxc_purchase_stock_in_bill.storage_id =  storage_id
     # @jxc_purchase_stock_in_bill.account_id =  account_id
     #制单人
-    @jxc_purchase_stock_in_bill.maker_id << current_user.id
+    @jxc_purchase_stock_in_bill.bill_maker << current_user
     #经手人
-    @jxc_purchase_stock_in_bill.handler_id << current_user.id
+    @jxc_purchase_stock_in_bill.handler << current_user
 
     @jxc_purchase_stock_in_bill.payment_date = stringParseDate(bill_info[:payment_date])
     @jxc_purchase_stock_in_bill.stock_in_date = stringParseDate(bill_info[:stock_in_date])
@@ -153,9 +153,9 @@ class JxcPurchaseStockInBillsController < ApplicationController
       @jxc_purchase_stock_in_bill.storage_id =  storage_id
       # @jxc_purchase_stock_in_bill.account_id =  account_id
       #制单人
-      @jxc_purchase_stock_in_bill.maker_id << current_user.id
+      @jxc_purchase_stock_in_bill.bill_maker << current_user
       #经手人
-      @jxc_purchase_stock_in_bill.handler_id << current_user.id
+      @jxc_purchase_stock_in_bill.handler << current_user
 
 
       @jxc_purchase_stock_in_bill.customize_bill_no = bill_info[:customize_bill_no]

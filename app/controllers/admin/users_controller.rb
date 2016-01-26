@@ -38,10 +38,12 @@ class Admin::UsersController < ApplicationController
 
   #创建用户
   def create
-    if params[:password].present?
-      params[:user][:password] ||= params[:password]
-    end
+    # if params[:password].present?
+    #   params[:user][:password] ||= params[:password]
+    # end
     @user = User.new(user_params)
+    #初始化密码: 123456
+    @user.password = "123456"
     @user['userinfo_id'] = current_user['userinfo_id']
     if @app_key.present?
       @user.userinfo=Userinfo.create(pdistance: 1)
@@ -50,6 +52,12 @@ class Admin::UsersController < ApplicationController
       begin
 
         if @user.save
+
+          unless params[:user][:roles].blank?
+            params[:user][:roles].each do |role|
+              @user.add_role role
+            end
+          end
           # if @app_key.present?
             # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
             # format.json { render :show, status: :ok }

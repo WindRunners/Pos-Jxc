@@ -1,10 +1,12 @@
-<%= form_for [:admin, @user], :html => { :class => "form-horizontal user", multipart: true ,remote: true} do |f| %>
-
-<input type="hidden" name="user[step]" value="3">
+<%= form_for [:admin, @user], :html => {:class => "form-horizontal user",:id => "user_form", multipart: true, remote: true} do |f| %>
+    <!--#error_explanation{"style"=>"display:none"}-->
+    <div id="error_explanation" style="display:none"><ul></ul></div>
+    <input type="hidden" name="user[step]" value="3">
     <% if @user.errors.any? %>
         <div id="error_expl" class="panel panel-danger">
           <div class="panel-heading">
-            <h3 class="panel-title"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h3>
+            <h3 class="panel-title"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being
+              saved:</h3>
           </div>
           <div class="panel-body">
             <ul>
@@ -16,16 +18,7 @@
         </div>
     <% end %>
 
-    <% if @user.avatar.present? %>
 
-        <div class="asset">
-          <p>
-            <%= image_tag(@user.avatar.url, size: "100x100", alt: "Edit Entry") %>
-          </p>
-          <p><small><%= number_to_human_size(@user.avatar.size) %>
-          </small></p>
-        </div>
-    <% end %>
     <div class="control-group">
       <%= f.label :name, :class => 'control-label' %>
       <div class="controls">
@@ -42,41 +35,27 @@
 
     </div>
 
-    <div class="field">
-      <%= f.label :password %>
-      <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em>
-      <% end %><br />
-      <%= f.password_field :password, autocomplete: "off" %>
-    </div>
 
     <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "off" %>
-    </div>
-    <% if current_user.has_role? :admin %>
-    <div class="field">
-      <%= f.label :email %><br />
+      <%= f.label :email %><br/>
       <%= f.text_field :email, autofocus: true %>
     </div>
-    <table width = 700px>
+
+    <table width=700px>
       <tr>
-    <dt><strong>权限:</strong></dt>
-      </tr><tr>
-    <% @roles.each do |role| %>
-        <td>
-          <%= t(role.name) %> <%= check_box_tag "user[roles][]", role.name, @user.roles.include?(role) %>
-        </td>
-    <% end %>
+        <dt><strong>权限:</strong></dt>
+      </tr>
+      <tr>
+        <% @roles.each do |role| %>
+            <td>
+              <%= t(role.name) %> <%= check_box_tag "user[roles][]", role.name, @user.roles.include?(role) %>
+            </td>
+        <% end %>
       </tr>
     </table>
-    <% end %>
 
 
     <%= f.submit nil, :class => 'btn btn-primary' %>
 
-    <a href='#' class="btn btn-default" onclick='history.go(-1);return false;'>
-      <span class="bigger-110">返回</span>
-    </a>
-
+    <%= link_to '返回用户列表','','data-href'=> admin_users_path,class:'btn btn-default'  %>
 <% end %>

@@ -239,6 +239,7 @@ Rails.application.routes.draw do
     post 'users/upload'
     resources :users
     post 'users/manage_store'
+    get 'users/:id/reset_password' => 'users#reset_password'
   end
 
   resources :mobile_categories

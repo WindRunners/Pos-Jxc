@@ -50,6 +50,5 @@
         %td= link_to t("helpers.links.edit"), '','data-href':edit_jxc_purchase_order_path(jxc_purchase_order),class:'btn btn-xs btn-warning',disabled:jxc_purchase_order.bill_status == '0' ? false:true
         -#%td= link_to t("helpers.links.destroy"), jxc_purchase_order,class:'btn btn-xs btn-danger', :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-      %br
-
+%br
 = link_to t("helpers.links.new"), '','data-href': new_jxc_purchase_order_path, :class => 'btn btn-primary'

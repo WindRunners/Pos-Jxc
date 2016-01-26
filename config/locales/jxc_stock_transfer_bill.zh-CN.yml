@@ -1,0 +1,18 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_stock_transfer_bill: '调拨单'
+    attributes:
+      jxc_stock_transfer_bill:
+        bill_no:  '单据编号'
+        customize_bill_no: '自定义单据编号'
+        transfer_date: '调拨日期'
+        transfer_way: '调拨方式'
+        remark: '备注'
+
+        transfer_out_stock: '调出仓库'
+        transfer_in_stock: '调入仓库'
+
+        handler: '经手人'
+        bill_maker: '制单人'
+        bill_status: '单据状态'

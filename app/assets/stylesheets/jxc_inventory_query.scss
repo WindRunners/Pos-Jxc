@@ -1,0 +1,24 @@
+// Place all the styles related to the jxc_inventory_query controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.panel-tree{
+  width:25%;
+  height:650px;
+  float:left;
+  padding:10px;
+  border-right:1px solid #EAE4E4 !important;
+  overflow:scroll !important;
+}
+.panel-table{
+  width:auto;
+  height:650px;
+  padding:10px;
+}
+.query_option{
+  width:100%;
+  height:50px;
+}
+.inventory-storage{
+  width:200px;
+  display: inline;
+}

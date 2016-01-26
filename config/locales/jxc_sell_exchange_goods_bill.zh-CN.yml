@@ -1,0 +1,6 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_sell_exchange_goods_bill: '销售换货单'
+    attributes:
+      jxc_sell_exchange_goods_bill:

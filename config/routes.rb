@@ -1,5 +1,98 @@
 Rails.application.routes.draw do
 
+  ## 进销存
+  #各单据
+
+
+  resources :jxc_stock_transfer_bills
+
+
+  resources :jxc_stock_reduce_bills
+
+
+  resources :jxc_stock_overflow_bills
+
+
+  resources :jxc_stock_count_bills
+
+
+  resources :jxc_stock_assign_bills
+
+
+  resources :jxc_sell_exchange_goods_bills
+
+
+  resources :jxc_sell_returns_bills
+
+
+  resources :jxc_sell_stock_out_bills
+
+
+  resources :jxc_sell_orders
+
+
+  resources :jxc_purchase_exchange_goods_bills
+
+
+  resources :jxc_purchase_returns_bills
+
+  post 'jxc_purchase_stock_in_bills/audit'
+  post 'jxc_purchase_stock_in_bills/strike_a_balance'
+  post 'jxc_purchase_stock_in_bills/invalid'
+  resources :jxc_purchase_stock_in_bills
+
+
+  resources :jxc_purchase_orders
+
+
+  resources :jxc_other_stock_out_bills
+
+
+  resources :jxc_other_stock_in_bills
+
+
+  resources :jxc_cost_adjust_bills
+
+
+
+  resources :jxc_dictionaries #字典项
+
+
+  resources :jxc_product_classify_standards #商品收益分类标准
+
+
+  resources :jxc_contacts_units #往来单位
+
+
+  resources :jxc_storages #仓库
+
+  #库存查询
+  get 'jxc_inventory_query/inventory_index'
+  get 'jxc_inventory_query/inventory_query'
+  get 'jxc_inventory_query/inventory_detail'
+
+  #进销存 通用查询
+  get 'jxc_common_info/getSuppliersInfo' #供应商
+  get 'jxc_common_info/getConsumersInfo' #客户
+  get 'jxc_common_info/getStorageTypesInfo' #仓库类型
+  get 'jxc_common_info/getStorageInfo' #仓库
+  get 'jxc_common_info/getJxcAccountsInfo' #进销存账户
+  get 'jxc_common_info/getDepartmentsInfo' #部门
+  get 'jxc_common_info/getHandlersInfo' #经手人 <部门职员>
+  get 'jxc_common_info/getProductCategoriesInfo' #商品分类
+  get 'jxc_common_info/getProductsInfo' #商品
+  get 'jxc_common_info/getAccountingItemsInfo' #会计科目
+  get 'jxc_common_info/getJxcUnitCategoriesInfo' #进销存往来单位类别
+  get 'jxc_common_info/getStorageTypesInfo' #仓库类别
+  get 'jxc_common_info/getStoragePageInfo' #仓库
+  get 'jxc_common_info/getHandlersPageInfo' #经手人 <部门职员>
+  get 'jxc_common_info/getProductsPageInfo' #商品
+  get 'jxc_common_info/getJxcUnits' #供应商
+  get 'jxc_common_info/getJxcDictionaryByDesc' #根据字典项获  取字典
+  get 'jxc_common_info/getBillDetailInfo' #单据明细
+  get 'jxc_common_info/checkInventoryChangeLog' #查询库存变更日志
+  ##
+
   resources :feedbacks
   resources :roles
   resources :card_bags do
@@ -240,6 +333,7 @@ Rails.application.routes.draw do
     post 'users/upload'
     resources :users
     post 'users/manage_store'
+    get 'users/:id/reset_password' => 'users#reset_password'
   end
 
   resources :mobile_categories

@@ -1,0 +1,14 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_stock_count_bill: '盘点单'
+    attributes:
+      jxc_stock_count_bill:
+        bill_no: '单据编号'
+        customize_bill_no: '自定义单据编号'
+        check_date: '盘点时间'
+        remark: '备注'
+        jxc_storage: '盘点仓库'
+        handler: '经手人'
+        bill_maker: '制单人'
+        bill_status: '单据状态'

@@ -14,6 +14,7 @@ zh-CN:
       cancel: "取消"
       confirm: "你确定吗?"
       destroy: "删除"
+      show: "查看"
       new: "添加"
       edit: "修改"
     titles:

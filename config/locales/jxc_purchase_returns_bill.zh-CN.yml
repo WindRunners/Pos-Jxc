@@ -1,0 +1,26 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_purchase_returns_bill: '采购退货单'
+    attributes:
+      jxc_purchase_returns_bill:
+        bill_no:  '单据编号'
+        customize_bill_no:  '自定义单据编号'
+        supplier: '供应商'
+        jxc_storage: '退货仓库'
+        handler: '经手人'
+
+        collection_date:  '收款日期'
+        returns_date: '退货日期'
+
+        jxc_account: '收款账户'
+        current_collection: '本次收款'
+        remark: '备注'
+
+        total_amount: '合计金额'
+        discount: '整单折扣'
+        discount_amount:  '整单优惠'
+        collection_amount:  '应收金额'
+
+        bill_status:  '单据状态'
+        bill_maker: '制单人'

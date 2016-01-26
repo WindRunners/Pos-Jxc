@@ -1,0 +1,19 @@
+%h1 Listing jxc_sell_exchange_goods_bills
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @jxc_sell_exchange_goods_bills.each do |jxc_sell_exchange_goods_bill|
+      %tr
+        %td= link_to 'Show', jxc_sell_exchange_goods_bill
+        %td= link_to 'Edit', edit_jxc_sell_exchange_goods_bill_path(jxc_sell_exchange_goods_bill)
+        %td= link_to 'Destroy', jxc_sell_exchange_goods_bill, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Jxc sell exchange goods bill', new_jxc_sell_exchange_goods_bill_path

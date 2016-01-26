@@ -1,0 +1,8 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_product_classify_standard: '商品收益分类标准'
+    attributes:
+      jxc_product_classify_standard:
+        class_name: '分类名称'
+        standard: '分类标准'

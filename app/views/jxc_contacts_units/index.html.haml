@@ -1,0 +1,79 @@
+%div{class:'page-header'}
+  %h1
+    =t('mongoid.models.jxc_contacts_unit')
+    (总共
+    = @jxc_contacts_units.size
+    条)
+%div.btn-group.btn-corner{style:'padding-bottom:8px;'}
+  %button.btn#addUnitType{type:'button','data-toggle':'modal','data-target':'#addDicModal',onclick:'addUnitType()'}
+    添加单位类别
+%div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
+      = page_entries_info @jxc_contacts_units
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @jxc_contacts_units
+.space.space-4
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
+    %tr
+      %th=t('mongoid.attributes.jxc_contacts_unit.unit_name')
+      %th=t('mongoid.attributes.jxc_contacts_unit.unit_property')
+      %th=t('mongoid.attributes.jxc_contacts_unit.contact_name')
+      %th=t('mongoid.attributes.jxc_contacts_unit.contact_call')
+      %th=t('mongoid.attributes.jxc_contacts_unit.contact_mobile')
+      -#%th=t('mongoid.attributes.jxc_contacts_unit.department')
+      -#%th=t('mongoid.attributes.jxc_contacts_unit.clerk')
+      %th=t('helpers.actions')
+      %th
+      %th
+
+  %tbody
+    - @jxc_contacts_units.each do |jxc_contacts_unit|
+      %tr
+        %td= jxc_contacts_unit.unit_name
+        %td= jxc_contacts_unit.unit_property == '1' ?'客户':'供应商'
+        %td= jxc_contacts_unit.contact_name
+        %td= jxc_contacts_unit.contact_call
+        %td= jxc_contacts_unit.contact_mobile
+        -#%td= jxc_contacts_unit.department.title unless jxc_contacts_unit.department.nil?
+        -#%td= jxc_contacts_unit.clerk.name unless jxc_contacts_unit.clerk.nil?
+        %td= link_to t('helpers.links.show'), '', 'data-href' => jxc_contacts_unit_path(jxc_contacts_unit),class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'), '', 'data-href' => edit_jxc_contacts_unit_path(jxc_contacts_unit),class:'btn btn-xs btn-warning'
+        %td= link_to t('helpers.links.destroy'),jxc_contacts_unit,:method => :delete,remote: true, :data => { :confirm => '您确定删除此条数据吗?' }, class:'btn btn-xs btn-danger'
+
+%br
+
+= link_to t('helpers.links.new'),'', 'data-href' => new_jxc_contacts_unit_path,:class => 'btn btn-primary'
+
+= render 'jxc_modal/jxc_addDictionary_modal'
+
+:javascript
+
+  function addUnitType(){
+    //模态框样式
+    $('.modal-title').text('添加单位类别');
+
+    var unitTypeForm =  "<form id='unitType'>" +
+                        "<table class='table table-bordered'>" +
+                        "<tr><td><label>单位类别</label></td><td><input type='text' name='jxc_dictionary[dic]' id='jxc_dictionary_dic' class='form-control' onblur='generatePinyinCode(\"jxc_dictionary_dic\",\"jxc_dictionary_pinyin_code\")' > <input type='hidden' name='jxc_dictionary[dic_desc]' id='jxc_dictionary_dic_desc' value='jxc_contacts_unit_category' > </td></tr>" +
+                        "<tr><td><label>拼音码</label></td><td><input type='text' name='jxc_dictionary[pinyin_code]' id='jxc_dictionary_pinyin_code' class='form-control' ></td></tr>" +
+                        "</table>" +
+                        "</form>";
+
+    $('.modal-body').html(unitTypeForm);
+  }
+
+  function submit(){
+    var jxc_dictionary = {};
+    jxc_dictionary.dic = $('#jxc_dictionary_dic').val();
+    jxc_dictionary.dic_desc = $('#jxc_dictionary_dic_desc').val();
+    jxc_dictionary.pinyin_code = $('#jxc_dictionary_pinyin_code').val();
+    $.post('/jxc_dictionaries',{jxc_dictionary});
+
+    //模态框隐藏
+    $('#addDicModal').modal('hide');
+  }

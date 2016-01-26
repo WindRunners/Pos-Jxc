@@ -1,0 +1,6 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_purchase_exchange_goods_bill: '采购换货单'
+    attributes:
+      jxc_purchase_exchange_goods_bill:

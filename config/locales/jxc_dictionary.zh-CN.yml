@@ -1,0 +1,11 @@
+zh-CN:
+  mongoid:
+   models:
+     jxc_dictionary: "进销存字典"
+   attributes:
+     jxc_dictionary:
+      dic: '名称'
+      dic_desc: '字典描述'
+      sort: '排序'
+      pinyin_code: '拼音码'
+

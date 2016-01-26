@@ -1,0 +1,56 @@
+%div{class:'page-header'}
+  %h1
+    =t("mongoid.models.jxc_sell_returns_bill")
+    (总共
+    = @jxc_sell_returns_bills.size
+    条)
+
+%div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
+      = page_entries_info @jxc_sell_returns_bills
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @jxc_sell_returns_bills
+.space.space-4
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
+    %tr
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.bill_no')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.refund_date')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.returns_date')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.current_refund')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.remark')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.total_amount')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.discount')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.discount_amount')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.refund_amount')
+      %th=t('mongoid.attributes.jxc_sell_returns_bill.bill_status')
+      %th=t("mongoid.links.operation")
+      %th
+
+  %tbody
+    - @jxc_sell_returns_bills.each do |jxc_sell_returns_bill|
+      %tr
+        %td= jxc_sell_returns_bill.bill_no
+        %td= jxc_sell_returns_bill.customize_bill_no
+        %td= jxc_sell_returns_bill.refund_date.strftime('%m/%d/%Y') unless jxc_sell_returns_bill.refund_date.blank?
+        %td= jxc_sell_returns_bill.returns_date.strftime('%m/%d/%Y') unless jxc_sell_returns_bill.returns_date.blank?
+        %td= jxc_sell_returns_bill.current_refund
+        %td= jxc_sell_returns_bill.remark
+        %td= jxc_sell_returns_bill.total_amount
+        %td= jxc_sell_returns_bill.discount
+        %td= jxc_sell_returns_bill.discount_amount
+        %td= jxc_sell_returns_bill.refund_amount
+        %td{style:'color:red;font-weight:bold;'}
+          = jxc_sell_returns_bill.bill_status == '0' ? '已创建' : (jxc_sell_returns_bill.bill_status == '1' ? '已审核' : '已红冲')
+        %td= link_to t("helpers.links.show"), jxc_sell_returns_bill,class:'btn btn-xs btn-info'
+        %td= link_to t("helpers.links.edit"), edit_jxc_sell_returns_bill_path(jxc_sell_returns_bill),class:'btn btn-xs btn-warning',disabled:jxc_sell_returns_bill.bill_status == '0' ? false:true
+        -#%td= link_to 'Destroy', jxc_sell_returns_bill, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+      %br
+
+= link_to t("helpers.links.new"), new_jxc_sell_returns_bill_path, :class => 'btn btn-primary'

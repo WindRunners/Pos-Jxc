@@ -1,4 +1,4 @@
-class JxcPurchaseStockInBill
+class JxcPurchaseStockInBill < JxcBaseModel
   ## 采购入库单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -47,9 +47,9 @@ class JxcPurchaseStockInBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(purchase_in_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(purchase_in_bill_id: self.id)
       #仓库
       store = self.jxc_storage
       #整单折扣
@@ -59,7 +59,7 @@ class JxcPurchaseStockInBill
         billDetailsArray.each do |billDetail|
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -82,14 +82,14 @@ class JxcPurchaseStockInBill
 
             store_product_detail.retail_price = billDetail.retail_price   #零售价
             store_product_detail.pack_spec = billDetail.pack_spec   #装箱规格
-            store_product_detail.classifyProductsByGrossProfit
+            store_product_detail.classifyProductsByGrossProfit  #根据商品利润对商品分级
 
             store_product_detail.update
           else
             #如果不存在，则添加
             store_product_detail = JxcStorageProductDetail.new
 
-            store_product_detail.product = billDetail.product
+            store_product_detail.resource_product_id = billDetail.resource_product_id
             store_product_detail.jxc_storage = billDetail.jxc_storage
             store_product_detail.unit = billDetail.unit     #单位
             store_product_detail.count = billDetail.count   #数量
@@ -109,33 +109,16 @@ class JxcPurchaseStockInBill
           end
 
           #仓库商品明细变更后，记录变更日志
-          storageJournal = JxcStorageJournal.new
-
-          storageJournal.product = billDetail.product   #商品
-          storageJournal.jxc_storage = store    #仓库
-          storageJournal.staff = self.handler  #经手人
-
-          storageJournal.previous_count = previous_count   #库存变更前存量
-          storageJournal.after_count = after_count   #库存变更后存量
-          storageJournal.count = billDetail.count #单据明细数量
-          storageJournal.price = (billDetail.price * (discount.to_d / 100)).round(2) #成本价
-          storageJournal.amount = billDetail.amount
-          storageJournal.op_type = '0'  #操作类型 <入库>
-          storageJournal.jxc_purchase_stock_in_bill = self  #库存变更依据的 单据
-          storageJournal.bill_no = self.bill_no #单据编号
-          storageJournal.bill_type = 'purchase_stock_in'
-          storageJournal.bill_status = '1'
-          storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-          storageJournal.save
+          cost_price = (billDetail.price * (discount.to_d / 100)).round(2) #成本价
+          inventoryChangeLog(self,billDetail,previous_count,after_count,cost_price,OperationType_StockIn,BillType_PurchaseStockIn,BillStatus_Audit)
         end
       end
 
       #生成产品溯源条码
-      generate_trace_root_code
+      # generate_trace_root_code
 
       #更细单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -154,9 +137,9 @@ class JxcPurchaseStockInBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(purchase_in_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(purchase_in_bill_id: self.id)
       #仓库
       store = self.jxc_storage
       #整单折扣
@@ -166,7 +149,7 @@ class JxcPurchaseStockInBill
         billDetailsArray.each do |billDetail|
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -187,34 +170,17 @@ class JxcPurchaseStockInBill
             store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            storageJournal = JxcStorageJournal.new
-
-            storageJournal.product = billDetail.product   #商品
-            storageJournal.jxc_storage = store    #仓库
-            storageJournal.staff = self.handler  #经手人
-
-            storageJournal.previous_count = previous_count   #库存变更前存量
-            storageJournal.after_count = after_count   #库存变更后存量
-            storageJournal.count = -billDetail.count #单据明细数量
-            storageJournal.price = (billDetail.price * (discount.to_d / 100)).round(2)
-            storageJournal.amount = -billDetail.amount
-            storageJournal.op_type = '4'  #操作类型 <红冲>
-            storageJournal.jxc_purchase_stock_in_bill = self  #库存变更依据的 单据
-            storageJournal.bill_no = self.bill_no #库存变更依据的 单据编号
-            storageJournal.bill_type = 'purchase_stock_in'
-            storageJournal.bill_status = '2'
-            storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageJournal.save
+            cost_price = (billDetail.price * (discount.to_d / 100)).round(2)
+            inventoryChangeLog(self,billDetail,previous_count,after_count,cost_price,OperationType_StrikeBalance,BillType_PurchaseStockIn,BillStatus_StrikeBalance)
           end
         end
       end
 
       #红冲后，之前生成的产品溯源条码一并删除
-      destroy_trace_root_code
+      # destroy_trace_root_code
 
       #更新单据状态
-      self.bill_status = '2'  #<红冲>
+      self.bill_status = BillStatus_StrikeBalance  #<红冲>
       self.update
 
       #审核结果返回
@@ -232,8 +198,8 @@ class JxcPurchaseStockInBill
     #处理结果
     result = {}
 
-    if self.bill_status == '0'
-      self.bill_status = '-1'
+    if self.bill_status == BillStatus_Create
+      self.bill_status = BillStatus_Invalid
       self.update
       result[:flag] = 1
       result[:msg] = '单据已作废'

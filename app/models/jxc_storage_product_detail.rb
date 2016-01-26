@@ -12,8 +12,10 @@ class JxcStorageProductDetail
   field :amount, type: BigDecimal, default: 0.00 #库存金额
   field :virtual_count, type: Integer   #虚拟数量
 
+  field :resource_product_id, type: String   #库存商品ID（ActiveResource Object）
+
   belongs_to :jxc_storage   #详情信息 所属的仓库
-  belongs_to :product  #每条详情信息 包含一个商品
+  # belongs_to :product  #每条详情信息 包含一个商品
   belongs_to :classify_standard, class_name: 'JxcProductClassifyStandard' #商品根据收益分等级
 
   scope :by_storage, -> (storage_id){
@@ -46,4 +48,10 @@ class JxcStorageProductDetail
     end
 
   end
+
+  # 查询商品信息
+  def product
+    @product = JxcProduct.find(self.resource_product_id)
+  end
+
 end

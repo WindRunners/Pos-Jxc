@@ -436,7 +436,7 @@
 
   // 单据审核
   function audit(){
-    $.post('audit',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
+    $.post('/jxc_purchase_stock_in_bills/audit',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit').attr('disabled',true);

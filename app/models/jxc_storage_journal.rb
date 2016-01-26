@@ -17,8 +17,10 @@ class JxcStorageJournal
   field :status, type: String, default: '0' #该条记录状态 （0：正常 | -1：作废）
   field :remark, type: String #备注
 
+  field :resource_product_id, type: String  #库存变更日志 包含的商品信息(ActiveResource Object)
+
   belongs_to :jxc_storage #流水明细所属仓库
-  belongs_to :product #流水明细包含的商品
+  # belongs_to :product #流水明细包含的商品
   belongs_to :user #经手人
 
   belongs_to :jxc_purchase_stock_in_bill #采购入库单
@@ -33,4 +35,9 @@ class JxcStorageJournal
   belongs_to :jxc_cost_adjust_bill #成本调整单
   # belongs_to :jxc_entering_stock #期初库存录入
   belongs_to :jxc_stock_assign_bill #要货单
+
+  # 定义获取 商品信息的方法
+  def product
+    @product = JxcProduct.find(self.resource_product_id)
+  end
 end

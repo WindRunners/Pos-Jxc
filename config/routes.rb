@@ -2,26 +2,68 @@ Rails.application.routes.draw do
 
   ## 进销存
   #各单据
+
+
   resources :jxc_stock_transfer_bills
+
+
   resources :jxc_stock_reduce_bills
+
+
   resources :jxc_stock_overflow_bills
+
+
   resources :jxc_stock_count_bills
+
+
   resources :jxc_stock_assign_bills
+
+
   resources :jxc_sell_exchange_goods_bills
+
+
   resources :jxc_sell_returns_bills
+
+
   resources :jxc_sell_stock_out_bills
+
+
   resources :jxc_sell_orders
+
+
   resources :jxc_purchase_exchange_goods_bills
+
+
   resources :jxc_purchase_returns_bills
+
+  post 'jxc_purchase_stock_in_bills/audit'
+  post 'jxc_purchase_stock_in_bills/strike_a_balance'
+  post 'jxc_purchase_stock_in_bills/invalid'
   resources :jxc_purchase_stock_in_bills
+
+
   resources :jxc_purchase_orders
+
+
   resources :jxc_other_stock_out_bills
+
+
   resources :jxc_other_stock_in_bills
+
+
   resources :jxc_cost_adjust_bills
 
+
+
   resources :jxc_dictionaries #字典项
+
+
   resources :jxc_product_classify_standards #商品收益分类标准
+
+
   resources :jxc_contacts_units #往来单位
+
+
   resources :jxc_storages #仓库
 
   #库存查询

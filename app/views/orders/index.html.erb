@@ -23,45 +23,6 @@
         });
 
 
-        //初始化商品选择窗口
-        var table = $('#delivery_users_table').DataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                "url": "/delivery_users/datatable",
-                "type": "Post",
-//                "data":{mobile:"13043990276"}
-            },
-            "columns": [
-                {"data": "_id", "visible": false},
-                {"data": "real_name"},
-                {"data": "mobile"},
-                {"data": "authentication_token", "visible": false},
-            ],
-            "createdRow": function (row, data, index) {
-
-                //$("tr").attr("_data","test123");
-                //alert("row:"+JSON.stringify(row));
-                //alert("data:"+JSON.stringify(data));
-                //alert("index:"+JSON.stringify(index));
-            },
-            "scrollY": "500px",
-            "drawCallback": function (settings) {
-
-            }
-        });
-
-        table.on('click', 'tr', function () {
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-            }
-            else {
-                table.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-            }
-        });
-
-
     });
 
 
@@ -97,8 +58,8 @@
 
 
     function take_order() {
-        var data = $('#delivery_users_table').DataTable().row('.selected').data();
         $('#delivery_users_modal').modal('hide');
+        var data = $('#delivery_users_table').DataTable().row('.selected').data();
         $.ajax({
             type: "POST",
             url: "/api/v1/deliveryOrder/take_order",
@@ -109,7 +70,7 @@
             dataType: "json",
             success: function (data) {
                 alert(JSON.stringify(data));
-                window.location.href = get_location_href_no_search()+"?workflow_state=paid&&"+get_rand_num();
+                window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
             }
         });
     }
@@ -361,5 +322,5 @@
 
 
 
-<button type="hidden" id="btn_order_id" value="111"></button>
+<button type="hidden" id="btn_order_id" value="order_id"></button>
 

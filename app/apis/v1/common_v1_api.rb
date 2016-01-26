@@ -27,5 +27,18 @@ class CommonV1API < Grape::API
     {msg: '小C登录回调成功!', flag: 1,share_integral:share_integral,product_ticket:product_ticket}
   end
 
+  desc '订单统计' do
+    detail '订单统计 {flag:{0:失败,1:成功},msg:提信息}'
+  end
+  params do
+    requires :order_id, type: String, desc: '订单id'
+  end
+  get 'order_count' do
+
+    status 200
+    CustomerOrderStatic.new.completed_order_successful(params[:order_id])
+    {msg: '订单统计成功!', flag: 1}
+  end
+
 
 end

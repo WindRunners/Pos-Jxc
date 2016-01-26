@@ -92,7 +92,6 @@ class ImportBagReceiversController < ApplicationController
   # DELETE /import_bag_receivers/1.json
   def destroy
 
-
     import_bag = @import_bag_receiver.import_bag
 
     #验证权限

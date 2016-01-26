@@ -18,12 +18,21 @@ class CustomersDatatable
   private
 
   def data
+    data_list = []
     customers.map do |customer|
-      data_list = []
-      data_list << customer['_id']
-      data_list << customer['value']
-      data_list
+      begin
+        rows = []
+        # customer_remote = Customer.find(customer['_id'])
+        # rows << customer_remote.mobile
+        # rows << customer_remote.name
+        rows << customer['_id']
+        rows << customer['value']
+        data_list << rows
+      rescue
+        next
+      end
     end
+    data_list
   end
 
   def customers
@@ -44,6 +53,7 @@ class CustomersDatatable
           return Array.sum(values);
         }
       }
+
     customer_list = Ordercompleted.where({'userinfo_id'=>@current_user['userinfo_id'],'workflow_state'=>'completed'}).map_reduce(map, reduce).out(inline: true)
     return  customer_list
   end

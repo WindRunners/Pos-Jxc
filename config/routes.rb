@@ -41,7 +41,9 @@ Rails.application.routes.draw do
   post 'jxc_purchase_stock_in_bills/invalid'
   resources :jxc_purchase_stock_in_bills
 
-
+  post 'jxc_purchase_orders/audit'
+  post 'jxc_purchase_orders/strike_a_balance'
+  post 'jxc_purchase_orders/invalid'
   resources :jxc_purchase_orders
 
 

@@ -449,7 +449,7 @@
 
   // 单据红冲
   function strike_a_balance(){
-    $.post('strike_a_balance',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
+    $.post('/jxc_purchase_stock_in_bills/strike_a_balance',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);
@@ -462,7 +462,7 @@
 
   // 单据作废
   function invalid(){
-    $.post('invalid',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
+    $.post('/jxc_purchase_stock_in_bills/invalid',{id:$('#jxc_purchase_stock_in_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);

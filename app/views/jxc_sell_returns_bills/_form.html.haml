@@ -1,0 +1,461 @@
+- if @operation == 'show'
+  %div.btn-group.btn-corner{style:'padding-bottom:8px;'}
+    %button.btn.btn-success#audit{onclick:'audit()',disabled:@jxc_sell_returns_bill.bill_status == '0'? false:true}
+      审核
+    %button.btn.btn-danger#strike_a_balance{onclick:'strike_a_balance()',disabled:@jxc_sell_returns_bill.bill_status == '1' ? false:true}
+      红冲
+    %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_sell_returns_bill.bill_status == '0'? false : true }
+      作废
+= form_for @jxc_sell_returns_bill do |f|
+  - if @jxc_sell_returns_bill.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_sell_returns_bill.errors.count, "error")} prohibited this jxc_sell_returns_bill from being saved:"
+      %ul
+        - @jxc_sell_returns_bill.errors.full_messages.each do |msg|
+          %li= msg
+
+  %table{class: "table table-bordered table-hover"}
+    %tr
+      %td
+        = f.label :bill_no
+      %td
+        = f.text_field :bill_no,:class=>'form-control',readonly:'true'
+        = f.hidden_field :id
+        = f.hidden_field :bill_status
+      %td
+        = f.label :customize_bill_no
+      %td
+        = f.text_field :customize_bill_no,:class=>'form-control'
+
+    %tr
+      %td
+        = f.label :returns_date
+      %td
+        -#= f.text_field :returns_date,:class=>'form-control datepicker',:readonly => true
+        %input.form-control.datepicker#jxc_sell_returns_bill_returns_date{type:'text',name:'jxc_sell_returns_bill[returns_date]',readonly:true,value:@jxc_sell_returns_bill.returns_date.present? ? @jxc_sell_returns_bill.returns_date.strftime('%m/%d/%Y') : ''}
+      %td
+        = f.label :refund_date
+      %td
+        -#= f.text_field :refund_date,:class=>'form-control datepicker',:readonly => true
+        %input.form-control.datepicker#jxc_sell_returns_bill_refund_date{type:'text',name:'jxc_sell_returns_bill[refund_date]',readonly:true,value:@jxc_sell_returns_bill.refund_date.present? ? @jxc_sell_returns_bill.refund_date.strftime('%m/%d/%Y') : ''}
+
+    %tr
+      %td
+        = f.button t('mongoid.attributes.jxc_sell_returns_bill.consumer'),type:'button',class:'btn btn-white btn-success',onclick:'getConsumersInfo()',disabled: @operation == 'show' ? true:false
+      %td
+        %input.form-control#jxc_sell_returns_bill_consumer{value: @jxc_sell_returns_bill.consumer.nil? ? '':@jxc_sell_returns_bill.consumer.unit_name,readonly:true }
+        = f.hidden_field :consumer_id
+      %td
+        = f.button t('mongoid.attributes.jxc_sell_returns_bill.jxc_storage'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo()',disabled: @operation == 'show' ? true:false
+      %td
+        %input.form-control#jxc_sell_returns_bill_jxc_storage{value: @jxc_sell_returns_bill.jxc_storage.nil? ? '':@jxc_sell_returns_bill.jxc_storage.storage_name,readonly:true }
+        = f.hidden_field :storage_id
+    %tr
+      %td
+        = f.button t('mongoid.attributes.jxc_sell_returns_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
+      %td
+        %input.form-control#jxc_sell_returns_bill_jxc_account{value: @jxc_sell_returns_bill.jxc_account.nil? ? '':@jxc_sell_returns_bill.jxc_account.account_name,readonly:true }
+        = f.hidden_field :account_id
+
+      %td
+        = f.label :current_refund
+      %td
+        = f.text_field :current_refund,:class=>'form-control'
+    %tr
+      %td
+        = f.label :handler
+      %td
+        %input.form-control#jxc_sell_returns_bill_handler{value: @jxc_sell_returns_bill.handler.nil? ? '':@jxc_sell_returns_bill.handler.name,readonly:true }
+        = f.hidden_field :handler_id
+      %td
+        = f.label :remark
+      %td
+        = f.text_field :remark,:class=>'form-control'
+
+    %tr
+      %td
+        = f.button '单据明细',type:'button',class:'btn btn-white btn-success',onclick:'getProductsInfo()',disabled: @operation == 'show' ? true:false
+      %td{colspan:3}
+        %table.table.table-bordered
+          %thead
+            %th
+              商品名称
+            %th
+              商品编码
+            %th
+              规格
+            %th
+              单位
+            %th
+              数量
+            %th
+              退货单价
+            %th
+              金额
+            %th
+              备注
+            %th
+              操作
+          %tbody#billDetail
+            - if !@bill_details.blank?
+              - @bill_details.each do |billDetail|
+                %tr{id:billDetail.product.id}
+                  %td
+                    = billDetail.product.title
+                    %input#billDetail_id{type:'hidden',name:'billDetail[][id]',value:billDetail.id}
+                    %input#billDetail_product_id{type:'hidden',name:'billDetail[][product_id]',value:billDetail.product.id}
+                  %td
+                    = billDetail.product.qrcode
+                  %td
+                    = billDetail.product.specification
+                  %td
+                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                  %td
+                    %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
+                  %td
+                    %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][price]',value:billDetail.price,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
+                  %td
+                    %input#billDetail_amount.billDetailInput{type:'text',name:'billDetail[][amount]',value:billDetail.amount,readonly:true}
+                  %td
+                    %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
+                  %td.del-icon-td
+                    %i.red.ace-icon.fa.fa-trash-o.bigger-130.del-icon{onclick:'delBillDetail("'+billDetail.product.id+'")'}
+
+    %tr
+      %td
+        = f.label :total_amount
+      %td
+        = f.text_field :total_amount,:class=>'form-control',readonly:true
+
+      %td
+        = f.label :discount
+      %td
+        = f.text_field :discount,:class=>'form-control',value:@jxc_sell_returns_bill.discount || 100
+
+    %tr
+      %td
+        = f.label :discount_amount
+      %td
+        = f.text_field :discount_amount,:class=>'form-control',value:@jxc_sell_returns_bill.discount_amount || 0.00
+
+      %td
+        = f.label :refund_amount
+      %td
+        = f.text_field :refund_amount,:class=>'form-control',readonly:true
+    - if @operation == 'show'
+      %tr
+        %td
+          = f.label :bill_maker
+        %td
+          = f.text_field :bill_maker,:class=>'form-control',readonly:true
+        %td
+          = f.label :bill_status
+        %td
+          %input.form-control#bill_status{readonly:true,value:@billStatus,style:'color:#d15b47;'}
+
+  .actions
+    = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
+    &nbsp;&nbsp;&nbsp;
+    %a{class:'btn',:href => jxc_sell_returns_bills_path}
+      %i{class:'ace-icon fa fa-return bigger-110'}返回
+
+=render 'jxc_modal/jxc_common_modal'
+
+:javascript
+  //zTree默认设置
+  var zTreeSetting = {
+    async:{
+      url:'',
+      type:'get',
+      enable:true
+    },
+    view: {
+      dblClickExpand: false,
+      showLine: true,
+      selectedMulti: false
+    },
+    data: {
+      key:{
+        name:""
+      },
+      simpleData: {
+        enable:true,
+        idKey: "_id",
+        pIdKey: "parent_id",
+        rootPId: ""
+      }
+    },
+    callback: {}
+  };
+
+  //EasyUI DataGrid设置
+  var tableSetting = {};
+
+
+
+  //选择客户信息
+  function getConsumersInfo(){
+    //模态框样式
+    $('.modal-title').text('选择客户');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','consumer');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getJxcUnitCategoriesInfo';
+    zTreeSetting.data.key.name = 'dic';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          unit_type:treeNode.dic
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '往来单位信息',
+      url:'/jxc_common_info/getConsumersInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'客户名称',field:'unit_name',width:'18%'},
+        {title:'联系人',field:'contact_name',width:'18%'},
+        {title:'手机',field:'contact_mobile',width:'18%'},
+        {title:'联系电话',field:'contact_call',width:'18%'},
+        {title:'单位地址',field:'unit_address',width:'28%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+
+
+  //选择仓库信息
+  function getJxcStorageInfo(){
+    $('.modal-title').text('选择入货仓库');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storage');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getStorageTypesInfo';
+    zTreeSetting.data.key.name = 'dic';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          storage_type:treeNode.dic
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '仓库信息',
+      url:'/jxc_common_info/getStorageInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'仓库名称',field:'storage_name',width:'18%'},
+        {title:'管理人',field:'admin',width:'18%'},
+        {title:'联系电话',field:'admin_phone',width:'18%'},
+        {title:'仓库地址',field:'address',width:'28%'},
+        {title:'备注',field:'memo',width:'18%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+
+
+
+  //选择账户信息
+  function getJxcAccountsInfo(){
+    $('.modal-title').text('选择付款账户');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').addClass('jxc-disappear-tree');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','account');
+
+    tableSetting = {
+      title: '账户信息',
+      url:'/jxc_common_info/getJxcAccountsInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'账户名称',field:'account_name',width:'50%'},
+        {title:'币种',field:'currency',width:'50%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化表格
+    initDataGrid(tableSetting);
+  }
+
+
+  //选择单据明细
+  function getProductsInfo(){
+
+    var consumer_id = $('#jxc_sell_returns_bill_consumer_id').val();
+    var storage_id = $('#jxc_sell_returns_bill_storage_id').val();
+
+    if(consumer_id == "" || storage_id == ""){
+      alert("请先选择客户和出货仓库信息!");
+      return;
+    }
+
+    $('.modal-title').text('选择单据明细');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','product');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getProductCategoriesInfo';
+    zTreeSetting.data.key.name = 'title';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          category_id:treeNode._id,
+          unit_id:consumer_id,
+          storage_id:storage_id
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '商品信息',
+      url:'/jxc_common_info/getBillDetailInfo',
+      width:600,
+      singleSelect:false,
+      queryParams:{},
+      columns:[[
+        {title:'名称',field:'title',width:'25%'},
+        {title:'品牌',field:'brand',width:'15%'},
+        {title:'规格',field:'specification',width:'14%'},
+        {title:'单位',field:'unit',width:'10%'},
+        {title:'成本价',field:'cost_price',width:'10%'},
+        {title:'库存数量',field:'count',width:'11%'},
+        {title:'库存金额',field:'amount',width:'15%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+
+  function selectData(){
+    var dataType = $('#confirm-button').attr('data-type');
+    var selectData = $('#dataTable').datagrid('getSelections');
+
+    if(selectData.length == 0){
+      alert('请选择数据');
+    }else{
+      if(dataType == 'consumer'){
+        $('#jxc_sell_returns_bill_consumer').val(selectData[0].unit_name);
+        $('#jxc_sell_returns_bill_consumer_id').val(selectData[0]._id);
+      }else if(dataType == 'storage'){
+        $('#jxc_sell_returns_bill_jxc_storage').val(selectData[0].storage_name);
+        $('#jxc_sell_returns_bill_storage_id').val(selectData[0]._id);
+      }else if(dataType == 'account'){
+        $('#jxc_sell_returns_bill_jxc_account').val(selectData[0].account_name);
+        $('#jxc_sell_returns_bill_account_id').val(selectData[0]._id);
+      }else if(dataType == 'handler'){
+        $('#jxc_sell_returns_bill_handler').val(selectData[0].name);
+        $('#jxc_sell_returns_bill_handler_id').val(selectData[0]._id);
+      }else if(dataType == 'product'){
+
+        var billDetailTable = '';
+
+        $(selectData).each(function(){
+          billDetailTable += '<tr id='+this.id+'>'+             //商品ID
+                             '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
+                             '<td>'+this.qrcode+'</td>'+          //商品编码
+                             '<td>'+this.specification+'</td>'+ //商品规格
+                             '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                             '<td><input type="text" class="billDetailInput" id="billDetail_count" name="billDetail[][count]" value="1" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //数量
+                             '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][price]" value="0.00" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //单价
+                             '<td><input type="text" class="billDetailInput" id="billDetail_amount" value="0.00" readonly ></td>'+    //金额
+                             '<td><input type="text" class="billDetailInput" id="billDetail_remark" name="billDetail[][remark]"></td>'+    //备注
+                             '<td class="del-icon-td"><i class="red ace-icon fa fa-trash-o bigger-130 del-icon" onclick="delBillDetail(\''+this.id+'\')"></i></td>'+    //删除
+                             '</tr>';
+        });
+
+        $('#billDetail').append(billDetailTable);
+      }
+
+      //模态框隐藏
+      $('#selectModal').modal('hide');
+    }
+  }
+
+  //删除单据商品详情
+  function delBillDetail(detailID){
+    $('#'+detailID).remove();
+  }
+
+  //单据审核
+  function audit(){
+    $.post('audit',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+      alert(resData.msg)
+      if(resData.flag == 1){
+        $('#audit').attr('disabled',true);
+        $('#strike_a_balance').attr('disabled',false);
+        $('#invalid').attr('disabled',true);
+        $('#bill_status').val('已审核');
+      }
+    });
+  }
+
+
+  //冲账
+  function strike_a_balance(){
+    $.post('strike_a_balance',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+      alert(resData.msg)
+      if(resData.flag == 1){
+        $('#invalid').attr('disabled',true);
+        $('#audit').attr('disabled',true);
+        $('#strike_a_balance').attr('disabled',true);
+        $('#bill_status').val('已红冲');
+      }
+    });
+  }
+
+
+  //作废
+  function invalid(){
+    $.post('invalid',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+      alert(resData.msg)
+      if(resData.flag == 1){
+        $('#invalid').attr('disabled',true);
+        $('#audit').attr('disabled',true);
+        $('#strike_a_balance').attr('disabled',true);
+        $('#bill_status').val('已作废');
+      }
+    });
+  }

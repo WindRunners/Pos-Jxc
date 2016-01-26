@@ -11,12 +11,11 @@ class AnnouncementV1API < Grape::API
   end
   params do
     requires :announcement_category_id, type: String, desc: '分类ID'
-    requires :page, type: String, desc: '当前页'
-    requires :per_page, type: String, desc: '每页纪录数目'
+    requires :page, type: String, desc: '第几页从0开始'
   end
   get 'list' do
     announcement_category_id = params[:announcement_category_id]
-    present Announcement.where(:status => 1, :announcement_category_id => announcement_category_id).page(params[:page]).per(params[:per_page]).order('created_at DESC'), with: Entities::Announcement
+    present Announcement.where(:status => 1, :announcement_category_id => announcement_category_id).page(params[:page]).per(8).order('created_at DESC'), with: Entities::Announcement
   end
 
 
@@ -24,15 +23,15 @@ class AnnouncementV1API < Grape::API
 
   params do
     requires :announcement_id, type: String, desc: 'announcement_id'
-    # requires :user_id, type: Integer, desc: 'user_id'
+    # requires :customer_id, type: Integer, desc: 'customer_id'
   end
 
   get 'app_show' do
     announcement = Announcement.where(:status => 1).find(params[:announcement_id])
-    customer_id = '未知游客'
-    if !customer_id.nil?
-      announcement.reader << customer_id
-    end
+    # customer_id = '未知游客'
+    # if !customer_id.nil? && !announcement.reader.include?(customer_id)
+    #   announcement.reader << customer_id
+    # end
     announcement.read_num = announcement.read_num+1
     announcement.save
     showHash = Hash.new()

@@ -1,0 +1,77 @@
+%div{class:'page-header'}
+  %h1
+    =t("mongoid.models.jxc_other_stock_in_bill")
+    (总共
+    = @jxc_other_stock_in_bills.size
+    条)
+%div.btn-group.btn-corner{style:'padding-bottom:8px;'}
+  %button.btn#addStockInType{type:'button','data-toggle':'modal','data-target':'#addDicModal',onclick:'addDictionary()'}
+    添加入库类型
+%div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
+      = page_entries_info @jxc_other_stock_in_bills
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @jxc_other_stock_in_bills
+.space.space-4
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
+    %tr
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.bill_no')
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.stock_in_date')
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.stock_in_type')
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.remark')
+      %th=t('mongoid.attributes.jxc_other_stock_in_bill.bill_status')
+      %th=t("mongoid.links.operation")
+      %th
+
+  %tbody
+    - @jxc_other_stock_in_bills.each do |jxc_other_stock_in_bill|
+      %tr
+        %td= jxc_other_stock_in_bill.bill_no
+        %td= jxc_other_stock_in_bill.customize_bill_no
+        %td= jxc_other_stock_in_bill.stock_in_date.strftime('%m/%d/%Y') unless jxc_other_stock_in_bill.stock_in_date.blank?
+        %td= jxc_other_stock_in_bill.stock_in_type
+        %td= jxc_other_stock_in_bill.remark
+        %td{style:'color:red;font-weight:bold;'}
+          = jxc_other_stock_in_bill.bill_status == '0' ? '已创建' : (jxc_other_stock_in_bill.bill_status == '1' ? '已审核' : '已红冲')
+        %td= link_to t('helpers.links.show'), jxc_other_stock_in_bill,class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'), edit_jxc_other_stock_in_bill_path(jxc_other_stock_in_bill),class:'btn btn-xs btn-warning',disabled:jxc_other_stock_in_bill.bill_status == '0' ? false:true
+        -#%td= link_to 'Destroy', jxc_other_stock_in_bill, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+      %br
+
+= link_to t("helpers.links.new"), new_jxc_other_stock_in_bill_path,:class => 'btn btn-primary'
+
+= render 'jxc_modal/jxc_addDictionary_modal'
+
+:javascript
+
+  function addDictionary(){
+    //模态框样式
+    $('.modal-title').text('添加入库类型');
+
+    var stockInTypeForm =  "<form id='stockInType'>" +
+                        "<table class='table table-bordered'>" +
+                        "<tr><td><label>入库类型</label></td><td><input type='text' name='jxc_dictionary[dic]' id='jxc_dictionary_dic' class='form-control' > <input type='hidden' name='jxc_dictionary[dic_desc]' id='jxc_dictionary_dic_desc' value='stock_in_type' > </td></tr>" +
+                        "<tr><td><label>拼音码</label></td><td><input type='text' name='jxc_dictionary[pinyin_code]' id='jxc_dictionary_pinyin_code' class='form-control' ></td></tr>" +
+                        "</table>" +
+                        "</form>";
+
+    $('.modal-body').html(stockInTypeForm);
+  }
+
+  function submit(){
+    var jxc_dictionary = {};
+    jxc_dictionary.dic = $('#jxc_dictionary_dic').val();
+    jxc_dictionary.dic_desc = $('#jxc_dictionary_dic_desc').val();
+    jxc_dictionary.pinyin_code = $('#jxc_dictionary_pinyin_code').val();
+    $.post('/jxc_dictionaries',{jxc_dictionary});
+
+    //模态框隐藏
+    $('#addDicModal').modal('hide');
+  }

@@ -1,0 +1,24 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_sell_order: '销售订单'
+    attributes:
+      jxc_sell_order:
+        order_no: '订单编号'
+        customize_order_no: '自定义编号'
+        consign_goods_date: '发货日期'
+        order_date: '订单日期'
+        receivable_deposit: '预收定金'
+        remark: '备注'
+
+        total_amount: '合计金额'
+        discount: '整单折扣'
+        discount_amount: '整单优惠'
+        receivable_amount: '应收金额'
+        bill_status: '单据状态'
+
+        consumer: '客户'
+        jxc_storage: '出货仓库'
+        handler: '经手人'
+        jxc_account: '收款账户'
+        bill_maker: '制单人'

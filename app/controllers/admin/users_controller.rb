@@ -5,10 +5,12 @@ class Admin::UsersController < ApplicationController
 
   def index
     @current_user = current_user
-    @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
+    @users = User.all.page(params[:page])
+    # @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
   end
 
   def new
+
     @user = User.new
     @roles = Role.all
 
@@ -26,33 +28,47 @@ class Admin::UsersController < ApplicationController
   end
 
   def edit
-    @roles = Role.all
+    # @roles = Role.all
+    @roles = Role.where({})
+    Rails.logger.info "修改"
+    @roles = Role.where({})
+    @roles = Role.where({})
   end
 
 
+  #创建用户
   def create
-    if params[:password].present?
-      params[:user][:password] ||= params[:password]
-    end
+    # if params[:password].present?
+    #   params[:user][:password] ||= params[:password]
+    # end
     @user = User.new(user_params)
+    #初始化密码: 123456
+    @user.password = "123456"
     @user['userinfo_id'] = current_user['userinfo_id']
-
     if @app_key.present?
       @user.userinfo=Userinfo.create(pdistance: 1)
     end
     respond_to do |format|
-      if @user.save
-        if @app_key.present?
-          # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-          format.json { render :show, status: :ok }
+      begin
+
+        if @user.save
+          # if @app_key.present?
+            # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+            # format.json { render :show, status: :ok }
+          # else
+            # format.js { render_js admin_users_path }
+            # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+            # format.json { render :show, status: :ok }
+
+          # end
+          format.json { render json: get_render_json(1,nil,admin_users_path) }
         else
-          format.js { render_js admin_users_path }
-          format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-          format.json { render :show, status: :ok }
+          # format.html { render :new }
+          # format.json { render json: @user.errors, status: :unprocessable_entity }
+          format.json { render json: get_render_json(0,@user.errors.messages) }
         end
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+      rescue Exception => e
+        p e.message
       end
     end
   end
@@ -115,7 +131,8 @@ class Admin::UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to admin_users_path, notice: 'User was successfully destroyed.' }
+      # format.html { redirect_to admin_users_path, notice: 'User was successfully destroyed.' }
+      format.js { render_js admin_users_path, notice: 'Feedback was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -140,6 +157,28 @@ class Admin::UsersController < ApplicationController
       puts e.message
       respond_to do |format|
         format.json { render json: {"flag" => 0, "msg" => "门店操作失败，服务器出现异常！"} }
+      end
+    end
+  end
+  
+  #管理员用户对普通用户进行密码重置:123456
+  def reset_password
+    set_user
+    # binding.pry
+    @user.password= '123456'
+    respond_to do |format|
+      begin
+        if @user.save
+          # format.js {render_js admin_users_path }
+          format.json { render json: get_render_json(1,nil,admin_users_path) }
+        else
+          # format.html { render :new }
+          # format.json { render json: @user.errors, status: :unprocessable_entity }
+          # format.js {render_js admin_users_path }
+          format.json { render json: get_render_json(0,@user.errors.messages) }
+        end
+      rescue Exception => e
+        p e.message
       end
     end
   end

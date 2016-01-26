@@ -1,0 +1,78 @@
+%div{class:'page-header'}
+  %h1
+    = t("mongoid.models.jxc_product_classify_standard")
+    (总共
+    = @jxc_product_classify_standards.size
+    条)
+%button.btn.btn-primary{onclick:'addClassifyStandard()'}
+  新增分类标准
+.space.space-4
+%div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
+      = page_entries_info @jxc_product_classify_standards
+  %div{class:'col-xs-6'}
+    %div{class:'dataTables_paginate paging_simple_numbers',id:'dynamic-table_paginate'}
+      %ul{class:'pagination',style:'padding-top:5px;'}
+        %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
+          = paginate @jxc_product_classify_standards
+.space.space-4
+%table{class: "table table-striped table-bordered table-hover"}
+  %thead
+    %tr
+      %th=t('mongoid.attributes.jxc_product_classify_standard.class_name')
+      %th=t('mongoid.attributes.jxc_product_classify_standard.standard')
+      %th=t('helpers.actions')
+
+  %tbody#standardList
+    - @jxc_product_classify_standards.each do |jxc_product_classify_standard|
+      %tr
+        %td= jxc_product_classify_standard.class_name
+        %td= jxc_product_classify_standard.standard.inspect + '%'
+        %td= link_to t('helpers.links.destroy'), jxc_product_classify_standard, :method => :delete,remote:true, class:'btn btn-xs btn-danger', :data => { :confirm => '您确定删除此条数据吗?' }
+
+.modal.fade#addStandardModal{tabindex:'-1',role:'dialog','aria-labelledby':'addClassifyStandardLabel'}
+  .modal-dialog{role:'document'}
+    .modal-content
+      .modal-header
+        %button{type:'button',class:'close','data-dismiss':'modal','aria-label':'Close'}
+          %span{'aria-hidden':'true'}
+            &times;
+        %h4{class:'modal-title',id:'ModalLabel'}
+          新增分类标准
+      .modal-body
+        %table.table.table-bordered
+          %tr
+            %td
+              %label
+                =t('mongoid.attributes.jxc_product_classify_standard.class_name')
+            %td
+              %input#jxc_product_classify_standard_class_name.form-control{type:'text',name:'jxc_product_classify_standard[class_name]'}
+          %tr
+            %td
+              %label
+                =t('mongoid.attributes.jxc_product_classify_standard.standard')
+            %td
+              %input#jxc_product_classify_standard_standard.form-control{type:'text',name:'jxc_product_classify_standard[standard]'}
+      .modal-footer
+        %button{type:'button',class:'btn btn-default',id:'close-modal','data-dismiss':'modal'}关闭
+        %button{type:'button',class:'btn btn-primary',id:'confirm-button','data-type':'',onclick:'submit()'}确定
+
+:javascript
+
+  function addClassifyStandard(){
+    $('#addStandardModal').modal('show');
+  }
+
+  function submit(){
+
+    var jxc_product_classify_standard = {};
+
+    jxc_product_classify_standard.class_name = $('#jxc_product_classify_standard_class_name').val();
+    jxc_product_classify_standard.standard = $('#jxc_product_classify_standard_standard').val();
+
+    $.post('/jxc_product_classify_standards',{jxc_product_classify_standard});
+
+    //模态框隐藏
+    $('#addStandardModal').modal('hide');
+  }

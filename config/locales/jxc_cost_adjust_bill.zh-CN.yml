@@ -1,0 +1,14 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_cost_adjust_bill: "成本调整单"
+    attributes:
+      jxc_cost_adjust_bill:
+        bill_no: '单据编号'
+        customize_bill_no: '自定义单据编号'
+        adjust_date: '调整日期'
+        remark: '备注'
+        bill_status: '单据状态'
+        jxc_storage: '调整仓库'
+        handler: '经手人'
+        bill_maker: '制单人'

@@ -1,0 +1,24 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_purchase_order: '采购订单'
+    attributes:
+      jxc_purchase_order:
+        order_no: '订单编号'
+        customize_order_no: '自定义编号'
+        supplier: '供应商'
+        jxc_storage: '入货仓库'
+        handler: '经手人'
+        jxc_account: '付款账户'
+        down_payment: '预付定金'
+        remark: '备注'
+
+        receive_goods_date: '到货日期'
+        order_date: '订单日期'
+
+        total_amount: '合计金额'
+        discount: '整单折扣'
+        discount_amount:  '整单优惠'
+        payable_amount: '应付金额'
+        bill_status:  '单据状态'
+        bill_maker: '制单人'

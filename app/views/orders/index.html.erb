@@ -1,6 +1,6 @@
 <script>
-
-  //初始化加载方法
+    var table = null;
+    //初始化加载方法
     $(function () {
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             $('#workflow_state').val($(e.target).attr('name'));
@@ -22,39 +22,66 @@
             format: "YYYY-MM-DD HH:mm:ss"
         });
 
+
     });
 
 
-
-
-  //提交方法
+    //提交方法
     function ajax_pagination(page) {
         $.get('<%= orders_table_data_orders_path %>',
-            {
-                orderno : $('#orderno').val(),
-                consignee : $('#consignee').val(),
-                telephone : $('#telephone').val(),
-                ordertype : $('#ordertype').val(),
-                workflow_state : $('#workflow_state').val(),
-                paymode : $('#paymode').val(),
-                beginTime : $('#beginTime').val(),
-                endTime : $('#endTime').val(),
-                page : page
-            },
-            function (data, status) {
-                if (status == 'success') {
-                    $('#home').html(data);
-                } else {
-                    ;
-                }
-            });
+                {
+                    orderno: $('#orderno').val(),
+                    consignee: $('#consignee').val(),
+                    telephone: $('#telephone').val(),
+                    ordertype: $('#ordertype').val(),
+                    workflow_state: $('#workflow_state').val(),
+                    paymode: $('#paymode').val(),
+                    beginTime: $('#beginTime').val(),
+                    endTime: $('#endTime').val(),
+                    page: page
+                },
+                function (data, status) {
+                    if (status == 'success') {
+                        $('#home').html(data);
+                    } else {
+                        ;
+                    }
+                });
     }
 
 
-  function clear_form() {
-      $(':input','#search_form').not(':button, :submit, :reset, :hidden').val('');
-      $('#workflow_state').val('all');
-  }
+    function clear_form() {
+        $(':input', '#search_form').not(':button, :submit, :reset, :hidden').val('');
+        $('#workflow_state').val('all');
+    }
+    ;
+
+
+    function take_order() {
+        $('#delivery_users_modal').modal('hide');
+        var data = $('#delivery_users_table').DataTable().row('.selected').data();
+        $.ajax({
+            type: "POST",
+            url: "/api/v1/deliveryOrder/take_order",
+            data: {
+                token: data.authentication_token,
+                order_id: $("#btn_order_id").val()
+            },
+            dataType: "json",
+            success: function (data) {
+                alert(JSON.stringify(data));
+                window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
+            }
+        });
+    }
+    ;
+
+
+    function set_btn_order_id(order_id) {
+        $("#btn_order_id").val(order_id);
+    }
+    ;
+
 
 </script>
 
@@ -80,7 +107,8 @@
           </div>
           <div class="col-xs-2">
             <div>
-              <p><input type="text" id="consignee" style="width:90%" class="input-sm" value="<%= params[:consignee] %>"></p>
+              <p><input type="text" id="consignee" style="width:90%" class="input-sm" value="<%= params[:consignee] %>">
+              </p>
             </div>
           </div>
           <div class="col-xs-2">
@@ -90,7 +118,8 @@
           </div>
           <div class="col-xs-2">
             <div>
-              <p><input type="text" id="telephone" style="width:90%" class="input-sm" value="<%= params[:telephone] %>"></p>
+              <p><input type="text" id="telephone" style="width:90%" class="input-sm" value="<%= params[:telephone] %>">
+              </p>
             </div>
           </div>
         </div>
@@ -105,8 +134,14 @@
               <p>
                 <select class="input-sm" style="width:90%" id="ordertype">
                   <option value="" selected>全部</option>
-                  <option value="0" <% if "0" == params[:ordertype] %> selected <% end%>>线下订单</option>
-                  <option value="1" <% if "1" == params[:ordertype] %> selected <% end%>>线上订单</option>
+                  <option value="0"
+                          <% if "0" == params[:ordertype] %> selected
+                          <% end %>>线下订单
+                  </option>
+                  <option value="1"
+                          <% if "1" == params[:ordertype] %> selected
+                          <% end %>>线上订单
+                  </option>
                 </select>
               </p>
             </div>
@@ -119,14 +154,32 @@
           <div class="col-xs-2">
             <div>
               <p>
-                <select id="workflow_state" class="input-sm" style="width:90%" >
+                <select id="workflow_state" class="input-sm" style="width:90%">
                   <option value="all" selected>全部</option>
-                  <option value="generation" <% if "generation" == params[:workflow_state] %> selected <% end%>>待付款</option>
-                  <option value="paid" <% if "paid" == params[:workflow_state] %> selected <% end%>>待接单</option>
-                  <option value="distribution" <% if "distribution" == params[:workflow_state] %> selected <% end%>>配送中</option>
-                  <option value="receive" <% if "receive" == params[:workflow_state] %> selected <% end%>>配送完成</option>
-                  <option value="cancelled" <% if "cancelled" == params[:workflow_state] %> selected <% end%>>已取消</option>
-                  <option value="completed" <% if "completed" == params[:workflow_state] %> selected <% end%>>已完成</option>
+                  <option value="generation"
+                          <% if "generation" == params[:workflow_state] %> selected
+                          <% end %>>待付款
+                  </option>
+                  <option value="paid"
+                          <% if "paid" == params[:workflow_state] %> selected
+                          <% end %>>待接单
+                  </option>
+                  <option value="distribution"
+                          <% if "distribution" == params[:workflow_state] %> selected
+                          <% end %>>配送中
+                  </option>
+                  <option value="receive"
+                          <% if "receive" == params[:workflow_state] %> selected
+                          <% end %>>配送完成
+                  </option>
+                  <option value="cancelled"
+                          <% if "cancelled" == params[:workflow_state] %> selected
+                          <% end %>>已取消
+                  </option>
+                  <option value="completed"
+                          <% if "completed" == params[:workflow_state] %> selected
+                          <% end %>>已完成
+                  </option>
                 </select>
               </p>
             </div>
@@ -141,9 +194,18 @@
               <p>
                 <select class="input-sm" style="width:90%" id="paymode">
                   <option value="" selected>全部</option>
-                  <option value="0" <% if "0" == params[:paymode] %> selected <% end%>>货到付款</option>
-                  <option value="1" <% if "1" == params[:paymode] %> selected <% end%>>支付宝</option>
-                  <option value="2" <% if "2" == params[:paymode] %> selected <% end%>>微信</option>
+                  <option value="0"
+                          <% if "0" == params[:paymode] %> selected
+                          <% end %>>货到付款
+                  </option>
+                  <option value="1"
+                          <% if "1" == params[:paymode] %> selected
+                          <% end %>>支付宝
+                  </option>
+                  <option value="2"
+                          <% if "2" == params[:paymode] %> selected
+                          <% end %>>微信
+                  </option>
                 </select>
               </p>
             </div>
@@ -158,9 +220,9 @@
           <div class="col-xs-10">
             <div>
               <p>
-                <input id="beginTime"  type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
+                <input id="beginTime" type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
                 至
-                <input id="endTime"  type="datetime" class="input-sm" value="<%= params[:endTime] %>">
+                <input id="endTime" type="datetime" class="input-sm" value="<%= params[:endTime] %>">
               </p>
             </div>
           </div>
@@ -193,10 +255,10 @@
       </a>
     </li>
     <li class="">
-        <a name="generation" data-toggle="tab" href="#home">
-          待付款
-          <span id="generation_count" class="badge badge-danger"><%= @order_state_count.order_generation_count %></span>
-        </a>
+      <a name="generation" data-toggle="tab" href="#home">
+        待付款
+        <span id="generation_count" class="badge badge-danger"><%= @order_state_count.order_generation_count %></span>
+      </a>
     </li>
     <li class="">
       <a name="distribution" data-toggle="tab" href="#home">
@@ -238,7 +300,27 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">选择配送员</h4>
+      </div>
+      <div class="modal-body">
+        <%= render 'delivery_users' %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onclick="take_order();">接单</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
+<button type="hidden" id="btn_order_id" value="order_id"></button>
 

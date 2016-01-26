@@ -1,0 +1,154 @@
+= form_for @jxc_storage,remote:true do |f|
+  - if @jxc_storage.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@jxc_storage.errors.count, "error")} prohibited this jxc_storage from being saved:"
+      %ul
+        - @jxc_storage.errors.full_messages.each do |msg|
+          %li= msg
+
+  %table{class: "table table-bordered table-hover"}
+    %tr
+      %td
+        = f.label :storage_name
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :storage_name,:class=>'form-control',onblur:'generatePinyinCode("jxc_storage_storage_name","jxc_storage_spell_code")'
+          %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.label :spell_code
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :spell_code,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
+    %tr
+      %td
+        = f.button t('mongoid.attributes.jxc_storage.storage_type'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageTypesInfo()'
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :storage_type,:class=>'form-control',readonly:true
+          %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.label :storage_code
+      %td
+        = f.text_field :storage_code,:class=>'form-control'
+    %tr
+      %td
+        = f.label :admin
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :admin,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.label :admin_phone
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :admin_phone,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
+    %tr
+      %td
+        = f.label :address
+      %td
+        = f.text_field :address,:class=>'form-control'
+      %td
+        = f.label :telephone
+      %td
+        = f.text_field :telephone,:class=>'form-control'
+    %tr
+      %td
+        = f.label :memo
+      %td
+        = f.text_area :memo,:class=>'form-control',:style => 'resize: vertical;'
+    %tr
+      %td
+        = f.label :data_1
+      %td
+        = f.text_field :data_1,:class=>'form-control'
+      %td
+        = f.label :data_2
+      %td
+        = f.text_field :data_2,:class=>'form-control'
+    %tr
+      %td
+        = f.label :data_3
+      %td
+        = f.text_field :data_3,:class=>'form-control'
+      %td
+        = f.label :data_4
+      %td
+        = f.text_field :data_4,:class=>'form-control'
+  .actions
+    = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
+    &nbsp;&nbsp;&nbsp;
+    %a{class:'btn','data-href':jxc_storages_path}
+      %i{class:'ace-icon fa fa-return bigger-110'}返回
+
+=render 'jxc_modal/jxc_common_modal'
+
+:javascript
+
+  //zTree默认设置
+  var zTreeSetting = {
+    async:{
+      url:'',
+      type:'get',
+      enable:true
+    },
+    view: {
+      dblClickExpand: false,
+      showLine: true,
+      selectedMulti: false
+    },
+    data: {
+      key:{
+        name:""
+      },
+      simpleData: {
+        enable:true,
+        idKey: "_id",
+        pIdKey: "parent_id",
+        rootPId: ""
+      }
+    },
+    callback: {}
+  };
+
+  //选择仓库类别信息
+  function getStorageTypesInfo(){
+    //模态框样式
+    $('.modal-title').text('选择仓库类别');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-tree').removeClass('jxc-select-tree');
+    $('#jxc-select-tree').addClass('jxc-tree');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#jxc-select-table').addClass('jxc-disappear-table');
+    $('#confirm-button').attr('data-type','storageType');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getStorageTypesInfo';
+    zTreeSetting.data.key.name = 'dic';
+
+    $('#selectModal').modal('show');
+
+    //初始化树
+    initZTree(zTreeSetting);
+  }
+
+
+  function selectData(){
+    var dataType = $('#confirm-button').attr('data-type');
+
+    if(dataType == 'storageType'){
+      if(zTree.getSelectedNodes().length > 0){
+        var node = zTree.getSelectedNodes(zTree)[0];
+        $('#jxc_storage_storage_type').val(node.dic);
+      }else{
+        alert('请单击选择仓库类型');
+        return;
+      }
+    }
+
+    //模态框隐藏
+    $('#selectModal').modal('hide');
+  }
+

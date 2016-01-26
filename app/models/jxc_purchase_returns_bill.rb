@@ -50,7 +50,7 @@ class JxcPurchaseReturnsBill < JxcBaseModel
     #如果单据状态为已创建，则可继续审核
     if self.bill_status == BillStatus_Create
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(:purchase_returns_bill_id => self.id)
+      billDetailsArray = JxcBillDetail.where(:purchase_returns_bill_id => self.id)
       #仓库
       store = self.jxc_storage
       #整单折扣

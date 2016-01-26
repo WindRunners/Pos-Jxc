@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Mobile:
+  = @product_ticket_customer_init.mobile
+%p
+  %b Customer ids:
+  = @product_ticket_customer_init.customer_ids
+
+= link_to 'Edit', edit_product_ticket_customer_init_path(@product_ticket_customer_init)
+\|
+= link_to 'Back', product_ticket_customer_inits_path

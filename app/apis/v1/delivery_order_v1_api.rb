@@ -145,6 +145,20 @@ class DeliveryOrderV1API < Grape::API
       present DeliveryOrderV1APIHelper.my_order_hi_list(current_deliveryUser,declared(params)), with: Entities::DeliveryOrderHis
     end
 
+
+
+    desc '订单列表行数（待接单、我的订单、历史订单）' do
+      detail '返回结果行数'
+    end
+    params do
+      requires :token, type: String, desc: '身份认证token'
+      optional :flag, type: Integer, desc: '标识、0：接单列表、1：我的订单、2：历史订单', default: 0,values:[0,1,2]
+    end
+    post 'order_rows' do
+
+      return DeliveryOrderV1APIHelper.order_rows(current_deliveryUser,declared(params))
+    end
+
   end
 
 

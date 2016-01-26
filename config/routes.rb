@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     post 'share_time_check', :on => :collection
     get 'share'
     post 'register'
+    resources :product_ticket_customer_inits, shallow: true
   end
 
   resources :user_integrals

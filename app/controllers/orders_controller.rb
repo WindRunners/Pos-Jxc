@@ -35,13 +35,14 @@ class OrdersController < ApplicationController
 
     @state = "all"
 
-    @order_state_count = OrderStateCount.build_orderStateCount(current_user.userinfo.id)
+    @order_state_count = OrderStateCount.build_orderStateCount(current_user)
   end
 
 
   def orders_table_data
     parm = Hash.new
     parm[:userinfo] = current_user.userinfo
+    parm[:store_id] = {"$in" => current_user['store_ids']}
 
     parm[:orderno] = params[:orderno] if !params[:orderno].nil? && !params[:orderno].blank?
     parm[:consignee] = params[:consignee] if !params[:consignee].nil? && !params[:consignee].blank?
@@ -111,6 +112,9 @@ class OrdersController < ApplicationController
       end
       @order = order
     end
+
+    @delivery_user = DeliveryUser.where({"_id" => BSON::ObjectId("#{@order['delivery_user_id']}")}).first if @order['delivery_user_id'].present?
+    @store = Store.where({"_id" => @order['store_id']}).first if @order['store_id'].present?
 
     @show_button = true
   end

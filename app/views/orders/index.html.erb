@@ -58,7 +58,7 @@
 
 
     function take_order() {
-        $('#delivery_users_modal').modal('hide');
+
         var data = $('#delivery_users_table').DataTable().row('.selected').data();
         $.ajax({
             type: "POST",
@@ -69,8 +69,12 @@
             },
             dataType: "json",
             success: function (data) {
-                alert(JSON.stringify(data));
-                window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
+
+                $('#myModal').modal('hide');
+                alert(data.msg);
+
+                //alert(JSON.stringify(data));
+                //window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
             }
         });
     }

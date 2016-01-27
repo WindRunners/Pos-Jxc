@@ -1,4 +1,4 @@
-class JxcCostAdjustBill
+class JxcCostAdjustBill < JxcBaseModel
   ## 进销存 成本调整单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -34,10 +34,10 @@ class JxcCostAdjustBill
     result[:flag] = 0
 
     #如果单据状态为： 已创建
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
 
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(cost_adjust_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(cost_adjust_bill_id: self.id)
       #仓库
       store = self.jxc_storage
 
@@ -45,7 +45,7 @@ class JxcCostAdjustBill
         billDetailsArray.each do |billDetail|
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -56,33 +56,34 @@ class JxcCostAdjustBill
             store_product_detail.update
 
             #记录库存变更日志
-            storageChangeLog = JxcStorageJournal.new
-
-            storageChangeLog.jxc_storage = store                          #调整仓库
-            storageChangeLog.product = billDetail.product                 #调整商品
-            storageChangeLog.staff = self.handler                         #经手人
-
-            storageChangeLog.previous_count = store_product_detail.count
-            storageChangeLog.after_count = store_product_detail.count
-            storageChangeLog.count = billDetail[:inventory_count]                     #调整数量
-            storageChangeLog[:price] = billDetail[:origin_price]   #原成本价
-            storageChangeLog[:adjusted_price] = billDetail[:adjusted_price]   #调后成本价
-            storageChangeLog[:amount] = billDetail[:amount]               #调整金额
-            storageChangeLog.op_type = '5'                                #操作类型 <成本调整>
-            storageChangeLog.jxc_cost_adjust_bill = self                  #库存变更依据的 单据
-            storageChangeLog.bill_no = self.bill_no                       #单据编号
-            storageChangeLog.bill_type = 'cost_adjust'
-            storageChangeLog.bill_status = '1'
-            storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageChangeLog.save
+            costAdjustLog(self,billDetail,store_product_detail.count,store_product_detail.count,OperationType_CostAdjust,BillType_CostAdjust,BillStatus_Audit)
+            # storageChangeLog = JxcStorageJournal.new
+            #
+            # storageChangeLog.jxc_storage = store                          #调整仓库
+            # storageChangeLog.product = billDetail.product                 #调整商品
+            # storageChangeLog.staff = self.handler                         #经手人
+            #
+            # storageChangeLog.previous_count = store_product_detail.count
+            # storageChangeLog.after_count = store_product_detail.count
+            # storageChangeLog.count = billDetail[:inventory_count]                     #调整数量
+            # storageChangeLog[:price] = billDetail[:origin_price]   #原成本价
+            # storageChangeLog[:adjusted_price] = billDetail[:adjusted_price]   #调后成本价
+            # storageChangeLog[:amount] = billDetail[:amount]               #调整金额
+            # storageChangeLog.op_type = '5'                                #操作类型 <成本调整>
+            # storageChangeLog.jxc_cost_adjust_bill = self                  #库存变更依据的 单据
+            # storageChangeLog.bill_no = self.bill_no                       #单据编号
+            # storageChangeLog.bill_type = 'cost_adjust'
+            # storageChangeLog.bill_status = '1'
+            # storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
+            #
+            # storageChangeLog.save
           end
 
         end
       end
 
       #更细单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -103,10 +104,10 @@ class JxcCostAdjustBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
 
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(cost_adjust_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(cost_adjust_bill_id: self.id)
       #仓库
       store = self.jxc_storage
 
@@ -114,7 +115,7 @@ class JxcCostAdjustBill
         billDetailsArray.each do |billDetail|
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -125,32 +126,33 @@ class JxcCostAdjustBill
             store_product_detail.update
 
             #记录库存变更日志
-            storageChangeLog = JxcStorageJournal.new
-
-            storageChangeLog.product = billDetail.product                 #调整商品
-            storageChangeLog.jxc_storage = store                          #调整仓库
-            storageChangeLog.staff = self.handler                         #经手人
-
-            storageChangeLog.previous_count = store_product_detail.count
-            storageChangeLog.after_count = store_product_detail.count
-            storageChangeLog.count = billDetail[:inventory_count]                     #调整数量
-            storageChangeLog[:price] = billDetail[:adjusted_price] #原成本价
-            storageChangeLog[:adjusted_price] = billDetail[:origin_price]   #调后成本价
-            storageChangeLog[:amount] = '-'+billDetail[:amount]              #调整金额
-            storageChangeLog.op_type = '4'                                #操作类型 <红冲>
-            storageChangeLog.jxc_cost_adjust_bill = self                  #库存变更依据的 单据
-            storageChangeLog.bill_no = self.bill_no                       #单据编号
-            storageChangeLog.bill_type = 'cost_adjust'
-            storageChangeLog.bill_status = '2'
-            storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageChangeLog.save
+            costAdjustLog(self,billDetail,store_product_detail.count,store_product_detail.count,OperationType_StrikeBalance,BillType_CostAdjust,BillStatus_StrikeBalance)
+            # storageChangeLog = JxcStorageJournal.new
+            #
+            # storageChangeLog.product = billDetail.product                 #调整商品
+            # storageChangeLog.jxc_storage = store                          #调整仓库
+            # storageChangeLog.staff = self.handler                         #经手人
+            #
+            # storageChangeLog.previous_count = store_product_detail.count
+            # storageChangeLog.after_count = store_product_detail.count
+            # storageChangeLog.count = billDetail[:inventory_count]                     #调整数量
+            # storageChangeLog[:price] = billDetail[:adjusted_price] #原成本价
+            # storageChangeLog[:adjusted_price] = billDetail[:origin_price]   #调后成本价
+            # storageChangeLog[:amount] = '-'+billDetail[:amount]              #调整金额
+            # storageChangeLog.op_type = '4'                                #操作类型 <红冲>
+            # storageChangeLog.jxc_cost_adjust_bill = self                  #库存变更依据的 单据
+            # storageChangeLog.bill_no = self.bill_no                       #单据编号
+            # storageChangeLog.bill_type = 'cost_adjust'
+            # storageChangeLog.bill_status = '2'
+            # storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
+            #
+            # storageChangeLog.save
           end
         end
       end
 
       #更新单据状态
-      self.bill_status = '2'  #<红冲>
+      self.bill_status = BillStatus_StrikeBalance  #<红冲>
       self.update
 
       #审核结果返回
@@ -171,9 +173,9 @@ class JxcCostAdjustBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #更新单据状态
-      self.bill_status = '-1'
+      self.bill_status = BillStatus_Invalid
       self.update
 
       #返回审核结果

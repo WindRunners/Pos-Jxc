@@ -50,7 +50,7 @@ class JxcBaseModel
     changeLog.after_count = after_count
     changeLog.count = after_count.to_d - previous_count.to_d
     changeLog.price = price
-    changeLog.amount = bill_detail_info.amount
+    changeLog.amount = changeLog.count.to_d * changeLog.price.to_d
     changeLog.op_type = operation_type
 
     changeLog.bill_no = bill_info.bill_no  #单据编号
@@ -100,7 +100,7 @@ class JxcBaseModel
     @changeLog.after_count = after_count
     @changeLog.count = after_count.to_d - previous_count.to_d
     @changeLog.price = price
-    @changeLog.amount = bill_detail_info.amount
+    @changeLog.amount = @changeLog.count.to_d * @changeLog.price.to_d
     @changeLog.op_type = operation_type
 
     @changeLog.bill_no = bill_info.bill_no  #单据编号
@@ -135,6 +135,38 @@ class JxcBaseModel
     end
 
     return @changeLog
+  end
+
+  #成本调整日志
+  def costAdjustLog(billInfo,billDetailInfo,previous_count,after_count,operation_type,bill_type,bill_status)
+    inventoryChangeLog = JxcStorageJournal.new
+
+    inventoryChangeLog.jxc_storage = billInfo.jxc_storage
+    inventoryChangeLog.resource_product_id = billInfo.resource_product_id
+    inventoryChangeLog.user = billInfo.handler[0]
+
+    inventoryChangeLog.previous_count = previous_count
+    inventoryChangeLog.after_count = after_count
+    inventoryChangeLog.count = billDetailInfo[:inventory_count]
+
+    if bill_status == BillStatus_Audit
+      inventoryChangeLog[:price] = billDetailInfo[:origin_price]
+      inventoryChangeLog[:adjusted_price] = billDetailInfo[:adjusted_price]
+      inventoryChangeLog[:amount] = billDetailInfo[:amount]
+    elsif bill_status == BillStatus_StrikeBalance
+      inventoryChangeLog[:price] = billDetailInfo[:adjusted_price]
+      inventoryChangeLog[:adjusted_price] = billDetailInfo[:origin_price]
+      inventoryChangeLog[:amount] = '-'+billDetailInfo[:amount]
+    end
+
+    inventoryChangeLog.op_type = operation_type
+    inventoryChangeLog.jxc_cost_adjust_bill = billInfo
+    inventoryChangeLog.bill_no = billInfo.bill_no
+    inventoryChangeLog.bill_type = bill_type
+    inventoryChangeLog.bill_status = bill_status
+    inventoryChangeLog.bill_create_date = billInfo.created_at.strftime('%Y/%m/%d')
+
+    inventoryChangeLog.save
   end
 
 end

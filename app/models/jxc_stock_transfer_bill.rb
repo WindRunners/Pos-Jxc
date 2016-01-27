@@ -1,4 +1,4 @@
-class JxcStockTransferBill
+class JxcStockTransferBill < JxcBaseModel
   ## 进销存  调拨单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -10,7 +10,7 @@ class JxcStockTransferBill
   field :transfer_way, type: String       #调拨方式（ 0:同价调拨 | 1:变价调拨 ）
   field :remark, type: String             #备注
 
-  field :bill_status, type: String, default: '0'        #单据状态 ( -1:已作废 | 0:已创建 | 1:已审核 | 2:已红冲 )
+  field :bill_status, type: String, default: BillStatus_Create        #单据状态 ( -1:已作废 | 0:已创建 | 1:已审核 | 2:已红冲 )
 
   has_and_belongs_to_many :transfer_out_stock, class_name:'JxcStorage' #调出仓库
   has_and_belongs_to_many :transfer_in_stock, class_name:'JxcStorage' #调入仓库
@@ -36,9 +36,9 @@ class JxcStockTransferBill
     result[:flag] = 0
 
     #如果单据状态为： 已创建
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #单据商品详情
-      billDetailArray = JxcTransferBillDetail.includes(:product).where(stock_transfer_bill_id: self.id)
+      billDetailArray = JxcTransferBillDetail.where(stock_transfer_bill_id: self.id)
       #调出仓库
       out_store = self.transfer_out_stock[0]
       #调入仓库
@@ -55,7 +55,7 @@ class JxcStockTransferBill
         billDetailArray.each do |billDetail|
           #库存 明细
           begin
-            out_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => out_store,:product => billDetail.product)
+            out_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => out_store,:resource_product_id => billDetail.resource_product_id)
           rescue
             out_store_product_detail = nil
           end
@@ -75,24 +75,7 @@ class JxcStockTransferBill
 
 
               #记录库存变更日志
-              storageChangeLog = JxcStorageJournal.new
-
-              storageChangeLog.jxc_storage = out_store    #仓库
-              storageChangeLog.product = out_store_product_detail.product   #商品
-              storageChangeLog.staff = self.handler #经手人
-
-              storageChangeLog.previous_count = previous_count   #库存变更前存量
-              storageChangeLog.after_count = after_count   #库存变更后存量
-              storageChangeLog.count = -billDetail.count #单据明细数量
-              storageChangeLog.price = out_store_product_detail.cost_price
-              storageChangeLog.amount = -(out_store_product_detail.cost_price.to_d * billDetail.count).round(2)
-              storageChangeLog.op_type = '1'  #操作类型 <出库>
-              storageChangeLog.jxc_stock_transfer_bill = self  #库存变更依据的 单据
-              storageChangeLog.bill_no = self.bill_no #单据编号
-              storageChangeLog.bill_type = 'stock_transfer'
-              storageChangeLog.bill_status = '1'
-              storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
+              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StockOut,BillType_StockTransfer,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -117,7 +100,7 @@ class JxcStockTransferBill
         billDetailArray.each do |billDetail|
           #库存 明细
           begin
-            in_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => in_store,:product => billDetail.product)
+            in_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => in_store,:resource_product_id => billDetail.resource_product_id)
           rescue
             in_store_product_detail = nil
           end
@@ -142,7 +125,7 @@ class JxcStockTransferBill
             in_store_product_detail = JxcStorageProductDetail.new
 
             in_store_product_detail.jxc_storage = in_store
-            in_store_product_detail.product = billDetail.product
+            in_store_product_detail.resource_product_id = billDetail.resource_product_id
             in_store_product_detail.unit = billDetail.unit
             in_store_product_detail.count = billDetail.count
             in_store_product_detail.cost_price = billDetail.transfer_price
@@ -157,30 +140,12 @@ class JxcStockTransferBill
           end
 
           #记录 调入仓库 库存变更日志
-          storageJournal = JxcStorageJournal.new
-
-          storageJournal.product = billDetail.product   #商品
-          storageJournal.jxc_storage = in_store    #仓库
-          storageJournal.staff = self.handler  #经手人
-
-          storageJournal.previous_count = previous_count   #库存变更前存量
-          storageJournal.after_count = after_count   #库存变更后存量
-          storageJournal.count = billDetail.count #单据明细数量
-          storageJournal.price = billDetail.transfer_price #成本价
-          storageJournal.amount = billDetail.amount
-          storageJournal.op_type = '0'  #操作类型 <入库>
-          storageJournal.jxc_stock_transfer_bill = self  #库存变更依据的 单据
-          storageJournal.bill_no = self.bill_no #单据编号
-          storageJournal.bill_type = 'stock_transfer'
-          storageJournal.bill_status = '1'
-          storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-          storageJournal.save
+          inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.transfer_price,OperationType_StockIn,BillType_StockTransfer,BillStatus_Audit)
         end
       end
 
       #更新单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -200,9 +165,9 @@ class JxcStockTransferBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
       #单据商品详情
-      billDetailArray = JxcTransferBillDetail.includes(:product).where(stock_transfer_bill_id: self.id)
+      billDetailArray = JxcTransferBillDetail.where(stock_transfer_bill_id: self.id)
       #调出仓库
       out_store = self.transfer_out_stock[0]
       #调入仓库
@@ -214,7 +179,7 @@ class JxcStockTransferBill
 
           #调入仓库 库存明细
           begin
-            in_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => in_store,:product => billDetail.product)
+            in_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => in_store,:resource_product_id => billDetail.resource_product_id)
           rescue
             in_store_product_detail = nil
           end
@@ -235,25 +200,7 @@ class JxcStockTransferBill
             in_store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            storageJournal = JxcStorageJournal.new
-
-            storageJournal.product = billDetail.product   #商品
-            storageJournal.jxc_storage = in_store    #仓库
-            storageJournal.staff = self.handler  #仓库商品变更 创建者<单据红冲者>
-
-            storageJournal.previous_count = previous_count   #库存变更前存量
-            storageJournal.after_count = after_count   #库存变更后存量
-            storageJournal.count = -billDetail.count #单据明细数量
-            storageJournal.price = billDetail.transfer_price
-            storageJournal.amount = -billDetail.amount
-            storageJournal.op_type = '4'  #操作类型 <红冲>
-            storageJournal.jxc_stock_transfer_bill = self  #库存变更依据的 单据
-            storageJournal.bill_no = self.bill_no #库存变更依据的 单据编号
-            storageJournal.bill_type = 'stock_transfer'
-            storageJournal.bill_status = '2'
-            storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageJournal.save
+            inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.transfer_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
           end
 
 
@@ -262,7 +209,7 @@ class JxcStockTransferBill
           #调出仓库 库存明细
           #仓库&商品 明细
           begin
-            out_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => out_store,:product => billDetail.product)
+            out_store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => out_store,:resource_product_id => billDetail.resource_product_id)
           rescue
             out_store_product_detail = nil
           end
@@ -277,31 +224,13 @@ class JxcStockTransferBill
             out_store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            storageJournal = JxcStorageJournal.new
-
-            storageJournal.product = billDetail.product   #商品
-            storageJournal.jxc_storage = out_store    #仓库
-            storageJournal.staff = self.handler  #经手人
-
-            storageJournal.previous_count = previous_count   #库存变更前存量
-            storageJournal.after_count = after_count   #库存变更后存量
-            storageJournal.count = billDetail.count #单据明细数量
-            storageJournal.price = out_store_product_detail.cost_price
-            storageJournal.amount = (out_store_product_detail.cost_price.to_d * billDetail.count).round(2)
-            storageJournal.op_type = '4'  #操作类型 <红冲>
-            storageJournal.jxc_stock_transfer_bill = self  #库存变更依据的 单据
-            storageJournal.bill_no = self.bill_no #库存变更依据的 单据编号
-            storageJournal.bill_type = 'stock_transfer'
-            storageJournal.bill_status = '2'
-            storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageJournal.save
+            inventoryChangeLog(self,billDetail,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
           end
         end
       end
 
       #更新单据状态
-      self.bill_status = '2'  #<红冲>
+      self.bill_status = BillStatus_StrikeBalance  #<红冲>
       self.update
 
       #审核结果返回
@@ -321,8 +250,8 @@ class JxcStockTransferBill
     #处理结果
     result = {}
 
-    if self.bill_status == '0'
-      self.bill_status = '-1'
+    if self.bill_status == BillStatus_Create
+      self.bill_status = BillStatus_Invalid
       self.update
       result[:flag] = 1
       result[:msg] = '单据已作废'

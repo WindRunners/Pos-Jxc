@@ -221,6 +221,18 @@ Rails.application.routes.draw do
 
   mount RuCaptcha::Engine => "/rucaptcha"
   resources :userinfos do
+    get 'jyd_index', :on => :collection
+    get 'jyd_new', :on => :collection
+    post 'jyd_create', :on => :collection
+    get 'jyd_show/:userinfo_id', to: "userinfos#jyd_show", :on => :collection
+    get 'jyd_edit/:userinfo_id', to: "userinfos#jyd_edit", :on => :collection
+    patch 'jyd_update', to: "userinfos#jyd_update", :on => :collection
+    delete 'jyd_destroy/:userinfo_id', to: "userinfos#jyd_destroy", :on => :collection
+
+
+
+
+
     get 'audit', :on => :collection
     get 'email_active/:confirmation_token', :action => :email_active, :on => :collection
 
@@ -228,7 +240,6 @@ Rails.application.routes.draw do
 
     resources :products do
       get 'desc'
-
       get 'preview'
     end
   end

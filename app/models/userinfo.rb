@@ -38,6 +38,7 @@ class Userinfo
 
   field :shopname, type: String # 经营者商店名称1
   field :location, type: Point, spatial: true, default: []
+  field :status, type: Integer,  default: 0 #启用状态，0初始化，1启用，-1禁用
 
   field :integral, type: Integer,default: 0 # 积分
   field :approver,type: String #审批人

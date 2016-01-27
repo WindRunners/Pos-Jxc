@@ -112,36 +112,47 @@ class ProductTicketsController < ApplicationController
 
     data ={}
 
-    product_ticket_customer_init = ProductTicketCustomerInit.where({:product_ticket_id => params[:product_ticket_id]})
-    if product_ticket_customer_init.count == 0
-      data = {:flag=>0,:message=>'发布失败，请导入酒劵会员！'}
+
+    if product_ticket.card_bags.count>0
+      data['flag'] = 0
+      data['message'] = '发布失败，该礼包已经发布！'
+
     else
 
-      product_ticket_customer_init.each do |ticket_customer|
-        begin
+      product_ticket_customer_init = ProductTicketCustomerInit.where({:product_ticket_id => params[:product_ticket_id]})
+      if product_ticket_customer_init.count == 0
+        data = {:flag=>0,:message=>'发布失败，请导入酒劵会员！'}
+      else
 
-          card_bag = product_ticket.card_bags.build()
-          card_bag.customer_id = ticket_customer.customer_id
-          card_bag.start_date = product_ticket.start_date
-          card_bag.end_date = product_ticket.end_date
-          card_bag.source = 0
-          card_bag.save
+        product_ticket_customer_init.each do |ticket_customer|
+          begin
 
-          ticket_customer.destroy #移除酒劵初始化会员，历史记录转移超卡包中
-        rescue Exception =>e
-          Rails.logger.info "发布酒劵出错#{e.message}"
+            card_bag = product_ticket.card_bags.build()
+            card_bag.customer_id = ticket_customer.customer_id
+            card_bag.start_date = product_ticket.start_date
+            card_bag.end_date = product_ticket.end_date
+            card_bag.source = 0
+            card_bag.save
+
+            ticket_customer.destroy #移除酒劵初始化会员，历史记录转移超卡包中
+          rescue Exception =>e
+            Rails.logger.info "发布酒劵出错#{e.message}"
+          end
+        end
+        product_ticket.status = 1
+
+        if product_ticket.save
+          data['flag'] = 1
+          data['message'] = '发布成功！'
+        else
+          data['flag'] = 0
+          data['message'] = '发布失败！'
         end
       end
-      product_ticket.status = 1
 
-      if product_ticket.save
-        data['flag'] = 1
-        data['message'] = '发布成功！'
-      else
-        data['flag'] = 0
-        data['message'] = '发布失败！'
-      end
+
     end
+
 
     respond_to do |format|
       format.json { render json: data }

@@ -192,6 +192,7 @@ class UserinfosController < ApplicationController
 
   def jyd_new
     @userinfo = Userinfo.new
+    @params_action = 'jyd_create'
   end
 
   def jyd_create
@@ -213,10 +214,12 @@ class UserinfosController < ApplicationController
 
   def jyd_edit
     @userinfo = Userinfo.find(params[:userinfo_id])
-
+    @params_action = 'jyd_update'
   end
 
   def jyd_update
+    binding.pry
+        @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.update(userinfo_params)
     respond_to do |format|
       format.html
@@ -227,6 +230,36 @@ class UserinfosController < ApplicationController
   def jyd_destroy
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.destroy
+    respond_to do |format|
+      format.html
+      format.js { render_js jyd_index_userinfos_path() }
+    end
+  end
+  def jyd_check
+    @userinfo = Userinfo.find(params[:userinfo_id])
+    @userinfo.status=1
+    init_user = @userinfo.users.build();
+    init_user.name = @userinfo.name
+    init_user.mobile = @userinfo.pusher_phone
+    init_user.password = '123456'
+    init_user.email = @userinfo.pusher_phone+'@qq.com'
+    init_user.step = 9
+    init_user.save
+    binding.pry
+    @userinfo.save
+    respond_to do |format|
+      format.html
+      format.js { render_js jyd_index_userinfos_path() }
+    end
+  end
+  def jyd_check_out
+    @userinfo = Userinfo.find(params[:userinfo_id])
+    @userinfo.status=-1
+    @userinfo.users.each do |user|
+      user.step = 1
+      user.save
+    end
+    @userinfo.save
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }

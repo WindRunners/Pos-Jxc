@@ -31,7 +31,11 @@ class JxcBaseModel
   BillStatus_StrikeBalance = '2'  #红冲
   BillStatus_Invalid = '-1'       #作废
 
-
+  #盘点单状态类型
+  PDD_BillStatus_Create = '0'         #创建
+  PDD_BillStatus_PreAudit = '1'       #预审
+  PDD_BillStatus_FinallyConfirm = '2' #最终确认
+  PDD_BillStatus_Invalid = '-1'       #作废
 
   #进销存  记录库存变更日志
   def inventoryChangeLog(bill_info,bill_detail_info,previous_count,after_count,price,operation_type,bill_type,bill_status)

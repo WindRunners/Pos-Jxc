@@ -1,4 +1,4 @@
-class JxcStockCountBill
+class JxcStockCountBill < JxcBaseModel
   ## 进销存 盘点单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -35,8 +35,8 @@ class JxcStockCountBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
-      self.bill_status = '1'
+    if self.bill_status == PDD_BillStatus_Create
+      self.bill_status = PDD_BillStatus_PreAudit
       self.update
 
       result[:flag] = 1
@@ -58,7 +58,7 @@ class JxcStockCountBill
     overflow_bill = self.jxc_stock_overflow_bill
     reduce_bill = self.jxc_stock_reduce_bill
 
-    if self.bill_status == '1'
+    if self.bill_status == PDD_BillStatus_PreAudit
       if overflow_bill.blank? && reduce_bill.blank?
 
         generate_profit_and_loss_bill(current_user)
@@ -85,7 +85,7 @@ class JxcStockCountBill
     overflow_bill = self.jxc_stock_overflow_bill
     reduce_bill = self.jxc_stock_reduce_bill
 
-    if self.bill_status == '1'
+    if self.bill_status == PDD_BillStatus_PreAudit
       if overflow_bill.blank? && reduce_bill.blank?
         generate_profit_and_loss_bill(current_user)
 
@@ -101,7 +101,7 @@ class JxcStockCountBill
         reduce_bill.audit(current_user)
       end
 
-      self.bill_status = '2'
+      self.bill_status = PDD_BillStatus_FinallyConfirm
       self.update
 
       result[:flag] = 1
@@ -120,8 +120,8 @@ class JxcStockCountBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
-      self.bill_status = '-1'
+    if self.bill_status == PDD_BillStatus_Create
+      self.bill_status = PDD_BillStatus_Invalid
       self.update
 
       result[:flag] = 1
@@ -137,7 +137,7 @@ class JxcStockCountBill
   #生成报损单和报溢单
   def generate_profit_and_loss_bill(current_user)
     #单据明细
-    billDetailArray = JxcBillDetail.includes(:product).where(stock_count_bill_id: self.id)
+    billDetailArray = JxcBillDetail.where(stock_count_bill_id: self.id)
 
     #报溢单据明细
     overflowDetailArray = []
@@ -171,9 +171,9 @@ class JxcStockCountBill
     #报溢仓库
     @jxc_stock_overflow_bill.jxc_storage = self.jxc_storage
     #经手人
-    @jxc_stock_overflow_bill.handler = self.handler
+    @jxc_stock_overflow_bill.handler << self.handler
     #制单人
-    @jxc_stock_overflow_bill.bill_maker = current_user
+    @jxc_stock_overflow_bill.bill_maker << current_user
     #报溢时间
     @jxc_stock_overflow_bill.overflow_date = self.check_date
     #备注
@@ -189,7 +189,7 @@ class JxcStockCountBill
       tempBillDetail.count = overflowDetail[:pl_count]  #报溢数量
       tempBillDetail.amount = overflowDetail[:pl_amount]  #报溢金额
 
-      tempBillDetail.product = overflowDetail.product
+      tempBillDetail.resource_product_id = overflowDetail.resource_product_id
       tempBillDetail.unit = overflowDetail.unit
 
       tempBillDetail.jxc_storage = overflowDetail.jxc_storage
@@ -210,9 +210,9 @@ class JxcStockCountBill
     #报损仓库
     @jxc_stock_reduce_bill.jxc_storage = self.jxc_storage
     #经手人
-    @jxc_stock_reduce_bill.handler = self.handler
+    @jxc_stock_reduce_bill.handler << self.handler
     #制单人
-    @jxc_stock_reduce_bill.bill_maker = current_user
+    @jxc_stock_reduce_bill.bill_maker << current_user
     #报损时间
     @jxc_stock_reduce_bill.reduce_date = self.check_date
     #备注
@@ -227,7 +227,7 @@ class JxcStockCountBill
       tempBillDetail.count = reduceDetail[:pl_count].to_d.abs  #报损数量(取绝对值)
       tempBillDetail.amount = reduceDetail[:pl_amount].to_d.abs  #报损金额(取绝对值)
 
-      tempBillDetail.product = reduceDetail.product
+      tempBillDetail.resource_product_id = reduceDetail.resource_product_id
       tempBillDetail.unit = reduceDetail.unit
 
       tempBillDetail.jxc_storage = reduceDetail.jxc_storage

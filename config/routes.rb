@@ -226,7 +226,9 @@ Rails.application.routes.draw do
     post 'jyd_create', :on => :collection
     get 'jyd_show/:userinfo_id', to: "userinfos#jyd_show", :on => :collection
     get 'jyd_edit/:userinfo_id', to: "userinfos#jyd_edit", :on => :collection
-    patch 'jyd_update', to: "userinfos#jyd_update", :on => :collection
+    patch 'jyd_update/:userinfo_id', to: "userinfos#jyd_update", :on => :collection
+    post 'jyd_check/:userinfo_id', to: "userinfos#jyd_check", :on => :collection
+    post 'jyd_check_out/:userinfo_id', to: "userinfos#jyd_check_out", :on => :collection
     delete 'jyd_destroy/:userinfo_id', to: "userinfos#jyd_destroy", :on => :collection
 
 

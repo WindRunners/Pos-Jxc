@@ -77,22 +77,7 @@ $(function(){
     };
 
     pagination_ajax();
-
-
-    $('#new_import_bag').on('ajax:success', function(event, xhr, status, error) {
-
-        if(xhr.flag==1){
-            $("#error_explanation").hide();
-            eval(xhr.path);
-        }else{
-            $("#error_explanation ul").html("");
-            msg_data = xhr.data
-            for (msg in msg_data){
-                $("#error_explanation ul").append("<li>"+msg_data[msg]+"</li>");
-            }
-            $("#error_explanation").show();
-        }
-    });
+    common_form_ajax_deal();
 });
 
 

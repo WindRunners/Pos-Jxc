@@ -6,7 +6,7 @@
       红冲
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_stock_reduce_bill.bill_status == '0'? false : true }
       作废
-= form_for @jxc_stock_reduce_bill do |f|
+= form_for @jxc_stock_reduce_bill, remote:true do |f|
   - if @jxc_stock_reduce_bill.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_stock_reduce_bill.errors.count, "error")} prohibited this jxc_stock_reduce_bill from being saved:"
@@ -45,7 +45,7 @@
       %td
         = f.label :handler
       %td
-        %input.form-control#jxc_stock_reduce_bill_handler{value: @jxc_stock_reduce_bill.handler.nil? ? '':@jxc_stock_reduce_bill.handler.name,readonly:true }
+        %input.form-control#jxc_stock_reduce_bill_handler{value: @jxc_stock_reduce_bill.handler[0].nil? ? '':@jxc_stock_reduce_bill.handler[0].name,readonly:true }
         = f.hidden_field :handler_id
     %tr
       %td
@@ -110,7 +110,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_stock_reduce_bills_path}
+    %a{class:'btn','data-href': jxc_stock_reduce_bills_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'
@@ -130,7 +130,8 @@
     },
     data: {
       key:{
-        name:""
+        name:"",
+        url:"#"
       },
       simpleData: {
         enable:true,
@@ -335,7 +336,7 @@
 
   // 单据审核
   function audit(){
-    $.post('audit',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
+    $.post('/jxc_stock_reduce_bills/audit',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit').attr('disabled',true);
@@ -348,7 +349,7 @@
 
   // 单据红冲
   function strike_a_balance(){
-    $.post('strike_a_balance',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
+    $.post('/jxc_stock_reduce_bills/strike_a_balance',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);
@@ -361,7 +362,7 @@
 
   // 单据作废
   function invalid(){
-    $.post('invalid',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
+    $.post('/jxc_stock_reduce_bills/invalid',{id:$('#jxc_stock_reduce_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);

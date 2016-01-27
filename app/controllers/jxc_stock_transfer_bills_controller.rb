@@ -27,7 +27,7 @@ class JxcStockTransferBillsController < ApplicationController
     @jxc_stock_transfer_bill = JxcStockTransferBill.new
     @jxc_stock_transfer_bill.bill_no = @jxc_stock_transfer_bill.generate_bill_no
     @jxc_stock_transfer_bill.transfer_date = Time.now
-    @jxc_stock_transfer_bill.handler = current_user.staff
+    @jxc_stock_transfer_bill.handler << current_user
   end
 
   def edit
@@ -41,14 +41,15 @@ class JxcStockTransferBillsController < ApplicationController
     #调入仓库
     transfer_in_stock_id = bill_info[:transfer_in_stock_ids]
     #经手人
-    handler_id = bill_info[:handler_id]
+    # handler_id = bill_info[:handler_id]
 
     @jxc_stock_transfer_bill = JxcStockTransferBill.new(jxc_stock_transfer_bill_params)
     @jxc_stock_transfer_bill.transfer_out_stock_ids << transfer_out_stock_id
     @jxc_stock_transfer_bill.transfer_in_stock_ids << transfer_in_stock_id
-    @jxc_stock_transfer_bill.handler_id = handler_id
     #制单人
-    @jxc_stock_transfer_bill.bill_maker = current_user
+    @jxc_stock_transfer_bill.bill_maker << current_user
+    #经手人信息
+    @jxc_stock_transfer_bill.handler << current_user
 
     @jxc_stock_transfer_bill.transfer_date = stringParseDate(bill_info[:transfer_date])
 
@@ -76,7 +77,7 @@ class JxcStockTransferBillsController < ApplicationController
       tempBillDetail.amount = amount
 
       #商品信息
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       tempBillDetail.unit = billDetailInfo[:unit]
       tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -90,10 +91,12 @@ class JxcStockTransferBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_stock_transfer_bill.save
-        format.html { redirect_to jxc_stock_transfer_bills_path, notice: '调拨单已经成功创建.' }
+        # format.html { redirect_to jxc_stock_transfer_bills_path, notice: '调拨单已经成功创建.' }
+        format.js { render_js jxc_stock_transfer_bills_path, notice: '调拨单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_stock_transfer_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_stock_transfer_bill_path }
         format.json { render json: @jxc_stock_transfer_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -109,13 +112,14 @@ class JxcStockTransferBillsController < ApplicationController
       #调入仓库
       transfer_in_stock_id = bill_info[:transfer_in_stock_ids]
       #经手人
-      handler_id = bill_info[:handler_id]
+      # handler_id = bill_info[:handler_id]
 
       @jxc_stock_transfer_bill.transfer_out_stock_ids[0] = transfer_out_stock_id
       @jxc_stock_transfer_bill.transfer_in_stock_ids[0] = transfer_in_stock_id
-      @jxc_stock_transfer_bill.handler_id = handler_id
       #制单人
-      @jxc_stock_transfer_bill.bill_maker = current_user
+      @jxc_stock_transfer_bill.bill_maker << current_user
+      #经手人信息
+      @jxc_stock_transfer_bill.handler << current_user
 
       @jxc_stock_transfer_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_stock_transfer_bill.transfer_date = stringParseDate(bill_info[:transfer_date])
@@ -148,7 +152,7 @@ class JxcStockTransferBillsController < ApplicationController
         tempBillDetail.amount = amount
 
         #商品信息
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         tempBillDetail.unit = billDetailInfo[:unit]
         tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -162,17 +166,20 @@ class JxcStockTransferBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_stock_transfer_bill.update
-          format.html { redirect_to @jxc_stock_transfer_bill, notice: '调拨单已经成功更新.' }
+          # format.html { redirect_to @jxc_stock_transfer_bill, notice: '调拨单已经成功更新.' }
+          format.js { render_js jxc_stock_transfer_bill_path(@jxc_stock_transfer_bill), notice: '调拨单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_stock_transfer_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_stock_transfer_bill_path(@jxc_stock_transfer_bill) }
           format.json { render json: @jxc_stock_transfer_bill.errors, status: :unprocessable_entity }
         end
       end
 
     else
       respond_to do |format|
-        format.html {redirect_to @jxc_stock_transfer_bill, notice: '单据当前状态无法更新!'}
+        # format.html {redirect_to @jxc_stock_transfer_bill, notice: '单据当前状态无法更新!'}
+        format.js { render_js edit_jxc_stock_transfer_bill_path(@jxc_stock_transfer_bill), notice: '单据当前状态无法更新!'}
       end
     end
 
@@ -181,7 +188,8 @@ class JxcStockTransferBillsController < ApplicationController
   def destroy
     @jxc_stock_transfer_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_stock_transfer_bills_url, notice: '调拨单已经成功删除.' }
+      # format.html { redirect_to jxc_stock_transfer_bills_url, notice: '调拨单已经成功删除.' }
+      format.js { render_js jxc_stock_transfer_bills_url, notice: '调拨单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -222,6 +230,6 @@ class JxcStockTransferBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcTransferBillDetail.includes(:product).where(:stock_transfer_bill_id => @jxc_stock_transfer_bill.id)
+    @bill_details = JxcTransferBillDetail.where(:stock_transfer_bill_id => @jxc_stock_transfer_bill.id)
   end
 end

@@ -1,4 +1,4 @@
-class JxcSellOrder
+class JxcSellOrder < JxcBaseModel
   ##  进销存 销售订单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -46,9 +46,9 @@ class JxcSellOrder
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #更新单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -67,9 +67,9 @@ class JxcSellOrder
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
       #更新单据状态
-      self.bill_status = '2'
+      self.bill_status = BillStatus_StrikeBalance
       self.update
 
       #返回红冲结果
@@ -88,9 +88,9 @@ class JxcSellOrder
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #更新单据状态
-      self.bill_status = '-1'
+      self.bill_status = BillStatus_Invalid
       self.update
 
       #返回审核结果

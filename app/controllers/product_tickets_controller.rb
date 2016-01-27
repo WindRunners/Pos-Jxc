@@ -150,7 +150,7 @@ class ProductTicketsController < ApplicationController
 
   def share
     @product_ticket = ProductTicket.find(params[:product_ticket_id])
-    @shared_customer_id = "568bd0b0af484356f300333c"
+    @shared_customer_id = params[:customer_id]
     render :layout => false
   end
 

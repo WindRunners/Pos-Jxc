@@ -30,7 +30,7 @@ class JxcSellStockOutBillsController < ApplicationController
     @jxc_sell_stock_out_bill.bill_no = @jxc_sell_stock_out_bill.generate_bill_no
     @jxc_sell_stock_out_bill.stock_out_date = Time.now
     @jxc_sell_stock_out_bill.collection_date = Time.now
-    @jxc_sell_stock_out_bill.handler = current_user.staff
+    @jxc_sell_stock_out_bill.handler << current_user
   end
 
   def edit
@@ -40,16 +40,17 @@ class JxcSellStockOutBillsController < ApplicationController
     bill_info = params[:jxc_sell_stock_out_bill]
     consumer_id = bill_info[:consumer_id]   #客户ID
     storage_id = bill_info[:storage_id]    #入货仓库ID
-    handler_id = bill_info[:handler_id]   #经手人ID
-    account_id = bill_info[:account_id]   #付款账户ID
+    # handler_id = bill_info[:handler_id]   #经手人ID
+    # account_id = bill_info[:account_id]   #付款账户ID
 
     @jxc_sell_stock_out_bill = JxcSellStockOutBill.new(jxc_sell_stock_out_bill_params)
     @jxc_sell_stock_out_bill.consumer_id = consumer_id
     @jxc_sell_stock_out_bill.storage_id = storage_id
-    @jxc_sell_stock_out_bill.handler_id = handler_id
-    @jxc_sell_stock_out_bill.account_id = account_id
+    # @jxc_sell_stock_out_bill.account_id = account_id
     #制单人
-    @jxc_sell_stock_out_bill.bill_maker = current_user
+    @jxc_sell_stock_out_bill.bill_maker << current_user
+    #经手人
+    @jxc_sell_stock_out_bill.handler << current_user
 
     @jxc_sell_stock_out_bill.collection_date = stringParseDate(bill_info[:collection_date])
     @jxc_sell_stock_out_bill.stock_out_date = stringParseDate(bill_info[:stock_out_date])
@@ -70,7 +71,7 @@ class JxcSellStockOutBillsController < ApplicationController
       count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #销售数量
       amount = tempBillDetail.calculate_discount_amount(sellPrice,count,discount)  #金额
 
-      tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
       tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
       tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -100,10 +101,12 @@ class JxcSellStockOutBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_sell_stock_out_bill.save
-        format.html { redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功创建.' }
+        # format.html { redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功创建.' }
+        format.js { render_js jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_sell_stock_out_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_sell_stock_out_bill_path }
         format.json { render json: @jxc_sell_stock_out_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -116,15 +119,16 @@ class JxcSellStockOutBillsController < ApplicationController
       bill_info = params[:jxc_sell_stock_out_bill]
       consumer_id = bill_info[:consumer_id]   #客户ID
       storage_id = bill_info[:storage_id]    #入货仓库ID
-      handler_id = bill_info[:handler_id]   #经手人ID
-      account_id = bill_info[:account_id]   #付款账户ID
+      # handler_id = bill_info[:handler_id]   #经手人ID
+      # account_id = bill_info[:account_id]   #付款账户ID
 
       @jxc_sell_stock_out_bill.consumer_id = consumer_id
       @jxc_sell_stock_out_bill.storage_id = storage_id
-      @jxc_sell_stock_out_bill.handler_id = handler_id
-      @jxc_sell_stock_out_bill.account_id = account_id
+      # @jxc_sell_stock_out_bill.account_id = account_id
       #制单人
-      @jxc_sell_stock_out_bill.bill_maker = current_user
+      @jxc_sell_stock_out_bill.bill_maker << current_user
+      #经手人
+      @jxc_sell_stock_out_bill.handler << current_user
 
       @jxc_sell_stock_out_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_sell_stock_out_bill.collection_date = stringParseDate(bill_info[:collection_date])
@@ -150,7 +154,7 @@ class JxcSellStockOutBillsController < ApplicationController
         count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #销售数量
         amount = tempBillDetail.calculate_discount_amount(sellPrice,count,discount)  #金额
 
-        tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
         tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
         tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -181,16 +185,19 @@ class JxcSellStockOutBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_sell_stock_out_bill.update
-          format.html { redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功更新.' }
+          # format.html { redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功更新.' }
+          format.js { render_js jxc_sell_stock_out_bills_path, notice: '销售出库单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_sell_stock_out_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_sell_stock_out_bill_path(@jxc_sell_stock_out_bill) }
           format.json { render json: @jxc_sell_stock_out_bill.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单当前状态无法更新。'}
+        # format.html {redirect_to jxc_sell_stock_out_bills_path, notice: '销售出库单当前状态无法更新。'}
+        format.js { render_js jxc_sell_stock_out_bills_path, notice: '销售出库单当前状态无法更新。'}
       end
     end
   end
@@ -198,7 +205,8 @@ class JxcSellStockOutBillsController < ApplicationController
   def destroy
     @jxc_sell_stock_out_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_sell_stock_out_bills_url, notice: '销售出库单已经成功删除.' }
+      # format.html { redirect_to jxc_sell_stock_out_bills_url, notice: '销售出库单已经成功删除.' }
+      format.js { render_js jxc_sell_stock_out_bills_url, notice: '销售出库单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -224,17 +232,15 @@ class JxcSellStockOutBillsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_jxc_sell_stock_out_bill
     @jxc_sell_stock_out_bill = JxcSellStockOutBill.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_sell_stock_out_bill_params
     params.require(:jxc_sell_stock_out_bill).permit(:bill_no, :customize_bill_no, :collection_date, :stock_out_date, :current_collection, :remark, :total_amount, :discount, :discount_amount, :receivable_amount, :bill_status)
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(sell_out_bill_id: @jxc_sell_stock_out_bill.id)
+    @bill_details = JxcBillDetail.where(sell_out_bill_id: @jxc_sell_stock_out_bill.id)
   end
 end

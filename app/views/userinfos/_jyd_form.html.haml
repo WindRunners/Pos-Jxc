@@ -1,0 +1,104 @@
+.hr.hr-16.hr-dotted
+.row
+  .container
+    = form_for @userinfo, url: {action: "jyd_create"},remote:true do |f|
+      - if @userinfo.errors.any?
+        #error_explanation
+          %h2= "#{pluralize(@userinfo.errors.count, 'error')} prohibited this store from being saved:"
+          %ul
+            - @userinfo.errors.full_messages.each do |msg|
+              %li= msg
+      .col-xs-12
+        %form.form-horizontal
+          .form-group
+            .field
+              = f.label :法人姓名,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :name,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :身份证号码,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :idnumber,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :地址,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :address,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :省,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :province,{:class=>'col-xs-4 col-sm-5'}
+            .field
+              = f.label :市,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :city,{:class=>'col-xs-3 col-sm-5'}
+            .field
+              = f.label :区县,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :district,{:class=>'col-xs-3 col-sm-5'}
+          .form-group
+            .field
+              = f.label :公司名称,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :shopname,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :手机号码,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :pusher_phone,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
+              = f.label :百度地图,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              #userinfo_map{style:'width:630px;height:230px;border:1px solid gray'}
+              .hr.hr-16.hr-dotted
+            .actions.col-sm-1.col-sm-offset-3
+              = f.submit 'Save',:class=> 'btn btn btn-Success'
+            .actions.col-sm-8
+              = link_to 'Back','', 'data-href' => jyd_index_userinfos_path,:class=> 'btn btn-info'
+
+
+
+:javascript
+    //jquery 初始化函数
+  $(function () {
+
+
+    var scripts = [null, null]
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+      //inline scripts related to this page
+    });
+
+
+    var map = new BMap.Map("userinfo_map");//初始化地图
+    map.addControl(new BMap.NavigationControl());  //初始化地图控件
+    map.enableScrollWheelZoom();    //启用滚轮放大缩小，默认禁用
+    map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+    map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+
+
+    var point = new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
+
+    var gc = new BMap.Geocoder();//地址解析类
+
+    //添加标记点击监听
+    map.addEventListener("click", function (e) {
+      gc.getLocation(e.point, function (rs) {
+
+      var addComp = rs.addressComponents;
+      $('#userinfo_address').val(addComp.province  + addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
+      $('#userinfo_province').val(addComp.province);
+      $('#userinfo_city').val(addComp.city);
+      $('#userinfo_district').val(addComp.district);
+      });
+
+    });
+
+
+
+  });
+
+

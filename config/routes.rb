@@ -137,6 +137,11 @@ Rails.application.routes.draw do
     resources :product_ticket_customer_inits, shallow: true
   end
 
+  get '/product_ticket_customer_inits/:id/remove' => "product_ticket_customer_inits#remove" #酒劵用户移除
+
+  get '/product_tickets/:product_ticket_id/product_ticket_customer_inits/import_customer' => "product_ticket_customer_inits#import_customer" #酒劵用户导入
+
+
   resources :user_integrals
   resources :wines
 
@@ -216,6 +221,18 @@ Rails.application.routes.draw do
 
   mount RuCaptcha::Engine => "/rucaptcha"
   resources :userinfos do
+    get 'jyd_index', :on => :collection
+    get 'jyd_new', :on => :collection
+    post 'jyd_create', :on => :collection
+    get 'jyd_show/:userinfo_id', to: "userinfos#jyd_show", :on => :collection
+    get 'jyd_edit/:userinfo_id', to: "userinfos#jyd_edit", :on => :collection
+    patch 'jyd_update', to: "userinfos#jyd_update", :on => :collection
+    delete 'jyd_destroy/:userinfo_id', to: "userinfos#jyd_destroy", :on => :collection
+
+
+
+
+
     get 'audit', :on => :collection
     get 'email_active/:confirmation_token', :action => :email_active, :on => :collection
 
@@ -223,7 +240,6 @@ Rails.application.routes.draw do
 
     resources :products do
       get 'desc'
-
       get 'preview'
     end
   end

@@ -29,7 +29,7 @@ class JxcStockAssignBillsController < ApplicationController
     @jxc_stock_assign_bill = JxcStockAssignBill.new
     @jxc_stock_assign_bill.bill_no = @jxc_stock_assign_bill.generate_bill_no
     @jxc_stock_assign_bill.assign_date = Time.now
-    @jxc_stock_assign_bill.handler = current_user.staff
+    @jxc_stock_assign_bill.handler << current_user
   end
 
   def edit
@@ -48,9 +48,9 @@ class JxcStockAssignBillsController < ApplicationController
     @jxc_stock_assign_bill.assign_in_stock_ids << assign_in_stock_id
 
     #制单人
-    @jxc_stock_assign_bill.bill_maker = current_user
+    @jxc_stock_assign_bill.bill_maker << current_user
     #经手人
-    @jxc_stock_assign_bill.handler = current_user.staff
+    @jxc_stock_assign_bill.handler << current_user
 
     @jxc_stock_assign_bill.assign_date = stringParseDate(bill_info[:assign_date])
 
@@ -74,7 +74,7 @@ class JxcStockAssignBillsController < ApplicationController
       tempBillDetail.count = count
 
       #商品信息
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       tempBillDetail.unit = billDetailInfo[:unit]
       tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -88,10 +88,12 @@ class JxcStockAssignBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_stock_assign_bill.save
-        format.html { redirect_to @jxc_stock_assign_bill, notice: '要货单创建成功.' }
+        # format.html { redirect_to @jxc_stock_assign_bill, notice: '要货单创建成功.' }
+        format.js { render_js jxc_stock_assign_bill_path(@jxc_stock_assign_bill), notice: '要货单创建成功.' }
         format.json { render :show, status: :created, location: @jxc_stock_assign_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_stock_assign_bill_path }
         format.json { render json: @jxc_stock_assign_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -110,9 +112,9 @@ class JxcStockAssignBillsController < ApplicationController
       @jxc_stock_assign_bill.assign_out_stock_ids[0] = assign_out_stock_id
       @jxc_stock_assign_bill.assign_in_stock_ids[0] = assign_in_stock_id
       #制单人
-      @jxc_stock_assign_bill.bill_maker = current_user
+      @jxc_stock_assign_bill.bill_maker << current_user
       #经手人
-      @jxc_stock_assign_bill.handler = current_user.staff
+      @jxc_stock_assign_bill.handler << current_user
 
       @jxc_stock_assign_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_stock_assign_bill.assign_date = stringParseDate(bill_info[:assign_date])
@@ -141,7 +143,7 @@ class JxcStockAssignBillsController < ApplicationController
         tempBillDetail.count = count
 
         #商品信息
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         tempBillDetail.unit = billDetailInfo[:unit]
         tempBillDetail.remark = billDetailInfo[:remark]
 
@@ -155,17 +157,20 @@ class JxcStockAssignBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_stock_assign_bill.update
-          format.html { redirect_to @jxc_stock_assign_bill, notice: '要货单更新成功.' }
+          # format.html { redirect_to @jxc_stock_assign_bill, notice: '要货单更新成功.' }
+          format.js { render_js jxc_stock_assign_bill_path(@jxc_stock_assign_bill), notice: '要货单更新成功.' }
           format.json { render :show, status: :ok, location: @jxc_stock_assign_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_stock_assign_bill_path }
           format.json { render json: @jxc_stock_assign_bill.errors, status: :unprocessable_entity }
         end
       end
 
     else
       respond_to do |format|
-        format.html {redirect_to @jxc_stock_assign_bill, notice: '单据当前状态无法更新!'}
+        # format.html {redirect_to @jxc_stock_assign_bill, notice: '单据当前状态无法更新!'}
+        format.js { render_js jxc_stock_assign_bill_path(@jxc_stock_assign_bill), notice: '单据当前状态无法更新!'}
       end
     end
   end
@@ -173,7 +178,8 @@ class JxcStockAssignBillsController < ApplicationController
   def destroy
     @jxc_stock_assign_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_stock_assign_bills_url, notice: '要货单删除成功.' }
+      # format.html { redirect_to jxc_stock_assign_bills_url, notice: '要货单删除成功.' }
+      format.js { render_js jxc_stock_assign_bills_url, notice: '要货单删除成功.' }
       format.json { head :no_content }
     end
   end
@@ -206,6 +212,6 @@ class JxcStockAssignBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcTransferBillDetail.includes(:product).where(:stock_assign_bill_id => @jxc_stock_assign_bill.id)
+    @bill_details = JxcTransferBillDetail.where(:stock_assign_bill_id => @jxc_stock_assign_bill.id)
   end
 end

@@ -8,7 +8,7 @@
       最终确认
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_stock_count_bill.bill_status == '0'? false : true }
       作废
-= form_for @jxc_stock_count_bill do |f|
+= form_for @jxc_stock_count_bill, remote:true do |f|
   - if @jxc_stock_count_bill.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_stock_count_bill.errors.count, "error")} prohibited this jxc_stock_count_bill from being saved:"
@@ -47,7 +47,7 @@
       %td
         = f.label :handler
       %td
-        %input.form-control#jxc_stock_count_bill_handler{value: @jxc_stock_count_bill.handler.nil? ? '':@jxc_stock_count_bill.handler.name,readonly:true }
+        %input.form-control#jxc_stock_count_bill_handler{value: @jxc_stock_count_bill.handler[0].nil? ? '':@jxc_stock_count_bill.handler[0].name,readonly:true }
         = f.hidden_field :handler_id
     %tr
       %td
@@ -124,7 +124,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_stock_count_bills_path}
+    %a{class:'btn','data-href': jxc_stock_count_bills_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'
@@ -145,7 +145,8 @@
     },
     data: {
       key:{
-        name:""
+        name:"",
+        url:"#"
       },
       simpleData: {
         enable:true,

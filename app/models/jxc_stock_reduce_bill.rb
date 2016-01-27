@@ -1,4 +1,4 @@
-class JxcStockReduceBill
+class JxcStockReduceBill < JxcBaseModel
   ## 进销存 报损单
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -36,10 +36,10 @@ class JxcStockReduceBill
     result[:flag] = 0
 
     #如果单据状态为： 已创建
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
 
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(stock_reduce_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(stock_reduce_bill_id: self.id)
       #仓库
       store = self.jxc_storage
 
@@ -52,7 +52,7 @@ class JxcStockReduceBill
         billDetailsArray.each do |billDetail|
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -74,24 +74,7 @@ class JxcStockReduceBill
               updateStorageArray << store_product_detail
 
               #记录库存变更日志
-              storageChangeLog = JxcStorageJournal.new
-
-              storageChangeLog.product = store_product_detail.product   #商品
-              storageChangeLog.jxc_storage = store    #仓库
-              storageChangeLog.staff = self.handler  #经手人
-
-              storageChangeLog.previous_count = previous_count   #库存变更前存量
-              storageChangeLog.after_count = after_count   #库存变更后存量
-              storageChangeLog.count = -billDetail.count #单据明细数量
-              storageChangeLog.price = store_product_detail.cost_price
-              storageChangeLog.amount = -billDetail.amount
-              storageChangeLog.op_type = '2'  #操作类型 <报损>
-              storageChangeLog.jxc_stock_reduce_bill = self  #库存变更依据的 单据
-              storageChangeLog.bill_no = self.bill_no #单据编号
-              storageChangeLog.bill_type = 'stock_reduce'
-              storageChangeLog.bill_status = '1'
-              storageChangeLog.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
+              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_Reduce,BillType_StockReduce,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -110,7 +93,7 @@ class JxcStockReduceBill
       end
 
       #更细单据状态
-      self.bill_status = '1'
+      self.bill_status = BillStatus_Audit
       self.update
 
       #返回审核结果
@@ -131,10 +114,10 @@ class JxcStockReduceBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '1'
+    if self.bill_status == BillStatus_Audit
 
       #单据商品详情
-      billDetailsArray = JxcBillDetail.includes(:product).where(stock_reduce_bill_id: self.id)
+      billDetailsArray = JxcBillDetail.where(stock_reduce_bill_id: self.id)
       #仓库
       store = self.jxc_storage
 
@@ -143,7 +126,7 @@ class JxcStockReduceBill
 
           #仓库&商品 明细
           begin
-            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:product => billDetail.product)
+            store_product_detail = JxcStorageProductDetail.find_by(:jxc_storage => store,:resource_product_id => billDetail.resource_product_id)
           rescue
             store_product_detail = nil
           end
@@ -157,31 +140,13 @@ class JxcStockReduceBill
             store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            storageJournal = JxcStorageJournal.new
-
-            storageJournal.product = billDetail.product   #商品
-            storageJournal.jxc_storage = store    #仓库
-            storageJournal.staff = self.handler  #经手人
-
-            storageJournal.previous_count = previous_count   #库存变更前存量
-            storageJournal.after_count = after_count   #库存变更后存量
-            storageJournal.count = billDetail.count #单据明细数量
-            storageJournal.price = store_product_detail.cost_price
-            storageJournal.amount = billDetail.amount
-            storageJournal.op_type = '4'  #操作类型 <红冲>
-            storageJournal.jxc_stock_reduce_bill = self  #库存变更依据的 单据
-            storageJournal.bill_no = self.bill_no #库存变更依据的 单据编号
-            storageJournal.bill_type = 'stock_reduce'
-            storageJournal.bill_status = '2'
-            storageJournal.bill_create_date = self.created_at.strftime('%Y/%m/%d')
-
-            storageJournal.save
+            inventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockReduce,BillStatus_StrikeBalance)
           end
         end
       end
 
       #更新单据状态
-      self.bill_status = '2'  #<红冲>
+      self.bill_status = BillStatus_StrikeBalance  #<红冲>
       self.update
 
       #审核结果返回
@@ -190,7 +155,6 @@ class JxcStockReduceBill
     else
       result[:msg] = '单据当前状态无法红冲!'
     end
-
 
     return result
   end
@@ -202,9 +166,9 @@ class JxcStockReduceBill
     result = {}
     result[:flag] = 0
 
-    if self.bill_status == '0'
+    if self.bill_status == BillStatus_Create
       #更新单据状态
-      self.bill_status = '-1'
+      self.bill_status = BillStatus_Invalid
       self.update
 
       #返回审核结果

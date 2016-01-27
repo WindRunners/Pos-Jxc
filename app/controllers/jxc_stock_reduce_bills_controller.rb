@@ -27,7 +27,7 @@ class JxcStockReduceBillsController < ApplicationController
     @jxc_stock_reduce_bill = JxcStockReduceBill.new
     @jxc_stock_reduce_bill.bill_no = @jxc_stock_reduce_bill.generate_bill_no
     @jxc_stock_reduce_bill.reduce_date = Time.now
-    @jxc_stock_reduce_bill.handler = current_user.staff
+    @jxc_stock_reduce_bill.handler << current_user
   end
 
   def edit
@@ -38,13 +38,14 @@ class JxcStockReduceBillsController < ApplicationController
     #仓库
     storage_id = bill_info[:storage_id]
     #经手人
-    handler_id = bill_info[:handler_id]
+    # handler_id = bill_info[:handler_id]
 
     @jxc_stock_reduce_bill = JxcStockReduceBill.new(jxc_stock_reduce_bill_params)
     @jxc_stock_reduce_bill.storage_id = storage_id
-    @jxc_stock_reduce_bill.handler_id = handler_id
     #制单人
-    @jxc_stock_reduce_bill.bill_maker = current_user
+    @jxc_stock_reduce_bill.bill_maker << current_user
+    #经手人
+    @jxc_stock_reduce_bill.handler << current_user
 
     @jxc_stock_reduce_bill.reduce_date = stringParseDate(bill_info[:reduce_date])
 
@@ -65,7 +66,7 @@ class JxcStockReduceBillsController < ApplicationController
       tempBillDetail.amount = amount
 
       #商品ID
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #商品计量单位
       tempBillDetail.unit = billDetailInfo[:unit]
       #备注
@@ -81,10 +82,12 @@ class JxcStockReduceBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_stock_reduce_bill.save
-        format.html { redirect_to jxc_stock_reduce_bills_path, notice: '报损单已经成功创建.' }
+        # format.html { redirect_to jxc_stock_reduce_bills_path, notice: '报损单已经成功创建.' }
+        format.js { render_js jxc_stock_reduce_bills_path, notice: '报损单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_stock_reduce_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_stock_reduce_bill_path }
         format.json { render json: @jxc_stock_reduce_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -97,12 +100,13 @@ class JxcStockReduceBillsController < ApplicationController
       #仓库
       storage_id = bill_info[:storage_id]
       #经手人
-      handler_id = bill_info[:handler_id]
+      # handler_id = bill_info[:handler_id]
 
       @jxc_stock_reduce_bill.storage_id = storage_id
-      @jxc_stock_reduce_bill.handler_id = handler_id
       #制单人
-      @jxc_stock_reduce_bill.bill_maker = current_user
+      @jxc_stock_reduce_bill.bill_maker << current_user
+      #经手人
+      @jxc_stock_reduce_bill.handler << current_user
 
       @jxc_stock_reduce_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_stock_reduce_bill.reduce_date = stringParseDate(bill_info[:reduce_date])
@@ -128,7 +132,7 @@ class JxcStockReduceBillsController < ApplicationController
         tempBillDetail.amount = amount
 
         #商品ID
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #商品计量单位
         tempBillDetail.unit = billDetailInfo[:unit]
         #备注
@@ -144,10 +148,12 @@ class JxcStockReduceBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_stock_reduce_bill.update
-          format.html { redirect_to @jxc_stock_reduce_bill, notice: '报损单已经成功更新.' }
+          # format.html { redirect_to @jxc_stock_reduce_bill, notice: '报损单已经成功更新.' }
+          format.js { render_js jxc_stock_reduce_bill_path(@jxc_stock_reduce_bill), notice: '报损单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_stock_reduce_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_stock_reduce_bill_path }
           format.json { render json: @jxc_stock_reduce_bill.errors, status: :unprocessable_entity }
         end
       end
@@ -155,7 +161,8 @@ class JxcStockReduceBillsController < ApplicationController
     else
 
       respond_to do |format|
-        format.html { redirect_to @jxc_stock_reduce_bill, notice: '报损单当前状态无法修改!'}
+        # format.html { redirect_to @jxc_stock_reduce_bill, notice: '报损单当前状态无法修改!'}
+        format.js { render_js jxc_stock_reduce_bill_path(@jxc_stock_reduce_bill), notice: '报损单当前状态无法修改!'}
       end
 
     end
@@ -164,7 +171,8 @@ class JxcStockReduceBillsController < ApplicationController
   def destroy
     @jxc_stock_reduce_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_stock_reduce_bills_url, notice: '报损单已经成功删除.' }
+      # format.html { redirect_to jxc_stock_reduce_bills_url, notice: '报损单已经成功删除.' }
+      format.js { render_js jxc_stock_reduce_bills_url, notice: '报损单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -203,6 +211,6 @@ class JxcStockReduceBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(:stock_reduce_bill_id => @jxc_stock_reduce_bill.id)
+    @bill_details = JxcBillDetail.where(:stock_reduce_bill_id => @jxc_stock_reduce_bill.id)
   end
 end

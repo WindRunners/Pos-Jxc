@@ -137,6 +137,11 @@ Rails.application.routes.draw do
     resources :product_ticket_customer_inits, shallow: true
   end
 
+  get '/product_ticket_customer_inits/:id/remove' => "product_ticket_customer_inits#remove" #酒劵用户移除
+
+  get '/product_tickets/:product_ticket_id/product_ticket_customer_inits/import_customer' => "product_ticket_customer_inits#import_customer" #酒劵用户导入
+
+
   resources :user_integrals
   resources :wines
 

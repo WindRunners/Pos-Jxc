@@ -27,7 +27,7 @@ class JxcStockCountBillsController < ApplicationController
     @jxc_stock_count_bill = JxcStockCountBill.new
     @jxc_stock_count_bill.bill_no = @jxc_stock_count_bill.generate_bill_no
     @jxc_stock_count_bill.check_date = Time.now
-    @jxc_stock_count_bill.handler = current_user.staff
+    @jxc_stock_count_bill.handler << current_user
   end
 
   def edit
@@ -38,13 +38,14 @@ class JxcStockCountBillsController < ApplicationController
     #仓库
     storage_id = bill_info[:storage_id]
     #经手人
-    handler_id = bill_info[:handler_id]
+    # handler_id = bill_info[:handler_id]
 
     @jxc_stock_count_bill = JxcStockCountBill.new(jxc_stock_count_bill_params)
     @jxc_stock_count_bill.storage_id = storage_id
-    @jxc_stock_count_bill.handler_id = handler_id
     #制单人
-    @jxc_stock_count_bill.bill_maker = current_user
+    @jxc_stock_count_bill.bill_maker << current_user
+    #经手人
+    @jxc_stock_count_bill.handler << current_user
 
     @jxc_stock_count_bill.check_date = stringParseDate(bill_info[:check_date])
 
@@ -74,7 +75,7 @@ class JxcStockCountBillsController < ApplicationController
       tempBillDetail[:pl_amount] = tempBillDetail.calculate_amount(price,pl_count)
 
       #商品ID
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #商品计量单位
       tempBillDetail.unit = billDetailInfo[:unit]
       #备注
@@ -90,10 +91,12 @@ class JxcStockCountBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_stock_count_bill.save
-        format.html { redirect_to jxc_stock_count_bills_path, notice: '盘点单已经成功创建.' }
+        # format.html { redirect_to jxc_stock_count_bills_path, notice: '盘点单已经成功创建.' }
+        format.js { render_js jxc_stock_count_bills_path, notice: '盘点单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_stock_count_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_stock_count_bill_path }
         format.json { render json: @jxc_stock_count_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -104,13 +107,14 @@ class JxcStockCountBillsController < ApplicationController
       bill_info = params[:jxc_stock_count_bill]
       #仓库
       storage_id = bill_info[:storage_id]
-      #经手人
-      handler_id = bill_info[:handler_id]
+      # 经手人
+      # handler_id = bill_info[:handler_id]
 
       @jxc_stock_count_bill.storage_id = storage_id
-      @jxc_stock_count_bill.handler_id = handler_id
       #制单人
-      @jxc_stock_count_bill.bill_maker = current_user
+      @jxc_stock_count_bill.bill_maker << current_user
+      #经手人
+      @jxc_stock_count_bill.handler << current_user
 
       @jxc_stock_count_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_stock_count_bill.check_date = stringParseDate(bill_info[:check_date])
@@ -145,7 +149,7 @@ class JxcStockCountBillsController < ApplicationController
         tempBillDetail[:pl_amount] = tempBillDetail.calculate_amount(price,pl_count)
 
         #商品ID
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #商品计量单位
         tempBillDetail.unit = billDetailInfo[:unit]
         #备注
@@ -161,16 +165,19 @@ class JxcStockCountBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_stock_count_bill.update
-          format.html { redirect_to @jxc_stock_count_bill, notice: '盘点单已经成功更新.' }
+          # format.html { redirect_to @jxc_stock_count_bill, notice: '盘点单已经成功更新.' }
+          format.js { render_js jxc_stock_count_bill_path(@jxc_stock_count_bill), notice: '盘点单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_stock_count_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_stock_count_bill_path(@jxc_stock_count_bill) }
           format.json { render json: @jxc_stock_count_bill.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html { redirect_to @jxc_stock_count_bill, notice: '盘点单当前状态无法修改!'}
+        # format.html { redirect_to @jxc_stock_count_bill, notice: '盘点单当前状态无法修改!'}
+        format.js { render_js edit_jxc_stock_count_bill_path(@jxc_stock_count_bill), notice: '盘点单当前状态无法修改!'}
       end
     end
   end
@@ -178,7 +185,8 @@ class JxcStockCountBillsController < ApplicationController
   def destroy
     @jxc_stock_count_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_stock_count_bills_url, notice: '盘点单已经成功删除.' }
+      # format.html { redirect_to jxc_stock_count_bills_url, notice: '盘点单已经成功删除.' }
+      format.js { render_js jxc_stock_count_bills_url, notice: '盘点单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -219,6 +227,6 @@ class JxcStockCountBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(:stock_count_bill_id => @jxc_stock_count_bill.id)
+    @bill_details = JxcBillDetail.where(:stock_count_bill_id => @jxc_stock_count_bill.id)
   end
 end

@@ -8,9 +8,7 @@
       %th 结束时间
       %th 状态
       %th
-      %th
-      %th
-      %th
+
 
   %tbody
     - @product_tickets.each do |product_ticket|
@@ -19,12 +17,12 @@
         %td= product_ticket.start_date_str
         %td= product_ticket.end_date_str
         %td= product_ticket.status
-        %td= link_to 'Show',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-Inverse'
-        %td= link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
-        %td= link_to '会员管理',  '', 'data-href' =>product_ticket_product_ticket_customer_inits_path(product_ticket),class:'btn btn-xs btn-info'
         %td
+          = link_to 'Show',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-Inverse'
+          = link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
+          = link_to '会员管理',  '', 'data-href' =>product_ticket_product_ticket_customer_inits_path(product_ticket),class:'btn btn-xs btn-info'
           %input{"type"=>"button",:class=>"btn btn-xs btn-pink",:value=>"发布",:onclick=>"publish('#{product_ticket.id}')"}
-        %td= link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
+          = link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
 %br
 
@@ -33,6 +31,10 @@
 :javascript
 
   function publish(product_ticket_id){
+
+    var r = confirm("确认发布吗，发布后酒劵所有信息不可修改！");
+    if (r!=true) return;
+
     $.ajax({
         type: "POST",
         url: "/product_tickets/"+product_ticket_id+"/build_card_bag",

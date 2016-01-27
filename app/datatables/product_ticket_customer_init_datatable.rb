@@ -22,6 +22,7 @@ class ProductTicketCustomerInitDatatable
     get_data_list.map do |record|
         rows = []
         rows << record['mobile']
+        rows << "<a class=\"btn btn-primary btn-sm\" href=\"javascript:remove('#{record.id.to_s}')\">移除</a>"
         rows
     end
   end
@@ -32,7 +33,13 @@ class ProductTicketCustomerInitDatatable
 
   def fetch_data_list
 
-    return ProductTicketCustomerInit.where({'product_ticket_id' => @product_ticket.id}).page(page).per(per_page)
+    search_where = {}
+    search_where['product_ticket_id'] = @product_ticket.id
+    searchText = params[:sSearch]
+    if searchText.present?
+      search_where['mobile'] = /#{searchText}/
+    end
+    return ProductTicketCustomerInit.where(search_where).page(page).per(per_page)
   end
 
   def page

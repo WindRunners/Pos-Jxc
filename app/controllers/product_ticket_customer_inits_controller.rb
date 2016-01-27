@@ -1,5 +1,5 @@
 class ProductTicketCustomerInitsController < ApplicationController
-  before_action :set_product_ticket_customer_init, only: [:show, :edit, :update, :destroy]
+  before_action :set_product_ticket_customer_init, only: [:show, :edit, :update, :destroy,:remove]
 
   # GET /product_ticket_customer_inits
   # GET /product_ticket_customer_inits.json
@@ -42,7 +42,7 @@ class ProductTicketCustomerInitsController < ApplicationController
 
       begin
 
-        if @product_ticket_customer_init.save!
+        if @product_ticket_customer_init.save
           format.json { render json: get_render_json(1,nil,'') }
         else
           format.json { render json: get_render_json(0,@product_ticket_customer_init.errors.messages,nil) }
@@ -73,10 +73,21 @@ class ProductTicketCustomerInitsController < ApplicationController
   # DELETE /product_ticket_customer_inits/1
   # DELETE /product_ticket_customer_inits/1.json
   def destroy
+
     @product_ticket_customer_init.destroy
     respond_to do |format|
-      format.html { redirect_to product_ticket_customer_inits_url, notice: 'Product ticket customer init was successfully destroyed.' }
-      format.json { head :no_content }
+      # format.html { redirect_to product_ticket_customer_inits_url, notice: 'Product ticket customer init was successfully destroyed.' }
+      format.json { render json: {:flag => 1,:msg => "移除成功！"}}
+    end
+  end
+
+
+  def remove
+
+    @product_ticket_customer_init.destroy
+    respond_to do |format|
+      # format.html { redirect_to product_ticket_customer_inits_url, notice: 'Product ticket customer init was successfully destroyed.' }
+      format.json { render json: {:flag => 1,:msg => "移除成功！"}}
     end
   end
 
@@ -87,30 +98,41 @@ class ProductTicketCustomerInitsController < ApplicationController
 
     userinfo_id = current_user()['userinfo_id']
 
+    start_date = params[:start_date]
+    end_date = params[:end_date]
+    # start_date = "2015/12/23"
+    # end_date = "2016/01/30"
+
+    # days = days_between(start_date, end_date)
+    js_pd = get_import_date_str(start_date,end_date,userinfo_id)
     wherejs = %Q{
-          function(){
-            var count = 0;
-            var obj = this;
-            var getcount = function(year,month,userinfo){
+        function(){
+          var count = 0;
+          var obj = this;
+          var getcount = function(year,month,day,userinfo){
 
-                var count_inner = 0;
-                if(obj[year] == undefined) return count_inner;
-                if(obj[year][month] == undefined) return count_inner;
-                if(obj[year][month][userinfo] == undefined) return count_inner;
-                return obj[year][month][userinfo];
-            };
-            count += getcount("2016","01","#{userinfo_id}");
-            count += getcount("2015","10","#{userinfo_id}");
-            count += getcount("2015","11","#{userinfo_id}");
-            count += getcount("2015","12","#{userinfo_id}");
-            return count >= 1;
-          }
+              var count_inner = 0;
+              if(obj[year] == undefined) return count_inner;
+              if(obj[year][month] == undefined) return count_inner;
+              if(obj[year][month][day] == undefined) return count_inner;
+              if(obj[year][month][day][userinfo] == undefined) return count_inner;
+              return obj[year][month][day][userinfo];
+          };
+          #{js_pd}
+          return count >= 1;
+        }
     }
-    count = CustomerOrderStatic.for_js(wherejs).count()
-    Rails.logger.info "导入订单数量：#{count}"
 
-    CustomerOrderStatic.for_js(wherejs).each do |customerOrderStatic|
+    count = CustomerOrderStatic.where({:userinfo_ids => userinfo_id.to_s}).for_js(wherejs).count()
+    Rails.logger.info "导入会员数量：#{count}"
 
+    rows = 0
+
+    CustomerOrderStatic.where({:userinfo_ids => userinfo_id.to_s}).for_js(wherejs).each do |customerOrderStatic|
+
+      next if ProductTicketCustomerInit.where({:customer_id => customerOrderStatic.customer_id}).count>0
+
+      rows+=1
       product_ticket_customer_init = ProductTicketCustomerInit.new
       product_ticket_customer_init.product_ticket = @product_ticket.id
       product_ticket_customer_init.customer_id = customerOrderStatic.customer_id
@@ -119,8 +141,7 @@ class ProductTicketCustomerInitsController < ApplicationController
     end
 
     respond_to do |format|
-
-      format.json { render json: get_render_json(1,'导入成功',nil) }
+      format.json { render json: get_render_json(1,"导入成功#{rows}条记录！",nil) }
     end
   end
 
@@ -140,4 +161,25 @@ class ProductTicketCustomerInitsController < ApplicationController
     def product_ticket_customer_init_params
       params.require(:product_ticket_customer_init).permit(:mobile, :customer_ids)
     end
+
+
+    def get_import_date_str(start_date,end_date,userinfo_id)
+
+      days =  days_between(start_date,end_date)
+      startDate = Date.parse(start_date)
+
+      str_array = []
+      for i in 0..days
+        nowDate = startDate+i
+        str_array << "count += getcount(#{nowDate.strftime("'%Y','%m','%d'")},'#{userinfo_id}')"
+      end
+      str_array.join(";")+";"
+    end
+
+    def days_between(date1, date2)
+      d1 = Date.parse(date1)
+      d2 = Date.parse(date2)
+      (d2 - d1).to_i
+    end
+
 end

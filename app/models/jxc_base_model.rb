@@ -50,7 +50,7 @@ class JxcBaseModel
     changeLog.after_count = after_count
     changeLog.count = after_count.to_d - previous_count.to_d
     changeLog.price = price
-    changeLog.amount = bill_detail_info.amount
+    changeLog.amount = changeLog.count.to_d * changeLog.price.to_d
     changeLog.op_type = operation_type
 
     changeLog.bill_no = bill_info.bill_no  #单据编号
@@ -100,7 +100,7 @@ class JxcBaseModel
     @changeLog.after_count = after_count
     @changeLog.count = after_count.to_d - previous_count.to_d
     @changeLog.price = price
-    @changeLog.amount = bill_detail_info.amount
+    @changeLog.amount = @changeLog.count.to_d * @changeLog.price.to_d
     @changeLog.op_type = operation_type
 
     @changeLog.bill_no = bill_info.bill_no  #单据编号

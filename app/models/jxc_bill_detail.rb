@@ -14,7 +14,7 @@ class JxcBillDetail
   field :amount, type: BigDecimal, default:0.00 #金额
   field :remark, type: String #备注
 
-  field :resource_product_id, type: String
+  field :resource_product_id, type: String  #所属商品ID (商品为 ActiveResource Object)
 
   ## 进销存属性
   # belongs_to :product, class_name:'JxcProduct',foreign_key: :product_id #所属商品

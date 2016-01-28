@@ -61,14 +61,13 @@
               = link_to 'Back','', 'data-href' => jyd_index_userinfos_path,:class=> 'btn btn-info'
 
 
-
 :javascript
     //jquery 初始化函数
   $(function () {
 
 
 
-
+    var userinfo_city = $('#userinfo_city').val();
 
     var map = new BMap.Map("userinfo_map");//初始化地图
     map.addControl(new BMap.NavigationControl());  //初始化地图控件
@@ -76,6 +75,16 @@
     map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
     map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
 
+
+    if (userinfo_city == "" || userinfo_city == undefined) {
+    var point = new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
+    }
+    else{
+      map.centerAndZoom(userinfo_city,15);
+
+
+    }
 
     var point = new BMap.Point(113.663221, 34.7568711);
     map.centerAndZoom(point, 15);//初始化地图中心点

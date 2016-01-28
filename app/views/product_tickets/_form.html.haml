@@ -78,8 +78,8 @@
                 %tbody
                   %tr#product_tr
                     -if @product.present?
-                      %td
-                        %img#product_avatar{:style => "height:100px;width:200px",:src=>@product.avatar}
+                      %td#product_avatar
+                        %img{:style => "height:100px;width:200px",:src=>@product.avatar}
                       %td#product_name
                         =@product.title
                       %td

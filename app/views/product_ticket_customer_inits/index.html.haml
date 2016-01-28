@@ -28,7 +28,9 @@
 
 %br
 
-%a.btn.btn-primary.btn-lg#bag_product_select_btn{'data-toggle'=>'modal','data-target'=>'#product_ticket_customer_modal'} 新建酒劵会员
+%a.btn.btn-primary#bag_product_select_btn{'data-toggle'=>'modal','data-target'=>'#product_ticket_customer_modal'} 新建酒劵会员
+= link_to '返回列表','','data-href'=>product_tickets_path,class: 'btn btn-primary'
+
 /= link_to '新建酒劵会员','','data-href'=>new_product_ticket_product_ticket_customer_init_path(@product_ticket),class: 'btn btn-default'
 
 /模态框

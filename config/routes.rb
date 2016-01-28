@@ -337,6 +337,8 @@ Rails.application.routes.draw do
     resources :users
     post 'users/manage_store'
     get 'users/:id/reset_password' => 'users#reset_password'
+    get 'users/:id/modify_loginpasswordForm' => 'users#modify_loginpasswordForm'
+    post 'users/modify_loginpassword' => 'users#modify_loginpassword'
   end
 
   resources :mobile_categories

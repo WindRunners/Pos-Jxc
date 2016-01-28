@@ -6,7 +6,6 @@
       红冲
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_purchase_order.bill_status == '0'? false : true }
       作废
-%p#notice= notice
 = form_for @jxc_purchase_order, remote:true do |f|
   - if @jxc_purchase_order.errors.any?
     #error_explanation

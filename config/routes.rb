@@ -415,8 +415,9 @@ Rails.application.routes.draw do
   post 'jxc_stock_overflow_bills/invalid'
   resources :jxc_stock_overflow_bills
 
-  post 'jxc_stock_count_bills/audit'
-  post 'jxc_stock_count_bills/strike_a_balance'
+  post 'jxc_stock_count_bills/audit_in_advance'
+  post 'jxc_stock_count_bills/generate_pl_bill'
+  post 'jxc_stock_count_bills/finally_confirm'
   post 'jxc_stock_count_bills/invalid'
   resources :jxc_stock_count_bills
 

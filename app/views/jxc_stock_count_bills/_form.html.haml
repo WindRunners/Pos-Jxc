@@ -311,7 +311,7 @@
 
   // 单据预审核
   function audit_in_advance(){
-    $.post('audit_in_advance',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/audit_in_advance',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -325,7 +325,7 @@
 
   // 单据生成盈亏单
   function generate_pl_bill(){
-    $.post('generate_pl_bill',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/generate_pl_bill',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -339,7 +339,7 @@
 
   // 单据最终确认
   function finally_confirm(){
-    $.post('finally_confirm',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/finally_confirm',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if (resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -353,7 +353,7 @@
 
   // 单据作废
   function invalid(){
-    $.post('invalid',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/invalid',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);

@@ -73,6 +73,8 @@ class JxcStockOverflowBill < JxcBaseModel
 
             store_product_detail.save
 
+            #更新前库存
+            previous_count = 0
             #更新后库存
             after_count = previous_count+billDetail.count
           end

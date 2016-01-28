@@ -114,28 +114,29 @@ class Order
 
 
 
-  def self.get_all_orders(parm)
+  def self.get_all_orders(parm,page,per)
+
+    orderStateChanges = OrderStateChange.where(parm).order(created_at: :desc)
     orderarray = []
-
-    orders = Order.where(parm)
-
-    orders.each do |order|
-      orderarray << order
-    end
-
-    ordercompleteds = Ordercompleted.where(parm)
-    ordercompleteds.each do |ordercompleted|
-      order = Order.new(ordercompleted.as_json)
-
-      ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
-        order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))
+    complete_ids = []
+    uncomplete_ids = []
+    orderStateChanges.page(page).per(per).each do |orderStateChange|
+      if "cancelled" == orderStateChange.state || "completed" == orderStateChange.state
+        complete_ids << orderStateChange.id
+      else
+        uncomplete_ids << orderStateChange.id
       end
-
-      orderarray << order
     end
 
-    return orderarray.sort{|a, b| b["created_at"] <=> a["created_at"]}
-
+    orderarray.concat(Order.where({'_id' => {"$in" => uncomplete_ids}}).order(created_at: :desc)) if !uncomplete_ids.empty?
+    if !complete_ids.empty?
+      complete_orders = Ordercompleted.where({'_id' => {"$in" => complete_ids}}).order(created_at: :desc)
+      complete_orders.each do |ordercompleted|
+        ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
+        orderarray << ordercompleted
+      end
+    end
+    return  Kaminari.paginate_array(orderarray, total_count: orderStateChanges.size).page(page).per(per)
   end
 
   def get_gift_product(gifts_product_ids)
@@ -440,7 +441,7 @@ class Order
                            :paymode => self.paymode,
                            :orderno => self.orderno,
                            :ordertype => self.ordertype,
-                           :created_at => self.created_at).save!
+                           :created_at => self.created_at).save
     end
 
     paid_count = self.userinfo.orders.where(:workflow_state => :paid).count

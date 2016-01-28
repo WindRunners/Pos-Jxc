@@ -2,12 +2,8 @@
 .row
   .container
     = form_for @userinfo, url: {action: @params_action},remote:true do |f|
-      - if @userinfo.errors.any?
-        #error_explanation
-          %h2= "#{pluralize(@userinfo.errors.count, 'error')} prohibited this store from being saved:"
-          %ul
-            - @userinfo.errors.full_messages.each do |msg|
-              %li= msg
+      #error_explanation{"style"=>"display:none"}
+        %ul
       .col-xs-12
         %form.form-horizontal
           .form-group
@@ -50,6 +46,11 @@
               = f.text_field :pusher_phone,{:class=>'col-xs-10 col-sm-5'}
           .form-group
             .field
+              = f.label :邮箱,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :email,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
               = f.label :百度地图,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-9
               #userinfo_map{style:'width:630px;height:230px;border:1px solid gray'}
@@ -66,10 +67,7 @@
   $(function () {
 
 
-    var scripts = [null, null]
-    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
-      //inline scripts related to this page
-    });
+
 
 
     var map = new BMap.Map("userinfo_map");//初始化地图
@@ -98,7 +96,17 @@
     });
 
 
+  pagination_ajax();
+  common_form_ajax_deal();
 
   });
+
+
+  function submit_check(){
+
+
+
+
+  }
 
 

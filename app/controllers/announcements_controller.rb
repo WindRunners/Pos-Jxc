@@ -294,6 +294,26 @@ class AnnouncementsController < ApplicationController
     end
   end
 
+
+  def announcement_hit
+
+    @announcement = Announcement.find(params[:announcement_id])
+    data ={}
+    @announcement.hits+=1
+    respond_to do |format|
+      if @announcement.save
+        data['flag'] = 1
+        data['message'] = '点赞成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '点赞失败'
+      end
+      format.json { render json: data }
+    end
+
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_announcement

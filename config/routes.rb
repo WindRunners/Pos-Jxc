@@ -295,6 +295,7 @@ Rails.application.routes.draw do
     get 'next_delete', :on => :collection
     post 'stow', :on => :collection
     post 'batch_delete', :on => :collection
+    post 'announcement_hit'
   end
 
   resources :announcement_categories

@@ -25,6 +25,7 @@ class Announcement
   field :source, type: String #来源
   field :customer_ids, type: Array, default: [] #收藏用户
   field :pic_thumb_path, type: Array, default: [] #缩略图
+  field :hits, type: Integer, default: 0 #点赞数
 
   has_mongoid_attached_file :avatar,
                             :default_url => '/missing.png'

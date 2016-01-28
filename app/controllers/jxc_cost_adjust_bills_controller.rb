@@ -27,7 +27,7 @@ class JxcCostAdjustBillsController < ApplicationController
     @jxc_cost_adjust_bill = JxcCostAdjustBill.new
     @jxc_cost_adjust_bill.bill_no = @jxc_cost_adjust_bill.generate_bill_no
     @jxc_cost_adjust_bill.adjust_date = Time.now
-    @jxc_cost_adjust_bill.handler = current_user.staff
+    @jxc_cost_adjust_bill.handler << current_user
   end
 
   def edit
@@ -38,14 +38,15 @@ class JxcCostAdjustBillsController < ApplicationController
     #仓库
     storage_id = bill_info[:storage_id]
     #经手人
-    handler_id = bill_info[:handler_id]
+    # handler_id = bill_info[:handler_id]
 
     @jxc_cost_adjust_bill = JxcCostAdjustBill.new(jxc_cost_adjust_bill_params)
     @jxc_cost_adjust_bill.adjust_date = stringParseDate(bill_info[:adjust_date])
     @jxc_cost_adjust_bill.storage_id = storage_id
-    @jxc_cost_adjust_bill.handler_id = handler_id
+    #经手人信息
+    @jxc_cost_adjust_bill.handler << current_user
     #制单人
-    @jxc_cost_adjust_bill.bill_maker = current_user
+    @jxc_cost_adjust_bill.bill_maker << current_user
 
     #单据明细
     billDetailArray = params[:billDetail]
@@ -68,7 +69,7 @@ class JxcCostAdjustBillsController < ApplicationController
       tempBillDetail[:amount] = amount
 
       #商品ID
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #商品计量单位
       tempBillDetail.unit = billDetailInfo[:unit]
       #备注
@@ -85,10 +86,12 @@ class JxcCostAdjustBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_cost_adjust_bill.save
-        format.html { redirect_to jxc_cost_adjust_bills_path, notice: '成本调整单创建成功.' }
+        # format.html { redirect_to jxc_cost_adjust_bills_path, notice: '成本调整单创建成功.' }
+        format.js { render_js jxc_cost_adjust_bills_path, notice: '成本调整单创建成功.' }
         format.json { render :show, status: :created, location: @jxc_cost_adjust_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_cost_adjust_bill_path }
         format.json { render json: @jxc_cost_adjust_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -101,12 +104,13 @@ class JxcCostAdjustBillsController < ApplicationController
       #仓库
       storage_id = bill_info[:storage_id]
       #经手人
-      handler_id = bill_info[:handler_id]
+      # handler_id = bill_info[:handler_id]
 
       @jxc_cost_adjust_bill.storage_id = storage_id
-      @jxc_cost_adjust_bill.handler_id = handler_id
+      #经手人信息
+      @jxc_cost_adjust_bill.handler << current_user
       #制单人
-      @jxc_cost_adjust_bill.bill_maker = current_user
+      @jxc_cost_adjust_bill.bill_maker << current_user
 
       @jxc_cost_adjust_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_cost_adjust_bill.adjust_date = stringParseDate(bill_info[:adjust_date])
@@ -136,7 +140,7 @@ class JxcCostAdjustBillsController < ApplicationController
         tempBillDetail[:amount] = amount
 
         #商品ID
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #商品计量单位
         tempBillDetail.unit = billDetailInfo[:unit]
         #备注
@@ -152,10 +156,12 @@ class JxcCostAdjustBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_cost_adjust_bill.update
-          format.html { redirect_to @jxc_cost_adjust_bill, notice: '成本调整单更新成功.' }
+          # format.html { redirect_to @jxc_cost_adjust_bill, notice: '成本调整单更新成功.' }
+          format.js { render_js jxc_cost_adjust_bill_path(@jxc_cost_adjust_bill), notice: '成本调整单更新成功.' }
           format.json { render :show, status: :ok, location: @jxc_cost_adjust_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_cost_adjust_bill_path(@jxc_cost_adjust_bill) }
           format.json { render json: @jxc_cost_adjust_bill.errors, status: :unprocessable_entity }
         end
       end
@@ -163,7 +169,8 @@ class JxcCostAdjustBillsController < ApplicationController
     else
 
       respond_to do |format|
-        format.html { redirect_to @jxc_cost_adjust_bill, notice: '单据当前状态无法更新!'}
+        # format.html { redirect_to @jxc_cost_adjust_bill, notice: '单据当前状态无法更新!'}
+        format.js { render_js edit_jxc_cost_adjust_bill_path(@jxc_cost_adjust_bill), notice: '单据当前状态无法更新!'}
       end
 
     end
@@ -173,7 +180,8 @@ class JxcCostAdjustBillsController < ApplicationController
   def destroy
     @jxc_cost_adjust_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_cost_adjust_bills_url, notice: '成本调整单删除成功.' }
+      # format.html { redirect_to jxc_cost_adjust_bills_url, notice: '成本调整单删除成功.' }
+      format.js { render_js jxc_cost_adjust_bills_url, notice: '成本调整单删除成功.' }
       format.json { head :no_content }
     end
   end
@@ -211,6 +219,6 @@ class JxcCostAdjustBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(:cost_adjust_bill_id => @jxc_cost_adjust_bill.id)
+    @bill_details = JxcBillDetail.where(:cost_adjust_bill_id => @jxc_cost_adjust_bill.id)
   end
 end

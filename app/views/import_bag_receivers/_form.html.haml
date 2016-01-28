@@ -1,10 +1,6 @@
 = form_for @import_bag_receiver, remote:true,url:{action: @action},html: {class: "form-horizontal"} do |f|
-  - if @import_bag_receiver.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@import_bag_receiver.errors.count, "error")} prohibited this import_bag_receiver from being saved:"
-      %ul
-        - @import_bag_receiver.errors.full_messages.each do |msg|
-          %li= msg
+  #error_explanation{"style"=>"display:none"}
+    %ul
 
   .form-group
     = f.label :receiver_mobile,'目标账号:',class: 'col-sm-2 control-label'

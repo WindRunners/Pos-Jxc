@@ -28,7 +28,7 @@ class JxcOtherStockOutBillsController < ApplicationController
     @jxc_other_stock_out_bill = JxcOtherStockOutBill.new
     @jxc_other_stock_out_bill.bill_no = @jxc_other_stock_out_bill.generate_bill_no
     @jxc_other_stock_out_bill.stock_out_date = Time.now
-    @jxc_other_stock_out_bill.handler = current_user.staff
+    @jxc_other_stock_out_bill.handler << current_user
   end
 
   def edit
@@ -38,15 +38,17 @@ class JxcOtherStockOutBillsController < ApplicationController
     bill_info = params[:jxc_other_stock_out_bill]
     consumer_id = bill_info[:consumer_id]   #客户ID
     storage_id = bill_info[:storage_id]    #入货仓库ID
-    handler_id = bill_info[:handler_id]   #经手人ID
+    # handler_id = bill_info[:handler_id]   #经手人ID
 
     @jxc_other_stock_out_bill = JxcOtherStockOutBill.new(jxc_other_stock_out_bill_params)
     @jxc_other_stock_out_bill.stock_out_date = stringParseDate(bill_info[:stock_out_date])
     @jxc_other_stock_out_bill.consumer_id = consumer_id
     @jxc_other_stock_out_bill.storage_id = storage_id
-    @jxc_other_stock_out_bill.handler_id = handler_id
+
+    #经手人信息
+    @jxc_other_stock_out_bill.handler << current_user
     #制单人
-    @jxc_other_stock_out_bill.bill_maker = current_user
+    @jxc_other_stock_out_bill.bill_maker << current_user
 
     #单据商品明细
     billDetailArray = params[:billDetail]
@@ -64,7 +66,7 @@ class JxcOtherStockOutBillsController < ApplicationController
       tempBillDetail.count = count
       tempBillDetail.amount = amount
 
-      tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
       tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
       tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -78,10 +80,12 @@ class JxcOtherStockOutBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_other_stock_out_bill.save
-        format.html { redirect_to @jxc_other_stock_out_bill, notice: '其他出库单已经成功创建.' }
+        # format.html { redirect_to @jxc_other_stock_out_bill, notice: '其他出库单已经成功创建.' }
+        format.js { render_js jxc_other_stock_out_bill_path(@jxc_other_stock_out_bill), notice: '其他出库单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_other_stock_out_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_other_stock_out_bill_path}
         format.json { render json: @jxc_other_stock_out_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -93,13 +97,14 @@ class JxcOtherStockOutBillsController < ApplicationController
       bill_info = params[:jxc_other_stock_out_bill]
       consumer_id = bill_info[:consumer_id]   #客户ID
       storage_id = bill_info[:storage_id]    #入货仓库ID
-      handler_id = bill_info[:handler_id]   #经手人ID
+      # handler_id = bill_info[:handler_id]   #经手人ID
 
       @jxc_other_stock_out_bill.consumer_id = consumer_id
       @jxc_other_stock_out_bill.storage_id = storage_id
-      @jxc_other_stock_out_bill.handler_id = handler_id
+      #经手人信息
+      @jxc_other_stock_out_bill.handler << current_user
       #制单人
-      @jxc_other_stock_out_bill.bill_maker = current_user
+      @jxc_other_stock_out_bill.bill_maker << current_user
 
       @jxc_other_stock_out_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_other_stock_out_bill.stock_out_type = bill_info[:stock_out_type]
@@ -125,7 +130,7 @@ class JxcOtherStockOutBillsController < ApplicationController
         tempBillDetail.count = count
         tempBillDetail.amount = amount
 
-        tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
         tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
         tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -139,17 +144,20 @@ class JxcOtherStockOutBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_other_stock_out_bill.update
-          format.html { redirect_to jxc_other_stock_out_bills_path, notice: '其他出库单已经成功更新.' }
+          # format.html { redirect_to jxc_other_stock_out_bills_path, notice: '其他出库单已经成功更新.' }
+          format.js { render_js jxc_other_stock_out_bills_path, notice: '其他出库单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_other_stock_out_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_other_stock_out_bill_path(@jxc_other_stock_out_bill) }
           format.json { render json: @jxc_other_stock_out_bill.errors, status: :unprocessable_entity }
         end
       end
 
     else
       respond_to do |format|
-        format.html {redirect_to @jxc_other_stock_out_bill, notice: '销售出库单当前状态无法更新。'}
+        # format.html {redirect_to @jxc_other_stock_out_bill, notice: '销售出库单当前状态无法更新。'}
+        format.js { render_js edit_jxc_other_stock_out_bill_path(@jxc_other_stock_out_bill), notice: '销售出库单当前状态无法更新。'}
       end
     end
 
@@ -158,7 +166,8 @@ class JxcOtherStockOutBillsController < ApplicationController
   def destroy
     @jxc_other_stock_out_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_other_stock_out_bills_url, notice: '其他出库单已经成功删除.' }
+      # format.html { redirect_to jxc_other_stock_out_bills_url, notice: '其他出库单已经成功删除.' }
+      format.js { render_js jxc_other_stock_out_bills_url, notice: '其他出库单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -195,7 +204,7 @@ class JxcOtherStockOutBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(:other_out_bill_id => @jxc_other_stock_out_bill.id)
+    @bill_details = JxcBillDetail.where(:other_out_bill_id => @jxc_other_stock_out_bill.id)
   end
 
   def set_stock_out_types

@@ -12,7 +12,6 @@ class Order
   accepts_nested_attributes_for :ordergoods
 
   belongs_to :userinfo,:autosave => true
-  belongs_to :delivery_user
 
   field :coupons, type: Array, default: [] #优惠券列表
   field :getcoupons, type: Array, default: [] #获取的优惠券列表
@@ -43,7 +42,6 @@ class Order
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
-
 
   index({location: "2d"}, {min: -200, max: 200})
 

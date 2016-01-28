@@ -37,6 +37,7 @@ function get_location_href_no_search(){
     return "http://"+location.host+"/"+l_hash;
 }
 
+
 //获取随机数
 function get_rand_num(){
     return Math.floor(Math.random()*1000);

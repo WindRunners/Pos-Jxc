@@ -78,9 +78,9 @@ class Users::SessionsController < Devise::SessionsController
     render layout: false
   end
  # DELETE /resource/sign_out
-  #  def destroy
-  #    super
-  #  end
+ #   def destroy
+ #     super
+ #   end
 
   # protected
 

@@ -371,11 +371,14 @@ class OrderV1API < Grape::API
 
       orderarray.concat(Order.where({'_id' => {"$in" => uncomplete_ids}}).order(created_at: :desc)) if !uncomplete_ids.empty?
 
-      complete_orders = Ordercompleted.where({'_id' => {"$in" => complete_ids}}).order(created_at: :desc)
-      complete_orders.each do |ordercompleted|
-        ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
-        orderarray << ordercompleted
+      if !complete_ids.empty?
+        complete_orders = Ordercompleted.where({'_id' => {"$in" => complete_ids}}).order(created_at: :desc)
+        complete_orders.each do |ordercompleted|
+          ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
+          orderarray << ordercompleted
+        end
       end
+
       # orderarray.concat(Ordercompleted.where({'_id' => {"$in" => complete_ids}}).order(created_at: :desc)) if !complete_ids.empty?
       orderarray
     end

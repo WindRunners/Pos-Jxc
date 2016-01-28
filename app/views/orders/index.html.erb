@@ -2,6 +2,8 @@
     var table = null;
     //初始化加载方法
     $(function () {
+
+        //tab页添加监听
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             $('#workflow_state').val($(e.target).attr('name'));
 
@@ -21,13 +23,16 @@
             locale: "zh-cn",
             format: "YYYY-MM-DD HH:mm:ss"
         });
-
-
     });
 
 
     //提交方法
     function ajax_pagination(page) {
+
+        var workflow_state = $('#workflow_state').val();
+        $("a[data-toggle='tab']").parent().removeClass("active");//移除tab页活动属性
+        $("a[data-toggle='tab'][name='"+workflow_state+"']").parent().addClass("active");//添加tab页活动属性
+
         $.get('<%= orders_table_data_orders_path %>',
                 {
                     orderno: $('#orderno').val(),
@@ -44,7 +49,25 @@
                     if (status == 'success') {
                         $('#home').html(data);
                     } else {
-                        ;
+                        console.log("获取订单列表数据错误，状态码为："+status);
+                    }
+                });
+        order_state_count();
+    }
+
+
+
+    //提交方法
+    function order_state_count() {
+        $.get("<%= order_state_count_orders_path %>",
+                function (data, status) {
+                    if (status == 'success') {
+                        $("#paid_count").html(data.order_paid_count);//待接单
+                        $("#generation_count").html(data.order_generation_count);//待付款
+                        $("#distribution_count").html(data.order_distribution_count);//配送中
+                        $("#receive_count").html(data.order_receive_count);//配送完成
+                    } else {
+                        console.log("获取订单数量错误，状态码为："+status);
                     }
                 });
     }
@@ -54,7 +77,6 @@
         $(':input', '#search_form').not(':button, :submit, :reset, :hidden').val('');
         $('#workflow_state').val('all');
     }
-    ;
 
 
     function take_order() {
@@ -69,7 +91,7 @@
             },
             dataType: "json",
             success: function (data) {
-
+                ajax_pagination(1);
                 $('#myModal').modal('hide');
                 alert(data.msg);
 
@@ -189,7 +211,7 @@
             </div>
           </div>
           <div class="col-xs-2">
-            <div style=" -align: right">
+            <div style="text-align: right">
               <lable><h6>付款方式：</h6></lable>
             </div>
           </div>
@@ -255,25 +277,25 @@
     <li class="">
       <a name="paid" data-toggle="tab" href="#home">
         待接单
-        <span id="paid_count" class="badge badge-danger"><%= @order_state_count.order_paid_count %></span>
+        <span id="paid_count" class="badge badge-danger"></span>
       </a>
     </li>
     <li class="">
       <a name="generation" data-toggle="tab" href="#home">
         待付款
-        <span id="generation_count" class="badge badge-danger"><%= @order_state_count.order_generation_count %></span>
+        <span id="generation_count" class="badge badge-danger"></span>
       </a>
     </li>
     <li class="">
       <a name="distribution" data-toggle="tab" href="#home">
         配送中
-        <span id="distribution_count" class="badge badge-danger"><%= @order_state_count.order_distribution_count %></span>
+        <span id="distribution_count" class="badge badge-danger"></span>
       </a>
     </li>
     <li class="">
       <a name="receive" data-toggle="tab" href="#home">
         配送完成
-        <span id="receive_count" class="badge badge-danger"><%= @order_state_count.order_receive_count %></span>
+        <span id="receive_count" class="badge badge-danger"></span>
       </a>
     </li>
     <li class="">
@@ -288,7 +310,7 @@
     </li>
     <li class="">
       <a name="all" data-toggle="tab" href="#home">
-        <i id="all_count" class="green icon-home bigger-110"><%= @order_state_count.order_all_count %></i>
+        <i id="all_count" class="green icon-home bigger-110"></i>
         全部
       </a>
     </li>

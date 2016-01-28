@@ -3,37 +3,55 @@ Rails.application.routes.draw do
   ## 进销存
   #各单据
 
-
+  post 'jxc_stock_transfer_bills/audit'
+  post 'jxc_stock_transfer_bills/strike_a_balance'
+  post 'jxc_stock_transfer_bills/invalid'
   resources :jxc_stock_transfer_bills
 
-
+  post 'jxc_stock_reduce_bills/audit'
+  post 'jxc_stock_reduce_bills/strike_a_balance'
+  post 'jxc_stock_reduce_bills/invalid'
   resources :jxc_stock_reduce_bills
 
-
+  post 'jxc_stock_overflow_bills/audit'
+  post 'jxc_stock_overflow_bills/strike_a_balance'
+  post 'jxc_stock_overflow_bills/invalid'
   resources :jxc_stock_overflow_bills
 
-
+  post 'jxc_stock_count_bills/audit'
+  post 'jxc_stock_count_bills/strike_a_balance'
+  post 'jxc_stock_count_bills/invalid'
   resources :jxc_stock_count_bills
 
-
+  post 'jxc_stock_assign_bills/audit'
+  post 'jxc_stock_assign_bills/strike_a_balance'
+  post 'jxc_stock_assign_bills/invalid'
   resources :jxc_stock_assign_bills
 
 
   resources :jxc_sell_exchange_goods_bills
 
-
+  post 'jxc_sell_returns_bills/audit'
+  post 'jxc_sell_returns_bills/strike_a_balance'
+  post 'jxc_sell_returns_bills/invalid'
   resources :jxc_sell_returns_bills
 
-
+  post 'jxc_sell_stock_out_bills/audit'
+  post 'jxc_sell_stock_out_bills/strike_a_balance'
+  post 'jxc_sell_stock_out_bills/invalid'
   resources :jxc_sell_stock_out_bills
 
-
+  post 'jxc_sell_orders/audit'
+  post 'jxc_sell_orders/strike_a_balance'
+  post 'jxc_sell_orders/invalid'
   resources :jxc_sell_orders
 
 
   resources :jxc_purchase_exchange_goods_bills
 
-
+  post 'jxc_purchase_returns_bills/audit'
+  post 'jxc_purchase_returns_bills/strike_a_balance'
+  post 'jxc_purchase_returns_bills/invalid'
   resources :jxc_purchase_returns_bills
 
   post 'jxc_purchase_stock_in_bills/audit'
@@ -46,13 +64,19 @@ Rails.application.routes.draw do
   post 'jxc_purchase_orders/invalid'
   resources :jxc_purchase_orders
 
-
+  post 'jxc_other_stock_out_bills/audit'
+  post 'jxc_other_stock_out_bills/strike_a_balance'
+  post 'jxc_other_stock_out_bills/invalid'
   resources :jxc_other_stock_out_bills
 
-
+  post 'jxc_other_stock_in_bills/audit'
+  post 'jxc_other_stock_in_bills/strike_a_balance'
+  post 'jxc_other_stock_in_bills/invalid'
   resources :jxc_other_stock_in_bills
 
-
+  post 'jxc_cost_adjust_bills/audit'
+  post 'jxc_cost_adjust_bills/strike_a_balance'
+  post 'jxc_cost_adjust_bills/invalid'
   resources :jxc_cost_adjust_bills
 
 
@@ -112,6 +136,11 @@ Rails.application.routes.draw do
     post 'register'
     resources :product_ticket_customer_inits, shallow: true
   end
+
+  get '/product_ticket_customer_inits/:id/remove' => "product_ticket_customer_inits#remove" #酒劵用户移除
+
+  get '/product_tickets/:product_ticket_id/product_ticket_customer_inits/import_customer' => "product_ticket_customer_inits#import_customer" #酒劵用户导入
+
 
   resources :user_integrals
   resources :wines
@@ -192,6 +221,20 @@ Rails.application.routes.draw do
 
   mount RuCaptcha::Engine => "/rucaptcha"
   resources :userinfos do
+    get 'jyd_index', :on => :collection
+    get 'jyd_new', :on => :collection
+    post 'jyd_create', :on => :collection
+    get 'jyd_show/:userinfo_id', to: "userinfos#jyd_show", :on => :collection
+    get 'jyd_edit/:userinfo_id', to: "userinfos#jyd_edit", :on => :collection
+    patch 'jyd_update/:userinfo_id', to: "userinfos#jyd_update", :on => :collection
+    post 'jyd_check/:userinfo_id', to: "userinfos#jyd_check", :on => :collection
+    post 'jyd_check_out/:userinfo_id', to: "userinfos#jyd_check_out", :on => :collection
+    delete 'jyd_destroy/:userinfo_id', to: "userinfos#jyd_destroy", :on => :collection
+
+
+
+
+
     get 'audit', :on => :collection
     get 'email_active/:confirmation_token', :action => :email_active, :on => :collection
 
@@ -199,7 +242,6 @@ Rails.application.routes.draw do
 
     resources :products do
       get 'desc'
-
       get 'preview'
     end
   end

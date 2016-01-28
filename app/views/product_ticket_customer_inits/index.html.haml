@@ -1,10 +1,29 @@
 %h1 酒劵初始化会员列表
 
+%form.form-inline#import_form
+  .input-group
+    %label{"for"=>"start_date"}
+      时间：
+    %input.input-sm#start_date{"type"=>"text","name"=>"start","data-date-format"=>"YYYY-MM-DD"}
+    至
+    %input.input-sm#end_date{"type"=>"text","name"=>"end","data-date-format"=>"YYYY-MM-DD"}
+
+  .form-group
+    %label{"for"=>"min_records"}
+      订单量大于等于
+    %input.input-sm#min_records{"type"=>"number","name"=>"min_records","min"=>"1","value"=>1}
+
+  %a.btn.btn-primary.btn-lg#import_customer 导入会员
+
+
+
+%input{"type"=>"hidden","id"=>"import_customer_url","value"=>"/product_tickets/#{@product_ticket.id}/product_ticket_customer_inits/import_customer"}
 
 %table.table.table-striped.table-bordered.table-hover#product_ticket_customer{"data-source" => "#{product_ticket_product_ticket_customer_inits_path(@product_ticket)}"}
   %thead
     %tr
       %th 手机号
+      %th 操作
   %tbody
 
 %br

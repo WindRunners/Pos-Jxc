@@ -28,7 +28,7 @@ class JxcPurchaseReturnsBillsController < ApplicationController
     @jxc_purchase_returns_bill.bill_no = @jxc_purchase_returns_bill.generate_bill_no
     @jxc_purchase_returns_bill.collection_date = Time.now
     @jxc_purchase_returns_bill.returns_date = Time.now
-    @jxc_purchase_returns_bill.handler = current_user.staff
+    @jxc_purchase_returns_bill.handler << current_user
   end
 
   def edit
@@ -38,17 +38,18 @@ class JxcPurchaseReturnsBillsController < ApplicationController
     bill_info = params[:jxc_purchase_returns_bill]
     supplier_id = bill_info[:supplier_id]   #供应商ID
     storage_id = bill_info[:storage_id]    #入货仓库ID
-    handler_id = bill_info[:handler_id]   #经手人ID
-    account_id = bill_info[:account_id]   #付款账户ID
+    # handler_id = bill_info[:handler_id]   #经手人ID
+    # account_id = bill_info[:account_id]   #付款账户ID
 
     @jxc_purchase_returns_bill = JxcPurchaseReturnsBill.new(jxc_purchase_returns_bill_params)
 
     @jxc_purchase_returns_bill.supplier_id = supplier_id
     @jxc_purchase_returns_bill.storage_id =  storage_id
-    @jxc_purchase_returns_bill.handler_id =  handler_id
-    @jxc_purchase_returns_bill.account_id =  account_id
+    # @jxc_purchase_returns_bill.account_id =  account_id
     #制单人
-    @jxc_purchase_returns_bill.bill_maker =  current_user
+    @jxc_purchase_returns_bill.bill_maker <<  current_user
+    #经手人
+    @jxc_purchase_returns_bill.handler << current_user
 
     @jxc_purchase_returns_bill.collection_date = stringParseDate(bill_info[:collection_date])
     @jxc_purchase_returns_bill.returns_date = stringParseDate(bill_info[:returns_date])
@@ -80,7 +81,7 @@ class JxcPurchaseReturnsBillsController < ApplicationController
       tempBillDetail.amount = amount
 
       #商品ID
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #商品计量单位
       tempBillDetail.unit = billDetailInfo[:unit]
       #备注
@@ -112,10 +113,13 @@ class JxcPurchaseReturnsBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_purchase_returns_bill.save
-        format.html { redirect_to jxc_purchase_returns_bills_path, notice: '采购退货单已经成功创建.' }
+        # format.html { redirect_to jxc_purchase_returns_bills_path, notice: '采购退货单已经成功创建.' }
+        format.js { render_js jxc_purchase_returns_bills_path, notice: '采购退货单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_purchase_returns_bill }
       else
-        format.html { render :new }
+        JxcBillDetail.where(purchase_returns_bill_id: @jxc_purchase_returns_bill.id).destroy
+
+        format.js { render_js new_jxc_purchase_returns_bill_path }
         format.json { render json: @jxc_purchase_returns_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -131,16 +135,17 @@ class JxcPurchaseReturnsBillsController < ApplicationController
       bill_info = params[:jxc_purchase_returns_bill]
       supplier_id = bill_info[:supplier_id]   #供应商ID
       storage_id = bill_info[:storage_id]    #入货仓库ID
-      handler_id = bill_info[:handler_id]   #经手人ID
-      account_id = bill_info[:account_id]   #付款账户ID
+      # handler_id = bill_info[:handler_id]   #经手人ID
+      # account_id = bill_info[:account_id]   #付款账户ID
 
 
       @jxc_purchase_returns_bill.supplier_id = supplier_id
       @jxc_purchase_returns_bill.storage_id =  storage_id
-      @jxc_purchase_returns_bill.handler_id =  handler_id
-      @jxc_purchase_returns_bill.account_id =  account_id
+      # @jxc_purchase_returns_bill.account_id =  account_id
       #制单人
-      @jxc_purchase_returns_bill.bill_maker =  current_user
+      @jxc_purchase_returns_bill.bill_maker <<  current_user
+      #经手人
+      @jxc_purchase_returns_bill.handler <<  current_user
 
       @jxc_purchase_returns_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_purchase_returns_bill.collection_date = stringParseDate(bill_info[:collection_date])
@@ -178,7 +183,7 @@ class JxcPurchaseReturnsBillsController < ApplicationController
         tempBillDetail.amount = amount
 
         #商品ID
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #商品计量单位
         tempBillDetail.unit = billDetailInfo[:unit]
         #备注
@@ -210,16 +215,18 @@ class JxcPurchaseReturnsBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_purchase_returns_bill.update
-          format.html { redirect_to @jxc_purchase_returns_bill, notice: '采购退货单已经成功更新.' }
+          # format.html { redirect_to @jxc_purchase_returns_bill, notice: '采购退货单已经成功更新.' }
+          format.js { render_js jxc_purchase_returns_bill_path(@jxc_purchase_returns_bill), notice: '采购退货单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_purchase_returns_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_purchase_returns_bill_path(@jxc_purchase_returns_bill) }
           format.json { render json: @jxc_purchase_returns_bill.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to jxc_purchase_returns_bills_path, notice: '采购退货单当前状态无法更新.'}
+        format.js { render_js jxc_purchase_returns_bills_path, notice: '采购退货单当前状态无法更新.'}
       end
     end
   end
@@ -229,7 +236,8 @@ class JxcPurchaseReturnsBillsController < ApplicationController
   def destroy
     @jxc_purchase_returns_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_purchase_returns_bills_url, notice: '采购退货单已经成功删除.' }
+      # format.html { redirect_to jxc_purchase_returns_bills_url, notice: '采购退货单已经成功删除.' }
+      format.js { render_js jxc_purchase_returns_bills_url, notice: '采购退货单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -265,6 +273,6 @@ class JxcPurchaseReturnsBillsController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(purchase_returns_bill_id: @jxc_purchase_returns_bill.id)
+    @bill_details = JxcBillDetail.where(purchase_returns_bill_id: @jxc_purchase_returns_bill.id)
   end
 end

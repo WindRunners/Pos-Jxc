@@ -42,20 +42,24 @@ class ImportBagReceiversController < ApplicationController
 
     countRows = ImportBagReceiver.where(receiver_mobile: @import_bag_receiver.receiver_mobile,import_bag_id: params[:import_bag_id]).count
 
-    if countRows > 0
-      render_js new_import_bag_import_bag_receiver_path(@import_bag)
-      # redirect_to new_import_bag_import_bag_receiver_path(@import_bag), notice: "账号#{@import_bag_receiver.receiver_mobile}已经添加无需再添加!"
-      return
-    end
+    # if countRows > 0
+    #   render_js new_import_bag_import_bag_receiver_path(@import_bag)
+    #   # redirect_to new_import_bag_import_bag_receiver_path(@import_bag), notice: "账号#{@import_bag_receiver.receiver_mobile}已经添加无需再添加!"
+    #   return
+    # end
 
     respond_to do |format|
-      if @import_bag_receiver.save
-        format.js {render_js import_bag_receiver_path(@import_bag_receiver) }
-        # format.html { redirect_to @import_bag_receiver, notice: '目标账号创建成功.' }
-        format.json { render :show, status: :created, location: @import_bag_receiver }
+
+      if countRows > 0
+
+        format.json { render json: get_render_json(0,{'repeat'=>'当前会员已经添加！'}) }
       else
-        format.html { render :new }
-        format.json { render json: @import_bag_receiver.errors, status: :unprocessable_entity }
+
+        if @import_bag_receiver.save
+          format.json { render json: get_render_json(1,nil,import_bag_receiver_path(@import_bag_receiver)) }
+        else
+          format.json { render json: get_render_json(0,@import_bag_receiver.errors.messages) }
+        end
       end
     end
   end
@@ -69,21 +73,20 @@ class ImportBagReceiversController < ApplicationController
     authorize  @import_bag ,:update?
 
     import_bag_receiver_bak = ImportBagReceiver.where(receiver_mobile: params[:import_bag_receiver][:receiver_mobile],import_bag_id: @import_bag.id).first
-    if import_bag_receiver_bak.present? && import_bag_receiver_bak.id!=@import_bag_receiver.id
-
-      render_js edit_import_bag_receiver_path(@import_bag_receiver)
-      # redirect_to edit_import_bag_receiver_path(@import_bag_receiver), notice: "账号#{params[:import_bag_receiver][:receiver_mobile]}已经添加无需再添加!"
-      return
-    end
 
     respond_to do |format|
-      if @import_bag_receiver.update(import_bag_receiver_params)
-        format.js {render_js import_bag_receiver_path(@import_bag_receiver) }
-        # format.html { redirect_to @import_bag_receiver, notice: '目标账号更新成功.' }
-        format.json { render :show, status: :ok, location: @import_bag_receiver }
+
+      if import_bag_receiver_bak.present? && import_bag_receiver_bak.id!=@import_bag_receiver.id
+
+        format.json { render json: get_render_json(0,{'repeat'=>'当前会员已经添加！'}) }
       else
-        format.html { render :edit }
-        format.json { render json: @import_bag_receiver.errors, status: :unprocessable_entity }
+
+        if @import_bag_receiver.update(import_bag_receiver_params)
+
+          format.json { render json: get_render_json(1,nil,import_bag_receiver_path(@import_bag_receiver)) }
+        else
+          format.json { render json: get_render_json(0,@import_bag_receiver.errors.messages) }
+        end
       end
     end
   end

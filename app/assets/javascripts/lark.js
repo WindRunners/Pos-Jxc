@@ -37,6 +37,7 @@ function get_location_href_no_search(){
     return "http://"+location.host+"/"+l_hash;
 }
 
+
 //获取随机数
 function get_rand_num(){
     return Math.floor(Math.random()*1000);
@@ -78,4 +79,23 @@ function isExitsVariable(variableName) {
         }
     } catch(e) {}
     return false;
+}
+
+//表单ajax提交处理，处理错误信息提示以及成功后页面跳转 适用于（data-remote=true）
+function common_form_ajax_deal(){
+
+    $("form[data-remote='true']").on('ajax:success', function(event, xhr, status, error) {
+
+        if(xhr.flag==1){
+            $("#error_explanation").hide();
+            eval(xhr.path);
+        }else{
+            $("#error_explanation ul").html("");
+            msg_data = xhr.data
+            for (msg in msg_data){
+                $("#error_explanation ul").append("<li>"+msg_data[msg]+"</li>");
+            }
+            $("#error_explanation").show();
+        }
+    });
 }

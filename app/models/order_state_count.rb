@@ -7,6 +7,8 @@ class OrderStateCount
   field :order_distribution_count, type: Integer,default:0
   field :order_receive_count, type: Integer,default:0
 
+
+  #需要修改
   def self.build_orderStateCount(userinfo_id)
 
     map = %Q{

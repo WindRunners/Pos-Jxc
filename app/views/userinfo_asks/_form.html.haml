@@ -1,10 +1,6 @@
 = form_for @userinfo_ask do |f|
-  - if @userinfo_ask.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@userinfo_ask.errors.count, "error")} prohibited this userinfo_ask from being saved:"
-      %ul
-        - @userinfo_ask.errors.full_messages.each do |msg|
-          %li= msg
+  #error_explanation{"style"=>"display:none"}
+    %ul
 
   .field
     = f.label :shopname

@@ -15,8 +15,8 @@ class JxcCommonInfoController < ApplicationController
 
     #如果传入单位类型ID为空，则查询所有供应商
     if unitType.blank?
-      suppliersList = JxcContactsUnit.where(unit_property:'0',:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total':JxcContactsUnit.where(unit_property:'0',:unit_name => /#{unit_param}/).count,'rows':suppliersList}
+      suppliersList = JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).page(page).per(rows)
+      render json: {'total':JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).count,'rows':suppliersList}
     else
       suppliersList = JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).page(page).per(rows)
       render json: {'total':JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows':suppliersList}

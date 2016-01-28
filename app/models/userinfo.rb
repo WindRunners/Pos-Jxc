@@ -22,8 +22,8 @@ class Userinfo
   has_many :coupons
   has_many :mobile_categories
 
-  field :name, type: String # 经营者姓名
-  field :idnumber, type: String#身份证号码
+  field :name, type: String # 经营者姓名1
+  field :idnumber, type: String#身份证号码1
 
   field :alipay,type: String #支付宝账号
   field :alipay_name,type: String#支付宝姓名
@@ -31,13 +31,16 @@ class Userinfo
   field :wx_name,type: String,default: "" #微信实名制姓名(即微信绑定银行卡的姓名)
   field :openid,type: String,default: "" #转账唯一标示
 
-  field :address, type: String,default: "" # 经营者地址
-  field :province,type:String ,default: ""  #省
-  field :city,type:String ,default: ""      #市区
-  field :district,type: String ,default: "" #县、区
+  field :address, type: String,default: "" # 经营者地址1
+  field :province,type:String ,default: ""  #省1
+  field :city,type:String ,default: ""      #市区1
+  field :district,type: String ,default: "" #县、区1
 
-  field :shopname, type: String # 经营者商店名称
+  field :shopname, type: String # 经营者商店名称1
   field :location, type: Point, spatial: true, default: []
+  field :email, type: String #邮箱 唯一
+
+  field :status, type: Integer,  default: 0 #启用状态，0初始化，1启用，-1禁用1
 
   field :integral, type: Integer,default: 0 # 积分
   field :approver,type: String #审批人
@@ -48,7 +51,7 @@ class Userinfo
   # field :cash_pw,type: String #提现密码
   field :work_24,type: String,default: 'false' #24小时店 true／false
 
-  field :alarm_stock, type: Integer,default: 10 # 预警库存数量
+  field :alarm_stock, type: Integer,default: 10 # 预警库存数量1
 
  # field :busp_url, type: String # 营业执照
  # field :footp_url, type: String # 食品流通许可证
@@ -70,7 +73,8 @@ class Userinfo
   field :end_business, type: String #营业结束时间
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
 
-  validates :pdistance,presence: true
+  validates :name, :province,:city,:district,:email, presence: true #名称，种类不能为空
+  validates :name,:email,:district,uniqueness: true #名称唯一
 
   index({location: "2d"}, {min: -200, max: 200})
 

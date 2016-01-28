@@ -22,7 +22,7 @@
       %th=t('mongoid.attributes.jxc_stock_count_bill.check_date')
       %th=t('mongoid.attributes.jxc_stock_count_bill.remark')
       %th=t('mongoid.attributes.jxc_stock_count_bill.bill_status')
-      %th=t("mongoid.links.operation")
+      %th=t("helpers.actions")
       %th
 
   %tbody
@@ -34,9 +34,8 @@
         %td= jxc_stock_count_bill.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_stock_count_bill.bill_status == '0' ? '已创建' : (jxc_stock_count_bill.bill_status == '1' ? '已预审' : '已确认')
-        %td= link_to t('helpers.links.show'), jxc_stock_count_bill,class:'btn btn-xs btn-info'
-        %td= link_to t('helpers.links.edit'), edit_jxc_stock_count_bill_path(jxc_stock_count_bill),class:'btn btn-xs btn-warning',disabled:jxc_stock_count_bill.bill_status == '0' ? false:true
+        %td= link_to t('helpers.links.show'), '', 'data-href': jxc_stock_count_bill_path(jxc_stock_count_bill),class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'),'','data-href': edit_jxc_stock_count_bill_path(jxc_stock_count_bill),class:'btn btn-xs btn-warning',disabled:jxc_stock_count_bill.bill_status == '0' ? false:true
 
 %br
-
-= link_to t("helpers.links.new"), new_jxc_stock_count_bill_path,:class => 'btn btn-primary'
+= link_to t("helpers.links.new"), '','data-href':new_jxc_stock_count_bill_path,:class => 'btn btn-primary'

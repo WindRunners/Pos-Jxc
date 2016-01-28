@@ -15,7 +15,9 @@ class JxcTransferBillDetail
   field :amount, type: BigDecimal           #小计
   field :remark, type: String               #备注
 
-  belongs_to :product #单据明细 所包含的商品信息
+  field :resource_product_id, type: String  #单据明细 包含的商品信息ID ( ActiveResource Object )
+
+  # belongs_to :product #单据明细 所包含的商品信息
   belongs_to :jxc_stock_transfer_bill, foreign_key: :stock_transfer_bill_id
   belongs_to :jxc_stock_assign_bill,  foreign_key: :stock_assign_bill_id
 
@@ -31,4 +33,10 @@ class JxcTransferBillDetail
   def calculate_amount(price,count)
     total_amount = (price.to_d * count.to_d).round(2)
   end
+
+  #查询关联商品信息
+  def product
+    @product = JxcProduct.find(self.resource_product_id)
+  end
+
 end

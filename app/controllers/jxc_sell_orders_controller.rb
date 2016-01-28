@@ -28,7 +28,7 @@ class JxcSellOrdersController < ApplicationController
     @jxc_sell_order.order_no = @jxc_sell_order.generate_bill_no
     @jxc_sell_order.consign_goods_date = Time.now
     @jxc_sell_order.order_date = Time.now
-    @jxc_sell_order.handler = current_user.staff
+    @jxc_sell_order.handler << current_user
   end
 
   def edit
@@ -38,16 +38,17 @@ class JxcSellOrdersController < ApplicationController
     sell_order_info = params[:jxc_sell_order]
     consumer_id = sell_order_info[:consumer_id]   #客户ID
     storage_id = sell_order_info[:storage_id]    #入货仓库ID
-    handler_id = sell_order_info[:handler_id]   #经手人ID
-    account_id = sell_order_info[:account_id]   #付款账户ID
+    # handler_id = sell_order_info[:handler_id]   #经手人ID
+    # account_id = sell_order_info[:account_id]   #付款账户ID
 
     @jxc_sell_order = JxcSellOrder.new(jxc_sell_order_params)
     @jxc_sell_order.consumer_id = consumer_id
     @jxc_sell_order.storage_id = storage_id
-    @jxc_sell_order.handler_id = handler_id
-    @jxc_sell_order.account_id = account_id
+    # @jxc_sell_order.account_id = account_id
     #制单人
-    @jxc_sell_order.bill_maker = current_user
+    @jxc_sell_order.bill_maker << current_user
+    #经手人
+    @jxc_sell_order.handler << current_user
 
     @jxc_sell_order.order_date = stringParseDate(sell_order_info[:order_date])
     @jxc_sell_order.consign_goods_date = stringParseDate(sell_order_info[:consign_goods_date])
@@ -68,7 +69,7 @@ class JxcSellOrdersController < ApplicationController
       count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #销售数量
       amount = tempBillDetail.calculate_discount_amount(sellPrice,count,discount)  #金额
 
-      tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
       tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
       tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -99,10 +100,12 @@ class JxcSellOrdersController < ApplicationController
 
     respond_to do |format|
       if @jxc_sell_order.save
-        format.html { redirect_to jxc_sell_orders_path, notice: '销售订单已经成功创建.' }
+        # format.html { redirect_to jxc_sell_orders_path, notice: '销售订单已经成功创建.' }
+        format.js { render_js jxc_sell_orders_path, notice: '销售订单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_sell_order }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.js { render_js new_jxc_sell_order_path }
         format.json { render json: @jxc_sell_order.errors, status: :unprocessable_entity }
       end
     end
@@ -114,15 +117,16 @@ class JxcSellOrdersController < ApplicationController
       sell_order_info = params[:jxc_sell_order]
       consumer_id = sell_order_info[:consumer_id]   #客户ID
       storage_id = sell_order_info[:storage_id]    #入货仓库ID
-      handler_id = sell_order_info[:handler_id]   #经手人ID
-      account_id = sell_order_info[:account_id]   #付款账户ID
+      # handler_id = sell_order_info[:handler_id]   #经手人ID
+      # account_id = sell_order_info[:account_id]   #付款账户ID
 
       @jxc_sell_order.consumer_id = consumer_id
       @jxc_sell_order.storage_id = storage_id
-      @jxc_sell_order.handler_id = handler_id
-      @jxc_sell_order.account_id = account_id
+      # @jxc_sell_order.account_id = account_id
       #制单人
-      @jxc_sell_order.bill_maker = current_user
+      @jxc_sell_order.bill_maker << current_user
+      #经手人
+      @jxc_sell_order.handler << current_user
 
       @jxc_sell_order.customize_order_no = sell_order_info[:customize_order_no]
       @jxc_sell_order.order_date = stringParseDate(sell_order_info[:order_date])
@@ -148,7 +152,7 @@ class JxcSellOrdersController < ApplicationController
         count = billDetailInfo[:count] == '' ? 0 : billDetailInfo[:count]  #销售数量
         amount = tempBillDetail.calculate_discount_amount(sellPrice,count,discount)  #金额
 
-        tempBillDetail.product_id = billDetailInfo[:product_id]   #商品ID
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]   #商品ID
         tempBillDetail.unit = billDetailInfo[:unit]       #商品计量单位
         tempBillDetail.remark = billDetailInfo[:remark]   #备注
 
@@ -179,16 +183,19 @@ class JxcSellOrdersController < ApplicationController
 
       respond_to do |format|
         if @jxc_sell_order.update
-          format.html { redirect_to jxc_sell_orders_path, notice: '销售订单已经成功更新' }
+          # format.html { redirect_to jxc_sell_orders_path, notice: '销售订单已经成功更新' }
+          format.js { render_js jxc_sell_orders_path, notice: '销售订单已经成功更新' }
           format.json { render :show, status: :ok, location: @jxc_sell_order }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_sell_order_path(@jxc_sell_order) }
           format.json { render json: @jxc_sell_order.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to jxc_sell_orders_path, notice: '销售订单当前状态无法更新。'}
+        # format.html {redirect_to jxc_sell_orders_path, notice: '销售订单当前状态无法更新。'}
+        format.js {render_js jxc_sell_orders_path, notice: '销售订单当前状态无法更新。'}
       end
     end
 
@@ -197,7 +204,8 @@ class JxcSellOrdersController < ApplicationController
   def destroy
     @jxc_sell_order.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_sell_orders_url, notice: '销售订单已经成功删除' }
+      # format.html { redirect_to jxc_sell_orders_url, notice: '销售订单已经成功删除' }
+      format.js { render_js jxc_sell_orders_url, notice: '销售订单已经成功删除' }
       format.json { head :no_content }
     end
   end
@@ -232,6 +240,6 @@ class JxcSellOrdersController < ApplicationController
   end
 
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(sell_order_id: @jxc_sell_order.id)
+    @bill_details = JxcBillDetail.where(sell_order_id: @jxc_sell_order.id)
   end
 end

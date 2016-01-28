@@ -1,0 +1,22 @@
+%p
+  %b 公司名称:
+  = @userinfo.shopname
+%p
+  %b 法人姓名:
+  = @userinfo.name
+%p
+  %b 法人身份证号:
+  = @userinfo.idnumber
+%p
+  %b 公司地址:
+  = @userinfo.address
+%p
+  %b 法人手机号码:
+  = @userinfo.pusher_phone
+%p
+  %b 公司状态:
+  = @userinfo.status
+%p
+= link_to '编辑',"",'data-href' =>'/userinfos/jyd_edit/'+ @userinfo.id,:class => 'btn btn-info'
+\|
+= link_to '返回',"",'data-href' =>jyd_index_userinfos_path,:class => 'btn btn-info'

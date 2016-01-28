@@ -24,7 +24,7 @@ class CustomerOrderStatic
       userinfo_id = order['userinfo_id'].to_s
 
       order_date =  order.created_at.strftime("%Y.%m.%d")
-      customerOrderStatic.inc("#{order_date}" => 1) #增加订单量
+      customerOrderStatic.inc("#{order_date}.#{userinfo_id}" => 1) #增加订单量
       customerOrderStatic.add_to_set({:userinfo_ids => userinfo_id,:order_ids => order_id}) #增加小Bid
     rescue Exception => e #异常捕获
       puts e.message

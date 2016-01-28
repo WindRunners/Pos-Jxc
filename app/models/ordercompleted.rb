@@ -7,7 +7,6 @@ class Ordercompleted
   include Mongoid::Attributes::Dynamic
 
   belongs_to :userinfo
-  belongs_to :delivery_user
   has_many :ordergoodcompleteds,:autosave => true
   has_many :order_tracks
 

@@ -19,6 +19,36 @@ $(function () {
     });
 });
 
+$(function () {
+    //键盘enter事件
+    document.onkeydown = function (event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if (e && e.keyCode == 27) { // 按 Esc
+            //要做的事情
+        }
+        if (e && e.keyCode == 113) { // 按 F2
+            //要做的事情
+        }
+        if (e && e.keyCode == 13) { // enter 键
+            search();
+        }
+    };
+    pagination_ajax();
+});
+
+//查询用户搜索
+function search() {
+    var user_name = $("#user_name").val();
+    var user_mobile = $("#user_mobile").val();
+    if (user_mobile.length > 11) {
+        alert("手机号码不合法!");
+        return;
+    }
+    var prefix_url = "?user_name=" + user_name + "&user_mobile=" + user_mobile;
+    window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
+}
+
+
 //管理员用户>>重置密码
 function reset_password(user_id) {
     $.get("/admin/users/" + user_id + "/reset_password", function (data, status) {

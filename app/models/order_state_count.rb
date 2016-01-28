@@ -9,7 +9,11 @@ class OrderStateCount
 
 
   #需要修改
-  def self.build_orderStateCount(userinfo_id)
+  def self.build_orderStateCount(current_user)
+
+    userinfo_id = current_user['userinfo_id'] #小Bid
+    store_ids = current_user['store_ids'].present? ? current_user['store_ids'] : [] #负责门店列表
+
 
     map = %Q{
       function() {
@@ -29,7 +33,7 @@ class OrderStateCount
 
     orderStateCount = OrderStateCount.new()
 
-    curren_user_orders = Order.where(:userinfo_id => userinfo_id)
+    curren_user_orders = Order.where(:userinfo_id => userinfo_id,:store_id => {"$in" => store_ids})
     orders = curren_user_orders.map_reduce(map, reduce).out(inline: true)
 
     begin
@@ -52,7 +56,7 @@ class OrderStateCount
         if "receive" == state_count["_id"]
           orderStateCount.order_receive_count = statecount
         end
-        orderStateCount.order_all_count = curren_user_orders.count + Ordercompleted.where(:userinfo_id => userinfo_id).count
+        # orderStateCount.order_all_count = curren_user_orders.count + Ordercompleted.where(:userinfo_id => userinfo_id,:store_id => {"$in" => store_ids}).count
       end
     rescue
 

@@ -7,7 +7,7 @@ module GiftBagV1APIHelper
   def GiftBagV1APIHelper.claim(customerUser, gift_bag_id)
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
 
     giftBag = GiftBag.where(id: gift_bag_id).first
     return {msg: '当前礼包不存在!', flag: 0} if !giftBag.present?
@@ -110,7 +110,7 @@ module GiftBagV1APIHelper
   def GiftBagV1APIHelper.send(customerUser, postInfo)
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
 
     return {msg: '密码输入错误,请重新输入', flag: 3} if !spiritRoom.authenticate(postInfo.password)
 
@@ -171,7 +171,7 @@ module GiftBagV1APIHelper
 
     gift_bag_id = postInfo['gift_bag_id']
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
     giftBag = GiftBag.where(id: gift_bag_id).first
     return {msg: '当前礼包不存在!', flag: 0} if !giftBag.present?
 

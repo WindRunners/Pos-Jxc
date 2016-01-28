@@ -183,7 +183,10 @@ class UserinfosController < ApplicationController
   # end
 
   def jyd_index
-    @userinfos = Userinfo.all
+    name_condition=params[:name] || ''
+    conditionParams = {}
+    conditionParams['shopname'] = /#{name_condition}/ if name_condition.present?
+    @userinfos = Userinfo.where(conditionParams).page(params[:page]).order('created_at DESC')
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }

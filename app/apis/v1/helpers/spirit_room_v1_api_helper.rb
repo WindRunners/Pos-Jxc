@@ -9,10 +9,15 @@ module SpiritRoomV1APIHelper
     return {msg: '密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(password)
 
     spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
-    return {msg: '酒库已经开通,请查看!', flag: 0} if spiritRoom.present?
+    return {msg: '酒库已经开通,请查看!', flag: 0} if spiritRoom.present? && spiritRoom.is_active == 1
 
-    spiritRoom = SpiritRoom.new(:password => password)
+    if spiritRoom.present?
+      spiritRoom.password = password
+    else
+      spiritRoom = SpiritRoom.new(:password => password)
+    end
     spiritRoom['customer_id'] = customerUser.id.to_s
+    spiritRoom.is_active = 1
     spiritRoom.save
     return {msg: '酒库创建成功!', flag: 1}
   end
@@ -23,7 +28,7 @@ module SpiritRoomV1APIHelper
     # puts "小C信息为:#{Customer.all.first.to_json}"
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
 
     map = %Q{
         function(){
@@ -52,7 +57,7 @@ module SpiritRoomV1APIHelper
   def SpiritRoomV1APIHelper.product_list(customerUser,postInfo)
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
 
     userinfo_id = postInfo['userinfo_id'] #小B id
 
@@ -81,7 +86,7 @@ module SpiritRoomV1APIHelper
     Rails.logger.info "酒库提酒参数为：#{postInfo}"
 
     spiritRoom = SpiritRoom.where({'customer_id' => customerUser.id}).first
-    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present?
+    return {msg: '当前会员未开通酒库,请开通后进行认领!', flag: 2} if !spiritRoom.present? || spiritRoom.is_active == 0
 
     return {msg: '密码输入错误,请重新输入', flag: 3} if !spiritRoom.authenticate(postInfo.password)
 
@@ -139,7 +144,7 @@ module SpiritRoomV1APIHelper
     return {msg: '新密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(new_pwd)
 
     spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
-    return {msg: '当前用户为开通酒库!', flag: 0} if !spiritRoom.present?
+    return {msg: '当前用户为开通酒库!', flag: 2} if !spiritRoom.present?
 
     return {msg: '旧密码输入错误,请重新输入', flag: 0} if !spiritRoom.authenticate(old_pwd)
 
@@ -161,7 +166,7 @@ module SpiritRoomV1APIHelper
     return {msg: '新密码不合法，请重新输入', flag: 0} if !SpiritRoomV1APIHelper.pwd_regex(new_pwd)
 
     spiritRoom = SpiritRoom.where(:customer_id => customerUser.id).first
-    return {msg: '当前用户为开通酒库!', flag: 0} if !spiritRoom.present?
+    return {msg: '当前用户未开通酒库!', flag: 2} if !spiritRoom.present?
 
     #验证码验证
     verifycode2 = VerifyCode.where(key: "#{RESET_PWD_VERIFYCODE_PREFIX}_#{customerUser.mobile}").first #获取验证码

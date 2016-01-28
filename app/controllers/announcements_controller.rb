@@ -246,6 +246,13 @@ class AnnouncementsController < ApplicationController
 
   def app_show
     @announcement = Announcement.find(params[:announcement_id])
+    count = Announcement.where(:announcement_category_id=>@announcement.announcement_category.id,:pic_path => {"$exists":true}).count
+    if count-4< 0
+      rand_num = 0
+    else
+      rand_num= count-4
+    end
+    @relate_news = Announcement.where(:announcement_category_id=>@announcement.announcement_category.id,:pic_path => {"$exists":true}).skip(rand(rand_num)).order('created_at DESC').limit(4)
     render :layout => nil
   end
 

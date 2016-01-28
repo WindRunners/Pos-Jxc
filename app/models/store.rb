@@ -101,7 +101,8 @@ class Store
 
 
     #更新订单门店及配送距离
-    Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance})
+    order.update_attribute({'store_id'=> storeId,'distance'=>distance})
+    OrderStateChange.find(order_id).update(:store_id => storeId) #更新订单总表门店信息
   end
 
 

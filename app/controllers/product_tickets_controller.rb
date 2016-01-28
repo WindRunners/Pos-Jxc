@@ -26,7 +26,6 @@ class ProductTicketsController < ApplicationController
   # POST /product_tickets.json
   def create
     @product_ticket = ProductTicket.new(product_ticket_params)
-    @product_ticket.customer_ids= params[:product_ticket]['customer_ids'].split(",")
     @product_ticket.userinfo = current_user.userinfo
     respond_to do |format|
       if @product_ticket.save
@@ -59,7 +58,6 @@ class ProductTicketsController < ApplicationController
   # DELETE /product_tickets/1.json
   def destroy
     @product_ticket.destroy
-    @product_ticket.card_bags.destroy
     respond_to do |format|
       format.js { render_js product_tickets_path, 'Product ticket was successfully destroyed.' }
       format.html { redirect_to product_tickets_url, notice: 'Product ticket was successfully destroyed.' }
@@ -113,7 +111,7 @@ class ProductTicketsController < ApplicationController
     data ={}
 
 
-    if product_ticket.card_bags.count>0
+    if product_ticket.card_bags.present?
       data['flag'] = 0
       data['message'] = '发布失败，该礼包已经发布！'
 
@@ -232,6 +230,6 @@ class ProductTicketsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_ticket_params
-    params.require(:product_ticket).permit(:title, :start_date, :end_date, :product_id, :status, :desc, :rule_content, :logo)
+    params.require(:product_ticket).permit(:title, :start_date, :end_date, :product_id, :status, :desc, :rule_content, :logo,:banner)
   end
 end

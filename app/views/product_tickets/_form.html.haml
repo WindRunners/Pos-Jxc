@@ -25,6 +25,17 @@
                 %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
               -else
                 %img#img_product_ticket_logo{:style => "height:50px;width:50px"}
+
+          .form-group
+            .field
+              = f.label :第三方页面banner图640280,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-3
+              = f.file_field :banner
+            .col-sm-6
+              -if params[:action] =='edit'
+                %img#img_product_ticket_banner{:style => "height:100px;width:200px",:src=>@product_ticket.banner.url}
+              -else
+                %img#img_product_ticket_banner{:style => "height:100px;width:200px"}
           .form-group
             .field
               = f.label :活动时间,:class=>'col-sm-2 control-label no-padding-right'
@@ -216,6 +227,29 @@
       console.log("objUrl = "+objUrl) ;
       if (objUrl) {
           $("#img_product_ticket_logo").attr("src", objUrl) ;
+      }
+    }) ;
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+
+
+
+
+        $("#product_ticket_banner").change(function(){
+      var objUrl = getObjectURL(this.files[0]) ;
+      console.log("objUrl = "+objUrl) ;
+      if (objUrl) {
+          $("#img_product_ticket_banner").attr("src", objUrl) ;
       }
     }) ;
     //建立一個可存取到該file的url

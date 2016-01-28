@@ -5,7 +5,13 @@ class Admin::UsersController < ApplicationController
 
   def index
     @current_user = current_user
-    @users = User.all.page(params[:page])
+    name =  params[:user_name]
+    mobile = params[:user_mobile]
+    whereParams = {} #查询条件
+    whereParams['name'] = /#{name}/ if name.present?
+    whereParams['mobile'] = /#{mobile}/ if mobile.present?
+    @users = User.where(whereParams).page(params[:page])
+    # @users = User.all.page(params[:page])
     # @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
   end
 

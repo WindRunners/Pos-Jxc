@@ -13,10 +13,9 @@
       =@product_ticket.title
   %body
     .img_banner
-      %img{:src => "../../images/product_tickets/banner.png",:style=> "width:100%;"}
+      %img{:src =>  @product_ticket.banner.url,:style=> "width:100%;"}
 
-    .logo-box
-      %img{:src => @product_ticket.logo.url }
+
 
     .register2-box
       .aa_box00
@@ -46,7 +45,7 @@
           %br
           您已是老朋友，登录APP
           %br
-            进行推荐有奖即获得#{@product_ticket.product_id}积分赶快行动吧！
+            进行推荐有奖即获得积分大礼包赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 

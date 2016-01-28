@@ -38,7 +38,9 @@ class Userinfo
 
   field :shopname, type: String # 经营者商店名称1
   field :location, type: Point, spatial: true, default: []
-  field :status, type: Integer,  default: 0 #启用状态，0初始化，1启用，-1禁用
+  field :email, type: String #邮箱 唯一
+
+  field :status, type: Integer,  default: 0 #启用状态，0初始化，1启用，-1禁用1
 
   field :integral, type: Integer,default: 0 # 积分
   field :approver,type: String #审批人
@@ -71,7 +73,8 @@ class Userinfo
   field :end_business, type: String #营业结束时间
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
 
-  validates :pdistance,presence: true
+  validates :name, :province,:city,:district,:email, presence: true #名称，种类不能为空
+  validates :name,:email,:district,uniqueness: true #名称唯一
 
   index({location: "2d"}, {min: -200, max: 200})
 

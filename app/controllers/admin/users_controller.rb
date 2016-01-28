@@ -203,7 +203,7 @@ class Admin::UsersController < ApplicationController
         if @current_user.save
           format.json { render json: get_render_json(1, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
         else
-          format.json { render json: get_render_json(1, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+          format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
         end
       else
         format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }

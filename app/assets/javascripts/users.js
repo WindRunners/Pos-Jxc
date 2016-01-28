@@ -53,7 +53,7 @@ function checkPwd(){
                 window.location.href="/users/sign_in"
 
             }else{
-                alert("密码修改失败!")
+                alert("密码修改失败,旧密码错误或服务器异常!")
             }
         });
         return;

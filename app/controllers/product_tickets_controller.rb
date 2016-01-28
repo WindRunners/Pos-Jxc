@@ -20,6 +20,7 @@ class ProductTicketsController < ApplicationController
 
   # GET /product_tickets/1/edit
   def edit
+    @product = Product.shop_id(@product_ticket.userinfo_id).find(@product_ticket.product_id)
   end
 
   # POST /product_tickets

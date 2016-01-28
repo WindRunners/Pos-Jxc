@@ -73,10 +73,19 @@
                   %tr
                     %th 缩略图
                     %th 商品名称
+                    %th
+
                 %tbody
                   %tr#product_tr
-                    %td#product_avatar
-                    %td#product_name
+                    -if @product.present?
+                      %td#product_avatar
+                        %img{:style => "height:100px;width:200px",:src=>@product.avatar}
+                      %td#product_name
+                        =@product.title
+                      %td
+                    -else
+                      %td#product_avatar
+                      %td#product_name
                   %input{"type"=>"hidden","id"=>"product_id","name"=>"product_ticket[product_id]","value"=> ""}
 
 

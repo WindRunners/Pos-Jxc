@@ -204,7 +204,7 @@ class Admin::UsersController < ApplicationController
   def modify_loginpassword
     @current_user = current_user
     respond_to do |format|
-      if params[:new_password].present? && BCrypt::Password.new(@current_user.encryped_password)==params[:old_password]
+      if params[:new_password].present? && BCrypt::Password.new(@current_user.encrypted_password)==params[:old_password]
         @current_user.password = params[:new_password]
         if @current_user.save
           format.json { render json: get_render_json(1, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }

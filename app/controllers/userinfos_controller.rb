@@ -248,6 +248,7 @@ class UserinfosController < ApplicationController
     init_user.mobile = @userinfo.pusher_phone
     init_user.password = '123456'
     init_user.email = @userinfo.email
+    init_user.roles
     init_user.step = 9
     init_user.save
     @userinfo.save

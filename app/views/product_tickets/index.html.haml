@@ -19,10 +19,11 @@
         %td= product_ticket.status
         %td
           = link_to 'Show',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-Inverse'
-          = link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
           = link_to '会员管理',  '', 'data-href' =>product_ticket_product_ticket_customer_inits_path(product_ticket),class:'btn btn-xs btn-info'
-          %input{"type"=>"button",:class=>"btn btn-xs btn-pink",:value=>"发布",:onclick=>"publish('#{product_ticket.id}')"}
-          = link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
+          - if product_ticket.status == 0
+            = link_to 'Edit',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
+            %input{"type"=>"button",:class=>"btn btn-xs btn-pink",:value=>"发布",:onclick=>"publish('#{product_ticket.id}')"}
+            = link_to 'Destroy', product_ticket, :method => :delete, :remote=>true,:data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
 
 %br
 

@@ -43,26 +43,40 @@ class ProductTicketsController < ApplicationController
   # PATCH/PUT /product_tickets/1
   # PATCH/PUT /product_tickets/1.json
   def update
+
+
     respond_to do |format|
-      if @product_ticket.update(product_ticket_params)
-        format.js { render_js product_tickets_path, 'Product ticket was successfully updated.' }
-        # format.html { redirect_to @product_ticket, notice: 'Product ticket was successfully updated.' }
-        format.json { render :show, status: :ok, location: @product_ticket }
+      if @product_ticket == 0
+
+        if @product_ticket.update(product_ticket_params)
+          format.js { render_js product_tickets_path, 'Product ticket was successfully updated.' }
+          # format.html { redirect_to @product_ticket, notice: 'Product ticket was successfully updated.' }
+          format.json { render :show, status: :ok, location: @product_ticket }
+        else
+          format.html { render :edit }
+          format.json { render json: @product_ticket.errors, status: :unprocessable_entity }
+        end
+
       else
-        format.html { render :edit }
-        format.json { render json: @product_ticket.errors, status: :unprocessable_entity }
+        format.js { render_js product_tickets_path, '酒券发布之后不能修改' }
       end
+
     end
   end
 
   # DELETE /product_tickets/1
   # DELETE /product_tickets/1.json
   def destroy
-    @product_ticket.destroy
+
+
     respond_to do |format|
-      format.js { render_js product_tickets_path, 'Product ticket was successfully destroyed.' }
-      format.html { redirect_to product_tickets_url, notice: 'Product ticket was successfully destroyed.' }
-      format.json { head :no_content }
+
+      if @product_ticket == 0
+        @product_ticket.destroy
+        format.js { render_js product_tickets_path, 'Product ticket was successfully destroyed.' }
+      else
+        format.js { render_js product_tickets_path, '酒券发布之后不能删除' }
+      end
     end
   end
 
@@ -120,7 +134,7 @@ class ProductTicketsController < ApplicationController
 
       product_ticket_customer_init = ProductTicketCustomerInit.where({:product_ticket_id => params[:product_ticket_id]})
       if product_ticket_customer_init.count == 0
-        data = {:flag=>0,:message=>'发布失败，请导入酒劵会员！'}
+        data = {:flag => 0, :message => '发布失败，请导入酒劵会员！'}
       else
 
         product_ticket_customer_init.each do |ticket_customer|
@@ -134,7 +148,7 @@ class ProductTicketsController < ApplicationController
             card_bag.save
 
             ticket_customer.destroy #移除酒劵初始化会员，历史记录转移超卡包中
-          rescue Exception =>e
+          rescue Exception => e
             Rails.logger.info "发布酒劵出错#{e.message}"
           end
         end
@@ -200,10 +214,10 @@ class ProductTicketsController < ApplicationController
 
   def share_log
 
-      respond_to do |format|
-        format.html
-        format.json { render json: ShareIntegralRecordDatatable.new(view_context, current_user)}
-      end
+    respond_to do |format|
+      format.html
+      format.json { render json: ShareIntegralRecordDatatable.new(view_context, current_user) }
+    end
   end
 
 
@@ -216,11 +230,9 @@ class ProductTicketsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: CustomersDatatable.new(view_context, current_user)}
+      format.json { render json: CustomersDatatable.new(view_context, current_user) }
     end
   end
-
-
 
 
   private
@@ -231,6 +243,6 @@ class ProductTicketsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_ticket_params
-    params.require(:product_ticket).permit(:title, :start_date, :end_date, :product_id, :status, :desc, :rule_content, :logo,:banner)
+    params.require(:product_ticket).permit(:title, :start_date, :end_date, :product_id, :status, :desc, :rule_content, :logo, :banner)
   end
 end

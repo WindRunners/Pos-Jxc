@@ -22,37 +22,40 @@
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="../../js/bootstrap.min.js"></script>
   <style type="text/css">
-        .container {
+      .container {
 
           font-family: SimHei;
-        }
-        #head_title {
+      }
+
+      #head_title {
           font-size: 140%;
-          font-weight:200;
+          font-weight: 200;
           color: #202020;
-        }
+      }
 
-        #head_source{
-            margin:5px -10px 15px -10px;
+      #head_source {
+          margin: 5px -10px 15px -10px;
           color: #505050;
-        }
+      }
 
-        #source {
+      #source {
 
           font-size: 70%;
           text-align: justify;
-        }
+      }
 
-        #created_at {
+      #created_at {
 
           font-size: 70%;
           text-align: right;
-        }
-        #content {
+      }
+
+      #content {
           font-size: 120%;
           color: #505050;
-            text-align: left;
-        }
+          text-align: left;
+      }
+          
   </style>
 
   <script>
@@ -111,13 +114,13 @@
 
       }
       ;
-//      $(document).ready(function(){
-//          $('#content').find('img').each(function(){
-//
-//              this.style.width = "100%";
-//
-//          });
-//      });
+      //      $(document).ready(function(){
+      //          $('#content').find('img').each(function(){
+      //
+      //              this.style.width = "100%";
+      //
+      //          });
+      //      });
 
   </script>
 
@@ -134,22 +137,19 @@
 <!--head_title-->
 
 
-
 <div class="row" id="head_source">
 
-    <div class="col-xs-6" id="source">
-      <% if @announcement.source.present? %>
-          <%= @announcement.source %>
-      <% else %>
-          小达快讯
-      <% end %></div>
-    <div class="col-xs-6" id="created_at">
-      <%= @announcement.created_at.to_s[5, 11] %>
-    </div>
+  <div class="col-xs-6" id="source">
+    <% if @announcement.source.present? %>
+        <%= @announcement.source %>
+    <% else %>
+        小达快讯
+    <% end %></div>
+  <div class="col-xs-6" id="created_at">
+    <%= @announcement.created_at.to_s[5, 11] %>
+  </div>
 
 </div>
-
-
 
 
 <div class="row" id="content">
@@ -159,7 +159,6 @@
   <!--content-->
 </div>
 <!--row_content-->
-
 
 
 </body>

@@ -19,14 +19,12 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_purchase_returns_bill.bill_no')
+      %th=t('mongoid.attributes.jxc_purchase_returns_bill.jxc_storage')
+      %th=t('mongoid.attributes.jxc_purchase_returns_bill.supplier')
+      %th=t('mongoid.attributes.jxc_purchase_returns_bill.handler')
       %th=t('mongoid.attributes.jxc_purchase_returns_bill.collection_date')
       %th=t('mongoid.attributes.jxc_purchase_returns_bill.returns_date')
-      %th=t('mongoid.attributes.jxc_purchase_returns_bill.current_collection')
       %th=t('mongoid.attributes.jxc_purchase_returns_bill.remark')
-      %th=t('mongoid.attributes.jxc_purchase_returns_bill.total_amount')
-      %th=t('mongoid.attributes.jxc_purchase_returns_bill.discount')
-      %th=t('mongoid.attributes.jxc_purchase_returns_bill.discount_amount')
-      %th=t('mongoid.attributes.jxc_purchase_returns_bill.collection_amount')
       %th=t('mongoid.attributes.jxc_purchase_returns_bill.bill_status')
       %th=t("helpers.actions")
       %th
@@ -35,14 +33,12 @@
     - @jxc_purchase_returns_bills.each do |jxc_purchase_returns_bill|
       %tr
         %td= jxc_purchase_returns_bill.bill_no
+        %td= jxc_purchase_returns_bill.jxc_storage.storage_name if jxc_purchase_returns_bill.jxc_storage.present?
+        %td= jxc_purchase_returns_bill.supplier.unit_name if jxc_purchase_returns_bill.supplier.present?
+        %td= jxc_purchase_returns_bill.handler[0].name if jxc_purchase_returns_bill.handler[0].present?
         %td= jxc_purchase_returns_bill.collection_date.strftime('%m/%d/%Y') unless jxc_purchase_returns_bill.collection_date.blank?
         %td= jxc_purchase_returns_bill.returns_date.strftime('%m/%d/%Y') unless jxc_purchase_returns_bill.returns_date.blank?
-        %td= jxc_purchase_returns_bill.current_collection
         %td= jxc_purchase_returns_bill.remark
-        %td= jxc_purchase_returns_bill.total_amount
-        %td= jxc_purchase_returns_bill.discount
-        %td= jxc_purchase_returns_bill.discount_amount
-        %td= jxc_purchase_returns_bill.collection_amount
         %td{style:'color:red;font-weight:bold;'}
           = jxc_purchase_returns_bill.bill_status == '0' ? '已创建' : (jxc_purchase_returns_bill.bill_status == '1' ? '已审核' : '已红冲')
         %td= link_to t("helpers.links.show"),'', 'data-href': jxc_purchase_returns_bill_path(jxc_purchase_returns_bill),class:'btn btn-xs btn-info'

@@ -5,7 +5,7 @@ class JxcStockAssignBillsController < ApplicationController
   before_action :set_bill_details, only: [:show, :edit]
 
   def index
-    @jxc_stock_assign_bills = JxcStockAssignBill.includes(:assign_in_stock).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_stock_assign_bills = JxcStockAssignBill.includes(:assign_out_stock, :assign_in_stock, :handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

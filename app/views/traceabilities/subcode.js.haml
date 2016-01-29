@@ -1,0 +1,31 @@
+:plain
+  var data='#{@jsonresult.to_json}'
+  data=jQuery.parseJSON(data)
+  //alert(JSON.stringify(data));
+  var LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM'));
+  var count=1
+  var printerName_o="GP-L80160 Series";
+  $('#code').val('');
+  $('tbody#subcodesTable > tr').fadeOut()
+  LODOP.PRINT_INIT("subcode_print");//必须初始化一个任务名称
+  if(LODOP.SET_PRINTER_INDEXA(printerName_o)){
+    if(data!='null'&& data!='' &&data != undefined){
+      $(data).each(function(){
+        //alert(this._id)
+
+        $('#subcodesTable').prepend('<tr><td>'+this.barcode+'</td><td>'+this.product.title+'</td><td></td></tr>')
+          //LODOP.ADD_PRINT_HTM(70,5,700,500,table);//(top,left,width,height)
+          LODOP.ADD_PRINT_BARCODE(0,25,180,30,"Code93",this.barcode);
+          LODOP.SET_PRINT_STYLEA(0, "FontSize", 6);
+
+          LODOP.SET_PRINTER_INDEXA(printerName_o); // 指定打印机序号
+          LODOP.SET_PRINT_PAGESIZE(1,700,500,'标签打印');
+          //LODOP.PREVIEW();
+          LODOP.PRINT();
+
+      });
+      $('#result').html('找到'+data.length+'个条码')
+    }else{
+      $('#result').html('<span style="color:red">没有找到条码信息</span>')
+    }
+  }

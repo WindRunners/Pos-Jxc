@@ -3,7 +3,7 @@ class JxcPurchaseReturnsBillsController < ApplicationController
   before_action :set_bill_details, only:[:show, :edit]
 
   def index
-    @jxc_purchase_returns_bills = JxcPurchaseReturnsBill.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_purchase_returns_bills = JxcPurchaseReturnsBill.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

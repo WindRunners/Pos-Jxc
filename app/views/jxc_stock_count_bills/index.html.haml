@@ -18,7 +18,8 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_stock_count_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_stock_count_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_stock_count_bill.jxc_storage')
+      %th=t('mongoid.attributes.jxc_stock_count_bill.handler')
       %th=t('mongoid.attributes.jxc_stock_count_bill.check_date')
       %th=t('mongoid.attributes.jxc_stock_count_bill.remark')
       %th=t('mongoid.attributes.jxc_stock_count_bill.bill_status')
@@ -29,7 +30,8 @@
     - @jxc_stock_count_bills.each do |jxc_stock_count_bill|
       %tr
         %td= jxc_stock_count_bill.bill_no
-        %td= jxc_stock_count_bill.customize_bill_no
+        %td= jxc_stock_count_bill.jxc_storage.storage_name if jxc_stock_count_bill.jxc_storage.present?
+        %td= jxc_stock_count_bill.handler[0].name if jxc_stock_count_bill.handler[0].present?
         %td= jxc_stock_count_bill.check_date.strftime('%m/%d/%Y') unless jxc_stock_count_bill.check_date.blank?
         %td= jxc_stock_count_bill.remark
         %td{style:'color:red;font-weight:bold;'}

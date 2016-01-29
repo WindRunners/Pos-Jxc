@@ -3,7 +3,7 @@ class JxcSellStockOutBillsController < ApplicationController
   before_action :set_bill_details, only:[:show, :edit]
 
   def index
-    @jxc_sell_stock_out_bills = JxcSellStockOutBill.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_sell_stock_out_bills = JxcSellStockOutBill.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

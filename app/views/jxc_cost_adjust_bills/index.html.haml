@@ -18,8 +18,9 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_cost_adjust_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_cost_adjust_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_cost_adjust_bill.jxc_storage')
       %th=t('mongoid.attributes.jxc_cost_adjust_bill.adjust_date')
+      %th=t('mongoid.attributes.jxc_cost_adjust_bill.handler')
       %th=t('mongoid.attributes.jxc_cost_adjust_bill.remark')
       %th=t('mongoid.attributes.jxc_cost_adjust_bill.bill_status')
       %th=t("helpers.actions")
@@ -29,8 +30,9 @@
     - @jxc_cost_adjust_bills.each do |jxc_cost_adjust_bill|
       %tr
         %td= jxc_cost_adjust_bill.bill_no
-        %td= jxc_cost_adjust_bill.customize_bill_no
+        %td= jxc_cost_adjust_bill.jxc_storage.storage_name if jxc_cost_adjust_bill.jxc_storage.present?
         %td= jxc_cost_adjust_bill.adjust_date.strftime('%m/%d/%Y') unless jxc_cost_adjust_bill.adjust_date.blank?
+        %td= jxc_cost_adjust_bill.handler[0].name if jxc_cost_adjust_bill.handler[0].present?
         %td= jxc_cost_adjust_bill.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_cost_adjust_bill.bill_status == '0' ? '已创建' : (jxc_cost_adjust_bill.bill_status == '1' ? '已审核' : '已红冲')

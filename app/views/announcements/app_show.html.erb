@@ -59,80 +59,79 @@
   </style>
 
   <script>
-      function add_comment() {
-          $.ajax({
-              type: "POST",
-              url: "/chateau_comments/add_comment",
-              data: {
-                  content: $("#textarea_content").val(),
-                  user_id: $("#input_user_id").val(),
-                  announcement_id: $("#input_announcement_id").val()
-              },
-              dataType: "json",
-              success: function (data) {
-                  alert(JSON.stringify(data));
-                  location.reload();
-              }
-          });
-      }
-      ;
+      //      function add_comment() {
+      //          $.ajax({
+      //              type: "POST",
+      //              url: "/chateau_comments/add_comment",
+      //              data: {
+      //                  content: $("#textarea_content").val(),
+      //                  user_id: $("#input_user_id").val(),
+      //      announcement_id: announcement_id
+      //              },
+      //              dataType: "json",
+      //              success: function (data) {
+      //                  alert(JSON.stringify(data));
+      //                  location.reload();
+      //              }
+      //          });
+      //      }
+      //      ;
+      //
+      //      function hit(a) {
+      //
+      //          $.ajax({
+      //              type: "POST",
+      //              url: "/chateau_comments/hit",
+      //              data: {
+      //                  chateau_comment_id: $("#input_chateau_comment_id" + a).val()
+      //              },
+      //              dataType: "json",
+      //              success: function (data) {
+      //                  var hits = parseInt($("#input_chateau_comment_hits" + a).val()) + 1;
+      //                  $("#p_hits" + a).html(hits + "");
+      //                  $("#btn_hits" + a).attr("disabled", true);
+      //              }
+      //          });
+      //
+      //      }
+      //      ;
+      //
+      //
+      //      function stow() {
+      //          var customer_id = $("#customer_id").val();
+      //          var announcement_id = $("#announcement_id").val();
+      //          $.ajax({
+      //              type: "POST",
+      //              url: "/announcements/stow",
+      //              data: {announcement_id: announcement_id, customer_id: customer_id},
+      //              dataType: "json",
+      //              success: function (data) {
+      //                  var stows = parseInt($("#p_stows").text()) + 1;
+      //                  $("#p_stows" + a).html(stows + "");
+      //                  $("#btn_stow" + a).attr("disabled", true);
+      //              }
+      //          });
+      //
+      //      }
+      //      ;
 
-      function hit(a) {
-
-          $.ajax({
-              type: "POST",
-              url: "/chateau_comments/hit",
-              data: {
-                  chateau_comment_id: $("#input_chateau_comment_id" + a).val()
-              },
-              dataType: "json",
-              success: function (data) {
-                  var hits = parseInt($("#input_chateau_comment_hits" + a).val()) + 1;
-                  $("#p_hits" + a).html(hits + "");
-                  $("#btn_hits" + a).attr("disabled", true);
-              }
-          });
-
-      }
-      ;
-
-
-      function stow() {
-          var customer_id = $("#customer_id").val();
-          var announcement_id = $("#announcement_id").val();
-          $.ajax({
-              type: "POST",
-              url: "/announcements/stow",
-              data: {announcement_id: announcement_id, customer_id: customer_id},
-              dataType: "json",
-              success: function (data) {
-                  var stows = parseInt($("#p_stows").text()) + 1;
-                  $("#p_stows" + a).html(stows + "");
-                  $("#btn_stow" + a).attr("disabled", true);
-              }
-          });
-
-      }
-      ;
 
 
 
       function announcement_hit() {
-          var hits = parseInt($("#p_announcement_hits").text()) + 1;
           var announcement_id = $("#announcement_id").val();
+          var hits = parseInt($("#p_announcement_hits").text()) + 1;
+          $("#support_image").attr("src", "../../images/announcements/support_red.png");
+          $("#p_announcement_hits").html(hits + "");
+          $("#a_support_image").removeAttr("onclick");
           $.ajax({
               type: "POST",
-              url: "/announcements/<%=@announcement.id.to_s%>/announcement_hit",
+              url: '/announcements/'+announcement_id+'/announcement_hit',
               data: {announcement_id: announcement_id},
               dataType: "json",
               success: function (data) {
-
               }
           });
-          $("#support_image").attr("src","../../images/announcements/support_red.png");
-
-          $("#p_announcement_hits").html(hits + "");
-          $("#a_support_image").removeAttr("onclick");
       }
       ;
 
@@ -175,27 +174,30 @@
 <!--row_content-->
 
 
-
-
-<div class="row" >
+<div class="row">
   <div class="col-xs-12" style="text-align: center;background-color: #87CEFA">
-    <p>酒运达版权所有，转载请注明出处。</p>
+    <p>本文来自网络，不代表酒运达的任何立场。</p>
   </div>
   <!--content-->
 </div>
 <!--row_content-->
 
-<div class="row" >
+<div class="row">
   <div class="col-xs-12">
     <a id="a_support_image" onclick="announcement_hit();">
       <img src="../../images/announcements/support_gray.png" id="support_image" style="display:block;margin-left:auto;margin-right:auto;height: 30%;width: 30%;">
     </a>
+
     <div style="text-align: center">
-    共有<p id="p_announcement_hits" style="display:inline;"><%=@announcement.hits%></p>次点赞</div>
+      共有<p id="p_announcement_hits" style="display:inline;"><%= @announcement.hits %></p>次点赞
+    </div>
   </div>
   <!--content-->
 </div>
 <!--row_content-->
+
+
+<input type="hidden" id="announcement_id" value="<%= @announcement.id %>">
 
 </body>
 

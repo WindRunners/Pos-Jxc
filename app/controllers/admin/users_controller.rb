@@ -36,9 +36,7 @@ class Admin::UsersController < ApplicationController
   def edit
     # @roles = Role.all
     @roles = Role.where({})
-    Rails.logger.info "修改"
-    @roles = Role.where({})
-    @roles = Role.where({})
+
   end
 
 

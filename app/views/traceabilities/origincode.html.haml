@@ -36,8 +36,8 @@
       //获取打印机个数
       var printerName;
       for(var i=0;i<LODOP.GET_PRINTER_COUNT();i++){
-        if(LODOP.GET_PRINTER_NAME(i)=="Gprinter  GP-1124D"){
-          printerName="Gprinter  GP-1124D";
+        if(LODOP.GET_PRINTER_NAME(i)=="Gprinter  GP-3120TL"){
+          printerName="Gprinter  GP-3120TL";
         }else if(LODOP.GET_PRINTER_NAME(i)=="XP-C230"){
           printerName="XP-C230";
         }
@@ -67,13 +67,13 @@
                 //LODOP.ADD_PRINT_BARCODE(309,579,44,238,"Code93",this.barcode);
                 //LODOP.SET_PRINT_STYLEA(0,"Angle",90);
 
-                var table = "<table width='270px' style='border-collapse:collapse;font-size:8pt;font-family:'黑体';'><tr><td style='vertical-align:top'  colspan='2' width='60px' height='85px'></td></tr><tr><td style='vertical-align:top' width='60px'>"+this.storage+"</td><td>"+new Date().format("yyyy.MM.dd hh:mm:ss")+"</td></tr></table>";
-                LODOP.ADD_PRINT_HTM(50,40,700,500,table);//(top,left,width,height)
-                LODOP.ADD_PRINT_BARCODE(40,0,270,90,"Code93",this.barcode);//(Top,Left,Width,Height,BarCodeType,BarCodeValue);
-                LODOP.SET_PRINT_STYLEA(0,"Angle",0);
+                var table = "<table width='220px' style='border-collapse:collapse;font-size:9pt;font-family:'黑体';'><tr style='vertical-align:top;line-height:60px'><td colspan='2' align='left'><img width='70px' src='/images/logo/4.png' /></td></tr><tr><td style='vertical-align:top'  colspan='2' width='60px' height='105px'></td></tr><tr><td style='vertical-align:top' align='left'> &nbsp;&nbsp;&nbsp;<strong>"+new Date().format("yyyy-MM-dd hh:mm:ss")+"</strong></td><td></td><td style='vertical-align:top' width='70px' align='left'><strong>"+this.storage+"</strong></td></tr></table>";
+                LODOP.ADD_PRINT_HTM(10,20,700,500,table);//(top,left,width,height)
+                LODOP.ADD_PRINT_BARCODE(50,30,260,90,"EAN128B",this.barcode);//(Top,Left,Width,Height,BarCodeType,BarCodeValue);
+                //LODOP.SET_PRINT_STYLEA(0,"Angle",0);
                 LODOP.SET_PRINTER_INDEXA(printerName); // 指定打印机序号
                 LODOP.SET_PRINT_STYLE(0,"FontSize",11);
-               // LODOP.SET_PRINT_PAGESIZE(1,700,500,'标签打印');
+                LODOP.SET_PRINT_PAGESIZE(1,700,500,'标签打印');
                 //LODOP.SET_PRINT_COPIES()
                 //LODOP.SET_SHOW_MODE("LANDSCAPE_DEFROTATED",1);//横向时的正向显示
                 //LODOP.SET_PREVIEW_WINDOW(0,1,0,400,300,"");//打印前弹出选择打印机的对话框
@@ -81,8 +81,9 @@
                 //LODOP.SET_PRINT_MODE("AUTO_CLOSE_PREWINDOW",1);//打印后自动关闭预览窗口
                 //LODOP.ADD_PRINT_TEXT(0,0,"95%",30,"总页号：第#页/共&页");
                 //LODOP.PRINT_DESIGN();
-                //LODOP.PRINT();
-                LODOP.PREVIEW();
+                LODOP.PRINT();
+                //LODOP.PREVIEW();
+                //$('#result').html(table)
             });
           }
         })
@@ -102,17 +103,18 @@
       %th 入库时间
       %th 入库商品
       %th 入库仓库
-      %th 制单人
+      %th 经手人
 
   %tbody
     - @jxc_bill_details.each do |bill|
       %tr
         %td= check_box_tag :checkbox,bill.id
         %td= bill.jxc_purchase_stock_in_bill.stock_in_date.strftime("%Y-%m-%d %H:%M:%S")
-        %td= bill.product
+        %td= bill.product.title if bill.product.present?
         %td= bill.jxc_purchase_stock_in_bill.jxc_storage
-        %td= bill.jxc_purchase_stock_in_bill.bill_maker
-
+        %td= bill.jxc_purchase_stock_in_bill.handler[0].name
+-#%img{src:'/images/logo/trace_log_lk.jpg'}
+-##result
 
 %br
 %div{class:"dataTables_wrapper form-inline no-footer"}

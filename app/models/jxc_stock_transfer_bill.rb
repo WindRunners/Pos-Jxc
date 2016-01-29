@@ -40,9 +40,9 @@ class JxcStockTransferBill < JxcBaseModel
       #单据商品详情
       billDetailArray = JxcTransferBillDetail.where(stock_transfer_bill_id: self.id)
       #调出仓库
-      out_store = self.transfer_out_stock[0]
+      out_store = self.transfer_out_stock
       #调入仓库
-      in_store = self.transfer_in_stock[0]
+      in_store = self.transfer_in_stock
 
       ## 调出操作
 
@@ -170,9 +170,9 @@ class JxcStockTransferBill < JxcBaseModel
       #单据商品详情
       billDetailArray = JxcTransferBillDetail.where(stock_transfer_bill_id: self.id)
       #调出仓库
-      out_store = self.transfer_out_stock[0]
+      out_store = self.transfer_out_stock
       #调入仓库
-      in_store = self.transfer_in_stock[0]
+      in_store = self.transfer_in_stock
 
       if billDetailArray.present?
         billDetailArray.each do |billDetail|

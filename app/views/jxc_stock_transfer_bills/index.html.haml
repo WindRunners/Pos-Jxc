@@ -18,10 +18,11 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_stock_transfer_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_stock_transfer_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_out_stock')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_in_stock')
+      %th=t('mongoid.attributes.jxc_stock_transfer_bill.handler')
       %th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_date')
       %th=t('mongoid.attributes.jxc_stock_transfer_bill.remark')
-      -#%th=t('mongoid.attributes.jxc_stock_transfer_bill.transfer_way')
       %th=t('mongoid.attributes.jxc_stock_transfer_bill.bill_status')
       %th=t("helpers.actions")
       %th
@@ -30,10 +31,11 @@
     - @jxc_stock_transfer_bills.each do |jxc_stock_transfer_bill|
       %tr
         %td= jxc_stock_transfer_bill.bill_no
-        %td= jxc_stock_transfer_bill.customize_bill_no
+        %td= jxc_stock_transfer_bill.transfer_out_stock.storage_name unless jxc_stock_transfer_bill.transfer_out_stock.blank?
+        %td= jxc_stock_transfer_bill.transfer_in_stock.storage_name unless jxc_stock_transfer_bill.transfer_in_stock.blank?
+        %td= jxc_stock_transfer_bill.handler[0].name if jxc_stock_transfer_bill.handler[0].present?
         %td= jxc_stock_transfer_bill.transfer_date.strftime('%m/%d/%Y') unless jxc_stock_transfer_bill.transfer_date.blank?
         %td= jxc_stock_transfer_bill.remark
-        -#%td= jxc_stock_transfer_bill.transfer_way
         %td{style:'color:red;font-weight:bold;'}
           = jxc_stock_transfer_bill.bill_status == '0' ? '已创建' : (jxc_stock_transfer_bill.bill_status == '1' ? '已审核' : '已红冲')
         %td= link_to t('helpers.links.show'), '', 'data-href': jxc_stock_transfer_bill_path(jxc_stock_transfer_bill),class:'btn btn-xs btn-info'

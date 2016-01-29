@@ -4,7 +4,7 @@ class JxcOtherStockOutBillsController < ApplicationController
   before_action :set_stock_out_types, only:[:new, :show, :edit]
 
   def index
-    @jxc_other_stock_out_bills = JxcOtherStockOutBill.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_other_stock_out_bills = JxcOtherStockOutBill.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

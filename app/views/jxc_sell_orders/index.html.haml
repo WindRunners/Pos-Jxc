@@ -18,15 +18,12 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_sell_order.order_no')
-      %th=t('mongoid.attributes.jxc_sell_order.customize_order_no')
+      %th=t('mongoid.attributes.jxc_sell_order.jxc_storage')
+      %th=t('mongoid.attributes.jxc_sell_order.consumer')
+      %th=t('mongoid.attributes.jxc_sell_order.handler')
       %th=t('mongoid.attributes.jxc_sell_order.consign_goods_date')
       %th=t('mongoid.attributes.jxc_sell_order.order_date')
-      %th=t('mongoid.attributes.jxc_sell_order.receivable_deposit')
       %th=t('mongoid.attributes.jxc_sell_order.remark')
-      %th=t('mongoid.attributes.jxc_sell_order.total_amount')
-      %th=t('mongoid.attributes.jxc_sell_order.discount')
-      %th=t('mongoid.attributes.jxc_sell_order.discount_amount')
-      %th=t('mongoid.attributes.jxc_sell_order.receivable_amount')
       %th=t('mongoid.attributes.jxc_sell_order.bill_status')
       %th=t('helpers.actions')
       %th
@@ -35,15 +32,12 @@
     - @jxc_sell_orders.each do |jxc_sell_order|
       %tr
         %td= jxc_sell_order.order_no
-        %td= jxc_sell_order.customize_order_no
+        %td= jxc_sell_order.jxc_storage.storage_name if jxc_sell_order.jxc_storage.present?
+        %td= jxc_sell_order.consumer.unit_name if jxc_sell_order.consumer.present?
+        %td= jxc_sell_order.handler[0].name if jxc_sell_order.handler[0].present?
         %td= jxc_sell_order.consign_goods_date.strftime('%m/%d/%Y') unless jxc_sell_order.consign_goods_date.blank?
         %td= jxc_sell_order.order_date.strftime('%m/%d/%Y') unless jxc_sell_order.order_date.blank?
-        %td= jxc_sell_order.receivable_deposit
         %td= jxc_sell_order.remark
-        %td= jxc_sell_order.total_amount
-        %td= jxc_sell_order.discount
-        %td= jxc_sell_order.discount_amount
-        %td= jxc_sell_order.receivable_amount
         %td{style:'color:red;font-weight:bold;'}
           = jxc_sell_order.bill_status == '0' ? '已创建' : (jxc_sell_order.bill_status == '1' ? '已审核' : '已红冲')
         %td= link_to t("helpers.links.show"), '', 'data-href': jxc_sell_order_path(jxc_sell_order),class:'btn btn-xs btn-info'

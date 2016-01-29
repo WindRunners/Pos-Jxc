@@ -13,8 +13,8 @@ class JxcStockAssignBill < JxcBaseModel
 
   has_and_belongs_to_many :assign_out_stock, class_name:'JxcStorage' #调出仓库
   has_and_belongs_to_many :assign_in_stock, class_name:'JxcStorage' #调入仓库
-  has_and_belongs_to_many :handler, class_name:'User'  #经手人
-  has_and_belongs_to_many :bill_maker, class_name:'User' #制单人
+  has_and_belongs_to_many :handler, class_name:'User', foreign_key: :handler_id  #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User', foreign_key: :maker_id #制单人
 
   has_many :jxc_transfer_bill_details    #要货单 商品明细
   has_many :jxc_storage_journals  #库存变更日志
@@ -145,7 +145,7 @@ class JxcStockAssignBill < JxcBaseModel
       end
 
       #生成产品溯源子码
-      generate_trace_sub_code
+      # generate_trace_sub_code
 
       #更新单据状态
       self.bill_status = BillStatus_Audit
@@ -226,7 +226,7 @@ class JxcStockAssignBill < JxcBaseModel
       end
 
       #删除审核时生成的溯源子码
-      destroy_trace_sub_code
+      # destroy_trace_sub_code
 
       #更新单据状态
       self.bill_status = BillStatus_StrikeBalance  #<红冲>
@@ -323,6 +323,26 @@ class JxcStockAssignBill < JxcBaseModel
         root_trace.update
       end
     end
+  end
+
+
+  def assign_out_stock
+    begin
+      @assign_out_stock = JxcStorage.find(self.assign_out_stock_ids[0])
+    rescue
+      @assign_out_stock = nil
+    end
+    return @assign_out_stock
+  end
+
+
+  def assign_in_stock
+    begin
+      @assign_in_stock = JxcStorage.find(self.assign_in_stock_ids[0])
+    rescue
+      @assign_in_stock = nil
+    end
+    return @assign_in_stock
   end
 
 end

@@ -14,8 +14,8 @@ class JxcStockTransferBill < JxcBaseModel
 
   has_and_belongs_to_many :transfer_out_stock, class_name:'JxcStorage' #调出仓库
   has_and_belongs_to_many :transfer_in_stock, class_name:'JxcStorage' #调入仓库
-  has_and_belongs_to_many :handler, class_name:'User'  #经手人
-  has_and_belongs_to_many :bill_maker, class_name:'User' #制单人
+  has_and_belongs_to_many :handler, class_name:'User', foreign_key: :handler_id  #经手人
+  has_and_belongs_to_many :bill_maker, class_name:'User', foreign_key: :maker_id #制单人
 
   has_many :jxc_transfer_bill_details    #调拨单 商品明细
 
@@ -263,4 +263,25 @@ class JxcStockTransferBill < JxcBaseModel
 
     return result
   end
+
+  def transfer_out_stock
+    begin
+      @transfer_out_stock = JxcStorage.find(self.transfer_out_stock_ids[0])
+    rescue
+      @transfer_out_stock = nil
+    end
+
+    return @transfer_out_stock
+  end
+
+  def transfer_in_stock
+    begin
+      @transfer_in_stock = JxcStorage.find(self.transfer_in_stock_ids[0])
+    rescue
+      @transfer_in_stock = nil
+    end
+
+    return @transfer_in_stock
+  end
+
 end

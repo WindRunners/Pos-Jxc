@@ -1,0 +1,10 @@
+= form_for @traceability do |f|
+  - if @traceability.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@traceability.errors.count, "error")} prohibited this traceability from being saved:"
+      %ul
+        - @traceability.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

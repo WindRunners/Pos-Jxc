@@ -36,7 +36,7 @@ class JxcTransferBillDetail
 
   #查询关联商品信息
   def product
-    @product = JxcProduct.find(self.resource_product_id)
+    @product = Warehouse::Product.find(self.resource_product_id)
   end
 
 end

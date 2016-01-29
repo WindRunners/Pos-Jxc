@@ -59,11 +59,15 @@
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
         var storage_id = $('#storage_id').val();
-        inventoryTableSetting.queryParams = {
-          category_id:treeNode._id,
-          storage_id:storage_id
-        };
-        initInventoryGrid(inventoryTableSetting);
+        if(storage_id == ""){
+          alert("请先选择仓库信息.");
+        }else{
+          inventoryTableSetting.queryParams = {
+            category_id:treeNode.id,
+            storage_id:storage_id
+          };
+          initInventoryGrid(inventoryTableSetting);
+        }
       }
     };
 
@@ -199,12 +203,12 @@
     //dataGrid设置
     tableSetting = {
       title: '库存变更日志',
-      url:'/jxc_common_info/checkInventoryChangeLog',
+      url:'/jxc_inventory_query/checkInventoryChangeLog',
       singleSelect:true,
       width:919,
       queryParams:{
         storage_id:storage_id,
-        product_id:selectData.product_id
+        product_id:selectData.resource_product_id
       },
       columns:[[
         {title:'单据编号',field:'bill_no',width:'240',resizable:true},
@@ -265,10 +269,10 @@
         {title:'单据日期',field:'bill_create_date',width:'100',resizable:true},
         {title:'仓库',field:'storage_title',width:'150',resizable:true},
         {title:'商品名称',field:'product_title',width:'300',resizable:true},
-        {title:'单位',field:'unit',width:'50',resizable:true},
+        //{title:'单位',field:'unit',width:'50',resizable:true},
         {title:'原库存数量',field:'previous_count',width:'80',resizable:true},
         {title:'变更数量',field:'count',width:'80',resizable:true},
-        {title:'变更后数量',field:'after_count',width:'80',resizable:true},
+        {title:'现库存数量',field:'after_count',width:'80',resizable:true},
         {title:'成本单价',field:'price',width:'80',resizable:true},
         {title:'调整后单价',field:'adjusted_price',width:'80',resizable:true},
         {title:'库存金额变动',field:'amount',width:'100',resizable:true},

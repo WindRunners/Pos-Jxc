@@ -56,7 +56,7 @@
 
     var stockOutTypeForm =  "<form id='stockOutType'>" +
                         "<table class='table table-bordered'>" +
-                        "<tr><td><label>出库类型</label></td><td><input type='text' name='jxc_dictionary[dic]' id='jxc_dictionary_dic' class='form-control' > <input type='hidden' name='jxc_dictionary[dic_desc]' id='jxc_dictionary_dic_desc' value='stock_out_type' > </td></tr>" +
+                        "<tr><td><label>出库类型</label></td><td><input type='text' name='jxc_dictionary[dic]' id='jxc_dictionary_dic' class='form-control' onblur='generatePinyinCode(\"jxc_dictionary_dic\",\"jxc_dictionary_pinyin_code\")' > <input type='hidden' name='jxc_dictionary[dic_desc]' id='jxc_dictionary_dic_desc' value='stock_out_type' > </td></tr>" +
                         "<tr><td><label>拼音码</label></td><td><input type='text' name='jxc_dictionary[pinyin_code]' id='jxc_dictionary_pinyin_code' class='form-control' ></td></tr>" +
                         "</table>" +
                         "</form>";

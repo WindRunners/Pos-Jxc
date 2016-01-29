@@ -1,0 +1,19 @@
+%h1 Listing traceabilities
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @traceabilities.each do |traceability|
+      %tr
+        %td= link_to 'Show', traceability
+        %td= link_to 'Edit', edit_traceability_path(traceability)
+        %td= link_to 'Destroy', traceability, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Traceability', new_traceability_path

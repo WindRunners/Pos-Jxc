@@ -45,7 +45,7 @@ class JxcCommonInfoController < ApplicationController
     render json: JxcDictionary.where(dic_desc:'storage_type')
   end
 
-  #进销存仓库 （根据仓库类型）
+  #进销存仓库 （根据仓库类型查询）
   def getStorageInfo
     storage_type = params[:storage_type]
     page = params[:page]
@@ -114,7 +114,7 @@ class JxcCommonInfoController < ApplicationController
 
   #单据明细
   def getBillDetailInfo
-    category_name = params[:category_name]  #商品分类
+    # category_name = params[:category_name]  #商品分类
     storage_id = params[:storage_id]   #仓库
     product_param = params[:searchParam] || '' #检索商品条件
 
@@ -122,100 +122,42 @@ class JxcCommonInfoController < ApplicationController
     rows = params[:rows]
 
     detailList = []
-    if category_name.present?
-      # productList = Category.find(category_name).products.where(:title => /#{product_param}/).page(page).per(rows)
-      productList = Warehouse::Product.find(:all,params: {title: /#{product_param}/, mobile_category_name: category_name}, page: page, per: rows)
-      productList.each do |product|
 
-        begin
-          storageInfo = JxcStorageProductDetail.find_by(:product => product,:jxc_storage_id => storage_id)  #库存信息
-        rescue
-          storageInfo = nil
-        end
+    conditions = {
+        category_id: params[:category_id],
+        tag:'JYD',
+        searchText: product_param,
+        page: page,
+        per: rows
+    }
 
-        product = JSON.parse(product.to_json)
+    # productList = Warehouse::Product.find(:all,params: {title: /#{product_param}/, mobile_category_name: category_name}, page: page, per: rows)
+    productList = Warehouse::Product.where(conditions)
+    productList.each do |product|
 
-        if storageInfo.present?
-          product[:cost_price] = storageInfo.cost_price
-          product[:count] = storageInfo.count
-          product[:amount] = storageInfo.amount
-          product[:pack_spec] = storageInfo.pack_spec
-        else
-          product[:cost_price] = 0
-          product[:count] = 0
-          product[:amount] = 0
-          product[:pack_spec] = 0
-        end
-
-        detailList << product
-      end
-      render json: {'total':Warehouse::Product.find(:all,params: {title: /#{product_param}/, mobile_category_name: category_name}).count,'rows':detailList}
-    else
-      # productList = Warehouse::Product.where(:title => /#{product_param}/).page(page).per(rows)
-      productList = Warehouse::Product.find( :all, params: { :title => /#{product_param}/ , :page => page, :per => rows})
-      productList.each do |product|
-
-        begin
-          storageInfo = JxcStorageProductDetail.find_by(:product => product,:jxc_storage_id => storage_id)  #库存信息
-        rescue
-          storageInfo = nil
-        end
-
-        product = JSON.parse(product.to_json)
-
-        if storageInfo.present?
-          product[:cost_price] = storageInfo.cost_price
-          product[:count] = storageInfo.count
-          product[:amount] = storageInfo.amount
-          product[:pack_spec] = storageInfo.pack_spec
-        else
-          product[:cost_price] = 0
-          product[:count] = 0
-          product[:amount] = 0
-          product[:pack_spec] = 0
-        end
-        detailList << product
+      begin
+        storageInfo = JxcStorageProductDetail.find_by(:resource_product_id => product.id,:jxc_storage_id => storage_id)  #库存信息
+      rescue
+        storageInfo = nil
       end
 
-      render json: {'total':Warehouse::Product.find(:all, params: { :title => /#{product_param}/ }).count,'rows':detailList}
+      product = JSON.parse(product.to_json)
+
+      if storageInfo.present?
+        product[:cost_price] = storageInfo.cost_price
+        product[:count] = storageInfo.count
+        product[:amount] = storageInfo.amount
+        product[:pack_spec] = storageInfo.pack_spec
+      else
+        product[:cost_price] = 0
+        product[:count] = 0
+        product[:amount] = 0
+        product[:pack_spec] = 0
+      end
+
+      detailList << product
     end
-
-  end
-
-  #查询库存变更日志
-  def checkInventoryChangeLog
-
-    storage_id = params[:storage_id]
-    product_id = params[:product_id]
-    log_param = params[:searchParam] || '' #检索日志的条件
-
-    page = params[:page]
-    rows = params[:rows]
-
-    logList = []
-
-    if storage_id.present? && product_id.present?
-      query = JxcStorageJournal.includes(:jxc_storage,:product,:staff).where(:jxc_storage_id => storage_id,:product_id => product_id,:bill_no => /#{log_param}/).order_by(:created_at => :desc)
-
-      _logList = query.page(page).per(rows)
-
-      _logList.each do |log|
-        store = log.jxc_storage
-        product = log.product
-        staff = log.staff
-
-        log[:storage_title] = store.present? ? store.storage_name : ''
-        log[:product_title] = product.present? ? product.title : ''
-        log[:unit] = product.present? ? product.unit : ''
-        log[:staff_name] = staff.present? ? staff.name : ''
-
-        logList << log
-      end
-
-      render json:{'total':query.count,'rows':logList}
-    else
-      render json:{'total':0,'rows':[]}
-    end
+    render json: {'total':productList.http_response['X-total'].to_i,'rows':detailList}
 
   end
 

@@ -29,7 +29,7 @@
       %th=t('mongoid.attributes.jxc_sell_returns_bill.discount_amount')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.refund_amount')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.bill_status')
-      %th=t("mongoid.links.operation")
+      %th=t("helpers.actions")
       %th
 
   %tbody
@@ -47,10 +47,9 @@
         %td= jxc_sell_returns_bill.refund_amount
         %td{style:'color:red;font-weight:bold;'}
           = jxc_sell_returns_bill.bill_status == '0' ? '已创建' : (jxc_sell_returns_bill.bill_status == '1' ? '已审核' : '已红冲')
-        %td= link_to t("helpers.links.show"), jxc_sell_returns_bill,class:'btn btn-xs btn-info'
-        %td= link_to t("helpers.links.edit"), edit_jxc_sell_returns_bill_path(jxc_sell_returns_bill),class:'btn btn-xs btn-warning',disabled:jxc_sell_returns_bill.bill_status == '0' ? false:true
+        %td= link_to t("helpers.links.show"), '','data-href': jxc_sell_returns_bill_path(jxc_sell_returns_bill),class:'btn btn-xs btn-info'
+        %td= link_to t("helpers.links.edit"), '','data-href': edit_jxc_sell_returns_bill_path(jxc_sell_returns_bill),class:'btn btn-xs btn-warning',disabled:jxc_sell_returns_bill.bill_status == '0' ? false:true
         -#%td= link_to 'Destroy', jxc_sell_returns_bill, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
-      %br
-
-= link_to t("helpers.links.new"), new_jxc_sell_returns_bill_path, :class => 'btn btn-primary'
+%br
+= link_to t("helpers.links.new"), '','data-href': new_jxc_sell_returns_bill_path, :class => 'btn btn-primary'

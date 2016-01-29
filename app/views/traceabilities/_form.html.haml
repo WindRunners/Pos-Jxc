@@ -6,5 +6,20 @@
         - @traceability.errors.full_messages.each do |msg|
           %li= msg
 
+  .field
+    = f.label :barcode
+    = f.text_field :barcode
+  .field
+    = f.label :codetype
+    = f.text_field :codetype
+  .field
+    = f.label :printdate
+    = f.text_field :printdate
+  .field
+    = f.label :jxc_bill_detail
+    = f.text_field :jxc_bill_detail
+  .field
+    = f.label :jxc_transfer_bill_detail
+    = f.text_field :jxc_transfer_bill_detail
   .actions
     = f.submit 'Save'

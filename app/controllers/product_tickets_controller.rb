@@ -43,20 +43,10 @@ class ProductTicketsController < ApplicationController
   # PATCH/PUT /product_tickets/1
   # PATCH/PUT /product_tickets/1.json
   def update
-
-
     respond_to do |format|
-      if @product_ticket == 0
-
-        if @product_ticket.update(product_ticket_params)
-          format.js { render_js product_tickets_path, 'Product ticket was successfully updated.' }
-          # format.html { redirect_to @product_ticket, notice: 'Product ticket was successfully updated.' }
-          format.json { render :show, status: :ok, location: @product_ticket }
-        else
-          format.html { render :edit }
-          format.json { render json: @product_ticket.errors, status: :unprocessable_entity }
-        end
-
+      if @product_ticket.status == 0
+        @product_ticket.update(product_ticket_params)
+        format.js { render_js product_tickets_path, 'Product ticket was successfully updated.' }
       else
         format.js { render_js product_tickets_path, '酒券发布之后不能修改' }
       end
@@ -71,7 +61,7 @@ class ProductTicketsController < ApplicationController
 
     respond_to do |format|
 
-      if @product_ticket == 0
+      if @product_ticket.status == 0
         @product_ticket.destroy
         format.js { render_js product_tickets_path, 'Product ticket was successfully destroyed.' }
       else

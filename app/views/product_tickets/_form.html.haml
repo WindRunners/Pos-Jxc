@@ -86,8 +86,10 @@
                     -else
                       %td#product_avatar
                       %td#product_name
+                -if @product.present?
+                  %input{"type"=>"hidden","id"=>"product_id","name"=>"product_ticket[product_id]","value"=> @product.id.to_s}
+                -else
                   %input{"type"=>"hidden","id"=>"product_id","name"=>"product_ticket[product_id]","value"=> ""}
-
 
             .hr.hr-16.hr-dotted
             .actions.col-sm-1.col-sm-offset-3

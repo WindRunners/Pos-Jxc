@@ -118,6 +118,7 @@
 
 
       function announcement_hit() {
+          var hits = parseInt($("#p_announcement_hits").text()) + 1;
           var announcement_id = $("#announcement_id").val();
           $.ajax({
               type: "POST",
@@ -125,21 +126,15 @@
               data: {announcement_id: announcement_id},
               dataType: "json",
               success: function (data) {
-                  $("#div_support_image").html("<img src='../../images/announcements/support_red.png'  style='display:block;margin-left:auto;margin-right:auto;'>");
-                  $("#div_support_image").removeAttr("onclick");
 
               }
           });
+          $("#support_image").attr("src","../../images/announcements/support_red.png");
 
+          $("#p_announcement_hits").html(hits + "");
+          $("#a_support_image").removeAttr("onclick");
       }
       ;
-      //      $(document).ready(function(){
-      //          $('#content').find('img').each(function(){
-      //
-      //              this.style.width = "100%";
-      //
-      //          });
-      //      });
 
   </script>
 
@@ -192,11 +187,11 @@
 
 <div class="row" >
   <div class="col-xs-12">
-    <div id="div_support_image" onclick="announcement_hit();">
-      <img src="../../images/announcements/support_gray.png"  style="display:block;margin-left:auto;margin-right:auto;">
-    </div>
+    <a id="a_support_image" onclick="announcement_hit();">
+      <img src="../../images/announcements/support_gray.png" id="support_image" style="display:block;margin-left:auto;margin-right:auto;height: 30%;width: 30%;">
+    </a>
     <div style="text-align: center">
-    <p>共有次<%=@announcement.hits%>点赞</p></div>
+    共有<p id="p_announcement_hits" style="display:inline;"><%=@announcement.hits%></p>次点赞</div>
   </div>
   <!--content-->
 </div>

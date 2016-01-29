@@ -200,13 +200,14 @@ class UserinfosController < ApplicationController
 
   def jyd_create
     @userinfo = Userinfo.new(userinfo_params)
+    @userinfo.role_marks = ['business']
     respond_to do |format|
       if @userinfo.save
-        format.json { render json: get_render_json(1,nil,jyd_index_userinfos_path) }
+        format.json { render json: get_render_json(1, nil, jyd_index_userinfos_path) }
         # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
         # format.json { head :no_content }
       else
-        format.json { render json: get_render_json(0,@userinfo.errors.messages) }
+        format.json { render json: get_render_json(0, @userinfo.errors.messages) }
         # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
         # format.json { head :no_content }
       end
@@ -243,15 +244,27 @@ class UserinfosController < ApplicationController
   def jyd_check
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.status=1
-    init_user = @userinfo.users.build();
-    init_user.name = @userinfo.name
-    init_user.mobile = @userinfo.pusher_phone
-    init_user.password = '123456'
-    init_user.email = @userinfo.email
-    init_user.add_role(:admin)
-    init_user.step = 9
-    init_user.save
+    if !@userinfo.users.present?
+      init_user = @userinfo.users.build();
+      init_user.name = @userinfo.name
+      init_user.mobile = @userinfo.pusher_phone
+      init_user.password = '123456'
+      init_user.email = @userinfo.email
+
+      role_array = []
+      @userinfo.role_marks.each do |role_mark|
+
+        Role.where(:role_mark => role_mark).each do |role|
+          role_array << role.id
+        end
+      end
+      init_user.role_ids = role_array
+
+      init_user.step = 9
+      init_user.save
+    end
     @userinfo.save
+    binding.pry
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }
@@ -289,7 +302,8 @@ class UserinfosController < ApplicationController
   def userinfo_params
     params.require(:userinfo).permit(:name, :address, :shopname, :url, :lat, :lng, :busp, :footp, :pdistance, :district, :city, :province, :integral,
                                      :approver, :pusher, :pusher_phone, :healthp, :taxp, :orgp, :idpb, :idpf, :idnumber, :aseet4, :aseet3, :fright, :lowestprice,
-                                     :fright_time, :h_lowestprice, :h_fright, :night_time, :province, :city, :district, :address, :start_business, :end_business, :status, :email)
+                                     :fright_time, :h_lowestprice, :h_fright, :night_time, :province, :city, :district, :address, :start_business, :end_business,
+                                     :status, :email, :role_marks)
   end
 
   def auth_userinfo_params

@@ -1,0 +1,31 @@
+div.main_txt {
+  font-size: 20px;
+  padding: 0 10px;
+  color: #333333;
+  line-height: 50px;
+}
+
+.pwd_label {
+  float: left;
+  margin-right: 10px;
+  text-align: right;
+  width: 90px;
+}
+
+.pwd_input {
+  border: 1px solid #dddddd;
+  height: 38px;
+  width: 200px;
+}
+.pwd_submit {
+  background-color: #00d0d0;
+  border: 1px solid #00d0d0;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 38px;
+  margin-top: 10px !important;
+  text-align: center;
+  width: 200px;
+}

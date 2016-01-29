@@ -30,30 +30,18 @@ State.create(:name => "已下架",
              :color => "white")
 
 
-Role.create(:name => "admin")
-
-Role.create(:name => "staff")
-
-#财务
-Role.create(:name       => "finance")
-#经理
-Role.create(:name       => "manager")
-#超级管理员
-Role.create(:name       => "SuperAdmin")
-
-#门店
-Role.create(:name       => "store")
-#运营商
-Role.create(:name       => "business")
+Role.create(:name => "admin",:role_mark => "business")#管理员
+Role.create(:name => "staff",:role_mark => "business")#员工
+Role.create(:name => "finance",:role_mark => "business")#财务
+Role.create(:name => "manager",:role_mark => "business")#经理
+Role.create(:name => "store",:role_mark => "business")#门店
+Role.create(:name => "business",:role_mark => "business")#运营商
 
 
-#门店
-Role.create(:name       => "store")
-#运营商
-Role.create(:name       => "business")
-Role.create(:name => "xiaoda_kuaixun") #小大快讯
-Role.create(:name => "jiu_world")#酒世界
-
+#平台角色
+Role.create(:name => "SuperAdmin",:role_mark => "platform")#超级管理员
+Role.create(:name => "xiaoda_kuaixun",:role_mark => "platform") #小大快讯
+Role.create(:name => "jiu_world",:role_mark => "platform")#酒世界
 
 Region.create(:name => "世界")
 

@@ -72,6 +72,7 @@ class Userinfo
   field :start_business, type: String  #营业开始时间
   field :end_business, type: String #营业结束时间
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
+  field :role_marks, type:Array,default: [] #角色标识 business: 运营商角色（对运营商），platform：平台角色（对平台）
 
   validates :name, :province,:city,:district,:email, presence: true #名称，种类不能为空
   validates :name,:email,:district,uniqueness: true #名称唯一

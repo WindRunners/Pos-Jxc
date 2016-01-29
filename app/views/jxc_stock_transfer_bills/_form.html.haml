@@ -94,7 +94,7 @@
                   %td
                     = billDetail.product.specification
                   %td
-                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                    = billDetail.unit
                   %td
                     %input#billDetail_cost_price.billDetailInput{type:'text',name:'billDetail[][cost_price]',value:billDetail.cost_price,readonly:true}
                   %td
@@ -274,9 +274,7 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode.id
-        };
+        tableSetting.queryParams.category_id = treeNode.id;
         initDataGrid(tableSetting);
       }
     };
@@ -332,7 +330,7 @@
                          '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
                          '<td>'+this.qrcode+'</td>'+          //商品编码
                          '<td>'+this.specification+'</td>'+ //商品规格
-                         '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                         '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                          '<td><input type="text" class="billDetailInput" id="billDetail_cost_price" name="billDetail[][cost_price]" value="'+this.cost_price+'" readonly ></td>'+    //原成本价
                          '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][transfer_price]" value="'+this.cost_price+'" onblur="calcTransferAmount(\''+this.id+'\')"></td>'+    //调拨单价
                          '<td><input type="text" class="billDetailInput" id="billDetail_count" name="billDetail[][count]" value="0" onblur="calcTransferAmount(\''+this.id+'\')"></td>'+    //数量

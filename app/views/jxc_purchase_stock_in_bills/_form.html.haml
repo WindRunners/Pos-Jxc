@@ -344,9 +344,7 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode.id
-        };
+        tableSetting.queryParams.category_id = treeNode.id;
         initDataGrid(tableSetting);
       }
     };

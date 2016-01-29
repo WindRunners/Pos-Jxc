@@ -92,7 +92,7 @@
                   %td
                     = billDetail.product.specification
                   %td
-                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                    = billDetail.unit
                   %td
                     %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][price]',value:billDetail.price,readonly:true}
                   %td
@@ -225,9 +225,7 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode.id
-        };
+        tableSetting.queryParams.category_id = treeNode.id
         initDataGrid(tableSetting);
       }
     };
@@ -279,9 +277,9 @@
         $(selectData).each(function(){
           billDetailTable += '<tr id='+this.id+'>'+             //商品ID
                          '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
-                         '<td>'+this.qrcode+'</td>'+          //商品编码
+                         '<td>'+(this.qrcode == null ? '' : this.qrcode)+'</td>'+          //商品编码
                          '<td>'+this.specification+'</td>'+ //商品规格
-                         '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                         '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                          '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][price]" value="'+this.cost_price+'" readonly ></td>'+    //成本价
                          '<td><input type="text" class="billDetailInput" id="billDetail_inventory_count" name="billDetail[][inventory_count]" value="'+this.count+'" readonly ></td>'+    //库存数量
                          '<td><input type="text" class="billDetailInput" id="billDetail_check_count" name="billDetail[][check_count]" value="0" onblur="calcPLCount(\''+this.id+'\',this)"></td>'+    //盘点数量

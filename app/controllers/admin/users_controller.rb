@@ -157,13 +157,13 @@ class Admin::UsersController < ApplicationController
     begin
       op = params[:op] #add 添加  ,remove 移除
       store_id = params[:store_id]
+      @user = User.find(params[:user_id])
       object_store_id = BSON::ObjectId(store_id)
-      @current_user = current_user
-      # binding.pry
+      # @current_user = current_user
       if (op=="add")
-        @current_user.add_to_set({"store_ids" => object_store_id})
+        @user.add_to_set({"store_ids" => object_store_id})
       else
-        @current_user.pull({"store_ids" => object_store_id})
+        @user.pull({"store_ids" => object_store_id})
       end
       respond_to do |format|
         format.json { render json: {"flag" => 1, "msg" => "门店操作成功！"} }
@@ -179,7 +179,6 @@ class Admin::UsersController < ApplicationController
   #管理员用户对普通用户进行密码重置:123456
   def reset_password
     set_user
-    # binding.pry
     @user.password= '123456'
     respond_to do |format|
       begin

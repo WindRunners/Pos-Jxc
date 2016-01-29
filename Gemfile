@@ -183,3 +183,5 @@ gem 'wisper'
 gem 'rb-readline'
 
 gem 'rqrcode'
+
+gem 'mongoid-multitenancy'

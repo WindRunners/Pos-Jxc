@@ -41,12 +41,12 @@
       %td
         = f.button t('mongoid.attributes.jxc_stock_transfer_bill.transfer_out_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'transfer_out\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_transfer_bill_transfer_out_stock{value: @jxc_stock_transfer_bill.transfer_out_stock[0].nil? ? '':@jxc_stock_transfer_bill.transfer_out_stock[0].storage_name,readonly:true }
+        %input.form-control#jxc_stock_transfer_bill_transfer_out_stock{value: @jxc_stock_transfer_bill.transfer_out_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_out_stock.storage_name,readonly:true }
         = f.hidden_field :transfer_out_stock_ids
       %td
         = f.button t('mongoid.attributes.jxc_stock_transfer_bill.transfer_in_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'transfer_in\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_transfer_bill_transfer_in_stock{value: @jxc_stock_transfer_bill.transfer_in_stock[0].nil? ? '':@jxc_stock_transfer_bill.transfer_in_stock[0].storage_name,readonly:true }
+        %input.form-control#jxc_stock_transfer_bill_transfer_in_stock{value: @jxc_stock_transfer_bill.transfer_in_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_in_stock.storage_name,readonly:true }
         = f.hidden_field :transfer_in_stock_ids
     %tr
       %td

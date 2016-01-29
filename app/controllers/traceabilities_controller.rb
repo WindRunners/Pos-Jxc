@@ -11,28 +11,37 @@ class TraceabilitiesController < ApplicationController
       rescue
         @traceabilitie=nil
       end
+
       if @traceabilitie.present?
 
+
         if @traceabilitie.childs.present?
-          @traceabilitie.childs.each do |tr|
-            @jsonresult << {:product => tr.jxc_transfer_bill_detail.product,
-                            :stock_in_date => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                            :storage => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_in_stock.to_s
-            }
-          end
+          # tr=@traceabilitie.childs[0]
+          # @traceabilitie.childs.each do |tr|
+          #   @jsonresult << {:product => tr.jxc_transfer_bill_detail.product,
+          #                   :stock_in_date => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+          #                   :storage => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_in_stock.to_s
+          #   }
+          # end
           @jsonresult<<{:product => @traceabilitie.jxc_bill_detail.product,
                         :stock_in_date => @traceabilitie.jxc_bill_detail.jxc_purchase_stock_in_bill.stock_in_date.strftime("%Y-%m-%d %H:%M:%S"),
-                        :storage => @traceabilitie.jxc_bill_detail.jxc_purchase_stock_in_bill.jxc_storage.to_s
+                        :stock_in_storage => @traceabilitie.jxc_storage.to_s,
+                        :provider => @traceabilitie.jxc_bill_detail.jxc_contacts_unit.to_s,
+                        :assign_in_storage => "",
           }
         end
         if @traceabilitie.parent.present?
           @jsonresult << {:product => @traceabilitie.jxc_transfer_bill_detail.product,
-                          :stock_in_date => @traceabilitie.jxc_transfer_bill_detail.jxc_stock_assign_bill.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                          :storage => @traceabilitie.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_in_stock.to_s
+                          :stock_in_date => @traceabilitie.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_date.strftime("%Y-%m-%d %H:%M:%S"),
+                          :stock_in_storage => @traceabilitie.parent.jxc_storage.to_s,
+                          :assign_in_storage => @traceabilitie.jxc_storage.to_s,
+                          :provider=>""
           }
           @jsonresult<<{:product => @traceabilitie.parent.jxc_bill_detail.product,
                         :stock_in_date => @traceabilitie.parent.jxc_bill_detail.jxc_purchase_stock_in_bill.stock_in_date.strftime("%Y-%m-%d %H:%M:%S"),
-                        :storage => @traceabilitie.parent.jxc_bill_detail.jxc_purchase_stock_in_bill.jxc_storage.to_s
+                        :stock_in_storage => @traceabilitie.parent.jxc_storage.to_s,
+                        :provider => @traceabilitie.parent.jxc_bill_detail.jxc_contacts_unit.to_s,
+                        :assign_in_storage =>""
           }
         end
 
@@ -62,6 +71,7 @@ class TraceabilitiesController < ApplicationController
     @traceabilities=Traceability.where(:flag => 0, :jxc_bill_detail_id => {'$ne' => nil}, :codetype => 0).distinct(:jxc_bill_detail_id)
     p @traceabilities
     @jxc_bill_details=JxcBillDetail.in(:id => @traceabilities).page params[:page]
+    # @jxc_bill_details
   end
 
   def subcode
@@ -69,15 +79,18 @@ class TraceabilitiesController < ApplicationController
     if params[:code].present?
       begin
         @parent=Traceability.find_by(:barcode => params[:code])
+
         p "-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{@parent.to_json}"
-        @traceabilities=@parent.childs
+        # @parent.includes(:product)
+        @traceabilities=@parent.childs.includes(:product)
+
         p "-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{@traceabilities.to_json}"
         @jsonresult=[]
-        @traceabilities.each do |tr|
+        @traceabilities.includes(:product).each do |tr|
           @jsonresult << {:id => tr.id, :barcode => tr.barcode, :product => tr.product}
         end
 
-        p "-=-=-=-=-=-=-=-=-=-=-#{@jsonresult.to_s}"
+        # p "-=-=-=-=-=-=-=-=-=-=-#{@jsonresult.to_s}"
         respond_to do |format|
           format.js
         end
@@ -85,7 +98,6 @@ class TraceabilitiesController < ApplicationController
       end
     end
     # p "@traceabilities=@parent.childs#{@parent.childs}"
-
 
   end
 

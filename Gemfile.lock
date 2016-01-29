@@ -278,6 +278,8 @@ GEM
       tzinfo (>= 0.3.37)
     mongoid-geospatial (5.0.0)
       mongoid (>= 5.0.0.beta)
+    mongoid-multitenancy (1.1.2)
+      mongoid (>= 4.0)
     mongoid-paperclip (0.0.10)
       paperclip (>= 2.3.6, != 4.3.0)
     mongoid-rspec (3.0.0)
@@ -578,6 +580,7 @@ DEPENDENCIES
   message_bus
   mongoid (~> 5.0.0)
   mongoid-geospatial
+  mongoid-multitenancy
   mongoid-paperclip
   mongoid-rspec
   mongoid-tree

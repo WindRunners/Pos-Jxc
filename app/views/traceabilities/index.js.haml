@@ -6,7 +6,7 @@
   $('tbody#searchResult > tr').remove().fadeOut()
   if(data!='null'&& data!='' &&data != undefined){
       $(data).each(function(){
-        $('#searchResult').prepend('<tr><td>'+this.product.title+'</td><td>'+this.storage+'</td><td>'+this.stock_in_date+'</td></tr>')
+        $('#searchResult').prepend('<tr><td>'+this.product.title+'</td><td>'+this.provider+'</td><td>'+this.stock_in_storage+'</td><td>'+this.assign_in_storage+'</td><td>'+this.stock_in_date+'</td></tr>')
       });
       $('#result').html('找到'+data.length+'条信息')
     }else{

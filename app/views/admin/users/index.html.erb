@@ -39,7 +39,7 @@
                           # "data-href" => admin_path(user),
                           :data => {:confirm => '你确定重置用户密码吗?'},
                           :class => 'btn btn-xs btn-danger' %>
-              <a class="btn btn-xs btn-info" data-href="<%= stores_path(state: "manage_store") %>">
+              <a class="btn btn-xs btn-info" data-href="<%= stores_path(state: "manage_store",:u_id=>user._id.to_s) %>">
                 <i class="ace-icon fa fa-pencil bigger-130">门店管理</i>
               </a>
               <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),

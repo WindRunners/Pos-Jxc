@@ -76,4 +76,8 @@ class JxcContactsUnit
 
   # has_many :jxc_accounting_voucher_details #凭证明细
 
+  def to_s
+    unit_name
+  end
+
 end

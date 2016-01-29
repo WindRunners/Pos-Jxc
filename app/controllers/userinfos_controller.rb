@@ -272,7 +272,8 @@ class UserinfosController < ApplicationController
       init_user.save
     end
     @userinfo.save
-    # binding.pry
+
+
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }

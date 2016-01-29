@@ -39,7 +39,7 @@ module CommonV1APIHelper
         card_bag = CardBag.where(:customer_id => share_customer.id, :product_ticket_id => share_integral_record.product_ticket_id, :status => 0).first
         if card_bag.present?
 
-          SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id, share_customer.id)
+          SpiritRoom.new.save_product_ticket_product(card_bag.product_ticket.id, share_customer.id)
           card_bag.status = 1
           card_bag.save
           #注册者酒券卡包生成

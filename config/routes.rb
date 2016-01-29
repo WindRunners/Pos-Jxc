@@ -494,7 +494,11 @@ Rails.application.routes.draw do
   resources :jxc_storages #仓库
 
   #产品溯源
-  resources :traceabilities
+  resources :traceabilities do
+    get 'subcode',:on=> :collection
+    get 'origincode',:on=> :collection
+    get 'print',:on=> :collection
+  end
 
   #库存查询
   get 'jxc_inventory_query/inventory_index'

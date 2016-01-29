@@ -19,15 +19,12 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_sell_returns_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_sell_stock_out_bill.jxc_storage')
+      %th=t('mongoid.attributes.jxc_sell_stock_out_bill.consumer')
+      %th=t('mongoid.attributes.jxc_sell_stock_out_bill.handler')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.refund_date')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.returns_date')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.current_refund')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.remark')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.total_amount')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.discount')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.discount_amount')
-      %th=t('mongoid.attributes.jxc_sell_returns_bill.refund_amount')
       %th=t('mongoid.attributes.jxc_sell_returns_bill.bill_status')
       %th=t("helpers.actions")
       %th
@@ -36,15 +33,12 @@
     - @jxc_sell_returns_bills.each do |jxc_sell_returns_bill|
       %tr
         %td= jxc_sell_returns_bill.bill_no
-        %td= jxc_sell_returns_bill.customize_bill_no
+        %td= jxc_sell_returns_bill.jxc_storage.storage_name if jxc_sell_returns_bill.jxc_storage.present?
+        %td= jxc_sell_returns_bill.consumer.unit_name if jxc_sell_returns_bill.consumer.present?
+        %td= jxc_sell_returns_bill.handler[0].name if jxc_sell_returns_bill.handler[0].present?
         %td= jxc_sell_returns_bill.refund_date.strftime('%m/%d/%Y') unless jxc_sell_returns_bill.refund_date.blank?
         %td= jxc_sell_returns_bill.returns_date.strftime('%m/%d/%Y') unless jxc_sell_returns_bill.returns_date.blank?
-        %td= jxc_sell_returns_bill.current_refund
         %td= jxc_sell_returns_bill.remark
-        %td= jxc_sell_returns_bill.total_amount
-        %td= jxc_sell_returns_bill.discount
-        %td= jxc_sell_returns_bill.discount_amount
-        %td= jxc_sell_returns_bill.refund_amount
         %td{style:'color:red;font-weight:bold;'}
           = jxc_sell_returns_bill.bill_status == '0' ? '已创建' : (jxc_sell_returns_bill.bill_status == '1' ? '已审核' : '已红冲')
         %td= link_to t("helpers.links.show"), '','data-href': jxc_sell_returns_bill_path(jxc_sell_returns_bill),class:'btn btn-xs btn-info'

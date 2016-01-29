@@ -3,7 +3,7 @@ class JxcSellOrdersController < ApplicationController
   before_action :set_bill_details, only: [:show,:edit]
 
   def index
-    @jxc_sell_orders = JxcSellOrder.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_sell_orders = JxcSellOrder.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

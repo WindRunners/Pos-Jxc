@@ -1,5 +1,20 @@
 %p#notice= notice
 
+%p
+  %b Barcode:
+  = @traceability.barcode
+%p
+  %b Codetype:
+  = @traceability.codetype
+%p
+  %b Printdate:
+  = @traceability.printdate
+%p
+  %b Jxc bill detail:
+  = @traceability.jxc_bill_detail
+%p
+  %b Jxc transfer bill detail:
+  = @traceability.jxc_transfer_bill_detail
 
 = link_to 'Edit', edit_traceability_path(@traceability)
 \|

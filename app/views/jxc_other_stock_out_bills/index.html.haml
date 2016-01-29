@@ -21,9 +21,10 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_other_stock_out_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_other_stock_out_bill.customize_bill_no')
-      %th=t('mongoid.attributes.jxc_other_stock_out_bill.stock_out_date')
+      %th=t('mongoid.attributes.jxc_other_stock_out_bill.jxc_storage')
       %th=t('mongoid.attributes.jxc_other_stock_out_bill.stock_out_type')
+      %th=t('mongoid.attributes.jxc_other_stock_out_bill.handler')
+      %th=t('mongoid.attributes.jxc_other_stock_out_bill.stock_out_date')
       %th=t('mongoid.attributes.jxc_other_stock_out_bill.remark')
       %th=t('mongoid.attributes.jxc_other_stock_out_bill.bill_status')
       %th=t('helpers.actions')
@@ -33,9 +34,10 @@
     - @jxc_other_stock_out_bills.each do |jxc_other_stock_out_bill|
       %tr
         %td= jxc_other_stock_out_bill.bill_no
-        %td= jxc_other_stock_out_bill.customize_bill_no
-        %td= jxc_other_stock_out_bill.stock_out_date.strftime('%m/%d/%Y') unless jxc_other_stock_out_bill.stock_out_date.blank?
+        %td= jxc_other_stock_out_bill.jxc_storage.storage_name if jxc_other_stock_out_bill.jxc_storage.present?
         %td= jxc_other_stock_out_bill.stock_out_type
+        %td= jxc_other_stock_out_bill.handler[0].name if jxc_other_stock_out_bill.handler[0].present?
+        %td= jxc_other_stock_out_bill.stock_out_date.strftime('%m/%d/%Y') unless jxc_other_stock_out_bill.stock_out_date.blank?
         %td= jxc_other_stock_out_bill.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_other_stock_out_bill.bill_status == '0' ? '已创建' : (jxc_other_stock_out_bill.bill_status == '1' ? '已审核' : '已红冲')

@@ -1,19 +1,24 @@
-%h1 Listing traceabilities
+%h1= t('mongoid.models.traceability')
 
-%table
+.row
+  .col-xs-12
+    = form_tag traceabilities_path,:remote=>true, method: 'get',style:'padding:10px;' do
+      .input-group
+        %span.input-group-addon
+          %i.ace-icon.glyphicon.glyphicon-barcode
+        = text_field_tag :code
+
+
+
+%h3#result 请扫描或输入条码查询!
+%table{class:'display table table-striped table-bordered'}
   %thead
     %tr
-      %th
-      %th
-      %th
+      %th 商品
+      %th 入库仓库
+      %th 入库时间
 
-  %tbody
-    - @traceabilities.each do |traceability|
-      %tr
-        %td= link_to 'Show', traceability
-        %td= link_to 'Edit', edit_traceability_path(traceability)
-        %td= link_to 'Destroy', traceability, :method => :delete, :data => { :confirm => 'Are you sure?' }
+  %tbody#searchResult
+
 
 %br
-
-= link_to 'New Traceability', new_traceability_path

@@ -18,11 +18,11 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.customize_bill_no')
+      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_storage')
+      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.supplier')
+      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.handler')
       %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.payment_date')
       %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.stock_in_date')
-      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.supplier')
-      %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_storage')
       %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.remark')
       %th=t('mongoid.attributes.jxc_purchase_stock_in_bill.bill_status')
       %th=t('helpers.actions')
@@ -32,11 +32,11 @@
     - @jxc_purchase_stock_in_bills.each do |jxc_purchase_stock_in_bill|
       %tr
         %td= jxc_purchase_stock_in_bill.bill_no
-        %td= jxc_purchase_stock_in_bill.customize_bill_no
+        %td= jxc_purchase_stock_in_bill.jxc_storage.storage_name if jxc_purchase_stock_in_bill.jxc_storage.present?
+        %td= jxc_purchase_stock_in_bill.supplier.unit_name if jxc_purchase_stock_in_bill.supplier.present?
+        %td= jxc_purchase_stock_in_bill.handler[0].name if jxc_purchase_stock_in_bill.handler[0].present?
         %td= jxc_purchase_stock_in_bill.payment_date.strftime('%m/%d/%Y') unless jxc_purchase_stock_in_bill.payment_date.blank?
         %td= jxc_purchase_stock_in_bill.stock_in_date.strftime('%m/%d/%Y') unless jxc_purchase_stock_in_bill.stock_in_date.blank?
-        %td= jxc_purchase_stock_in_bill.supplier.unit_name if jxc_purchase_stock_in_bill.supplier.present?
-        %td= jxc_purchase_stock_in_bill.jxc_storage.storage_name if jxc_purchase_stock_in_bill.jxc_storage.present?
         %td= jxc_purchase_stock_in_bill.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_purchase_stock_in_bill.bill_status == '0' ? '已创建' : (jxc_purchase_stock_in_bill.bill_status == '1' ? '已审核' : '已红冲')

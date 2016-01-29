@@ -2,7 +2,7 @@ class JxcPurchaseOrdersController < ApplicationController
   before_action :set_jxc_purchase_order, only: [:show, :edit, :update, :destroy, :audit, :strike_a_balance, :invalid]
 
   def index
-    @jxc_purchase_orders = JxcPurchaseOrder.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_purchase_orders = JxcPurchaseOrder.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

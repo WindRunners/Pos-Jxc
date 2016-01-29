@@ -93,7 +93,8 @@ function common_form_ajax_deal(){
             $("#error_explanation ul").html("");
             msg_data = xhr.data
             for (msg in msg_data){
-                $("#error_explanation ul").append("<li>"+msg_data[msg]+"</li>");
+                $("#error_explanation ul").append("<li>"+msg+":"+msg_data[msg]+"</li>");
+                //$("form[data-remote='true'][id$=_"+msg+"]").parent().addClass("field_with_errors");
             }
             $("#error_explanation").show();
         }

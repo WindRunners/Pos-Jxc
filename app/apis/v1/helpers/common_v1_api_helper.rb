@@ -47,6 +47,7 @@ module CommonV1APIHelper
           register_card_bag.customer_id = register_customer.id
           register_card_bag.source = 1
           register_card_bag.save
+
           #更新记录表状态
           share_integral_record.is_confirm = 1
           share_integral_record.save
@@ -54,10 +55,15 @@ module CommonV1APIHelper
 
           data['message']="酒券回调成功！"
           data['flag']=1
+
+        else
+          data['message']="无有效卡包记录！"
+          data['flag']=0
         end
       else
-        data['message']="无有效酒券记录！"
+        data['message']="无有效分享记录！"
         data['flag']=0
+
       end
     rescue Exception => e
       Rails.logger e.message

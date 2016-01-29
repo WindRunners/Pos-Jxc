@@ -159,7 +159,6 @@ class Admin::UsersController < ApplicationController
       store_id = params[:store_id]
       object_store_id = BSON::ObjectId(store_id)
       @current_user = current_user
-      # binding.pry
       if (op=="add")
         @current_user.add_to_set({"store_ids" => object_store_id})
       else
@@ -179,7 +178,6 @@ class Admin::UsersController < ApplicationController
   #管理员用户对普通用户进行密码重置:123456
   def reset_password
     set_user
-    # binding.pry
     @user.password= '123456'
     respond_to do |format|
       begin

@@ -71,8 +71,8 @@ class ApplicationController < ActionController::Base
   def render_js(path, notice = '')
 
     flash[:notice] = notice if notice.present?
-
-    render :text => "location.hash = '##{path}|hash#{rand(1000)}'"
+    path += path.include?("?") ? "&hash_rand=#{rand(1000)}" : "?hash_rand=#{rand(1000)}"
+    render :text => "location.hash = '##{path}'"
 
   end
 
@@ -90,7 +90,9 @@ class ApplicationController < ActionController::Base
     result={}
     result['flag'] = flag
     result['data'] = data
-    result['path'] = "location.hash = '##{path}|hash#{rand(1000)}'"
+
+    path += path.include?("?") ? "&hash_rand=#{rand(1000)}" : "?hash_rand=#{rand(1000)}"
+    result['path'] = "location.hash = '##{path}'"
     result
   end
 

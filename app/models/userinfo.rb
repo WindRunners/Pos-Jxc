@@ -74,8 +74,8 @@ class Userinfo
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
   field :role_marks, type:Array,default: [] #角色标识 business: 运营商角色（对运营商），platform：平台角色（对平台）
 
-  validates :name, :province,:city,:district,:email, presence: true #名称，种类不能为空
-  validates :name,:email,:district,uniqueness: true #名称唯一
+  validates :province,:city,:email,:pusher_phone, presence: true #名称，种类不能为空
+  validates :email,:pusher_phone,uniqueness: true #名称唯一
 
   index({location: "2d"}, {min: -200, max: 200})
 

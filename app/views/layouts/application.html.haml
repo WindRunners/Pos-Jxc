@@ -5,7 +5,7 @@
   = javascript_include_tag controller_name
 
 = include_gon
-
+%input{"type"=>"hidden","id"=>"controller_name","value"=>"#{controller_name}"}
 = yield
 
 -if flash[:notice]

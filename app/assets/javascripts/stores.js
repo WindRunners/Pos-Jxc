@@ -116,9 +116,8 @@ function search() {
 
 
 //用户确认负责门店
-function manage_store(store_id) {
-
-    var data = {store_id: store_id, op: "add"}
+function manage_store(store_id,user_id) {
+    var data = {store_id: store_id,user_id:user_id, op: "add"}
     $.post("/admin/users/manage_store", data,
         function (data, status) {
             if (data.flag == 1) {
@@ -131,9 +130,9 @@ function manage_store(store_id) {
 }
 
 //取消门店负责
-function unmanage_store(store_id) {
+function unmanage_store(store_id,user_id) {
 
-    var data = {store_id: store_id, op: "remove"}
+    var data = {store_id: store_id,user_id:user_id, op: "remove"}
     $.post("/admin/users/manage_store", data,
         function (data, status) {
             if (data.flag == 1) {

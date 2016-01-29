@@ -85,7 +85,7 @@ class JxcPurchaseReturnsBill < JxcBaseModel
 
               #记录库存变更日志
               bill_price = (billDetail.price * (discount.to_d / 100)).round(2)
-              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,later_count,bill_price,OperationType_StockOut,BillType_PurchaseReturns,BillStatus_Audit)
+              storageChangeLog = newInventoryChangeLog(self,billDetail,store,previous_count,later_count,bill_price,OperationType_StockOut,BillType_PurchaseReturns,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -151,7 +151,7 @@ class JxcPurchaseReturnsBill < JxcBaseModel
             store_product_detail.update
 
             bill_price = (billDetail.price * (discount.to_d / 100)).round(2)
-            inventoryChangeLog(self,billDetail,previous_count,after_count,bill_price,OperationType_StrikeBalance,BillType_PurchaseReturns,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,bill_price,OperationType_StrikeBalance,BillType_PurchaseReturns,BillStatus_StrikeBalance)
           end
         end
       end

@@ -79,7 +79,7 @@ class JxcSellStockOutBill < JxcBaseModel
               updateStorageArray << store_product_detail
 
               #记录仓库明细变更日志
-              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,later_count,store_product_detail.cost_price,OperationType_StockOut,BillType_SellStockOut,BillStatus_Audit)
+              storageChangeLog = newInventoryChangeLog(self,billDetail,store,previous_count,later_count,store_product_detail.cost_price,OperationType_StockOut,BillType_SellStockOut,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -144,7 +144,7 @@ class JxcSellStockOutBill < JxcBaseModel
 
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_StockIn,BillType_SellStockOut,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_StockIn,BillType_SellStockOut,BillStatus_StrikeBalance)
           end
         end
       end

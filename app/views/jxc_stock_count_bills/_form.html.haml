@@ -92,7 +92,7 @@
                   %td
                     = billDetail.product.specification
                   %td
-                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                    = billDetail.unit
                   %td
                     %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][price]',value:billDetail.price,readonly:true}
                   %td
@@ -225,10 +225,7 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode._id,
-          storage_id:storage_id
-        };
+        tableSetting.queryParams.category_id = treeNode.id
         initDataGrid(tableSetting);
       }
     };
@@ -239,7 +236,7 @@
       url:'/jxc_common_info/getBillDetailInfo',
       width:600,
       singleSelect:false,
-      queryParams:{},
+      queryParams:{storage_id:storage_id},
       columns:[[
         {title:'名称',field:'title',width:'25%'},
         {title:'品牌',field:'brand',width:'15%'},
@@ -280,9 +277,9 @@
         $(selectData).each(function(){
           billDetailTable += '<tr id='+this.id+'>'+             //商品ID
                          '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
-                         '<td>'+this.qrcode+'</td>'+          //商品编码
+                         '<td>'+(this.qrcode == null ? '' : this.qrcode)+'</td>'+          //商品编码
                          '<td>'+this.specification+'</td>'+ //商品规格
-                         '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                         '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                          '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][price]" value="'+this.cost_price+'" readonly ></td>'+    //成本价
                          '<td><input type="text" class="billDetailInput" id="billDetail_inventory_count" name="billDetail[][inventory_count]" value="'+this.count+'" readonly ></td>'+    //库存数量
                          '<td><input type="text" class="billDetailInput" id="billDetail_check_count" name="billDetail[][check_count]" value="0" onblur="calcPLCount(\''+this.id+'\',this)"></td>'+    //盘点数量
@@ -311,7 +308,7 @@
 
   // 单据预审核
   function audit_in_advance(){
-    $.post('audit_in_advance',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/audit_in_advance',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -325,7 +322,7 @@
 
   // 单据生成盈亏单
   function generate_pl_bill(){
-    $.post('generate_pl_bill',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/generate_pl_bill',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -339,7 +336,7 @@
 
   // 单据最终确认
   function finally_confirm(){
-    $.post('finally_confirm',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/finally_confirm',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if (resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);
@@ -353,7 +350,7 @@
 
   // 单据作废
   function invalid(){
-    $.post('invalid',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
+    $.post('/jxc_stock_count_bills/invalid',{id:$('#jxc_stock_count_bill_id').val()},function(resData){
       alert(resData.msg);
       if(resData.flag == 1){
         $('#audit_in_advance').attr('disabled',true);

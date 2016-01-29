@@ -28,7 +28,7 @@ class JxcSellReturnsBillsController < ApplicationController
     @jxc_sell_returns_bill.bill_no = @jxc_sell_returns_bill.generate_bill_no
     @jxc_sell_returns_bill.refund_date = Time.now
     @jxc_sell_returns_bill.returns_date = Time.now
-    @jxc_sell_returns_bill.handler = current_user.staff
+    @jxc_sell_returns_bill.handler << current_user
   end
 
   def edit
@@ -39,17 +39,18 @@ class JxcSellReturnsBillsController < ApplicationController
     bill_info = params[:jxc_sell_returns_bill]
     consumer_id = bill_info[:consumer_id]   #客户ID
     storage_id = bill_info[:storage_id]    #入货仓库ID
-    handler_id = bill_info[:handler_id]   #经手人ID
-    account_id = bill_info[:account_id]   #付款账户ID
+    # handler_id = bill_info[:handler_id]   #经手人ID
+    # account_id = bill_info[:account_id]   #付款账户ID
 
     @jxc_sell_returns_bill = JxcSellReturnsBill.new(jxc_sell_returns_bill_params)
 
     @jxc_sell_returns_bill.consumer_id = consumer_id
     @jxc_sell_returns_bill.storage_id =  storage_id
-    @jxc_sell_returns_bill.handler_id =  handler_id
-    @jxc_sell_returns_bill.account_id =  account_id
+    # @jxc_sell_returns_bill.account_id =  account_id
     #制单人
-    @jxc_sell_returns_bill.bill_maker =  current_user
+    @jxc_sell_returns_bill.bill_maker <<  current_user
+    #经手人信息
+    @jxc_sell_returns_bill.handler <<  current_user
 
     @jxc_sell_returns_bill.refund_date = stringParseDate(bill_info[:refund_date])
     @jxc_sell_returns_bill.returns_date = stringParseDate(bill_info[:returns_date])
@@ -81,7 +82,7 @@ class JxcSellReturnsBillsController < ApplicationController
       tempBillDetail.amount = amount
 
       #商品ID
-      tempBillDetail.product_id = billDetailInfo[:product_id]
+      tempBillDetail.resource_product_id = billDetailInfo[:product_id]
       #商品计量单位
       tempBillDetail.unit = billDetailInfo[:unit]
       #备注
@@ -112,10 +113,12 @@ class JxcSellReturnsBillsController < ApplicationController
 
     respond_to do |format|
       if @jxc_sell_returns_bill.save
-        format.html { redirect_to jxc_sell_returns_bills_path, notice: '销售退货单已经成功创建.' }
+        # format.html { redirect_to jxc_sell_returns_bills_path, notice: '销售退货单已经成功创建.' }
+        format.js { render_js jxc_sell_returns_bills_path, notice: '销售退货单已经成功创建.' }
         format.json { render :show, status: :created, location: @jxc_sell_returns_bill }
       else
-        format.html { render :new }
+        # format.html { render :new }
+        format.html { render_js new_jxc_sell_returns_bill_path }
         format.json { render json: @jxc_sell_returns_bill.errors, status: :unprocessable_entity }
       end
     end
@@ -129,16 +132,17 @@ class JxcSellReturnsBillsController < ApplicationController
       bill_info = params[:jxc_sell_returns_bill]
       consumer_id = bill_info[:consumer_id]   #供应商ID
       storage_id = bill_info[:storage_id]    #入货仓库ID
-      handler_id = bill_info[:handler_id]   #经手人ID
-      account_id = bill_info[:account_id]   #付款账户ID
+      # handler_id = bill_info[:handler_id]   #经手人ID
+      # account_id = bill_info[:account_id]   #付款账户ID
 
 
       @jxc_sell_returns_bill.consumer_id = consumer_id
       @jxc_sell_returns_bill.storage_id =  storage_id
-      @jxc_sell_returns_bill.handler_id =  handler_id
-      @jxc_sell_returns_bill.account_id =  account_id
+      # @jxc_sell_returns_bill.account_id =  account_id
       #制单人
-      @jxc_sell_returns_bill.bill_maker =  current_user
+      @jxc_sell_returns_bill.bill_maker << current_user
+      #经手人信息
+      @jxc_sell_returns_bill.handler << current_user
 
       @jxc_sell_returns_bill.customize_bill_no = bill_info[:customize_bill_no]
       @jxc_sell_returns_bill.refund_date = stringParseDate(bill_info[:refund_date])
@@ -176,7 +180,7 @@ class JxcSellReturnsBillsController < ApplicationController
         tempBillDetail.amount = amount
 
         #商品ID
-        tempBillDetail.product_id = billDetailInfo[:product_id]
+        tempBillDetail.resource_product_id = billDetailInfo[:product_id]
         #商品计量单位
         tempBillDetail.unit = billDetailInfo[:unit]
         #备注
@@ -208,16 +212,19 @@ class JxcSellReturnsBillsController < ApplicationController
 
       respond_to do |format|
         if @jxc_sell_returns_bill.update
-          format.html { redirect_to @jxc_sell_returns_bill, notice: '销售退货单已经成功更新.' }
+          # format.html { redirect_to @jxc_sell_returns_bill, notice: '销售退货单已经成功更新.' }
+          format.js { render_js edit_jxc_sell_returns_bill_path(@jxc_sell_returns_bill), notice: '销售退货单已经成功更新.' }
           format.json { render :show, status: :ok, location: @jxc_sell_returns_bill }
         else
-          format.html { render :edit }
+          # format.html { render :edit }
+          format.js { render_js edit_jxc_sell_returns_bill_path(@jxc_sell_returns_bill) }
           format.json { render json: @jxc_sell_returns_bill.errors, status: :unprocessable_entity }
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to @jxc_sell_returns_bill, notice: '销售退货单当前状态无法更新.'}
+        # format.html {redirect_to @jxc_sell_returns_bill, notice: '销售退货单当前状态无法更新.'}
+        format.js { render_js jxc_sell_returns_bill_path(@jxc_sell_returns_bill), notice: '销售退货单当前状态无法更新.'}
       end
     end
   end
@@ -225,7 +232,8 @@ class JxcSellReturnsBillsController < ApplicationController
   def destroy
     @jxc_sell_returns_bill.destroy
     respond_to do |format|
-      format.html { redirect_to jxc_sell_returns_bills_url, notice: '销售退货单已经成功删除.' }
+      # format.html { redirect_to jxc_sell_returns_bills_url, notice: '销售退货单已经成功删除.' }
+      format.js { render_js jxc_sell_returns_bills_url, notice: '销售退货单已经成功删除.' }
       format.json { head :no_content }
     end
   end
@@ -250,18 +258,16 @@ class JxcSellReturnsBillsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
   def set_jxc_sell_returns_bill
     @jxc_sell_returns_bill = JxcSellReturnsBill.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_sell_returns_bill_params
     params.require(:jxc_sell_returns_bill).permit(:bill_no, :customize_bill_no, :refund_date, :returns_date, :current_refund, :remark, :total_amount, :discount, :discount_amount, :refund_amount, :bill_status)
   end
 
   #设置单据明细
   def set_bill_details
-    @bill_details = JxcBillDetail.includes(:product).where(sell_returns_bill_id: @jxc_sell_returns_bill.id)
+    @bill_details = JxcBillDetail.where(sell_returns_bill_id: @jxc_sell_returns_bill.id)
   end
 end

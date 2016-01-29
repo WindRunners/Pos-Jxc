@@ -56,7 +56,7 @@ class JxcCostAdjustBill < JxcBaseModel
             store_product_detail.update
 
             #记录库存变更日志
-            costAdjustLog(self,billDetail,store_product_detail.count,store_product_detail.count,OperationType_CostAdjust,BillType_CostAdjust,BillStatus_Audit)
+            costAdjustLog(self,billDetail,store,store_product_detail.count,store_product_detail.count,OperationType_CostAdjust,BillType_CostAdjust,BillStatus_Audit)
             # storageChangeLog = JxcStorageJournal.new
             #
             # storageChangeLog.jxc_storage = store                          #调整仓库
@@ -126,7 +126,7 @@ class JxcCostAdjustBill < JxcBaseModel
             store_product_detail.update
 
             #记录库存变更日志
-            costAdjustLog(self,billDetail,store_product_detail.count,store_product_detail.count,OperationType_StrikeBalance,BillType_CostAdjust,BillStatus_StrikeBalance)
+            costAdjustLog(self,billDetail,store,store_product_detail.count,store_product_detail.count,OperationType_StrikeBalance,BillType_CostAdjust,BillStatus_StrikeBalance)
             # storageChangeLog = JxcStorageJournal.new
             #
             # storageChangeLog.product = billDetail.product                 #调整商品

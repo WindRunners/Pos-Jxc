@@ -6,7 +6,6 @@
       红冲
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_purchase_order.bill_status == '0'? false : true }
       作废
-%p#notice= notice
 = form_for @jxc_purchase_order, remote:true do |f|
   - if @jxc_purchase_order.errors.any?
     #error_explanation
@@ -117,7 +116,7 @@
                   %td
                     = billDetail.product.specification
                   %td
-                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                    = billDetail.unit
                   %td
                     %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
                   %td
@@ -188,7 +187,8 @@
     },
     data: {
       key:{
-        name:""
+        name:"",
+        url:"#"
       },
       simpleData: {
         enable:true,
@@ -352,11 +352,9 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode._id,
-          unit_id:supplier_id
-        };
+        tableSetting.queryParams.category_id = treeNode.id;
         initDataGrid(tableSetting);
+        //alert(treeNode.id+" "+treeNode.title+" "+treeNode.name);
       }
     };
 
@@ -413,7 +411,7 @@
                              '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
                              '<td>'+this.qrcode+'</td>'+          //商品编码
                              '<td>'+this.specification+'</td>'+ //商品规格
-                             '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                             '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                              '<td><input type="text" class="billDetailInput" id="billDetail_count" name="billDetail[][count]" value="1" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //数量
                              '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][purchase_price]" value="0.00" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //采购单价
                              '<td><input type="text" class="billDetailInput" id="billDetail_amount" value="0.00" readonly></td>'+    //金额

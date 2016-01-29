@@ -13,6 +13,7 @@ class JxcStorageProductDetail
   field :virtual_count, type: Integer   #虚拟数量
 
   field :resource_product_id, type: String   #库存商品ID（ActiveResource Object）
+  field :mobile_category_id, type: String   #商品分类ID（ActiveResource Object）
 
   belongs_to :jxc_storage   #详情信息 所属的仓库
   # belongs_to :product  #每条详情信息 包含一个商品
@@ -51,7 +52,12 @@ class JxcStorageProductDetail
 
   # 查询商品信息
   def product
-    @product = JxcProduct.find(self.resource_product_id)
+    @product = Warehouse::Product.find(self.resource_product_id)
+  end
+
+  #查询商品分类信息
+  def mobile_category
+    @mobile_category = Warehouse::MobileCategory.find(self.mobile_category_id)
   end
 
 end

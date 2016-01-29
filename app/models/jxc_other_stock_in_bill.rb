@@ -74,6 +74,7 @@ class JxcOtherStockInBill < JxcBaseModel
             store_product_detail = JxcStorageProductDetail.new
 
             store_product_detail.resource_product_id = billDetail.resource_product_id
+            store_product_detail.mobile_category_id = billDetail.product.mobile_category_id
             store_product_detail.jxc_storage = billDetail.jxc_storage
             store_product_detail.unit = billDetail.unit
             store_product_detail.count = billDetail.count
@@ -87,7 +88,7 @@ class JxcOtherStockInBill < JxcBaseModel
           end
 
           #仓库商品明细变更后，记录变更日志
-          inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.price,OperationType_StockIn,BillType_OtherStockIn,BillStatus_Audit)
+          inventoryChangeLog(self,billDetail,store,previous_count,after_count,billDetail.price,OperationType_StockIn,BillType_OtherStockIn,BillStatus_Audit)
         end
       end
 
@@ -143,7 +144,7 @@ class JxcOtherStockInBill < JxcBaseModel
             store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.price,OperationType_StrikeBalance,BillType_OtherStockIn,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,billDetail.price,OperationType_StrikeBalance,BillType_OtherStockIn,BillStatus_StrikeBalance)
           end
         end
       end

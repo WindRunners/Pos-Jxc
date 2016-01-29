@@ -6,7 +6,7 @@
       红冲
     %button.btn.btn-inverse#invalid{onclick:'invalid()',disabled:@jxc_sell_returns_bill.bill_status == '0'? false : true }
       作废
-= form_for @jxc_sell_returns_bill do |f|
+= form_for @jxc_sell_returns_bill, remote:true do |f|
   - if @jxc_sell_returns_bill.errors.any?
     #error_explanation
       %h2= "#{pluralize(@jxc_sell_returns_bill.errors.count, "error")} prohibited this jxc_sell_returns_bill from being saved:"
@@ -51,11 +51,11 @@
         %input.form-control#jxc_sell_returns_bill_jxc_storage{value: @jxc_sell_returns_bill.jxc_storage.nil? ? '':@jxc_sell_returns_bill.jxc_storage.storage_name,readonly:true }
         = f.hidden_field :storage_id
     %tr
-      %td
-        = f.button t('mongoid.attributes.jxc_sell_returns_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
-      %td
-        %input.form-control#jxc_sell_returns_bill_jxc_account{value: @jxc_sell_returns_bill.jxc_account.nil? ? '':@jxc_sell_returns_bill.jxc_account.account_name,readonly:true }
-        = f.hidden_field :account_id
+      -#%td
+      -#  = f.button t('mongoid.attributes.jxc_sell_returns_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
+      -#%td
+      -#  %input.form-control#jxc_sell_returns_bill_jxc_account{value: @jxc_sell_returns_bill.jxc_account.nil? ? '':@jxc_sell_returns_bill.jxc_account.account_name,readonly:true }
+      -#  = f.hidden_field :account_id
 
       %td
         = f.label :current_refund
@@ -65,7 +65,7 @@
       %td
         = f.label :handler
       %td
-        %input.form-control#jxc_sell_returns_bill_handler{value: @jxc_sell_returns_bill.handler.nil? ? '':@jxc_sell_returns_bill.handler.name,readonly:true }
+        %input.form-control#jxc_sell_returns_bill_handler{value: @jxc_sell_returns_bill.handler[0].nil? ? '':@jxc_sell_returns_bill.handler[0].name,readonly:true }
         = f.hidden_field :handler_id
       %td
         = f.label :remark
@@ -109,7 +109,7 @@
                   %td
                     = billDetail.product.specification
                   %td
-                    %input#billDetail_unit.billDetailInput{type:'text',name:'billDetail[][unit]',value:billDetail.unit}
+                    = billDetail.unit
                   %td
                     %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
                   %td
@@ -156,7 +156,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn',:href => jxc_sell_returns_bills_path}
+    %a{class:'btn','data-href': jxc_sell_returns_bills_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'
@@ -176,7 +176,8 @@
     },
     data: {
       key:{
-        name:""
+        name:"",
+        url:"#"
       },
       simpleData: {
         enable:true,
@@ -334,11 +335,7 @@
     zTreeSetting.data.key.name = 'title';
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
-        tableSetting.queryParams = {
-          category_id:treeNode._id,
-          unit_id:consumer_id,
-          storage_id:storage_id
-        };
+        tableSetting.queryParams.category_id = treeNode.id;
         initDataGrid(tableSetting);
       }
     };
@@ -349,7 +346,7 @@
       url:'/jxc_common_info/getBillDetailInfo',
       width:600,
       singleSelect:false,
-      queryParams:{},
+      queryParams:{storage_id:storage_id},
       columns:[[
         {title:'名称',field:'title',width:'25%'},
         {title:'品牌',field:'brand',width:'15%'},
@@ -397,7 +394,7 @@
                              '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
                              '<td>'+this.qrcode+'</td>'+          //商品编码
                              '<td>'+this.specification+'</td>'+ //商品规格
-                             '<td><input type="text" class="billDetailInput" id="billDetail_unit" name="billDetail[][unit]" value="'+(this.unit == undefined ? '':this.unit)+'"></td>'+    //单位
+                             '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                              '<td><input type="text" class="billDetailInput" id="billDetail_count" name="billDetail[][count]" value="1" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //数量
                              '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][price]" value="0.00" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //单价
                              '<td><input type="text" class="billDetailInput" id="billDetail_amount" value="0.00" readonly ></td>'+    //金额
@@ -421,7 +418,7 @@
 
   //单据审核
   function audit(){
-    $.post('audit',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+    $.post('/jxc_sell_returns_bills/audit',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
       alert(resData.msg)
       if(resData.flag == 1){
         $('#audit').attr('disabled',true);
@@ -435,7 +432,7 @@
 
   //冲账
   function strike_a_balance(){
-    $.post('strike_a_balance',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+    $.post('/jxc_sell_returns_bills/strike_a_balance',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
       alert(resData.msg)
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);
@@ -449,7 +446,7 @@
 
   //作废
   function invalid(){
-    $.post('invalid',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
+    $.post('/jxc_sell_returns_bills/invalid',{id:$('#jxc_sell_returns_bill_id').val()},function(resData){
       alert(resData.msg)
       if(resData.flag == 1){
         $('#invalid').attr('disabled',true);

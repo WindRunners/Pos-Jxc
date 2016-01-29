@@ -44,29 +44,30 @@ module DeliveryUserV1APIHelper
 
       return {msg: '当前手机号未注册,请注册!', flag: 0} if !deliveryUser.present?
 
-      return {msg: '验证码错误,请重新获取!', flag: 0} if !deliveryUser.verify_codes.present? || !deliveryUser.verify_codes["login"].present?
+      if mobile != "18224529355" #测试账号
 
-      verifycode2 = deliveryUser.verify_codes["login"]["code"].to_s
-      time = deliveryUser.verify_codes["login"]["time"]
+        return {msg: '验证码错误,请重新获取!', flag: 0} if !deliveryUser.verify_codes.present? || !deliveryUser.verify_codes["login"].present?
 
-      #判断配送员是否已经审核通过
-      if deliveryUser.status != 1
-        {msg: '当前配送员未审核通过，请耐心等待审核!', flag: 0}
-      elsif verifycode != verifycode2 #判断验证码是否一致
-        {msg: '验证码错误,请重新获取!', flag: 0}
-      elsif Time.now - time > EXPIRY_TIMES #有效期10分钟
-        {msg: '验证码失效,请重新获取!', flag: 0}
-      else
+        verifycode2 = deliveryUser.verify_codes["login"]["code"].to_s
+        time = deliveryUser.verify_codes["login"]["time"]
 
-
-        deliveryUser.channel_ids << channel unless deliveryUser.channel_ids.include? channel
-
-        Rails.logger.info deliveryUser.channel_ids
-
-        deliveryUser.set_delivery_user_track
-        deliveryUser.save #更新配送员登录信息
-        deliveryUser
+        #判断配送员是否已经审核通过
+        if deliveryUser.status != 1
+          return {msg: '当前配送员未审核通过，请耐心等待审核!', flag: 0}
+        elsif verifycode != verifycode2 #判断验证码是否一致
+          return {msg: '验证码错误,请重新获取!', flag: 0}
+        elsif Time.now - time > EXPIRY_TIMES #有效期10分钟
+          return {msg: '验证码失效,请重新获取!', flag: 0}
+        end
       end
+
+      deliveryUser.channel_ids << channel unless deliveryUser.channel_ids.include? channel
+
+      Rails.logger.info deliveryUser.channel_ids
+
+      deliveryUser.set_delivery_user_track
+      deliveryUser.save #更新配送员登录信息
+      deliveryUser
     rescue Exception => e #异常捕获
       puts e.message
       return {msg: '服务器端出现异常', flag: 0}

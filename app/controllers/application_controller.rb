@@ -91,8 +91,10 @@ class ApplicationController < ActionController::Base
     result['flag'] = flag
     result['data'] = data
 
-    path += path.include?("?") ? "&hash_rand=#{rand(1000)}" : "?hash_rand=#{rand(1000)}"
-    result['path'] = "location.hash = '##{path}'"
+    if path.present?
+      path += path.include?("?") ? "&hash_rand=#{rand(1000)}" : "?hash_rand=#{rand(1000)}"
+      result['path'] = "location.hash = '##{path}'"
+    end
     result
   end
 

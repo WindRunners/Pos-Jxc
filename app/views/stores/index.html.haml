@@ -2,9 +2,9 @@
 %br
 %div{class:'row',style:'background-color:#EFF3F8'}
   -if @manage_store!="manage_store"
-    %div{class:'col-xs-9'}
+    %div{class:'col-xs-6'}
       = link_to '新建门店',"##{new_store_path}",'data-href' =>new_store_path,:class => 'btn btn-info'
-    %div{class:'col-xs-3'}
+    %div{class:'col-xs-6'}
       %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>stores_path,'data-remote'=>'true'}
         .form-group
           %label{"for"=>"qrcode"} 店名:
@@ -36,11 +36,11 @@
           %td
             -if @manage_store=="manage_store"
               -if @store_ids.include?(store.id)
-                = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "unmanage_store_href#{store.id.to_s}"
-                = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "manage_store_href#{store.id.to_s}",style: 'display: none'
+                = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-xs btn-danger',:id => "unmanage_store_href#{store.id.to_s}"
+                = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-xs btn-info',:id => "manage_store_href#{store.id.to_s}",style: 'display: none'
               -else
-                = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "unmanage_store_href#{store.id.to_s}",style: 'display: none'
-                = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-minier btn-primary',:id => "manage_store_href#{store.id.to_s}"
+                = link_to '取消负责',"javascript:unmanage_store('"+store.id+"')",:class => 'btn btn-xs btn-danger',:id => "unmanage_store_href#{store.id.to_s}",style: 'display: none'
+                = link_to '确认负责',"javascript:manage_store('"+store.id+"')",:class => 'btn btn-xs btn-info',:id => "manage_store_href#{store.id.to_s}"
             -else
               = link_to '详细',"##{store_path(store)}",'data-href' => store_path(store),:class => 'btn btn-minier btn-yellow'
               = link_to '编辑',"##{edit_store_path(store)}",'data-href' => edit_store_path(store),:class => 'btn btn-minier btn-primary'

@@ -38,16 +38,15 @@ module CommonV1APIHelper
         #分享者奖励商品入酒库，卡包内酒券失效
         card_bag = CardBag.where(:customer_id => share_customer.id, :product_ticket_id => share_integral_record.product_ticket_id, :status => 0).first
         if card_bag.present?
+
           SpiritRoom.save_product_ticket_product(card_bag.product_ticket.id, share_customer.id)
           card_bag.status = 1
           card_bag.save
-
           #注册者酒券卡包生成
           register_card_bag =card_bag.product_ticket.card_bag.build()
           register_card_bag.customer_id = register_customer.id
           register_card_bag.source = 1
           register_card_bag.save
-
           #更新记录表状态
           share_integral_record.is_confirm = 1
           share_integral_record.save

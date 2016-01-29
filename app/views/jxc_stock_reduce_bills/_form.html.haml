@@ -306,7 +306,7 @@
         $(selectData).each(function(){
           billDetailTable += '<tr id='+this.id+'>'+             //商品ID
                          '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
-                         '<td>'+this.qrcode+'</td>'+          //商品编码
+                         '<td>'+(this.qrcode == null ? '' : this.qrcode)+'</td>'+          //商品编码
                          '<td>'+this.specification+'</td>'+ //商品规格
                          '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                          '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][price]" value="'+this.cost_price+'" readonly ></td>'+    //成本价

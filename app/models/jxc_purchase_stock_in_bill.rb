@@ -116,7 +116,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
       end
 
       #生成产品溯源条码
-      # generate_trace_root_code
+      generate_trace_root_code
 
       #更细单据状态
       self.bill_status = BillStatus_Audit
@@ -178,7 +178,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
       end
 
       #红冲后，之前生成的产品溯源条码一并删除
-      # destroy_trace_root_code
+      destroy_trace_root_code
 
       #更新单据状态
       self.bill_status = BillStatus_StrikeBalance  #<红冲>
@@ -228,7 +228,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
           @traceObj.codetype = 0  #母码
           @traceObj.jxc_bill_detail = billDetail  #采购入库 明细
           @traceObj.subCodeCount = billDetail.pack_spec #溯源条码 子码个数 ( 商品装箱规格 )
-          @traceObj.product = billDetail.product  #溯源的商品
+          @traceObj.resource_product_id = billDetail.resource_product_id  #溯源的商品
           @traceObj.jxc_storage = billDetail.jxc_storage  #采购入库仓库
 
           @traceObj.save

@@ -3,7 +3,7 @@ class JxcCostAdjustBillsController < ApplicationController
   before_action :set_bill_details, only: [:show, :edit]
 
   def index
-    @jxc_cost_adjust_bills = JxcCostAdjustBill.where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_cost_adjust_bills = JxcCostAdjustBill.includes(:jxc_storage,:handler).where(:bill_status.ne => '-1').order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

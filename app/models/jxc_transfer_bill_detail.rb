@@ -39,4 +39,22 @@ class JxcTransferBillDetail
     @product = Warehouse::Product.find(self.resource_product_id)
   end
 
+  def assign_out_stock
+    begin
+      @assign_out_stock = JxcStorage.find(self.assign_out_stock_ids[0])
+    rescue
+      @assign_out_stock = nil
+    end
+    return @assign_out_stock
+  end
+
+  def assign_in_stock
+    begin
+      @assign_in_stock = JxcStorage.find(self.assign_in_stock_ids[0])
+    rescue
+      @assign_in_stock = nil
+    end
+    return @assign_in_stock
+  end
+
 end

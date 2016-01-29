@@ -41,12 +41,12 @@
       %td
         = f.button t('mongoid.attributes.jxc_stock_assign_bill.assign_out_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'assign_out\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_assign_bill_assign_out_stock{value: @jxc_stock_assign_bill.assign_out_stock[0].nil? ? '':@jxc_stock_assign_bill.assign_out_stock[0].storage_name,readonly:true }
+        %input.form-control#jxc_stock_assign_bill_assign_out_stock{value: @jxc_stock_assign_bill.assign_out_stock.nil? ? '':@jxc_stock_assign_bill.assign_out_stock.storage_name,readonly:true }
         = f.hidden_field :assign_out_stock_ids
       %td
         = f.button t('mongoid.attributes.jxc_stock_assign_bill.assign_in_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'assign_in\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_assign_bill_assign_in_stock{value: @jxc_stock_assign_bill.assign_in_stock[0].nil? ? '':@jxc_stock_assign_bill.assign_in_stock[0].storage_name,readonly:true }
+        %input.form-control#jxc_stock_assign_bill_assign_in_stock{value: @jxc_stock_assign_bill.assign_in_stock.nil? ? '':@jxc_stock_assign_bill.assign_in_stock.storage_name,readonly:true }
         = f.hidden_field :assign_in_stock_ids
     %tr
       %td
@@ -275,7 +275,7 @@
         $(selectData).each(function(){
           billDetailTable += '<tr id='+this.id+'>'+             //商品ID
                          '<td>'+this.title+'<input type="hidden" id="billDetail_product_id" name="billDetail[][product_id]" value="'+this.id+'">'+'</td>'+         //商品名称 & 商品ID
-                         '<td>'+this.qrcode+'</td>'+          //商品编码
+                         '<td>'+(this.qrcode == null ? '' : this.qrcode)+'</td>'+          //商品编码
                          '<td>'+this.specification+'</td>'+ //商品规格
                          '<td>'+(this.unit == undefined ? '':this.unit)+'</td>'+    //单位
                          '<td>1&times;&nbsp;<input type="text" class="billDetailInput" id="billDetail_pack_spec" name="billDetail[][pack_spec]" value="'+this.pack_spec+'" style="width:50px;" onblur="calcPrimaryCount(\''+this.id+'\')"></td>'+    //数量

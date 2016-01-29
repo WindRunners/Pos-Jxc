@@ -4,7 +4,43 @@ class TraceabilitiesController < ApplicationController
   # GET /traceabilities
   # GET /traceabilities.json
   def index
-    @traceabilities = Traceability.all
+    if params[:code].present?
+      @jsonresult=[]
+      begin
+        @traceabilitie=Traceability.find_by(:barcode => params[:code])
+      rescue
+        @traceabilitie=nil
+      end
+      if @traceabilitie.present?
+
+        if @traceabilitie.childs.present?
+          @traceabilitie.childs.each do |tr|
+            @jsonresult << {:product => tr.jxc_transfer_bill_detail.product,
+                            :stock_in_date => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                            :storage => tr.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_in_stock.to_s
+            }
+          end
+          @jsonresult<<{:product => @traceabilitie.jxc_bill_detail.product,
+                        :stock_in_date => @traceabilitie.jxc_bill_detail.jxc_purchase_stock_in_bill.stock_in_date.strftime("%Y-%m-%d %H:%M:%S"),
+                        :storage => @traceabilitie.jxc_bill_detail.jxc_purchase_stock_in_bill.jxc_storage.to_s
+          }
+        end
+        if @traceabilitie.parent.present?
+          @jsonresult << {:product => @traceabilitie.jxc_transfer_bill_detail.product,
+                          :stock_in_date => @traceabilitie.jxc_transfer_bill_detail.jxc_stock_assign_bill.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                          :storage => @traceabilitie.jxc_transfer_bill_detail.jxc_stock_assign_bill.assign_in_stock.to_s
+          }
+          @jsonresult<<{:product => @traceabilitie.parent.jxc_bill_detail.product,
+                        :stock_in_date => @traceabilitie.parent.jxc_bill_detail.jxc_purchase_stock_in_bill.stock_in_date.strftime("%Y-%m-%d %H:%M:%S"),
+                        :storage => @traceabilitie.parent.jxc_bill_detail.jxc_purchase_stock_in_bill.jxc_storage.to_s
+          }
+        end
+
+      end
+      respond_to do |format|
+        format.js
+      end
+    end
   end
 
   # GET /traceabilities/1
@@ -21,8 +57,50 @@ class TraceabilitiesController < ApplicationController
   def edit
   end
 
-  # POST /traceabilities
-  # POST /traceabilities.json
+  def origincode
+    # @traceabilities = Traceability.all
+    @traceabilities=Traceability.where(:flag => 0, :jxc_bill_detail_id => {'$ne' => nil}, :codetype => 0).distinct(:jxc_bill_detail_id)
+    p @traceabilities
+    @jxc_bill_details=JxcBillDetail.in(:id => @traceabilities).page params[:page]
+  end
+
+  def subcode
+    @traceabilities=nil
+    if params[:code].present?
+      begin
+        @parent=Traceability.find_by(:barcode => params[:code])
+        p "-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{@parent.to_json}"
+        @traceabilities=@parent.childs
+        p "-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{@traceabilities.to_json}"
+        @jsonresult=[]
+        @traceabilities.each do |tr|
+          @jsonresult << {:id => tr.id, :barcode => tr.barcode, :product => tr.product}
+        end
+
+        p "-=-=-=-=-=-=-=-=-=-=-#{@jsonresult.to_s}"
+        respond_to do |format|
+          format.js
+        end
+      rescue
+      end
+    end
+    # p "@traceabilities=@parent.childs#{@parent.childs}"
+
+
+  end
+
+  def print
+    if params[:bill][:id].length > 0
+      @traceabilities=Traceability.in(:jxc_bill_detail_id => params[:bill][:id]).where(:flag => 0, :codetype => 0)
+      @traceabilities.update_all(:printdate => Time.now.localtime)
+      render 'printorigin.json.jbuilder'
+    end
+  end
+
+  def
+
+    # POST /traceabilities
+    # POST /traceabilities.json
   def create
     @traceability = Traceability.new(traceability_params)
 
@@ -62,13 +140,13 @@ class TraceabilitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_traceability
-      @traceability = Traceability.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_traceability
+    @traceability = Traceability.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def traceability_params
-      params[:traceability]
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def traceability_params
+    params.require(:traceability).permit(:barcode, :codetype, :printdate, :jxc_bill_detail_id, :jxc_transfer_bill_detail_id)
+  end
 end

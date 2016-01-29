@@ -18,8 +18,9 @@
   %thead
     %tr
       %th=t('mongoid.attributes.jxc_stock_assign_bill.bill_no')
-      %th=t('mongoid.attributes.jxc_stock_assign_bill.assign_date')
       %th=t('mongoid.attributes.jxc_stock_assign_bill.assign_in_stock')
+      %th=t('mongoid.attributes.jxc_stock_assign_bill.handler')
+      %th=t('mongoid.attributes.jxc_stock_assign_bill.assign_date')
       %th=t('mongoid.attributes.jxc_stock_assign_bill.remark')
       %th=t('mongoid.attributes.jxc_stock_assign_bill.bill_status')
       %th=t('helpers.actions')
@@ -29,8 +30,9 @@
     - @jxc_stock_assign_bills.each do |jxc_stock_assign_bill|
       %tr
         %td= jxc_stock_assign_bill.bill_no
+        %td= jxc_stock_assign_bill.assign_in_stock.storage_name unless jxc_stock_assign_bill.assign_in_stock.blank?
+        %td= jxc_stock_assign_bill.handler[0].name if jxc_stock_assign_bill.handler[0].present?
         %td= jxc_stock_assign_bill.assign_date.strftime('%m/%d/%Y') unless jxc_stock_assign_bill.assign_date.blank?
-        %td= jxc_stock_assign_bill.assign_in_stock[0].storage_name unless jxc_stock_assign_bill.assign_in_stock[0].blank?
         %td= jxc_stock_assign_bill.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_stock_assign_bill.bill_status == '0' ? '已创建' : (jxc_stock_assign_bill.bill_status == '1' ? '已审核' : '已红冲')

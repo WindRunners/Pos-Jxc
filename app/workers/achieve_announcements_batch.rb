@@ -31,10 +31,8 @@ class AchieveAnnouncementsBatch
                   # 压缩图片
                   begin
                   img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-                  width = img.columns
-                  height = img.rows
-                  thumb = img.resize(width * 0.8, height * 0.8)
-                  thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') {self.quality = 50} #compress压缩大小
+                  thumb = img.crop_resized!(420, 330, Magick::NorthGravity)
+                  thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
                   # 将压缩图片地址存进数组
                   announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
                   rescue

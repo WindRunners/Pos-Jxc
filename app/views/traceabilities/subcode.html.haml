@@ -1,0 +1,32 @@
+%h1= t('mongoid.attributes.traceability.subcode')
+
+.row
+  .col-xs-12
+    = form_tag subcode_traceabilities_path,remote:true, method: 'get',style:'padding:10px;' do
+      .input-group
+        %span.input-group-addon
+          %i.ace-icon.glyphicon.glyphicon-barcode
+        = text_field_tag :code
+
+-#= link_to '门店条码打印','#',class:'btn btn-primary',id:'printcode'
+%h3#result 请扫描或输入条码查询!
+%table{class:'display table table-striped table-bordered'}
+  %thead
+    %tr
+      %th 条形码
+      %th 商品
+      %th 规格
+
+  %tbody#subcodesTable
+
+    -#- @traceabilities.each do |bill|
+    -#  %tr
+    -#    %td= check_box_tag :checkbox,bill.id
+    -#    %td= bill.jxc_transfer_bill_detail.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    -#    %td= bill.jxc_transfer_bill_detail.product
+    -#    %td= bill.jxc_transfer_bill_detail.jxc_stock_transfer_bill.bill_maker
+
+
+
+
+%br

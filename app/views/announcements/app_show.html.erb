@@ -125,14 +125,14 @@
           $("#support_image").attr("src", "../../images/announcements/support_red.png");
           $("#p_announcement_hits").html(hits + "");
           $("#a_support_image").removeAttr("onclick");
-          $.ajax({
-              type: "POST",
-              url: '/announcements/'+announcement_id+'/announcement_hit',
-              data: {announcement_id: announcement_id},
-              dataType: "json",
-              success: function (data) {
-              }
-          });
+//          $.ajax({
+//              type: "POST",
+//              url: '/announcements/'+announcement_id+'/announcement_hit',
+//              data: {announcement_id: announcement_id},
+//              dataType: "json",
+//              success: function (data) {
+//              }
+//          });
       }
       ;
 

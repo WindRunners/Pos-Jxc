@@ -38,12 +38,12 @@ class JxcBaseModel
   PDD_BillStatus_Invalid = '-1'       #作废
 
   #进销存  记录库存变更日志
-  def inventoryChangeLog(bill_info,bill_detail_info,previous_count,after_count,price,operation_type,bill_type,bill_status)
+  def inventoryChangeLog(bill_info,bill_detail_info,store_info,previous_count,after_count,price,operation_type,bill_type,bill_status)
 
     changeLog = JxcStorageJournal.new
 
     changeLog.resource_product_id = bill_detail_info.resource_product_id  #库粗变更商品ID (商品为 ActiveResource Object)
-    changeLog.jxc_storage = bill_info.jxc_storage
+    changeLog.jxc_storage = store_info
     changeLog.user = bill_info.handler[0]
 
     changeLog.previous_count = previous_count
@@ -88,12 +88,12 @@ class JxcBaseModel
   end
 
   #进销存  新建库存变更日志（不保存）
-  def newInventoryChangeLog(bill_info,bill_detail_info,previous_count,after_count,price,operation_type,bill_type,bill_status)
+  def newInventoryChangeLog(bill_info,bill_detail_info,store_info,previous_count,after_count,price,operation_type,bill_type,bill_status)
 
     @changeLog = JxcStorageJournal.new
 
-    @changeLog.resource_product_id = bill_detail_info.resource_product_id  #库粗变更商品ID (商品为 ActiveResource Object)
-    @changeLog.jxc_storage = bill_info.jxc_storage
+    @changeLog.resource_product_id = bill_detail_info.resource_product_id  #库存变更商品ID (商品为 ActiveResource Object)
+    @changeLog.jxc_storage = store_info
     @changeLog.user = bill_info.handler[0]
 
     @changeLog.previous_count = previous_count
@@ -138,10 +138,10 @@ class JxcBaseModel
   end
 
   #成本调整日志
-  def costAdjustLog(billInfo,billDetailInfo,previous_count,after_count,operation_type,bill_type,bill_status)
+  def costAdjustLog(billInfo,billDetailInfo,store_info,previous_count,after_count,operation_type,bill_type,bill_status)
     inventoryChangeLog = JxcStorageJournal.new
 
-    inventoryChangeLog.jxc_storage = billInfo.jxc_storage
+    inventoryChangeLog.jxc_storage = store_info
     inventoryChangeLog.resource_product_id = billInfo.resource_product_id
     inventoryChangeLog.user = billInfo.handler[0]
 

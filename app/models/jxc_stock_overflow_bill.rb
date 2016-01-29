@@ -81,7 +81,7 @@ class JxcStockOverflowBill < JxcBaseModel
           end
 
           #仓库商品明细变更后，记录变更日志
-          inventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_Overflow,BillType_StockOverflow,BillStatus_Audit)
+          inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_Overflow,BillType_StockOverflow,BillStatus_Audit)
         end
       end
 
@@ -134,7 +134,7 @@ class JxcStockOverflowBill < JxcBaseModel
             store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.price,OperationType_StrikeBalance,BillType_StockOverflow,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.price,OperationType_StrikeBalance,BillType_StockOverflow,BillStatus_StrikeBalance)
           end
         end
       end

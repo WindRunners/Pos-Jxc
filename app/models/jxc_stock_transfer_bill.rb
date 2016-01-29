@@ -75,7 +75,7 @@ class JxcStockTransferBill < JxcBaseModel
 
 
               #记录库存变更日志
-              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StockOut,BillType_StockTransfer,BillStatus_Audit)
+              storageChangeLog = newInventoryChangeLog(self,billDetail,out_store,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StockOut,BillType_StockTransfer,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -141,7 +141,7 @@ class JxcStockTransferBill < JxcBaseModel
           end
 
           #记录 调入仓库 库存变更日志
-          inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.transfer_price,OperationType_StockIn,BillType_StockTransfer,BillStatus_Audit)
+          inventoryChangeLog(self,billDetail,in_store,previous_count,after_count,billDetail.transfer_price,OperationType_StockIn,BillType_StockTransfer,BillStatus_Audit)
         end
       end
 
@@ -201,7 +201,7 @@ class JxcStockTransferBill < JxcBaseModel
             in_store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,billDetail.transfer_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,in_store,previous_count,after_count,billDetail.transfer_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
           end
 
 
@@ -225,7 +225,7 @@ class JxcStockTransferBill < JxcBaseModel
             out_store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,out_store,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockTransfer,BillStatus_StrikeBalance)
           end
         end
       end

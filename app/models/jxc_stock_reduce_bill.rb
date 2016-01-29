@@ -74,7 +74,7 @@ class JxcStockReduceBill < JxcBaseModel
               updateStorageArray << store_product_detail
 
               #记录库存变更日志
-              storageChangeLog = newInventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_Reduce,BillType_StockReduce,BillStatus_Audit)
+              storageChangeLog = newInventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_Reduce,BillType_StockReduce,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
             end
           else
@@ -140,7 +140,7 @@ class JxcStockReduceBill < JxcBaseModel
             store_product_detail.update
 
             #仓库商品明细变更后，记录变更日志
-            inventoryChangeLog(self,billDetail,previous_count,after_count,store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockReduce,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockReduce,BillStatus_StrikeBalance)
           end
         end
       end

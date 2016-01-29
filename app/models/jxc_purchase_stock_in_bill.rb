@@ -111,7 +111,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
 
           #仓库商品明细变更后，记录变更日志
           cost_price = (billDetail.price * (discount.to_d / 100)).round(2) #成本价
-          inventoryChangeLog(self,billDetail,previous_count,after_count,cost_price,OperationType_StockIn,BillType_PurchaseStockIn,BillStatus_Audit)
+          inventoryChangeLog(self,billDetail,store,previous_count,after_count,cost_price,OperationType_StockIn,BillType_PurchaseStockIn,BillStatus_Audit)
         end
       end
 
@@ -172,7 +172,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             cost_price = (billDetail.price * (discount.to_d / 100)).round(2)
-            inventoryChangeLog(self,billDetail,previous_count,after_count,cost_price,OperationType_StrikeBalance,BillType_PurchaseStockIn,BillStatus_StrikeBalance)
+            inventoryChangeLog(self,billDetail,store,previous_count,after_count,cost_price,OperationType_StrikeBalance,BillType_PurchaseStockIn,BillStatus_StrikeBalance)
           end
         end
       end

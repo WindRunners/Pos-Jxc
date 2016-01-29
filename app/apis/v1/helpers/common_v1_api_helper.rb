@@ -43,7 +43,7 @@ module CommonV1APIHelper
           card_bag.status = 1
           card_bag.save
           #注册者酒券卡包生成
-          register_card_bag =card_bag.product_ticket.card_bag.build()
+          register_card_bag =card_bag.product_ticket.card_bags.build()
           register_card_bag.customer_id = register_customer.id
           register_card_bag.source = 1
           register_card_bag.save

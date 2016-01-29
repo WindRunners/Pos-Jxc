@@ -272,7 +272,7 @@ class UserinfosController < ApplicationController
       init_user.save
     end
     @userinfo.save
-    
+
 
     respond_to do |format|
       format.html

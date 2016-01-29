@@ -1,25 +1,8 @@
 //jquery 初始化函数
 $(function () {
 
-    pagination_ajax();
+    //pagination_ajax();
 
-    $('#user_form').on('ajax:success', function (event, xhr, status, error) {
-
-        if (xhr.flag == 1) {
-            $("#error_explanation").hide();
-            eval(xhr.path);
-        } else {
-            $("#error_explanation ul").html("");
-            msg_data = xhr.data
-            for (msg in msg_data) {
-                $("#error_explanation ul").append("<li>" + msg_data[msg] + "</li>");
-            }
-            $("#error_explanation").show();
-        }
-    });
-});
-
-$(function () {
     //键盘enter事件
     document.onkeydown = function (event) {
         var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -33,7 +16,9 @@ $(function () {
             search();
         }
     };
+
     pagination_ajax();
+    common_form_ajax_deal();
 });
 
 //查询用户搜索

@@ -432,7 +432,7 @@ class Order
 
     #更新订单状态记录表
     begin
-      OrderStateChange.find(self.id).update!(:state => self.workflow_state)
+      OrderStateChange.find(self.id).update!(:state => self.workflow_state,:store_id => self.store_id)
     rescue
       OrderStateChange.new(:id => self.id,
                            :customer_id => self.customer_id,

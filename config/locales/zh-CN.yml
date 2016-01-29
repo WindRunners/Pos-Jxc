@@ -5,6 +5,13 @@ zh-CN:
   designer: "美工"
   supervisor: "主管"
   staff: '员工'
+  manager: '经理'
+  SuperAdmin: '超级管理员'
+  store: '门店'
+  business: '运营商'
+  xiaoda_kuaixun: '小达快讯'
+  jiu_world: '酒世界'
+  finance: '财务'
 
 
   new: "新建"

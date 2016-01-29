@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
 
   def index
     @current_user = current_user
-    name =  params[:user_name]
+    name = params[:user_name]
     mobile = params[:user_mobile]
     whereParams = {} #查询条件
     whereParams['name'] = /#{name}/ if name.present?
@@ -15,11 +15,14 @@ class Admin::UsersController < ApplicationController
     # @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
   end
 
+  #添加新用户,并对角色进行过滤
   def new
-
     @user = User.new
-    @roles = Role.all
-
+    @current_user = current_user
+    userinfo = Userinfo.find(@current_user.userinfo_id)
+    role_mark = userinfo.role_marks
+    @roles = Role.where({'role_mark' => {'$in' => role_mark}})
+    # @roles = Role.all
     # session[:user_params] ||= {}
     # @user = User.new(session[:user_params])
     # @user.current_step = session[:user_step]
@@ -35,8 +38,10 @@ class Admin::UsersController < ApplicationController
 
   def edit
     # @roles = Role.all
-    @roles = Role.where({})
-
+    @current_user = current_user
+    userinfo = Userinfo.find(@current_user.userinfo_id)
+    role_mark = userinfo.role_marks
+    @roles = Role.where({'role_mark' => {'$in' => role_mark}})
   end
 
 

@@ -39,9 +39,9 @@ class JxcStockAssignBill < JxcBaseModel
       #单据商品详情
       billDetailArray = JxcTransferBillDetail.where(stock_assign_bill_id: self.id)
       #总库
-      out_store = self.assign_out_stock[0]
+      out_store = self.assign_out_stock
       #要货仓库
-      in_store = self.assign_in_stock[0]
+      in_store = self.assign_in_stock
 
       ##调出操作
 
@@ -125,7 +125,7 @@ class JxcStockAssignBill < JxcBaseModel
             in_store_product_detail = JxcStorageProductDetail.new
 
             in_store_product_detail.jxc_storage = in_store
-            in_store_product_detail.product = billDetail.product
+            in_store_product_detail.resource_product_id = billDetail.resource_product_id
             in_store_product_detail.unit = billDetail.unit
             in_store_product_detail.count = billDetail.count
             in_store_product_detail.cost_price = origin_detail.present? ? origin_detail.cost_price : 0
@@ -145,7 +145,7 @@ class JxcStockAssignBill < JxcBaseModel
       end
 
       #生成产品溯源子码
-      # generate_trace_sub_code
+      generate_trace_sub_code
 
       #更新单据状态
       self.bill_status = BillStatus_Audit
@@ -173,9 +173,9 @@ class JxcStockAssignBill < JxcBaseModel
       #单据商品详情
       billDetailArray = JxcTransferBillDetail.where(stock_assign_bill_id: self.id)
       #总库
-      out_store = self.assign_out_stock[0]
+      out_store = self.assign_out_stock
       #要货仓库
-      in_store = self.assign_in_stock[0]
+      in_store = self.assign_in_stock
 
       if billDetailArray.present?
         billDetailArray.each do |billDetail|
@@ -226,7 +226,7 @@ class JxcStockAssignBill < JxcBaseModel
       end
 
       #删除审核时生成的溯源子码
-      # destroy_trace_sub_code
+      destroy_trace_sub_code
 
       #更新单据状态
       self.bill_status = BillStatus_StrikeBalance  #<红冲>
@@ -267,11 +267,11 @@ class JxcStockAssignBill < JxcBaseModel
     billDetailArray = JxcTransferBillDetail.where(:stock_assign_bill_id => self.id)
 
     billDetailArray.each do |billDetail|
-      store = billDetail.assign_out_stock[0]
-      product = billDetail.product
+      store = billDetail.assign_out_stock
+      resource_product_id = billDetail.resource_product_id
       assign_count = billDetail.package_count.to_i
 
-      @root_trace_array = Traceability.where(:jxc_storage => store, :product => product, :codetype => 0,:generateSubCodeFlag => 0).sort(_id:1).limit(assign_count)
+      @root_trace_array = Traceability.where(:jxc_storage => store, :resource_product_id => resource_product_id, :codetype => 0,:generateSubCodeFlag => 0).sort(_id:1).limit(assign_count)
 
       @root_trace_array.each do |root_trace|
 
@@ -284,8 +284,8 @@ class JxcStockAssignBill < JxcBaseModel
           @subTraceObj.codetype = 1
           @subTraceObj.parent = root_trace
           @subTraceObj.jxc_transfer_bill_detail = billDetail
-          @subTraceObj.product = billDetail.product
-          @subTraceObj.jxc_storage = billDetail.assign_in_stock[0]
+          @subTraceObj.resource_product_id = billDetail.resource_product_id
+          @subTraceObj.jxc_storage = billDetail.assign_in_stock
 
           if sequence < 10
             @subTraceObj.barcode = root_trace.barcode + '0' + sequence.inspect

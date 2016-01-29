@@ -7,6 +7,9 @@
   %b logo:
   %img#img_product_ticket_logo{:style => "height:50px;width:50px",:src=>@product_ticket.logo.url}
 %p
+  %b banner:
+  %img#img_product_ticket_banner{:style => "height:100px;width:200px",:src=>@product_ticket.banner.url}
+%p
   %b 开始时间:
   = @product_ticket.start_date_str
 %p
@@ -24,9 +27,6 @@
 %p
   %b 规则:
   =markdown @product_ticket.rule_content
-%p
-  %b 小C数量:
-  = @product_ticket.customer_ids
 
 
 

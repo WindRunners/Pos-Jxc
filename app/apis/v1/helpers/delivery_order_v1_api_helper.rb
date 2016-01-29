@@ -18,8 +18,8 @@ module DeliveryOrderV1APIHelper
     orders.each do |order|
 
       store = store_info[order['store_id']]
-      order['store_address'] = store.position
-      if current_lng.present? && current_lat.present?
+      order['store_address'] = store.present? ? store.position : ''
+      if current_lng.present? && current_lat.present? && store.present?
         order['current_distance'] = DeliveryOrderV1APIHelper.get_distance_for_points(current_lng, current_lat,store.location[0],store.location[1])
       else
         order['current_distance'] = 0
@@ -80,7 +80,7 @@ module DeliveryOrderV1APIHelper
 
     return {msg: '当前订单不存在!', flag: 0} if !order.present?
     store = Store.find(order['store_id'])
-    order['store_address'] = store.position
+    order['store_address'] = store.present? ? store.position : ""
     if current_lng.present? && current_lat.present?
       order['current_distance'] = DeliveryOrderV1APIHelper.get_distance_for_points(current_lng, current_lat,store.location[0],store.location[1])
     else
@@ -96,8 +96,8 @@ module DeliveryOrderV1APIHelper
     order['consignee_latitude'] = order.location[0]
 
     #门店经纬度
-    order['store_longitude'] = store.location[0]
-    order['store_latitude'] = store.location[1]
+    order['store_longitude'] = store.present? ? store.location[0] : 0
+    order['store_latitude'] = store.present? ? store.location[1] : 0
 
     #获取商品
     order['ordergoods'] = isEnd ? order.ordergoodcompleteds : order.ordergoods
@@ -117,8 +117,8 @@ module DeliveryOrderV1APIHelper
     store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|
       store = store_info[order['store_id']]
-      order['store_address'] = store.position
-      if current_lng.present? && current_lat.present?
+      order['store_address'] = store.present? ? store.position : ''
+      if current_lng.present? && current_lat.present? && store.present?
         order['current_distance'] = DeliveryOrderV1APIHelper.get_distance_for_points(current_lng, current_lat,store.location[0],store.location[1])
       else
         order['current_distance'] = 0
@@ -139,7 +139,7 @@ module DeliveryOrderV1APIHelper
     store_info = DeliveryOrderV1APIHelper.get_stores_by_userinfo_id(deliveryUser['userinfo_id'])
     orders.each do |order|
       store = store_info[order['store_id']]
-      order['store_address'] = store.position
+      order['store_address'] = store.present? ? store.position : ""
       my_his_orders << order
     end
     my_his_orders

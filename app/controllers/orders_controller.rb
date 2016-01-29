@@ -34,14 +34,14 @@ class OrdersController < ApplicationController
   def index
 
     @state = "all"
-
-    @order_state_count = OrderStateCount.build_orderStateCount(current_user.userinfo.id)
+    # @order_state_count = OrderStateCount.build_orderStateCount(current_user)
   end
 
 
   def orders_table_data
     parm = Hash.new
     parm[:userinfo] = current_user.userinfo
+    parm[:store_id] = {"$in" => current_user['store_ids']}
 
     parm[:orderno] = params[:orderno] if !params[:orderno].nil? && !params[:orderno].blank?
     parm[:consignee] = params[:consignee] if !params[:consignee].nil? && !params[:consignee].blank?
@@ -60,23 +60,28 @@ class OrdersController < ApplicationController
       ordercompleteds = Ordercompleted.where(parm).order(created_at: :desc)
 
       ordercompleteds.each do |ordercompleted|
-        order = Order.new(ordercompleted.as_json)
-        ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
-          order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))
-        end
-        orders << order
+        ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
+        orders << ordercompleted
+        # order = Order.new(ordercompleted.as_json)
+        # ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
+        #   order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))
+        # end
+        # orders << order
       end
       @orders = Kaminari.paginate_array(orders, total_count: orders.size).page(params[:page]).per(5)
     elsif :generation == state_parm || :paid == state_parm || :distribution == state_parm || :receive == state_parm
+      parm.delete :store_id if :generation == state_parm #待付款时移除门店限制
+
       parm[:workflow_state] = state_parm
       orders = Order.where(parm).order(created_at: :desc)
       @orders = orders.page(params[:page]).per(5)
     else
-      orders = Order.get_all_orders(parm)
-      @orders = Kaminari.paginate_array(orders, total_count: orders.size).page(params[:page]).per(5)
+
+      @orders  = Order.get_all_orders(parm,params[:page],5)
+      # @orders = Kaminari.paginate_array(orders, total_count: orders.size).page(params[:page]).per(5)
     end
 
-    @order_state_count = OrderStateCount.build_orderStateCount(parm[:userinfo].id)
+    # @order_state_count = OrderStateCount.build_orderStateCount(parm[:userinfo].id)
 
     render :partial => 'orders_table_data', :layout => false
   end
@@ -104,13 +109,16 @@ class OrdersController < ApplicationController
       @order = Order.find(params[:id])
     rescue
       ordercompleted = Ordercompleted.find(params[:id])
-
-      order = Order.new(ordercompleted.as_json)
-      ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
-        order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))
-      end
-      @order = order
+      ordercompleted['ordergoods'] = ordergoodcompleted.ordergoodcompleteds
+      # order = Order.new(ordercompleted.as_json)
+      # ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
+      #   order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))
+      # end
+      @order = ordercompleted
     end
+
+    @delivery_user = DeliveryUser.where({"_id" => BSON::ObjectId("#{@order['delivery_user_id']}")}).first if @order['delivery_user_id'].present?
+    @store = Store.where({"_id" => @order['store_id']}).first if @order['store_id'].present?
 
     @show_button = true
   end
@@ -130,7 +138,7 @@ class OrdersController < ApplicationController
 
 
   def order_state_count
-    render json: OrderStateCount.build_orderStateCount(current_user.userinfo.id)
+    render json: OrderStateCount.build_orderStateCount(current_user)
   end
 
   # DELETE /orders/1

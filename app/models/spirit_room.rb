@@ -9,8 +9,9 @@ class SpiritRoom
 
   has_secure_password
 
-  field :password_digest, type: String #密码
+  field :password_digest, type: String, default: "000000" #密码
   field :customer_id, type: String #会员id
+  field :is_active, type: Integer,default: 0 #是否激活 0：未激活，1：已激活
   has_many :spirit_room_products
 
   index({customer_id: 1}, {unique: true, name: "customer_id_index"}) #小C酒库唯一索引
@@ -57,7 +58,8 @@ class SpiritRoom
   def self.save_product_ticket_product(product_ticket_id,customer_id)
 
     product_ticket = ProductTicket.find(product_ticket_id)
-    spiritRoom = SpiritRoom.where({'customer_id' => customer_id}).first
+                         # .find_or_create_by(:customer_id => customer.id)
+    spiritRoom = SpiritRoom.find_or_create_by({'customer_id' => customer_id})
     userinfo_id = product_ticket['userinfo_id']
     add_spirit_room_product(spiritRoom,userinfo_id,product_ticket.product_id,1)
 
@@ -87,7 +89,7 @@ class SpiritRoom
       spiritRoomProduct.spirit_room = spiritRoom.id
       spiritRoomProduct['mobile_category_name'] = product.category_name
     end
-    spiritRoomProduct.save! #更新
+    spiritRoomProduct.save #更新
   end
 
 end

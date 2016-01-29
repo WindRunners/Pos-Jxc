@@ -22,37 +22,40 @@
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="../../js/bootstrap.min.js"></script>
   <style type="text/css">
-        .container {
+      .container {
 
           font-family: SimHei;
-        }
-        #head_title {
+      }
+
+      #head_title {
           font-size: 140%;
-          font-weight:200;
+          font-weight: 200;
           color: #202020;
-        }
+      }
 
-        #head_source{
-            margin:5px -10px 15px -10px;
+      #head_source {
+          margin: 5px -10px 15px -10px;
           color: #505050;
-        }
+      }
 
-        #source {
+      #source {
 
           font-size: 70%;
           text-align: justify;
-        }
+      }
 
-        #created_at {
+      #created_at {
 
           font-size: 70%;
           text-align: right;
-        }
-        #content {
+      }
+
+      #content {
           font-size: 120%;
           color: #505050;
-            text-align: left;
-        }
+          text-align: left;
+      }
+
   </style>
 
   <script>
@@ -111,13 +114,27 @@
 
       }
       ;
-//      $(document).ready(function(){
-//          $('#content').find('img').each(function(){
-//
-//              this.style.width = "100%";
-//
-//          });
-//      });
+
+
+
+      function announcement_hit() {
+          var hits = parseInt($("#p_announcement_hits").text()) + 1;
+          var announcement_id = $("#announcement_id").val();
+          $.ajax({
+              type: "POST",
+              url: "/announcements/<%=@announcement.id.to_s%>/announcement_hit",
+              data: {announcement_id: announcement_id},
+              dataType: "json",
+              success: function (data) {
+
+              }
+          });
+          $("#support_image").attr("src","../../images/announcements/support_red.png");
+
+          $("#p_announcement_hits").html(hits + "");
+          $("#a_support_image").removeAttr("onclick");
+      }
+      ;
 
   </script>
 
@@ -134,22 +151,19 @@
 <!--head_title-->
 
 
-
 <div class="row" id="head_source">
 
-    <div class="col-xs-6" id="source">
-      <% if @announcement.source.present? %>
-          <%= @announcement.source %>
-      <% else %>
-          小达快讯
-      <% end %></div>
-    <div class="col-xs-6" id="created_at">
-      <%= @announcement.created_at.to_s[5, 11] %>
-    </div>
+  <div class="col-xs-6" id="source">
+    <% if @announcement.source.present? %>
+        <%= @announcement.source %>
+    <% else %>
+        小达快讯
+    <% end %></div>
+  <div class="col-xs-6" id="created_at">
+    <%= @announcement.created_at.to_s[5, 11] %>
+  </div>
 
 </div>
-
-
 
 
 <div class="row" id="content">
@@ -161,6 +175,27 @@
 <!--row_content-->
 
 
+
+
+<div class="row" >
+  <div class="col-xs-12" style="text-align: center;background-color: #87CEFA">
+    <p>酒运达版权所有，转载请注明出处。</p>
+  </div>
+  <!--content-->
+</div>
+<!--row_content-->
+
+<div class="row" >
+  <div class="col-xs-12">
+    <a id="a_support_image" onclick="announcement_hit();">
+      <img src="../../images/announcements/support_gray.png" id="support_image" style="display:block;margin-left:auto;margin-right:auto;height: 30%;width: 30%;">
+    </a>
+    <div style="text-align: center">
+    共有<p id="p_announcement_hits" style="display:inline;"><%=@announcement.hits%></p>次点赞</div>
+  </div>
+  <!--content-->
+</div>
+<!--row_content-->
 
 </body>
 

@@ -183,7 +183,10 @@ class UserinfosController < ApplicationController
   # end
 
   def jyd_index
-    @userinfos = Userinfo.all
+    name_condition=params[:name] || ''
+    conditionParams = {}
+    conditionParams['shopname'] = /#{name_condition}/ if name_condition.present?
+    @userinfos = Userinfo.where(conditionParams).page(params[:page]).order('created_at DESC')
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }
@@ -199,11 +202,13 @@ class UserinfosController < ApplicationController
     @userinfo = Userinfo.new(userinfo_params)
     respond_to do |format|
       if @userinfo.save
-        format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        format.json { head :no_content }
+        format.json { render json: get_render_json(1,nil,jyd_index_userinfos_path) }
+        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
+        # format.json { head :no_content }
       else
-        format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        format.json { head :no_content }
+        format.json { render json: get_render_json(0,@userinfo.errors.messages) }
+        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
+        # format.json { head :no_content }
       end
     end
   end
@@ -218,12 +223,11 @@ class UserinfosController < ApplicationController
   end
 
   def jyd_update
-    binding.pry
-        @userinfo = Userinfo.find(params[:userinfo_id])
+    @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.update(userinfo_params)
     respond_to do |format|
       format.html
-      format.js { render_js jyd_index_userinfos_path()}
+      format.js { render_js jyd_index_userinfos_path() }
     end
   end
 
@@ -235,6 +239,7 @@ class UserinfosController < ApplicationController
       format.js { render_js jyd_index_userinfos_path() }
     end
   end
+
   def jyd_check
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.status=1
@@ -242,16 +247,17 @@ class UserinfosController < ApplicationController
     init_user.name = @userinfo.name
     init_user.mobile = @userinfo.pusher_phone
     init_user.password = '123456'
-    init_user.email = @userinfo.pusher_phone+'@qq.com'
+    init_user.email = @userinfo.email
+    init_user.add_role(:admin)
     init_user.step = 9
     init_user.save
-    binding.pry
     @userinfo.save
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }
     end
   end
+
   def jyd_check_out
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.status=-1
@@ -283,7 +289,7 @@ class UserinfosController < ApplicationController
   def userinfo_params
     params.require(:userinfo).permit(:name, :address, :shopname, :url, :lat, :lng, :busp, :footp, :pdistance, :district, :city, :province, :integral,
                                      :approver, :pusher, :pusher_phone, :healthp, :taxp, :orgp, :idpb, :idpf, :idnumber, :aseet4, :aseet3, :fright, :lowestprice,
-                                     :fright_time, :h_lowestprice, :h_fright, :night_time, :province, :city, :district, :address, :start_business, :end_business, :status)
+                                     :fright_time, :h_lowestprice, :h_fright, :night_time, :province, :city, :district, :address, :start_business, :end_business, :status, :email)
   end
 
   def auth_userinfo_params

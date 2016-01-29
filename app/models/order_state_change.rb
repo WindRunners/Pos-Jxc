@@ -10,5 +10,7 @@ class OrderStateChange
   field :state
   field :orderno
   field :ordertype
+  field :store_id  # 门店id
+  field :delivery_user_id #配送员id
 
 end

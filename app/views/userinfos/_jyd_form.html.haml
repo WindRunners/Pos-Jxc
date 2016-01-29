@@ -2,12 +2,8 @@
 .row
   .container
     = form_for @userinfo, url: {action: @params_action},remote:true do |f|
-      - if @userinfo.errors.any?
-        #error_explanation
-          %h2= "#{pluralize(@userinfo.errors.count, 'error')} prohibited this store from being saved:"
-          %ul
-            - @userinfo.errors.full_messages.each do |msg|
-              %li= msg
+      #error_explanation{"style"=>"display:none"}
+        %ul
       .col-xs-12
         %form.form-horizontal
           .form-group
@@ -50,6 +46,11 @@
               = f.text_field :pusher_phone,{:class=>'col-xs-10 col-sm-5'}
           .form-group
             .field
+              = f.label :邮箱,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.text_field :email,{:class=>'col-xs-10 col-sm-5'}
+          .form-group
+            .field
               = f.label :百度地图,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-9
               #userinfo_map{style:'width:630px;height:230px;border:1px solid gray'}
@@ -60,17 +61,13 @@
               = link_to 'Back','', 'data-href' => jyd_index_userinfos_path,:class=> 'btn btn-info'
 
 
-
 :javascript
     //jquery 初始化函数
   $(function () {
 
 
-    var scripts = [null, null]
-    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
-      //inline scripts related to this page
-    });
 
+    var userinfo_city = $('#userinfo_city').val();
 
     var map = new BMap.Map("userinfo_map");//初始化地图
     map.addControl(new BMap.NavigationControl());  //初始化地图控件
@@ -78,6 +75,16 @@
     map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
     map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
 
+
+    if (userinfo_city == "" || userinfo_city == undefined) {
+    var point = new BMap.Point(113.663221, 34.7568711);
+    map.centerAndZoom(point, 15);//初始化地图中心点
+    }
+    else{
+      map.centerAndZoom(userinfo_city,15);
+
+
+    }
 
     var point = new BMap.Point(113.663221, 34.7568711);
     map.centerAndZoom(point, 15);//初始化地图中心点
@@ -98,7 +105,16 @@
     });
 
 
+  common_form_ajax_deal();
 
   });
+
+
+  function submit_check(){
+
+
+
+
+  }
 
 

@@ -246,6 +246,13 @@ class AnnouncementsController < ApplicationController
 
   def app_show
     @announcement = Announcement.find(params[:announcement_id])
+    count = Announcement.where(:announcement_category_id=>@announcement.announcement_category.id,:pic_path => {"$exists":true}).count
+    if count-4< 0
+      rand_num = 0
+    else
+      rand_num= count-4
+    end
+    @relate_news = Announcement.where(:announcement_category_id=>@announcement.announcement_category.id,:pic_path => {"$exists":true}).skip(rand(rand_num)).order('created_at DESC').limit(4)
     render :layout => nil
   end
 
@@ -285,6 +292,26 @@ class AnnouncementsController < ApplicationController
       data['message'] = '共'+params[:announcement_id_array].size.to_s+'条，' +@s.to_s+'条成功，'+@f.to_s+'条失败。'
       format.json { render json: data }
     end
+  end
+
+
+  def announcement_hit
+
+    @announcement = Announcement.find(params[:announcement_id])
+    data ={}
+    @announcement.hits+=1
+    respond_to do |format|
+      if @announcement.save
+        data['flag'] = 1
+        data['message'] = '点赞成功！'
+
+      else
+        data['flag'] = 0
+        data['message'] = '点赞失败'
+      end
+      format.json { render json: data }
+    end
+
   end
 
   private

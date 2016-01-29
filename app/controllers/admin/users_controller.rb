@@ -5,7 +5,13 @@ class Admin::UsersController < ApplicationController
 
   def index
     @current_user = current_user
-    @users = User.all.page(params[:page])
+    name =  params[:user_name]
+    mobile = params[:user_mobile]
+    whereParams = {} #查询条件
+    whereParams['name'] = /#{name}/ if name.present?
+    whereParams['mobile'] = /#{mobile}/ if mobile.present?
+    @users = User.where(whereParams).page(params[:page])
+    # @users = User.all.page(params[:page])
     # @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])
   end
 
@@ -30,9 +36,7 @@ class Admin::UsersController < ApplicationController
   def edit
     # @roles = Role.all
     @roles = Role.where({})
-    Rails.logger.info "修改"
-    @roles = Role.where({})
-    @roles = Role.where({})
+
   end
 
 
@@ -59,19 +63,19 @@ class Admin::UsersController < ApplicationController
             end
           end
           # if @app_key.present?
-            # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-            # format.json { render :show, status: :ok }
+          # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+          # format.json { render :show, status: :ok }
           # else
-            # format.js { render_js admin_users_path }
-            # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-            # format.json { render :show, status: :ok }
+          # format.js { render_js admin_users_path }
+          # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+          # format.json { render :show, status: :ok }
 
           # end
-          format.json { render json: get_render_json(1,nil,admin_users_path) }
+          format.json { render json: get_render_json(1, nil, admin_users_path) }
         else
           # format.html { render :new }
           # format.json { render json: @user.errors, status: :unprocessable_entity }
-          format.json { render json: get_render_json(0,@user.errors.messages) }
+          format.json { render json: get_render_json(0, @user.errors.messages) }
         end
       rescue Exception => e
         p e.message
@@ -138,7 +142,7 @@ class Admin::UsersController < ApplicationController
     @user.destroy
     respond_to do |format|
       # format.html { redirect_to admin_users_path, notice: 'User was successfully destroyed.' }
-      format.js { render_js admin_users_path, notice: 'Feedback was successfully destroyed.' }
+      format.js { render_js admin_users_path, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -166,7 +170,7 @@ class Admin::UsersController < ApplicationController
       end
     end
   end
-  
+
   #管理员用户对普通用户进行密码重置:123456
   def reset_password
     set_user
@@ -176,18 +180,41 @@ class Admin::UsersController < ApplicationController
       begin
         if @user.save
           # format.js {render_js admin_users_path }
-          format.json { render json: get_render_json(1,nil,admin_users_path) }
+          format.json { render json: get_render_json(1, nil, admin_users_path) }
         else
           # format.html { render :new }
           # format.json { render json: @user.errors, status: :unprocessable_entity }
           # format.js {render_js admin_users_path }
-          format.json { render json: get_render_json(0,@user.errors.messages) }
+          format.json { render json: get_render_json(0, @user.errors.messages) }
         end
       rescue Exception => e
         p e.message
       end
     end
   end
+
+  #点击动作进入修改密码表格
+  def modify_loginpasswordForm
+
+  end
+
+  #当前用户修改登录密码(表单形式)
+  def modify_loginpassword
+    @current_user = current_user
+    respond_to do |format|
+      if params[:new_password].present? && BCrypt::Password.new(@current_user.encrypted_password)==params[:old_password]
+        @current_user.password = params[:new_password]
+        if @current_user.save
+          format.json { render json: get_render_json(1, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+        else
+          format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+        end
+      else
+        format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+      end
+    end
+  end
+
 
   private
 

@@ -19,8 +19,10 @@ class ProductTicket
   has_mongoid_attached_file :logo,
                             :default_url => '/missing.png'
   validates_attachment_content_type :logo, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
-
-
+  #第三方页面banner图片
+  has_mongoid_attached_file :banner,
+                            :default_url => '/missing.png'
+  validates_attachment_content_type :banner, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
   validates :title, presence: true #名称，种类不能为空
   validates :title,uniqueness: true #名称唯一

@@ -4,7 +4,7 @@
 
 
     function take_order() {
-        $('#delivery_users_modal').modal('hide');
+        //$('#delivery_users_modal').modal('hide');
         var data = $('#delivery_users_table').DataTable().row('.selected').data();
         $.ajax({
             type: "POST",
@@ -15,8 +15,11 @@
             },
             dataType: "json",
             success: function (data) {
-                alert(JSON.stringify(data));
-                window.location.href = get_location_href_no_search()+"?workflow_state=paid&f="+get_rand_num();
+                $('#myModal').modal('hide');
+                alert(data.msg);
+                //alert(JSON.stringify(data));
+                location.hash = location.hash+"&f="+get_rand_num();
+               // window.location.href = get_location_href_no_search()+"f="+get_rand_num();
             }
         });
     }
@@ -228,6 +231,22 @@
               <p><%= @order.remarks %></p>
             </td>
           </tr>
+          <tr>
+            <td align="">
+              <p>配送员：</p>
+            </td>
+            <td>
+              <p><%= "#{@delivery_user.mobile}(#{@delivery_user.real_name})" if @delivery_user.present? %></p>
+            </td>
+          </tr>
+          <tr>
+            <td align="">
+              <p>门店：</p>
+            </td>
+            <td>
+              <p><%= @store.name if @store.present? %></p>
+            </td>
+          </tr>
           </tbody>
         </table>
       </td>
@@ -339,7 +358,7 @@
         <% @order.ordergoods.each do |ordergood| %>
             <tr>
               <td style="text-align: center">
-                <img src="<%= RestConfig::IMG_SERVER + ordergood.avatar_url %>" height="60px" width="60px">
+                <img src="<%= ordergood.avatar_url.present? ? RestConfig::IMG_SERVER + ordergood.avatar_url : "missing.png" %>" height="60px" width="60px">
               </td>
               <td style="text-align: center">
                 <a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></td>

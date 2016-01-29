@@ -212,8 +212,7 @@
     zTreeSetting.callback = {
       onClick: function(event,treeId,treeNode){
         tableSetting.queryParams = {
-          category_id:treeNode._id,
-          storage_id:storage_id
+          category_id:treeNode.id
         };
         initDataGrid(tableSetting);
       }
@@ -225,7 +224,7 @@
       url:'/jxc_common_info/getBillDetailInfo',
       width:600,
       singleSelect:false,
-      queryParams:{},
+      queryParams:{storage_id:storage_id},
       columns:[[
         {title:'名称',field:'title',width:'25%'},
         {title:'品牌',field:'brand',width:'15%'},

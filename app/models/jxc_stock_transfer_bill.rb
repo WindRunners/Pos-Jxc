@@ -126,6 +126,7 @@ class JxcStockTransferBill < JxcBaseModel
 
             in_store_product_detail.jxc_storage = in_store
             in_store_product_detail.resource_product_id = billDetail.resource_product_id
+            in_store_product_detail.mobile_category_id = billDetail.product.mobile_category_id
             in_store_product_detail.unit = billDetail.unit
             in_store_product_detail.count = billDetail.count
             in_store_product_detail.cost_price = billDetail.transfer_price

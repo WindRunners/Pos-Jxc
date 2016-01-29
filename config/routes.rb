@@ -497,7 +497,7 @@ Rails.application.routes.draw do
   get 'jxc_inventory_query/inventory_index'
   get 'jxc_inventory_query/inventory_query'
   get 'jxc_inventory_query/inventory_detail'
-
+  get 'jxc_inventory_query/checkInventoryChangeLog' #查询库存变更日志
   #进销存 通用查询
   get 'jxc_common_info/getSuppliersInfo' #供应商
   get 'jxc_common_info/getConsumersInfo' #客户
@@ -517,7 +517,6 @@ Rails.application.routes.draw do
   get 'jxc_common_info/getJxcUnits' #供应商
   get 'jxc_common_info/getJxcDictionaryByDesc' #根据字典项获  取字典
   get 'jxc_common_info/getBillDetailInfo' #单据明细
-  get 'jxc_common_info/checkInventoryChangeLog' #查询库存变更日志
   ##
 
 end

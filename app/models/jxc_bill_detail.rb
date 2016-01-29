@@ -17,7 +17,6 @@ class JxcBillDetail
   field :resource_product_id, type: String  #所属商品ID (商品为 ActiveResource Object)
 
   ## 进销存属性
-  # belongs_to :product, class_name:'JxcProduct',foreign_key: :product_id #所属商品
   belongs_to :jxc_storage, foreign_key: :storage_id #仓库
   belongs_to :jxc_contacts_unit, foreign_key: :unit_id #所属供应商 | 客户
 
@@ -58,17 +57,17 @@ class JxcBillDetail
   end
 
   def product
-    @product = JxcProduct.find(self.resource_product_id)
+    @product = Warehouse::Product.find(self.resource_product_id)
   end
 
   #获取
-  def self.getProduct(product_id)
-    @product=Product.find_by(:id=>product_id)
-  end
-
-  #获取仓库信息
-  def self.getStock(stock_id)
-    JxcStorage.find_by(:id=>stock_id)
-  end
+  # def self.getProduct(product_id)
+  #   @product=Product.find_by(:id=>product_id)
+  # end
+  #
+  # #获取仓库信息
+  # def self.getStock(stock_id)
+  #   JxcStorage.find_by(:id=>stock_id)
+  # end
 
 end

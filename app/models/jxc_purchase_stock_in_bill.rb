@@ -90,6 +90,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
             store_product_detail = JxcStorageProductDetail.new
 
             store_product_detail.resource_product_id = billDetail.resource_product_id
+            store_product_detail.mobile_category_id = billDetail.product.mobile_category_id
             store_product_detail.jxc_storage = billDetail.jxc_storage
             store_product_detail.unit = billDetail.unit     #单位
             store_product_detail.count = billDetail.count   #数量

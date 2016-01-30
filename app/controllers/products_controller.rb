@@ -104,7 +104,13 @@ class ProductsController < ApplicationController
   # GET /products/1
   # GET /products/1.json
   def show
-    @top_products = @product.mobile_category.products.order_by(:sale_count => :desc).limit(5)
+
+    if @product.mobile_category.present?
+      @top_products = @product.mobile_category.products.order_by(:sale_count => :desc).limit(5)
+    else
+      @top_products = []
+    end
+
   end
 
   # GET /products/new

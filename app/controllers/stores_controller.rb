@@ -4,18 +4,23 @@ class StoresController < ApplicationController
   # GET /stores
   # GET /stores.json
   def index
-    @manage_store=params[:state]
-    @user_id=params[:u_id]
-    @user = User.find(params[:u_id])
+    #这段代码有问题
+    # @manage_store=params[:state]
+    # @user_id=params[:u_id]
+    # @user = User.find(params[:u_id])
     # @current_user = current_user
-    @store_ids = @user['store_ids']
-    @store_ids = [] if !@store_ids.present?
-
+    # @store_ids = @user['store_ids']
+    # @store_ids = [] if !@store_ids.present?
+    #
     name_condition=params[:name] || ''
     conditionParams = {}
     conditionParams['name'] = name_condition if name_condition.present?
-    conditionParams['userinfo_id'] = current_user.userinfo.id if current_user.present?
-    @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
+    if current_user.userinfo.present?
+      conditionParams['userinfo_id'] = current_user.userinfo.id
+      @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
+    else
+      @stores = nil
+    end
   end
 
   # GET /stores/1

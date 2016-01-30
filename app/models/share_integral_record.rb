@@ -15,7 +15,7 @@ class ShareIntegralRecord
 
   after_save do
 
-    if self.is_confirm == 1 #登录回执
+    if self.is_confirm == 1 && self['share_integral_id'].present? #登录回执记录积分
 
       share_integral = self.share_integral
 

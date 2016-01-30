@@ -190,6 +190,8 @@ class Product
 
   end
 
-
+  def to_s
+    self.title
+  end
 
 end

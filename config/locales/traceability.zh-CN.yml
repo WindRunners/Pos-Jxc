@@ -1,0 +1,17 @@
+zh-CN:
+  mongoid:
+    models:
+      traceability: "产品溯源"
+    attributes:
+      traceability:
+        barcode: "条形码"
+        codetype: "条码类型"
+        printdate: "打印时间"
+        last_printdate: "打印时间"
+        flag:  "打印标记"
+        jxc_bill_detail: "入库单据"
+        jxc_transfer_bill_detail: "要货单据"
+        created_at: "创建时间"
+        updated_at: "更新时间"
+        origincode: "入库条码打印"
+        subcode: "门店条码打印"

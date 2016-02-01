@@ -17,7 +17,6 @@ body, img, {
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: #FBFBFB;
 }
 
 .img_banner {
@@ -46,7 +45,7 @@ a {
 
 .con-box {
     width: 85%;
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     width: 100%;
     background-size: 100% 100%;
@@ -55,7 +54,7 @@ a {
 
 .content-box {
     width: 85%;
-    background-image: url("../../../public/images/share_integrals/share_content.png");
+    /*background-image: url("../../../public/images/share_integrals/share_content.png");*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin-left: auto;
@@ -131,7 +130,7 @@ a {
 
 .aa_box {
     width: 100%;
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -145,7 +144,7 @@ a {
 }
 
 .register2-box {
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     width: 100%;
     background-size: 100% 100%;
@@ -203,8 +202,8 @@ a {
     font-size: 120%;
 }
 .role_content_box{
-    font-family: "SimHei"
-    color: #cccccc;
+    font-family: "SimHei";
+    color: #4d4d4d;
     font-size: 90%;
     margin-top: 5%;
     padding-left:5%;

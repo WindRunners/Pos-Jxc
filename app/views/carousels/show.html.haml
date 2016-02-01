@@ -21,13 +21,13 @@
     .widget-body
       .widget-main.padding-8
         %ul{:class => "ace-thumbnails clearfix", :id => "carouselAssets"}
-          = render @carousel.carouselAssets.select(&:persisted?)
+          -#= render @carousel.carouselAssets.select(&:persisted?)
 
         = form_tag carousel_upload_path(@carousel), method: "post", id: "upload_carouse_asset" do
           %span{:class => "btn btn-success fileinput-button"}
             %i{:class => "glyphicon glyphicon-plus"}
             %span 上传轮播图
-            %input{:type => "file", :name => "carousel[carouselAsset]", :multiple => ""}
+            %input{:type => "file", :name => "carousel[avatar]", :multiple => ""}
         %script{:id => "template-upload-origin", :type => "text/x-tmpl"}
           .upload
             {%=o.name%}

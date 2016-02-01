@@ -9,7 +9,7 @@ class ProductTicketV1API < Grape::API
     requires :status, type: Integer, desc: '酒券状态,0未邀请,1邀请成功,-1已失效'
   end
   get 'card_bag_list' do
-      if params[:status]==0
+    if params[:status]==0
         card_bags = CardBag.where(:customer_id => params[:customer_id],:status=>0,:start_date=>{"$lte" => Time.now},:end_date=>{"$gte" => Time.now})
       elsif params[:status]==1
         card_bags = CardBag.where(:customer_id => params[:customer_id],:status=>1)

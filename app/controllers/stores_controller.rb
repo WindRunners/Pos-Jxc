@@ -4,22 +4,28 @@ class StoresController < ApplicationController
   # GET /stores
   # GET /stores.json
   def index
-    #这段代码有问题
-    # @manage_store=params[:state]
-    # @user_id=params[:u_id]
-    # @user = User.find(params[:u_id])
-    # @current_user = current_user
-    # @store_ids = @user['store_ids']
-    # @store_ids = [] if !@store_ids.present?
-    #
-    name_condition=params[:name] || ''
-    conditionParams = {}
-    conditionParams['name'] = name_condition if name_condition.present?
-    if current_user.userinfo.present?
-      conditionParams['userinfo_id'] = current_user.userinfo.id
+    if params[:u_id].present?
+      @manage_store=params[:state]
+      @user_id=params[:u_id]
+      @user = User.find(params[:u_id])
+      @current_user = current_user
+      @store_ids = @user['store_ids']
+      conditionParams = {}
+      conditionParams['userinfo_id'] = @user.userinfo.id
       @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
+      # binding.pry
     else
-      @stores = nil
+      # @store_ids = [] if !@store_ids.present?
+      #
+      name_condition=params[:name] || ''
+      conditionParams = {}
+      conditionParams['name'] = name_condition if name_condition.present?
+      if current_user.userinfo.present?
+        conditionParams['userinfo_id'] = current_user.userinfo.id
+        @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
+      else
+        @stores = nil
+      end
     end
   end
 

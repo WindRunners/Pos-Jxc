@@ -10,6 +10,7 @@ class Admin::UsersController < ApplicationController
     whereParams = {} #查询条件
     whereParams['name'] = /#{name}/ if name.present?
     whereParams['mobile'] = /#{mobile}/ if mobile.present?
+    whereParams['userinfo_id'] = @current_user['userinfo_id']
     @users = User.where(whereParams).page(params[:page])
     # @users = User.all.page(params[:page])
     # @users = User.where({:userinfo_id => @current_user['userinfo_id']}).page(params[:page])

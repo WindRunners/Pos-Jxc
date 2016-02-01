@@ -152,7 +152,7 @@ class DeliveryUsersController < ApplicationController
     searchParams['mobile'] = /#{searchValue}/
     searchParams['authentication_token'] = {"$exists" => true}
     orinfo = []
-    if current_user.store_ids.present?
+    if current_user['store_ids'].present?
       current_user['store_ids'].each do |store_id|
         orinfo << {'store_ids' => store_id}
       end

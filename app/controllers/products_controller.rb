@@ -52,12 +52,12 @@ class ProductsController < ApplicationController
   def warehouse_index
 
     gon.searchBar = true
-
-    conditions = {category_id: params[:category_id],
-                  tag: 'JYD',
-                  searchText: params[:searchText],
-                  page: params[:page],
-                  per: 20}
+    #tag: 'JYD',
+    conditions = {:category_id => params[:category_id],
+                  :mark => {'$exists'=>false},
+                  :searchText =>  params[:searchText],
+                  :page => params[:page],
+                  :per =>  20}
     products = Warehouse::Product.where(conditions)
 
     @products = Kaminari::PaginatableArray.new(

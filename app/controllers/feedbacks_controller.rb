@@ -35,12 +35,14 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       if @feedback.save
-        format.js { render_js feedbacks_path, notice: 'Feedback was successfully created.' }
+        # format.js { render_js feedbacks_path, notice: 'Feedback was successfully created.' }
         # format.html { redirect_to @feedback, notice: 'Feedback was successfully created.' }
-        format.json { render :show, status: :created, location: @feedback }
+        # format.json { render :show, status: :created, location: @feedback }
+        format.json { render json: get_render_json(1,nil,feedbacks_path) }
       else
-        format.html { render :new }
-        format.json { render json: @feedback.errors, status: :unprocessable_entity }
+        # format.html { render :new }
+        # format.json { render json: @feedback.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_json(0,@feedback.errors.messages) }
       end
     end
   end
@@ -50,12 +52,14 @@ class FeedbacksController < ApplicationController
   def update
     respond_to do |format|
       if @feedback.update(feedback_params)
-        format.js { render_js feedbacks_path, notice: 'Feedback was successfully updated.' }
+        # format.js { render_js feedbacks_path, notice: 'Feedback was successfully updated.' }
         # format.html { redirect_to @feedback, notice: 'Feedback was successfully updated.' }
-        format.json { render :show, status: :ok, location: @feedback }
+        # format.json { render :show, status: :ok, location: @feedback }
+        format.json { render json: get_render_json(1,nil,feedbacks_path) }
       else
-        format.html { render :edit }
-        format.json { render json: @feedback.errors, status: :unprocessable_entity }
+        # format.html { render :edit }
+        # format.json { render json: @feedback.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_json(0,@feedback.errors.messages) }
       end
     end
   end

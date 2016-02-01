@@ -321,6 +321,7 @@
       </ul>
     </li>
 
+    <% if current_user.has_role?(:business) || current_user.has_role?(:admin) %>
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>
@@ -352,8 +353,6 @@
       </ul>
     </li>
 
-
-    <% if current_user.has_role?(:business) || current_user.has_role?(:admin) %>
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>

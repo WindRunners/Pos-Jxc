@@ -251,26 +251,31 @@ class UserinfosController < ApplicationController
 
   def jyd_check
     @userinfo = Userinfo.find(params[:userinfo_id])
-    @userinfo.status=1
-    if !@userinfo.users.present?
+
+    if @userinfo.users.present?
+      init_user = User.where(:mobile=>@userinfo.pusher_phone).first
+
+    else
       init_user = @userinfo.users.build();
       init_user.name = @userinfo.name
       init_user.mobile = @userinfo.pusher_phone
       init_user.password = '123456'
       init_user.email = @userinfo.email
-
-      role_array = []
-      @userinfo.role_marks.each do |role_mark|
-
-        Role.where(:role_mark => role_mark).each do |role|
-          role_array << role.id
-        end
-      end
-      init_user.role_ids = role_array
-
       init_user.step = 9
-      init_user.save
     end
+
+    role_array = []
+    @userinfo.role_marks.each do |role_mark|
+
+      Role.where(:role_mark => role_mark).each do |role|
+        role_array << role.id
+      end
+    end
+    init_user.role_ids = role_array
+
+    init_user.save
+
+    @userinfo.status=1
     @userinfo.save
 
 

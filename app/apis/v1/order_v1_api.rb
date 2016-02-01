@@ -40,6 +40,8 @@ class OrderV1API < Grape::API
         end
         order.paycost += order.totalcost
 
+        Rails.logger.info "小B查询结束#{current_userinfo}"
+
         current_customer = Customer.find(orderjson["customer_id"])
         order.customer_integral = current_customer.integral
         order.customer_id = current_customer.id
@@ -47,12 +49,14 @@ class OrderV1API < Grape::API
           usecan = (order.totalcost * 0.1 * 100).to_i / 10 * 10  #查询当前订单最多抵扣积分数
           usecan > current_customer.integral ? order.useintegral = (current_customer.integral / 10 * 10) : order.useintegral = usecan
         end
+        Rails.logger.info "小c查询结束#{current_customer}"
 
         if orderjsonback.use_coupon == true
           order.user_coupons
         end
         order.activities = order.activities.as_json(:only => [:_id,:preferential_way,:name,:reduction,:integral,:condition,:ordergoods])
         orderjsonback.order = order
+        Rails.logger.info "返回结果#{orderjsonback}"
       end
     end
 

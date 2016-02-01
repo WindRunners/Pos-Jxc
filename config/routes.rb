@@ -332,6 +332,7 @@ Rails.application.routes.draw do
   resources :share_integrals do
     post 'register'
     post 'share_time_check', :on => :collection
+    get 'share_integral_role'
     resources :share_integral_records
 
   end

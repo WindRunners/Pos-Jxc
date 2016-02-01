@@ -33,17 +33,19 @@
         = f.text_field :storage_code,:class=>'form-control'
     %tr
       %td
-        = f.label :admin
+        = f.button t('mongoid.attributes.jxc_storage.admin'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageAdmin()'
       %td
         %span.input-icon{style:'width:100%;'}
-          = f.text_field :admin,:class=>'form-control'
+          -#= f.text_field :admin,:class=>'form-control',readonly:true
+          %input.form-control#jxc_storage_admin{value: @jxc_storage.admin.present? ? @jxc_storage.admin.to_s : '',readonly:true }
+          = f.hidden_field :admin_id
           %i.ace-icon.fa.fa-leaf.green
-      %td
-        = f.label :admin_phone
-      %td
-        %span.input-icon{style:'width:100%;'}
-          = f.text_field :admin_phone,:class=>'form-control'
-          %i.ace-icon.fa.fa-leaf.green
+      -#%td
+      -#  = f.label :admin_phone
+      -#%td
+      -#  %span.input-icon{style:'width:100%;'}
+      -#    = f.text_field :admin_phone,:class=>'form-control'
+      -#    %i.ace-icon.fa.fa-leaf.green
     %tr
       %td
         = f.label :address
@@ -58,24 +60,24 @@
         = f.label :memo
       %td
         = f.text_area :memo,:class=>'form-control',:style => 'resize: vertical;'
-    %tr
-      %td
-        = f.label :data_1
-      %td
-        = f.text_field :data_1,:class=>'form-control'
-      %td
-        = f.label :data_2
-      %td
-        = f.text_field :data_2,:class=>'form-control'
-    %tr
-      %td
-        = f.label :data_3
-      %td
-        = f.text_field :data_3,:class=>'form-control'
-      %td
-        = f.label :data_4
-      %td
-        = f.text_field :data_4,:class=>'form-control'
+    -#%tr
+    -#  %td
+    -#    = f.label :data_1
+    -#  %td
+    -#    = f.text_field :data_1,:class=>'form-control'
+    -#  %td
+    -#    = f.label :data_2
+    -#  %td
+    -#    = f.text_field :data_2,:class=>'form-control'
+    -#%tr
+    -#  %td
+    -#    = f.label :data_3
+    -#  %td
+    -#    = f.text_field :data_3,:class=>'form-control'
+    -#  %td
+    -#    = f.label :data_4
+    -#  %td
+    -#    = f.text_field :data_4,:class=>'form-control'
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
@@ -135,6 +137,34 @@
   }
 
 
+  //选择仓库负责人信息
+  function getStorageAdmin(){
+    $('.modal-title').text('选择仓库负责人');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').addClass('jxc-disappear-tree');
+    $('#jxc-select-table').removeClass('jxc-disappear-table');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storageAdmin');
+    $('#searchParam').val('');
+
+    $('#selectModal').modal('show');
+
+    tableSetting = {
+      title: '仓库负责人',
+      url:'/jxc_common_info/getJxcStorageAdmin',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'姓名',field:'name',width:'50%'},
+        {title:'手机',field:'mobile',width:'50%'}
+      ]]
+    };
+
+    //初始化表格
+    initDataGrid(tableSetting);
+  }
+
   function selectData(){
     var dataType = $('#confirm-button').attr('data-type');
 
@@ -145,6 +175,14 @@
       }else{
         alert('请单击选择仓库类型');
         return;
+      }
+    }else if(dataType == 'storageAdmin'){
+      var selectData = $('#dataTable').datagrid('getSelections');
+      if(selectData.length == 0){
+        alert('请选择数据');
+      }else{
+        $('#jxc_storage_admin').val(selectData[0].name);
+        $('#jxc_storage_admin_id').val(selectData[0]._id);
       }
     }
 

@@ -42,7 +42,7 @@ class OrderStateCount
         statecount = state_count["value"]["count"].to_i
 
         if "generation" == state_count["_id"]
-          orderStateCount.order_generation_count = statecount
+          # orderStateCount.order_generation_count = Order.where(:userinfo_id => userinfo_id,:workflow_state=>'generation').count
         end
 
         if "paid" == state_count["_id"]
@@ -58,6 +58,8 @@ class OrderStateCount
         end
         # orderStateCount.order_all_count = curren_user_orders.count + Ordercompleted.where(:userinfo_id => userinfo_id,:store_id => {"$in" => store_ids}).count
       end
+
+      orderStateCount.order_generation_count = Order.where(:userinfo_id => userinfo_id,:workflow_state=>'generation').count
     rescue
 
     end

@@ -109,7 +109,7 @@ class OrdersController < ApplicationController
       @order = Order.find(params[:id])
     rescue
       ordercompleted = Ordercompleted.find(params[:id])
-      ordercompleted['ordergoods'] = ordergoodcompleted.ordergoodcompleteds
+      ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
       # order = Order.new(ordercompleted.as_json)
       # ordercompleted.ordergoodcompleteds.each do |ordergoodcompleted|
       #   order.ordergoods.build(ordergoodcompleted.as_json(:except => [:ordercompleted_id]))

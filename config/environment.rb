@@ -16,7 +16,7 @@ module RestConfig
 
   OA_SERVER = 'http://www.ibuluo.me:9090/'
 
-  ELEPHANT_HOST = ENV["ELEPHANT_HOST"] || ''
+  ELEPHANT_HOST = ENV["ELEPHANT_HOST"] || 'http://www.jiuyunda.net:90/'
 
 end
 

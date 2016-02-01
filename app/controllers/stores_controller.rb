@@ -110,7 +110,6 @@ class StoresController < ApplicationController
       if @store.save
         format.js { render_js store_delivery_users_path }
       else
-        binding.pry
         format.js { render_js store_delivery_users_path }
       end
     end

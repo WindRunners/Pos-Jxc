@@ -8,11 +8,11 @@ module ProductConfig
 end
 
 module RestConfig
-  IMG_SERVER = 'http://pic.xianglema.cn:3001/'
+  IMG_SERVER = 'http://pic.jiuyunda.net:3001/'
 
   PRODUCT_SERVER = 'http://pic.xianglema.cn:3001/'
 
-  CUSTOMER_SERVER = ENV["CUSTOMER_HOST"] || 'http://jyd.ibuluo.me:3000/'
+  CUSTOMER_SERVER = ENV["CUSTOMER_HOST"] || 'http://customer.jiuyunda.net:3000/'
 
   OA_SERVER = 'http://www.ibuluo.me:9090/'
 

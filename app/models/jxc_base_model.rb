@@ -142,7 +142,7 @@ class JxcBaseModel
     inventoryChangeLog = JxcStorageJournal.new
 
     inventoryChangeLog.jxc_storage = store_info
-    inventoryChangeLog.resource_product_id = billInfo.resource_product_id
+    inventoryChangeLog.resource_product_id = billDetailInfo.resource_product_id
     inventoryChangeLog.user = billInfo.handler[0]
 
     inventoryChangeLog.previous_count = previous_count

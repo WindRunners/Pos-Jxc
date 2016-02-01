@@ -16,8 +16,11 @@
   %b 结束时间:
   = @product_ticket.end_date_str
 %p
-  %b 商品:
-  =@product_ticket.product_id
+  %b 商品名称:
+  =@product.title
+%p
+  %b 商品图片:
+  %img{:style => "height:100px;width:200px",:src=>@product.avatar}
 %p
   %b 状态:
   = @product_ticket.status_str

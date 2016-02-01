@@ -15,7 +15,7 @@
   = @userinfo.pusher_phone
 %p
   %b 公司状态:
-  = @userinfo.status
+  = @userinfo.status_str
 %p
 = link_to '编辑',"",'data-href' =>'/userinfos/jyd_edit/'+ @userinfo.id,:class => 'btn btn-info'
 \|

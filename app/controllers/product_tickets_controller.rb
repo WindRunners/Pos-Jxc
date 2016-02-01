@@ -11,6 +11,7 @@ class ProductTicketsController < ApplicationController
   # GET /product_tickets/1
   # GET /product_tickets/1.json
   def show
+    @product = Product.shop_id(@product_ticket.userinfo_id).find(@product_ticket.product_id)
   end
 
   # GET /product_tickets/new

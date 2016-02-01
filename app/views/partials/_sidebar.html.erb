@@ -143,6 +143,7 @@
               <b class="arrow"></b>
             </li>
 
+            <% if current_user.has_role?(:SuperAdmin)%>
             <li class="">
               <a data-href="<%= jyd_index_userinfos_path %>">
                 <i class="menu-icon fa fa-caret-right"></i>
@@ -150,6 +151,7 @@
               </a>
               <b class="arrow"></b>
             </li>
+            <% end %>
 
           </ul>
         </li>

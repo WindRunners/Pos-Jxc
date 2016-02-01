@@ -128,6 +128,21 @@ class Userinfo
   def integral_update(integral)
     self.update_attributes(:integral => integral) #积分核增
   end
+
+
+
+
+  def status_str
+    if self.status==0
+      p '未启用'
+    elsif self.status==1
+      p '启用'
+    else
+      p '停用'
+    end
+  end
+
+
   class << self
     def nearby(coordinate, max_distance=5)
       # 5公里内， 符合条件的记录， 默认取100个。同时会按照距离的远近 进行排序。

@@ -25,7 +25,7 @@
         %td= userinfo.name
         %td= userinfo.pusher_phone
         %td= userinfo.address
-        %td= userinfo.status
+        %td= userinfo.status_str
         %td
           = link_to '详细',"",'data-href' => '/userinfos/jyd_show/'+ userinfo.id,:class => 'btn btn-minier btn-primary'
           = link_to '编辑',"",'data-href' => '/userinfos/jyd_edit/'+ userinfo.id,:class => 'btn btn-minier btn-primary'

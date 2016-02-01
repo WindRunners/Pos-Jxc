@@ -248,7 +248,7 @@ class ProductsController < ApplicationController
     headers['Authentication-Token'] = '4Kzp1iyj4DiHVPhv4JVm'
 
 
-    url = RestConfig::PRODUCT_SERVER + 'api/v1/product/all'
+    url = RestConfig::PRODUCT_SERVER + 'api/v1/product/jyd'
 
     response = RestClient.get(url, headers)
 

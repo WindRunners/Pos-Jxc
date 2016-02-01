@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'share'
     post 'register'
     resources :product_ticket_customer_inits, shallow: true
+    get 'product_ticket_role'
   end
 
   get '/product_ticket_customer_inits/:id/remove' => "product_ticket_customer_inits#remove" #酒劵用户移除

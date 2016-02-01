@@ -225,6 +225,10 @@ class ProductTicketsController < ApplicationController
     end
   end
 
+  def product_ticket_role
+    @product_ticket = ProductTicket.find(params[:product_ticket_id])
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

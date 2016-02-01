@@ -49,12 +49,12 @@
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
-    .hd-box
-      .hd
-        %p 活动规则
-        %img.role_pic{:src => "/images/share_integrals/share_down.png"}
-    .text-box{:style=>"display:none"}
-      = markdown @product_ticket.rule_content if @product_ticket.rule_content.present?
+    .role-box
+      %p
+        这是你的专属优惠，可以兑换商品哦
+      %a.role_active{:href => "/product_tickets/#{@product_ticket.id.to_s}/product_ticket_role"}
+        %i> ?
+        活动说明
 
     %input#product_ticket_id{:type => "hidden", :value => @product_ticket.id.to_s }
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
@@ -64,6 +64,14 @@
   $(function(){
 
      $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
+
+    $('#btn_mobile').bind('input propertychange', function() {
+      //$('.msg').html($(this).val().length + ' characters');
+      if ($(this).val().length>=11){
+      $(".btn_style_04").css('background-color','#F50806');
+      };
+    });
+
 
 
      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {

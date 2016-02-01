@@ -10,8 +10,9 @@
 
 
 :javascript
+        var table = null;
           //初始化配送员选择窗口
-        var table = $('#delivery_users_table').DataTable({
+         table = $('#delivery_users_table').DataTable({
             "processing": true,
             "serverSide": true,
             "ajax": {
@@ -32,7 +33,6 @@
                 //alert("index:"+JSON.stringify(index));
             },
             "drawCallback": function (settings) {
-
             }
         });
 

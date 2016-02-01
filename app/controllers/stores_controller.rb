@@ -16,10 +16,7 @@ class StoresController < ApplicationController
       conditionParams = {}
       conditionParams['userinfo_id'] = @user.userinfo.id
       @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')
-      # binding.pry
     else
-      # @store_ids = [] if !@store_ids.present?
-      #
       name_condition=params[:name] || ''
       conditionParams = {}
       conditionParams['name'] = name_condition if name_condition.present?
@@ -93,31 +90,44 @@ class StoresController < ApplicationController
     end
   end
 
+
+  # 门店自主选择配送员
+
   def delivery_users
-    # 门店自主选择配送员
     name_condition=params[:name] || ''
     conditionParams = {}
     conditionParams['real_name'] = /#{name_condition}/ if name_condition.present?
     @delivery_users = DeliveryUser.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
+
+  # 配送员增加
   def add_delivery_user
-    # 配送员增加
-    @du = DeliveryUser.find(params[:id])
+    @du = DeliveryUser.find(params[:delivery_user_id])
     @store = Store.find(params[:store_id])
     @store.delivery_users << @du
-    @store.save
-    redirect_to store_delivery_users_url
+    respond_to do |format|
+      if @store.save
+        format.js { render_js store_delivery_users_path }
+      else
+        binding.pry
+        format.js { render_js store_delivery_users_path }
+      end
+    end
   end
 
+
+  # 配送员移除
   def reduce_delivery_user
-    # 配送员移除
-    @du = DeliveryUser.find(params[:id])
+    @du = DeliveryUser.find(params[:delivery_user_id])
     @store = Store.find(params[:store_id])
     @store.delivery_users.delete(@du)
-    @store.save
     respond_to do |format|
-      format.js { render_js store_delivery_users_url }
+      if @store.save
+        format.js { render_js store_delivery_users_path }
+      else
+        format.js { render_js store_delivery_users_path }
+      end
     end
   end
 

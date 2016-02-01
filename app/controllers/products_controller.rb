@@ -260,9 +260,9 @@ class ProductsController < ApplicationController
         @product = Product.with(collection: current_user.shop_id).find(p['id'])
       rescue
         @product = Product.new(p)
-        @product.price = Faker::Commerce.price
+        @product.price = Faker::Commerce.price + 1
         @product.purchasePrice = @product.price * 0.8
-        @product.stock = Faker::Number.between(1, 10)
+        @product.stock = Faker::Number.between(1, 10000)
         @product.integral = Faker::Number.between(1, 10)
         @product.state = State.find_by(name: "已上架")
 

@@ -14,7 +14,9 @@ module Entities
     end
     expose :sale_count, documentation: {type: Integer, desc: '销量'}
     expose :avatar_url, documentation: {type: String, desc: '商品缩略图'}
-    expose :thumb_url, documentation: {type: String, desc: '商品大缩略图'}
+    expose :thumb_url, documentation: {type: String, desc: '商品大缩略图'} do |object, options|
+      object.thumb_url.present? ? object.thumb_url : object.avatar_url
+    end
     expose :tags, documentation: {type: String, desc: '商品标签'}
 
   end

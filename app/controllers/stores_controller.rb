@@ -97,6 +97,7 @@ class StoresController < ApplicationController
     name_condition=params[:name] || ''
     conditionParams = {}
     conditionParams['real_name'] = /#{name_condition}/ if name_condition.present?
+    @store = Store.find(params[:store_id])
     @delivery_users = DeliveryUser.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
@@ -107,10 +108,12 @@ class StoresController < ApplicationController
     @store = Store.find(params[:store_id])
     @store.delivery_users << @du
     respond_to do |format|
-      if @store.save
-        format.js { render_js store_delivery_users_path }
+      if @store.save && @du.save
+        format.js { render_js store_delivery_users_path() }
+        format.json { head :no_content }
       else
-        format.js { render_js store_delivery_users_path }
+        format.js { render_js store_delivery_users_path() }
+        format.json { head :no_content }
       end
     end
   end
@@ -122,10 +125,12 @@ class StoresController < ApplicationController
     @store = Store.find(params[:store_id])
     @store.delivery_users.delete(@du)
     respond_to do |format|
-      if @store.save
-        format.js { render_js store_delivery_users_path }
+      if @store.save && @du.save
+        format.js { render_js store_delivery_users_path() }
+        format.json { head :no_content }
       else
-        format.js { render_js store_delivery_users_path }
+        format.js { render_js store_delivery_users_path() }
+        format.json { head :no_content }
       end
     end
   end

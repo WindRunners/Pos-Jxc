@@ -19,12 +19,12 @@
         %td= delivery_user.real_name
         %td= delivery_user.mobile
         %td= delivery_user.created_at
-        -if Store.find(params[:store_id]).delivery_user_ids.include?(delivery_user.id)
+        -if @store.delivery_user_ids.include?(delivery_user.id)
           %td
-            = link_to '减少', store_reduce_delivery_user_path(:delivery_user_id=>delivery_user.id), :remote=>true, :method => :post,:class => 'btn btn-minier btn-primary'
-
+            = link_to '减少', store_reduce_delivery_user_path(:delivery_user_id=>delivery_user.id), :remote=>true, :method => :post,:class => 'btn btn-minier btn-danger'
         -else
-          %td= link_to '增加',store_add_delivery_user_path(:delivery_user_id=>delivery_user.id),:method => :post,:class => 'btn btn-minier btn-primary'
+          %td
+            = link_to '增加',store_add_delivery_user_path(:delivery_user_id=>delivery_user.id),:method => :post,:class => 'btn btn-minier btn-primary'
 %br
 
 %div{class:'row',style:'background-color:#EFF3F8'}

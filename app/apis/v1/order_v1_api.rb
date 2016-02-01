@@ -43,6 +43,7 @@ class OrderV1API < Grape::API
         Rails.logger.info "小B查询结束#{current_userinfo}"
 
         current_customer = Customer.find(orderjson["customer_id"])
+        Rails.logger.info "小c查询结果#{current_customer}"
         order.customer_integral = current_customer.integral
         order.customer_id = current_customer.id
         if current_customer.integral > 10

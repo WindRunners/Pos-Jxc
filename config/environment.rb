@@ -15,6 +15,9 @@ module RestConfig
   CUSTOMER_SERVER = ENV["CUSTOMER_HOST"] || 'http://jyd.ibuluo.me:3000/'
 
   OA_SERVER = 'http://www.ibuluo.me:9090/'
+
+  ELEPHANT_HOST = ENV["ELEPHANT_HOST"] || ''
+
 end
 
 module AHOY

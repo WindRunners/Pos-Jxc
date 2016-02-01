@@ -20,8 +20,8 @@ class AchieveOrderRefundOnlinePayment
                        amount: '0.01',
                        reason: '退款'
                    }],
-            notify_url: "http://jyd.ibuluo.me:4000/orders/#{order.id}/alipay_refund_notify",
-            dback_notify_url: "http://jyd.ibuluo.me:4000/orders/#{order.id}/alipay_dback_notify",
+            notify_url: "#{RestConfig::ELEPHANT_HOST}/orders/#{order.id}/alipay_refund_notify",
+            dback_notify_url: "#{RestConfig::ELEPHANT_HOST}/orders/#{order.id}/alipay_dback_notify",
         )
 
 

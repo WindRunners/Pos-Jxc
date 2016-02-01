@@ -34,6 +34,7 @@ class Product
   field :avatar_url
   field :main_url
   field :desc_url
+  field :thumb_url
 
   field :mobile_category_name, default: '其他' #类别名称
   field :mobile_category_num, type: Integer, default: 0 #类别排序号

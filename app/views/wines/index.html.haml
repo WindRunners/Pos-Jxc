@@ -25,7 +25,7 @@
       %td=w.hits
       %td=w.sequence
       %td=w.status
-      %td=w.user.name if w.user.name.present?
+      %td=w.user.name if w.user.present?
       %td= link_to '详细', '', 'data-href' =>wine_path(w),:class => 'btn btn-xs btn-primary'
       %td= link_to '编辑', '', 'data-href' =>edit_wine_path(w),:class => 'btn btn-xs btn-info'
       -if current_user.has_role?(:admin)

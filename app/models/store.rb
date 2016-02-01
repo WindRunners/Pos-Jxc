@@ -42,7 +42,7 @@ class Store
   has_and_belongs_to_many :delivery_users,
                           :autosave => true #门店下面有多个配送员负责配送
 
-  validates :name, :manager, :type, :longitude, :latitude, :position, presence: true
+  validates :name, :type, :longitude, :latitude, :position, presence: true
 
   before_save :add_jpg_url
 

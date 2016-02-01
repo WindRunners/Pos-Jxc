@@ -271,8 +271,8 @@ Rails.application.routes.draw do
 
   resources :stores do
     get 'delivery_users'
-    get 'add_delivery_user'
-    delete 'reduce_delivery_user'
+    post 'add_delivery_user'
+    post 'reduce_delivery_user'
     post 'upload'
     get 'search', :on => :collection
   end

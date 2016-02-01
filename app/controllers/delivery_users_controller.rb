@@ -1,13 +1,13 @@
 class DeliveryUsersController < ApplicationController
-  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy,:check,:check_save,:store_index,:store_save]
+  before_action :set_delivery_user, only: [:show, :edit, :update, :destroy, :check, :check_save, :store_index, :store_save]
   skip_before_action :authenticate_user!, only: [:datatable]
   # GET /delivery_users
   # GET /delivery_users.json
   def index
 
     #@delivery_users = DeliveryUser.all.page(params[:page]).per(2)
-    reqParams = {mobile: params[:mobile],status: params[:status]}
-    @delivery_user = DeliveryUser.new(mobile: params[:mobile],status: params[:status])
+    reqParams = {mobile: params[:mobile], status: params[:status]}
+    @delivery_user = DeliveryUser.new(mobile: params[:mobile], status: params[:status])
     @delivery_users = policy_scope(@delivery_user).page(params[:page])
   end
 
@@ -34,7 +34,7 @@ class DeliveryUsersController < ApplicationController
     respond_to do |format|
       if @delivery_user.save
         # format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully created.' }
-        format.js {render_js delivery_user_path(@delivery_user)}
+        format.js { render_js delivery_user_path(@delivery_user) }
         format.json { render :show, status: :created, location: @delivery_user }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class DeliveryUsersController < ApplicationController
   def update
     respond_to do |format|
       if @delivery_user.update(delivery_user_params)
-        format.js {render_js delivery_user_path(@delivery_user)}
+        format.js { render_js delivery_user_path(@delivery_user) }
         # format.html { redirect_to @delivery_user, notice: 'Delivery user was successfully updated.' }
         format.json { render :show, status: :ok, location: @delivery_user }
       else
@@ -80,14 +80,14 @@ class DeliveryUsersController < ApplicationController
   def check_save
     respond_to do |format|
 
-      puts "保存参数为:#{params.require(:delivery_user).permit(:status,:userinfo_id)}"
+      puts "保存参数为:#{params.require(:delivery_user).permit(:status, :userinfo_id)}"
 
-      if @delivery_user.update(params.require(:delivery_user).permit(:status,:userinfo_id))
+      if @delivery_user.update(params.require(:delivery_user).permit(:status, :userinfo_id))
         @notice = '审核成功!'
-        format.js {render_js delivery_user_path(@delivery_user)}
+        format.js { render_js delivery_user_path(@delivery_user) }
         format.json { render :show, status: :ok, location: @delivery_user }
       else
-        format.js {render_js delivery_user_path(@delivery_user)}
+        format.js { render_js delivery_user_path(@delivery_user) }
         format.json { render json: @delivery_user.errors, status: :unprocessable_entity }
       end
     end
@@ -99,7 +99,7 @@ class DeliveryUsersController < ApplicationController
   def destroy
     @delivery_user.destroy
     respond_to do |format|
-      format.js {render_js delivery_users_url}
+      format.js { render_js delivery_users_url }
       # format.html { redirect_to delivery_users_url, notice: 'Delivery user was successfully destroyed.' }
       format.json { head :no_content }
     end
@@ -111,7 +111,7 @@ class DeliveryUsersController < ApplicationController
 
     @store_ids = @delivery_user['store_ids']
     @store_ids = [] if !@store_ids.present?
-    @stores = Store.where({"userinfo_id"=>@delivery_user['userinfo_id']})
+    @stores = Store.where({"userinfo_id" => @delivery_user['userinfo_id']})
   end
 
   #门店保存
@@ -123,19 +123,19 @@ class DeliveryUsersController < ApplicationController
       store_id = params[:store_id]
       object_store_id = BSON::ObjectId(store_id)
 
-      if(op == "add")
+      if (op == "add")
 
-        @delivery_user.add_to_set({"store_ids"=> object_store_id})
+        @delivery_user.add_to_set({"store_ids" => object_store_id})
       else
-        @delivery_user.pull({"store_ids"=>object_store_id})
+        @delivery_user.pull({"store_ids" => object_store_id})
       end
       respond_to do |format|
-        format.json {render json: {"flag"=> 1,"msg"=> "门店操作成功！"} }
+        format.json { render json: {"flag" => 1, "msg" => "门店操作成功！"} }
       end
-    rescue Exception=>e #异常捕获
+    rescue Exception => e #异常捕获
       puts e
       respond_to do |format|
-        format.json {render json: {"flag"=> 0,"msg"=> "门店操作失败，服务器出现异常！"} }
+        format.json { render json: {"flag" => 0, "msg" => "门店操作失败，服务器出现异常！"} }
       end
     end
   end
@@ -147,15 +147,17 @@ class DeliveryUsersController < ApplicationController
     start = params[:start].to_i #记录跳过的行数
 
 
-
-
     searchValue = params[:search][:value] #查询
     searchParams = {}
     searchParams['mobile'] = /#{searchValue}/
     searchParams['authentication_token'] = {"$exists" => true}
     orinfo = []
-    current_user['store_ids'].each do |store_id|
-      orinfo << {'store_ids' => store_id}
+    if current_user['store_ids'].present?
+      current_user['store_ids'].each do |store_id|
+        orinfo << {'store_ids' => store_id}
+      end
+    else
+      orinfo << {'store_ids' => ""}
     end
 
     searchParams['$or'] = orinfo
@@ -174,13 +176,13 @@ class DeliveryUsersController < ApplicationController
 
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_delivery_user
-      @delivery_user = DeliveryUser.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_delivery_user
+    @delivery_user = DeliveryUser.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def delivery_user_params
-      params.require(:delivery_user).permit(:real_name, :user_desc, :generate, :scaffold, :DeliveryUser, :real_name, :user_desc, :work_status, :mobile, :login_type, :status, :position)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def delivery_user_params
+    params.require(:delivery_user).permit(:real_name, :user_desc, :generate, :scaffold, :DeliveryUser, :real_name, :user_desc, :work_status, :mobile, :login_type, :status, :position)
+  end
 end

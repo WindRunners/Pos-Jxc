@@ -1,42 +1,204 @@
 @charset "utf-8";
 /* CSS Document */
 
-body,img,{margin:0;padding:0;border:0;}
-*{ margin:0px; padding:0px; font-family:"SimHei"}
-.container{ width:100%; margin:0; padding:0;}
-.img_banner{width:100%}
-a{text-decoration:none;}
-
-
-.logo-box{width:100%;background-repeat:no-repeat; background-size:100% 100%;}
-.logo-box img{display:block; width:15%; margin-left:auto; margin-right:auto; padding-top:15%; margin-top:-22%;}
-.con-box{
-    width:85%;
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
-    background-repeat:no-repeat;width:100%;
-    background-size:100% 100%;
-    overflow:hidden
+body, img, {
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
-.content-box{width:85%;background-image: url("../../../public/images/share_integrals/share_content.png"); background-repeat:no-repeat; background-size: 100% 100%;margin-left:auto;margin-right:auto;overflow:hidden}
-.content-box p{text-align:center;font-size:140%;margin-top:12%;margin-bottom:5%}
 
-.btn01{ display:block; width:70%; height:40px; border-radius:5px; background-color:#fa6261; border:none; margin-left:auto; margin-right:auto; margin-top:5%; line-height:40px; text-align:center; color:#ffffff; font-size:120%;}
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: "SimHei"
+}
 
-.hd-box{width:100%; margin-top:20%; margin-bottom:2%}
-.hd{display:table; margin-left:auto; margin-right:auto;}
-.hd p{ float:left; font-size:125%;}
-.hd img{ float:left; margin-top:3px; margin-left:10px;}
+.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-.text-box{width:100%}
-.text-box p{margin-bottom:5%;font-size:125%}
-.register-content{margin-left:auto;margin-right:auto;width:65%;height:60%;background-size:100% 100%;margin-top:15%;margin-bottom:15%}
-.im01{ width:100%;}
-.aa_box{ width:100%; background-image:url("../../../public/images/share_integrals/share_bg.png");background-repeat:no-repeat; background-size:100% 100%;}
-.register2-box img{ display:block; width:15%; margin-left:auto; margin-right:auto; padding-top:15%;}
+.img_banner {
+    width: 100%
+}
 
-.register2-box{background-image:url("../../../public/images/share_integrals/share_bg.png");background-repeat:no-repeat;width:100%;background-size:100% 100%;overflow:hidden}
+a {
+    text-decoration: none;
+}
 
-.aa_box00{ font-size:120%; line-height:150%; text-align:center; color:#000; margin-top:5%;}
-.aa_box01{ font-size:150%; line-height:150%; text-align:center; color:#fa6261; margin-top:5%;}
-.btn_style_03{ display:block; width:60%; height:40px; border:solid 1px #cccccc; border-radius:8px; margin-left:auto; margin-right:auto; background-color:rgba(20,20,20,0); line-height:40px; text-align:center; color:#cccccc; font-size:130%; margin-top:10%;}
-.btn_style_04{ display:block; width:60%; height:40px; border-radius:8px; background-color:#fa6261; border:none; margin-left:auto; margin-right:auto; margin-top:5%; line-height:40px; text-align:center; color:#ffffff; font-size:130%;}
+.logo-box {
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.logo-box img {
+    display: block;
+    width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 15%;
+    margin-top: -22%;
+}
+
+.con-box {
+    width: 85%;
+    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    background-repeat: no-repeat;
+    width: 100%;
+    background-size: 100% 100%;
+    overflow: hidden
+}
+
+.content-box {
+    width: 85%;
+    background-image: url("../../../public/images/share_integrals/share_content.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden
+}
+
+.content-box p {
+    text-align: center;
+    font-size: 140%;
+    margin-top: 12%;
+    margin-bottom: 5%
+}
+
+.btn01 {
+    display:block;
+    width:70%;
+    height:40px;
+    border-radius:5px;
+    background-color:#fa6261;
+    border:none; margin-left:auto;
+    margin-right:auto; margin-top:5%;
+    line-height:40px; text-align:center;
+    color:#ffffff; font-size:120%;
+}
+
+.hd-box {
+    width: 100%;
+    margin-top: 20%;
+    margin-bottom: 2%
+}
+
+.hd {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hd p {
+    float: left;
+    font-size: 125%;
+}
+
+.hd img {
+    float: left;
+    margin-top: 3px;
+    margin-left: 10px;
+}
+
+.text-box {
+    width: 100%
+}
+
+.text-box p {
+    margin-bottom: 5%;
+    font-size: 125%
+}
+
+.register-content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
+    height: 60%;
+    background-size: 100% 100%;
+    margin-top: 15%;
+    margin-bottom: 15%
+}
+
+.im01 {
+    width: 100%;
+}
+
+.aa_box {
+    width: 100%;
+    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.register2-box img {
+    display: block;
+    width: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 15%;
+}
+
+.register2-box {
+    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    background-repeat: no-repeat;
+    width: 100%;
+    background-size: 100% 100%;
+    overflow: hidden
+}
+
+.aa_box00 {
+    font-size: 120%;
+    line-height: 150%;
+    text-align: center;
+    color: #000;
+    margin-top: 5%;
+}
+
+.aa_box01 {
+    font-size: 150%;
+    line-height: 150%;
+    text-align: center;
+    color: #fa6261;
+    margin-top: 5%;
+}
+
+.btn_style_03 {
+    display: block;
+    width: 80%;
+    height: 40px;
+    border: solid 1px #cccccc;
+    border-radius: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(20, 20, 20, 0);
+    line-height: 40px;
+    text-align: center;
+    color: #cccccc;
+    font-size: 130%;
+    margin-top: 10%;
+
+}
+
+.btn_style_04 {
+    display: block;
+    width: 80%;
+    height: 40px;
+    border-radius: 8px;
+    background-color: #fa6261;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    line-height: 40px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 130%;
+}
+
+
+
+
+

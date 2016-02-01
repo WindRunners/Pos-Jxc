@@ -112,5 +112,6 @@ class ElephantV1Api < Grape::API
   mount ProductTicketV1API => 'productTicket'
 
   add_swagger_documentation base_path: "#{ENV["ELEPHANT_HOST"]}/api/v1", hide_format: true
+
 end
 

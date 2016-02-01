@@ -20,7 +20,7 @@
 </div>
 
 <div class="container">
-  <img src="<%= @product.avatar %>" class="center-block" style="width:55%"/>
+  <img src="<%= @product.main %>" class="center-block" style="width:100%" />
 </div>
 
 <div class="mod-productDetail">
@@ -55,10 +55,6 @@
   <div class="property-item">
     <span class="leading-word">图文详情</span>
   </div>
-</div>
-
-<div class="row">
-  <img src="<%= @product.main %>" class="img-responsive center-block"/>
 </div>
 
 <% if @product.desc_url.present? %>

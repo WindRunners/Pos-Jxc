@@ -24,7 +24,7 @@
         Hi,我是酒运达小伙伴!
       .aa_box01
         送你#{@share_integral.register_give_integral}积分大礼包
-      %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号"}
+      %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号",:autoComplete=>'off'}
       .xiazai
         %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
 
@@ -88,11 +88,15 @@
 
       });
 
-
+    $('#btn_mobile').bind('input propertychange', function() {
+      //$('.msg').html($(this).val().length + ' characters');
+      if ($(this).val().length>=11){
+      $(".btn_style_04").css('background-color','#F50806');
+      };
+    });
 
 
    });
-
 
 
 

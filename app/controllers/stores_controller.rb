@@ -10,6 +10,9 @@ class StoresController < ApplicationController
       @user = User.find(params[:u_id])
       @current_user = current_user
       @store_ids = @user['store_ids']
+      if @store_ids==nil
+        @store_ids=[]
+      end
       conditionParams = {}
       conditionParams['userinfo_id'] = @user.userinfo.id
       @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')

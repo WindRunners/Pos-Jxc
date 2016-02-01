@@ -154,7 +154,7 @@ a {
     line-height: 100%;
     text-align: center;
     color: #000;
-    margin-top: 2%;
+    margin-top: 3%;
 }
 
 .aa_box01 {
@@ -162,7 +162,7 @@ a {
     line-height: 150%;
     text-align: center;
     color: #fa6261;
-    margin-top: 2%;
+    margin-top: 3%;
 }
 
 .btn_style_03 {
@@ -172,14 +172,12 @@ a {
     border-radius: 6px;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(5, 5, 5, 0);
-    line-height: 40px;
+    line-height: 20px;
     text-align: center;
     color: #cccccc;
-    font-size: 120%;
+    font-size: 150%;
     margin-top: 4%;
     border: 1px solid #e5e5e5;
-    box-shadow:none;
 
 }
 
@@ -193,15 +191,15 @@ a {
     margin-left: auto;
     margin-right: auto;
     margin-top: 4%;
-    line-height: 40px;
+    line-height: 20px;
     text-align: center;
     color: #ffffff;
-    font-size: 120%;
+    font-size: 140%;
 }
 .role_content_box{
     font-family: "SimHei";
     color: #4d4d4d;
-    font-size: 90%;
+    font-size: 120%;
     margin-top: 5%;
     padding-left:5%;
 

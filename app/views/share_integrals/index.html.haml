@@ -1,6 +1,6 @@
 %h1 活动列表
 
-%table.table
+%table.table.table-striped.table-bordered.table-hover
   %thead
     %tr
       %th 标题
@@ -9,10 +9,7 @@
       %th 分享人获赠积分
       %th 注册人获赠积分
       %th 当前状态
-      %th
-      %th
-      %th
-      %th
+      %th 操作
 
   %tbody
     - @share_integrals.each do |share_integral|
@@ -23,11 +20,12 @@
         %td= share_integral.shared_give_integral
         %td= share_integral.register_give_integral
         %td= share_integral.status_str
-        %td= link_to '详细','','data-href' => share_integral_path(share_integral)
-        %td= link_to '编辑','','data-href' =>  edit_share_integral_path(share_integral)
-        %td= link_to '删除',share_integral_path(share_integral), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' }
-        %td= link_to '参与人员查看','','data-href' => share_integral_share_integral_records_path(share_integral.id)
+        %td
+          = link_to '详细','','data-href' => share_integral_path(share_integral),class:'btn btn-xs btn-Inverse'
+          = link_to '编辑','','data-href' =>  edit_share_integral_path(share_integral),class:'btn btn-xs btn-info'
+          = link_to '删除',share_integral_path(share_integral), :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },class:'btn btn-xs btn-danger'
+          = link_to '参与人员查看','','data-href' => share_integral_share_integral_records_path(share_integral.id),class:'btn btn-xs btn-purple'
 
 %br
 
-= link_to '新建活动','','data-href' => new_share_integral_path
+= link_to '新建活动','','data-href' => new_share_integral_path,:class=>'btn btn-xs btn-primary'

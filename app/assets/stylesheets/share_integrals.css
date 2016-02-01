@@ -188,11 +188,11 @@ a {
     border-radius: 6px;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(20, 20, 20, 0);
+    background-color: rgba(5, 5, 5, 0);
     line-height: 40px;
     text-align: center;
     color: #cccccc;
-    font-size: 16px;
+    font-size: 18px;
     margin-top: 25px;
     border: 1px solid #e5e5e5;
 
@@ -203,7 +203,7 @@ a {
     width: 80%;
     height: 40px;
     border-radius: 8px;
-    background-color: #fa6261;
+    background-color: #fa7d7d;
     border: none;
     margin-left: auto;
     margin-right: auto;
@@ -213,12 +213,10 @@ a {
     color: #ffffff;
     font-size: 130%;
 }
-
 .role_content_box{
-
-    color: #999;
-    font-size: 14px;
-    text-align: center;
+    font-family: "SimHei"
+    color: #cccccc;
+    font-size: 90%;
     margin-top: 20px;
 
 

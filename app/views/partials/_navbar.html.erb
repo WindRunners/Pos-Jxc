@@ -39,7 +39,7 @@
       <a href="/" class="navbar-brand">
         <small>
           <i class="fa fa-leaf"></i>
-          酒运达
+          <%= current_user.userinfo.present? ? current_user.userinfo.shopname : '' %>
         </small>
       </a>
 
@@ -151,7 +151,7 @@
             <img class="nav-user-photo" src="/images/avatar.png" alt="Jason's Photo"/>
 								<span class="user-info">
 									<small>欢迎您,</small>
-									<%= current_user.userinfo.present? ? current_user.userinfo.name : '' %>
+                                    <%= current_user.mobile %>
 								</span>
 
             <i class="ace-icon fa fa-caret-down"></i>

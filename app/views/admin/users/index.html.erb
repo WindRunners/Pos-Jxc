@@ -4,13 +4,13 @@
 </div>
 
 <div>
-<%= form_tag("", method: "post",remote:true,id:"search-scope.form-inline",onSubmit:"return search()") do %>
-    <%= label_tag(:user_name, "用户姓名:") %>
-    <%= text_field_tag 'user_name',nil,placeholder:'用户姓名' %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <%= label_tag(:user_mobile, "用户手机号:") %>
-    <%= text_field_tag 'user_mobile',nil,placeholder:'用户手机号' %>
-    <%= submit_tag '搜索',class:'btn btn-primary btn-sm' %>
-<% end %>
+  <%= form_tag("", method: "post", remote: true, id: "search-scope.form-inline", onSubmit: "return search()") do %>
+      <%= label_tag(:user_name, "用户姓名:") %>
+      <%= text_field_tag 'user_name', nil, placeholder: '用户姓名' %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <%= label_tag(:user_mobile, "用户手机号:") %>
+      <%= text_field_tag 'user_mobile', nil, placeholder: '用户手机号' %>
+      <%= submit_tag '搜索', class: 'btn btn-primary btn-sm' %>
+  <% end %>
 </div>
 
 <table class="table table-striped table-bordered table-hover">
@@ -39,15 +39,17 @@
                           # "data-href" => admin_path(user),
                           :data => {:confirm => '你确定重置用户密码吗?'},
                           :class => 'btn btn-xs btn-danger' %>
-              <a class="btn btn-xs btn-info" data-href="<%= stores_path(state: "manage_store",:u_id=>user._id.to_s) %>">
+              <a class="btn btn-xs btn-info" data-href="<%= stores_path(state: "manage_store", :u_id => user._id.to_s) %>">
                 <i class="ace-icon fa fa-pencil bigger-130">门店管理</i>
               </a>
-              <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
-                          admin_user_path(user),
-                          :remote => true,
-                          :method => :delete,
-                          :data => {:confirm => '你确定删除该用户吗?'},
-                          :class => 'btn btn-xs btn-danger' %>
+              <% if @current_user.id!=user.id %>
+                  <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
+                              admin_user_path(user),
+                              :remote => true,
+                              :method => :delete,
+                              :data => {:confirm => '你确定删除该用户吗?'},
+                              :class => 'btn btn-xs btn-danger' %>
+              <% end %>
           <% end %>
         </td>
       </tr>

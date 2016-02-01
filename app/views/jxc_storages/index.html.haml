@@ -25,13 +25,9 @@
       %th
         =t('mongoid.attributes.jxc_storage.spell_code')
       %th
-        =t('mongoid.attributes.jxc_storage.storage_code')
-      %th
         =t('mongoid.attributes.jxc_storage.storage_type')
       %th
         =t('mongoid.attributes.jxc_storage.admin')
-      %th
-        =t('mongoid.attributes.jxc_storage.admin_phone')
       %th
         =t('mongoid.attributes.jxc_storage.address')
       %th
@@ -47,10 +43,8 @@
       %tr
         %td= jxc_storage.storage_name
         %td= jxc_storage.spell_code
-        %td= jxc_storage.storage_code
         %td= jxc_storage.storage_type
-        %td= jxc_storage.admin
-        %td= jxc_storage.admin_phone
+        %td= jxc_storage.admin.present? ? jxc_storage.admin.name : ''
         %td= jxc_storage.address
         %td= jxc_storage.telephone
         %td= jxc_storage.memo

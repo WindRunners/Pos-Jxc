@@ -23,7 +23,7 @@
       .aa_box00
         Hi,我是酒运达小伙伴!
       .aa_box01
-        送你#{@share_integral.register_give_integral}积分大礼包
+        恭喜你获得价值#{@share_integral.register_give_integral/100}元大礼包
       %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号",:autoComplete=>'off'}
       .xiazai
         %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
@@ -34,7 +34,7 @@
         .aa_box01
           %p
             %br
-            您已领取#{@share_integral.register_give_integral}积分大礼包
+            您已领取价值#{@share_integral.register_give_integral/100}元大礼包
             %br
               快快使用吧
       .xiazai
@@ -47,7 +47,7 @@
           %br
           您已是老朋友，登录APP
           %br
-            进行推荐有奖即可获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+            进行推荐有奖即可获得价值#{@share_integral.shared_give_integral/100}元大礼包赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
@@ -60,7 +60,6 @@
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
-
 
 :javascript
   $(function(){
@@ -89,24 +88,30 @@
       });
 
     $('#btn_mobile').bind('input propertychange', function() {
-      //$('.msg').html($(this).val().length + ' characters');
-      if ($(this).val().length>=11){
+
+      if($(this).val().length==3||$(this).val().length==8){
+        $(this).val($(this).val() + ' ');
+      }
+      if ($(this).val().length>=13){
       $(".btn_style_04").css('background-color','#fa6261');
+      $("#btn_register").click();
       };
     });
-
 
    });
 
 
 
   function register(){
-    var mobile = $("input:text").val();
+    var mobile = $("input:text").val().replace(/\s+/g,"");
     var share_integral_id = $("#share_integral_id").val();
     var shared_customer_id = $("#shared_customer_id").val();
-    if (mobile == undefined || mobile == ""|| mobile.length!=11) {
+
+
+    var pattern = /^1[34578]\d{9}$/;
+    if (!pattern.test(mobile)) {
      alert("请输入正确的手机号码！")
-     return false;
+          return false;
     };
 
     $.ajax({

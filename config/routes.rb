@@ -325,6 +325,7 @@ Rails.application.routes.draw do
     get 'check'
     get 'check_out'
     get 'search', :on => :collection
+    post 'picture_upload', :on => :collection
   end
   post 'ckeditor/pictures' => 'wines#upload'
 

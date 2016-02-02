@@ -245,6 +245,9 @@ class OrderV1API < Grape::API
     if order.commit_order!(false)
       ordercompleted = Ordercompleted.build(order)
       ordercompleted.commit_order!
+      #移除定时队列
+      # Resque.enqueue_at(24.hours.from_now, AchieveOrderCompleted, order_id)
+      Resque.remove_delayed(AchieveOrderCompleted, params[:orderid])
 
       {result:'success'}
     else

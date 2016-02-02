@@ -58,6 +58,9 @@ module DeliveryOrderV1APIHelper
     #更改订单状态
     order.receive_goods!
 
+    #24小时之后，如果用户还没有确认收货，系统自动确认收货
+    Resque.enqueue_at(24.hours.from_now, AchieveOrderCompleted, order_id)
+
     {msg: '恭喜您配送完成!', flag: 1}
   end
 

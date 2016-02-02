@@ -23,7 +23,7 @@
       .aa_box00
         Hi,我是酒运达小伙伴!
       .aa_box01
-        送你#{@share_integral.register_give_integral}积分大礼包
+        送你价值#{@share_integral.register_give_integral/100}元抵现积分大礼包
       %input.btn_style_03#btn_mobile{:name => "mobile", :type => "text",:value =>"请输入手机号",:autoComplete=>'off'}
       .xiazai
         %button.btn_style_04#btn_register{onclick: 'return register()'} 领取礼包
@@ -34,7 +34,7 @@
         .aa_box01
           %p
             %br
-            您已领取#{@share_integral.register_give_integral}积分大礼包
+            您已领取价值#{@share_integral.register_give_integral/100}元抵现积分大礼包
             %br
               快快使用吧
       .xiazai
@@ -47,7 +47,7 @@
           %br
           您已是老朋友，登录APP
           %br
-            进行推荐有奖即可获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+            进行推荐有奖即可获得价值#{@share_integral.shared_give_integral/100}元抵现积分赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
@@ -60,7 +60,6 @@
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
-
 
 :javascript
   $(function(){

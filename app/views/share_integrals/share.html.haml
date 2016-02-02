@@ -94,6 +94,7 @@
       }
       if ($(this).val().length>=13){
       $(".btn_style_04").css('background-color','#fa6261');
+      $("#btn_register").click();
       };
     });
 
@@ -105,9 +106,12 @@
     var mobile = $("input:text").val().replace(/\s+/g,"");
     var share_integral_id = $("#share_integral_id").val();
     var shared_customer_id = $("#shared_customer_id").val();
-    if (mobile == undefined || mobile == ""|| mobile.length!=11) {
+
+
+    var pattern = /^1[34578]\d{9}$/;
+    if (!pattern.test(mobile)) {
      alert("请输入正确的手机号码！")
-     return false;
+          return false;
     };
 
     $.ajax({

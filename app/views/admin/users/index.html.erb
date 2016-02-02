@@ -42,6 +42,7 @@
               <a class="btn btn-xs btn-info" data-href="<%= stores_path(state: "manage_store", :u_id => user._id.to_s) %>">
                 <i class="ace-icon fa fa-pencil bigger-130">门店管理</i>
               </a>
+
               <% if @current_user.id!=user.id %>
 
                   <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),

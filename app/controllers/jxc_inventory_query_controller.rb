@@ -25,9 +25,9 @@ class JxcInventoryQueryController < ApplicationController
         inventory_list << inventory
       end
 
-      render json:{'total':queryInfo.count,'rows':inventory_list}
+      render json:{'total'=>queryInfo.count,'rows'=>inventory_list}
     else
-      render json:{'total':0,'rows':[]}
+      render json:{'total'=>0,'rows'=>[]}
     end
   end
 
@@ -65,9 +65,9 @@ class JxcInventoryQueryController < ApplicationController
         logList << log
       end
 
-      render json:{'total':query.count,'rows':logList}
+      render json:{'total'=>query.count,'rows'=>logList}
     else
-      render json:{'total':0,'rows':[]}
+      render json:{'total'=>0,'rows'=>[]}
     end
 
   end

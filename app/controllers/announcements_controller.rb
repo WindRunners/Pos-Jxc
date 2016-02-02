@@ -52,11 +52,9 @@ class AnnouncementsController < ApplicationController
           @announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
           # 压缩图片
           begin
-            img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-            width = img.columns
-            height = img.rows
-            thumb = img.resize(width * 0.5, height * 0.5)
-            thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
+            img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+            thumb = img.crop_resized!(420, 330, Magick::NorthGravity)
+            thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
             # 将压缩图片地址存进数组
             @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
           rescue
@@ -68,6 +66,7 @@ class AnnouncementsController < ApplicationController
       end
       # 替换content原图片链接并转化城IMG标签
       a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
+      a.insert(5, '/') if a[5]!='/'
     }
     respond_to do |format|
       if @announcement.save
@@ -102,11 +101,9 @@ class AnnouncementsController < ApplicationController
             @announcement.pic_path << '/upload/image/announcements/' + b + '/' + uuid + '.jpg'
             # 压缩图片
             begin
-              img = Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-              width = img.columns
-              height = img.rows
-              thumb = img.resize(width * 0.5, height * 0.5)
-              thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg') { self.quality = 50 } #compress压缩大小
+              img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
+              thumb = img.crop_resized!(420, 330, Magick::NorthGravity)
+              thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
               # 将压缩图片地址存进数组
               @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
             rescue

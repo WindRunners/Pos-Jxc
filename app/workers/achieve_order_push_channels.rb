@@ -5,7 +5,7 @@ class AchieveOrderPushChannels
 
     channels, badge, log_id = args.first, args[1], args.last
 
-    ios_client = Baidu::CloudPush.new('9qKGVvWRL4dPvLX7h4UFlI2n', 'AI9fNO8dVHjZFM7FHsXjlRwKX5TZzmbW')
+    ios_client = Baidu::CloudPush.new('4w1C44Xvs5yYAdvVUpqOqnna', 'p8Qs0n0dWPOVdTOGgprFiGLjGQMLlOT4')
     android_client = Baidu::CloudPush.new('YSG5VESAS4QsuKhUoiAFdPuH', 'uK7R7g9fX1pvomK1cBMFEmsYjbrGEtT3')
 
 

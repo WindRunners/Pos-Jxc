@@ -34,7 +34,7 @@
         .aa_box01
           %p
             %br
-            您已领取积分礼包#{@share_integral.register_give_integral}积分
+            您已领取#{@share_integral.register_give_integral}积分大礼包
             %br
               快快使用吧
       .xiazai
@@ -47,16 +47,16 @@
           %br
           您已是老朋友，登录APP
           %br
-            进行推荐有奖即获得#{@share_integral.shared_give_integral}积分赶快行动吧！
+            进行推荐有奖即可获得#{@share_integral.shared_give_integral}积分赶快行动吧！
       .xiazai
         %a.btn01#app_path1 下载酒运达APP品味人生
 
-    .hd-box
-      .hd
-        %p 活动规则
-        %img.role_pic{:src => "/images/share_integrals/share_down.png"}
-    .text-box{:style=>"display:none"}
-      = markdown @share_integral.rule_content if @share_integral.rule_content.present?
+    .role-box
+      %p
+        这是你的专属优惠，可以兑换商品哦
+      %a.role_active{:href => "/share_integrals/#{@share_integral.id.to_s}/share_integral_role"}
+        %i> ?
+        活动说明
 
     %input#share_integral_id{:type => "hidden", :value => @share_integral.id.to_s }
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
@@ -91,7 +91,7 @@
     $('#btn_mobile').bind('input propertychange', function() {
       //$('.msg').html($(this).val().length + ' characters');
       if ($(this).val().length>=11){
-      $(".btn_style_04").css('background-color','#F50806');
+      $(".btn_style_04").css('background-color','#fa6261');
       };
     });
 

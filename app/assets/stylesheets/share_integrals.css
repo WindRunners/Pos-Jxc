@@ -1,6 +1,3 @@
-@charset "utf-8";
-/* CSS Document */
-
 body, img, {
     margin: 0;
     padding: 0;
@@ -20,7 +17,8 @@ body, img, {
 }
 
 .img_banner {
-    width: 100%
+    width: 100%;
+    min-height: 249.5px;
 }
 
 a {
@@ -44,26 +42,27 @@ a {
 
 .con-box {
     width: 85%;
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     width: 100%;
     background-size: 100% 100%;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .content-box {
     width: 85%;
-    background-image: url("../../../public/images/share_integrals/share_content.png");
+    /*background-image: url("../../../public/images/share_integrals/share_content.png");*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
     margin-left: auto;
     margin-right: auto;
-    overflow: hidden
+    overflow: hidden;
+
 }
 
 .content-box p {
     text-align: center;
-    font-size: 140%;
+    font-size: 120%;
     margin-top: 12%;
     margin-bottom: 5%
 }
@@ -80,28 +79,41 @@ a {
     color:#ffffff; font-size:120%;
 }
 
-.hd-box {
+.role-box {
     width: 100%;
-    margin-top: 20%;
-    margin-bottom: 2%
+    margin-top: 20px;
 }
 
-.hd {
-    display: table;
-    margin-left: auto;
-    margin-right: auto;
+.role-box p{
+    color: #999;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+
+}
+.role_active {
+    display: block;
+    color: #999;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
+.role_active i{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    border-radius: 50%;
+    border: 1px solid #999;
+    font-size: 12px;
+    text-align: center;
+    margin-right: 6px;
+    font-style: normal;
+
 }
 
-.hd p {
-    float: left;
-    font-size: 125%;
-}
 
-.hd img {
-    float: left;
-    margin-top: 3px;
-    margin-left: 10px;
-}
 
 .text-box {
     width: 100%
@@ -112,23 +124,10 @@ a {
     font-size: 125%
 }
 
-.register-content {
-    margin-left: auto;
-    margin-right: auto;
-    width: 65%;
-    height: 60%;
-    background-size: 100% 100%;
-    margin-top: 15%;
-    margin-bottom: 15%
-}
-
-.im01 {
-    width: 100%;
-}
 
 .aa_box {
     width: 100%;
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -142,43 +141,43 @@ a {
 }
 
 .register2-box {
-    background-image: url("../../../public/images/share_integrals/share_bg.png");
+    /*background-image: url("../../../public/images/share_integrals/share_bg.png");*/
     background-repeat: no-repeat;
     width: 100%;
     background-size: 100% 100%;
-    overflow: hidden
+    overflow: hidden;
+
 }
 
 .aa_box00 {
     font-size: 120%;
-    line-height: 150%;
+    line-height: 100%;
     text-align: center;
     color: #000;
-    margin-top: 5%;
+    margin-top: 3%;
 }
 
 .aa_box01 {
-    font-size: 150%;
+    font-size: 120%;
     line-height: 150%;
     text-align: center;
     color: #fa6261;
-    margin-top: 5%;
+    margin-top: 3%;
 }
 
 .btn_style_03 {
     display: block;
     width: 80%;
     height: 40px;
-    border: solid 1px #cccccc;
-    border-radius: 8px;
+    border-radius: 6px;
     margin-left: auto;
     margin-right: auto;
-    background-color: rgba(20, 20, 20, 0);
-    line-height: 40px;
+    line-height: 20px;
     text-align: center;
     color: #cccccc;
-    font-size: 130%;
-    margin-top: 10%;
+    font-size: 150%;
+    margin-top: 4%;
+    border: 1px solid #e5e5e5;
 
 }
 
@@ -186,19 +185,22 @@ a {
     display: block;
     width: 80%;
     height: 40px;
-    border-radius: 8px;
-    background-color: #fa6261;
+    border-radius: 6px;
+    background-color: #fa7d7d;
     border: none;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 5%;
-    line-height: 40px;
+    margin-top: 4%;
+    line-height: 20px;
     text-align: center;
     color: #ffffff;
-    font-size: 130%;
+    font-size: 140%;
 }
+.role_content_box{
+    font-family: "SimHei";
+    color: #4d4d4d;
+    font-size: 120%;
+    margin-top: 5%;
+    padding-left:5%;
 
-
-
-
-
+}

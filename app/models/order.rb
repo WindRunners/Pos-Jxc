@@ -244,9 +244,9 @@ class Order
 
     #本单购买总积分
     integral_order = 0
-    # self.ordergoods.each do |ordergood|
-    #   integral_order += ordergood.integral * ordergood.quantity
-    # end
+    self.ordergoods.each do |ordergood|
+      integral_order += ordergood.integral * ordergood.quantity
+    end
 
     if integral_order !=0
       begin

@@ -46,6 +46,7 @@ class Ordercompleted
       event :line_order_creat, :transitions_to => :completed
       event :cancel_order, :transitions_to => :cancelled
       event :commit_order, :transitions_to => :completed
+      event :commit_order2, :transitions_to => :completed
     end
 
     # 已取消

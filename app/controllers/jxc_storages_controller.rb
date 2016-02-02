@@ -18,7 +18,6 @@ class JxcStoragesController < ApplicationController
 
   def create
     @jxc_storage = JxcStorage.new(jxc_storage_params)
-
     respond_to do |format|
       if @jxc_storage.save
         # format.html { redirect_to jxc_storages_path, notice: '仓库信息成功创建.' }
@@ -63,6 +62,6 @@ class JxcStoragesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_storage_params
-    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :admin, :admin_phone, :address, :telephone, :status, :memo, :data_1, :data_2, :data_3, :data_4)
+    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :admin_id, :address, :telephone, :status, :memo, :data_1, :data_2, :data_3, :data_4)
   end
 end

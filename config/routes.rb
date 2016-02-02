@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'share'
     post 'register'
     resources :product_ticket_customer_inits, shallow: true
+    get 'product_ticket_role'
   end
 
   get '/product_ticket_customer_inits/:id/remove' => "product_ticket_customer_inits#remove" #酒劵用户移除
@@ -270,8 +271,8 @@ Rails.application.routes.draw do
 
   resources :stores do
     get 'delivery_users'
-    get 'add_delivery_user'
-    delete 'reduce_delivery_user'
+    post 'add_delivery_user'
+    post 'reduce_delivery_user'
     post 'upload'
     get 'search', :on => :collection
   end
@@ -332,6 +333,7 @@ Rails.application.routes.draw do
   resources :share_integrals do
     post 'register'
     post 'share_time_check', :on => :collection
+    get 'share_integral_role'
     resources :share_integral_records
 
   end
@@ -524,6 +526,7 @@ Rails.application.routes.draw do
   get 'jxc_common_info/getJxcUnits' #供应商
   get 'jxc_common_info/getJxcDictionaryByDesc' #根据字典项获  取字典
   get 'jxc_common_info/getBillDetailInfo' #单据明细
+  get 'jxc_common_info/getJxcStorageAdmin' #选取仓库负责人
   ##
 
 end

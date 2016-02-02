@@ -259,11 +259,10 @@ class UserinfosController < ApplicationController
       init_user = @userinfo.users.build();
       init_user.name = @userinfo.name
       init_user.mobile = @userinfo.pusher_phone
-      init_user.password = '123456'
       init_user.email = @userinfo.email
       init_user.step = 9
     end
-
+    init_user.password = '123456'
     role_array = []
     @userinfo.role_marks.each do |role_mark|
 
@@ -289,7 +288,7 @@ class UserinfosController < ApplicationController
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.status=-1
     @userinfo.users.each do |user|
-      user.step = 1
+      user.password = '654321'
       user.save
     end
     @userinfo.save

@@ -15,20 +15,22 @@
 
 <body class="container">
 
-<div style="height:50px">
+<div style="height:20px">
   <br/>
 </div>
 
 <div class="container">
-  <img src="<%= @product.main %>" class="center-block" style="width:55%"/>
+  <img src="<%= @product.main %>" class="center-block" style="width:100%"/>
 </div>
 
 <div class="mod-productDetail">
   <div class="product-title-no-short"><p class="product-name"><%= @product.title %></p></div>
   <div class="product-shopping">
-    <span class="product-price">￥<a><%= @product.price %></a></span></div>
-  <div class="property-item product-promotion"><span class="promotion-title">促销</span>
-    <span class="promotion-content">买一赠一（赠品数量有限，赠完为止）</span></div>
+    <span class="product-price">￥<%= @product.price %></span>
+    <span class="sale_count">已售:<%= @product.sale_count %></span>
+  </div>
+  <div style="clear: right" class="property-item product-promotion"><span class="promotion-title">促销</span>
+    <span class="promotion-content"><%= @product.tags %></span></div>
 </div>
 
 
@@ -53,19 +55,14 @@
   </div>
 
   <div class="property-item">
-    <span class="leading-word">图文详情</span>
+    <span class="leading-word">详情</span>
   </div>
 </div>
 
-<div class="row">
-  <img src="<%= @product.main %>" class="img-responsive center-block"/>
-</div>
-
-<% if @product.desc_url.present? %>
 <div class="row ">
   <img src="<%= @product.desc %>" class="img-responsive center-block"/>
 </div>
-<% end %>
+
 
 </body>
 

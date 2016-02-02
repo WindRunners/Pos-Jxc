@@ -52,12 +52,12 @@ class ProductsController < ApplicationController
   def warehouse_index
 
     gon.searchBar = true
-
-    conditions = {category_id: params[:category_id],
-                  tag: 'JYD',
-                  searchText: params[:searchText],
-                  page: params[:page],
-                  per: 20}
+    #tag: 'JYD',
+    conditions = {:category_id => params[:category_id],
+                  :mark => {'$exists'=>false},
+                  :searchText =>  params[:searchText],
+                  :page => params[:page],
+                  :per =>  20}
     products = Warehouse::Product.where(conditions)
 
     @products = Kaminari::PaginatableArray.new(
@@ -248,7 +248,7 @@ class ProductsController < ApplicationController
     headers['Authentication-Token'] = '4Kzp1iyj4DiHVPhv4JVm'
 
 
-    url = RestConfig::PRODUCT_SERVER + 'api/v1/product/all'
+    url = RestConfig::PRODUCT_SERVER + 'api/v1/product/jyd'
 
     response = RestClient.get(url, headers)
 
@@ -260,9 +260,9 @@ class ProductsController < ApplicationController
         @product = Product.with(collection: current_user.shop_id).find(p['id'])
       rescue
         @product = Product.new(p)
-        @product.price = Faker::Commerce.price
+        @product.price = Faker::Commerce.price + 1
         @product.purchasePrice = @product.price * 0.8
-        @product.stock = Faker::Number.between(1, 10)
+        @product.stock = Faker::Number.between(1, 10000)
         @product.integral = Faker::Number.between(1, 10)
         @product.state = State.find_by(name: "已上架")
 

@@ -38,7 +38,7 @@ class AnnouncementV1API < Grape::API
     showHash[:id] = announcement.id
     showHash[:title] = announcement.title
     showHash[:read_num] = announcement.read_num
-    showHash[:url] = 'http://jyd.ibuluo.me:4000/announcements/' + announcement.id + '/app_show'
+    showHash[:url] = "#{RestConfig::ELEPHANT_HOST}/announcements/" + announcement.id + "/app_show"
     showHash
   end
 

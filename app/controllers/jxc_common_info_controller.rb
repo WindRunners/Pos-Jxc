@@ -16,10 +16,10 @@ class JxcCommonInfoController < ApplicationController
     #如果传入单位类型ID为空，则查询所有供应商
     if unitType.blank?
       suppliersList = JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total':JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).count,'rows':suppliersList}
+      render json: {'total'=>JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).count,'rows'=>suppliersList}
     else
       suppliersList = JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total':JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows':suppliersList}
+      render json: {'total'=>JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows'=>suppliersList}
     end
   end
 
@@ -33,10 +33,10 @@ class JxcCommonInfoController < ApplicationController
     #如果传入单位类型ID为空，则查询所有客户
     if unitType.blank?
       consumersList = JxcContactsUnit.where(unit_property:'1',:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total':JxcContactsUnit.where(unit_property:'1',:unit_name => /#{unit_param}/).count,'rows':consumersList}
+      render json: {'total'=>JxcContactsUnit.where(unit_property:'1',:unit_name => /#{unit_param}/).count,'rows'=>consumersList}
     else
       consumersList = JxcContactsUnit.where(unit_property:'1',unit_type:unitType,:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total':JxcContactsUnit.where(unit_property:'1',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows':consumersList}
+      render json: {'total'=>JxcContactsUnit.where(unit_property:'1',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows'=>consumersList}
     end
   end
 
@@ -55,11 +55,18 @@ class JxcCommonInfoController < ApplicationController
     #如果传入仓库类型ID为空，则查询所有仓库
     if storage_type.blank?
       storageList = JxcStorage.where(:storage_name => /#{store_param}/).page(page).per(rows)
-      render json:{'total':JxcStorage.where(:storage_name => /#{store_param}/).count,'rows':storageList}
+      render json:{'total'=>JxcStorage.where(:storage_name => /#{store_param}/).count,'rows'=>storageList}
     else
       storageList = JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).page(page).per(rows)
-      render json:{'total':JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).count,'rows':storageList}
+      render json:{'total'=>JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).count,'rows'=>storageList}
     end
+  end
+
+  #选择进销存仓库负责人
+  def getJxcStorageAdmin
+    search_param = params[:searchParam] || ''
+    query = User.or({:name => /#{search_param}/},{:mobile => /#{search_param}/})
+    render json: {'total'=>query.count,'rows'=>query.page(params[:page]).per(params[:rows])}
   end
 
   #进销存 账户信息
@@ -105,10 +112,10 @@ class JxcCommonInfoController < ApplicationController
     #如果传入分类ID为空，则查询所有商品
     if category_id.blank?
       productsList = Product.page(page).per(rows)
-      render json: {'total':Product.count,'rows':productsList}
+      render json: {'total'=>Product.count,'rows'=>productsList}
     else
       productsList = Category.find(category_id).products.page(page).per(rows)
-      render json: {'total':Category.find(category_id).products.count,'rows':productsList}
+      render json: {'total'=>Category.find(category_id).products.count,'rows'=>productsList}
     end
   end
 
@@ -157,7 +164,7 @@ class JxcCommonInfoController < ApplicationController
 
       detailList << product
     end
-    render json: {'total':productList.http_response['X-total'].to_i,'rows':detailList}
+    render json: {'total'=>productList.http_response['X-total'].to_i,'rows'=>detailList}
 
   end
 

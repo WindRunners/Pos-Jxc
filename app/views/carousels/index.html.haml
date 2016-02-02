@@ -13,16 +13,15 @@
 
   %tbody
     - @carousels.each do |carousel|
-      - if carousel.id==current_user.id
-        %tr
-          %td= link_to carousel.area,'',"data-href"=> carousel_path(carousel)
-          %td= carousel.start_time.strftime('%Y-%m-%d %H:%M:%S').to_s
-          %td= carousel.end_time.strftime('%Y-%m-%d %H:%M:%S').to_s
-          %td= carousel.url
-          %td
-            = link_to raw("<i class='ace-icon fa fa-info-circle bigger-150'></i>"),'',"data-href"=> carousel_path(carousel), :class => "btn btn-xs btn-success"
-            = link_to raw("<i class='ace-icon fa fa-pencil bigger-150'></i>"), '',"data-href"=>edit_carousel_path(carousel), :class => "btn btn-xs btn-info"
-            = link_to raw("<i class='ace-icon fa fa-trash bigger-150'></i>"), carousel, :class => "btn btn-xs btn-danger",
-                                                                             :method => :delete,
-                                                                             :remote =>true,
-                                                                             :data => { :confirm => 'Are you sure?' }
+      %tr
+        %td= link_to carousel.area,'',"data-href"=> carousel_path(carousel)
+        %td= carousel.start_time.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= carousel.end_time.strftime('%Y-%m-%d %H:%M:%S').to_s
+        %td= carousel.url
+        %td
+          = link_to raw("<i class='ace-icon fa fa-info-circle bigger-150'></i>"),'',"data-href"=> carousel_path(carousel), :class => "btn btn-xs btn-success"
+          = link_to raw("<i class='ace-icon fa fa-pencil bigger-150'></i>"), '',"data-href"=>edit_carousel_path(carousel), :class => "btn btn-xs btn-info"
+          = link_to raw("<i class='ace-icon fa fa-trash bigger-150'></i>"), carousel, :class => "btn btn-xs btn-danger",
+                                                                           :method => :delete,
+                                                                           :remote =>true,
+                                                                           :data => { :confirm => 'Are you sure?' }

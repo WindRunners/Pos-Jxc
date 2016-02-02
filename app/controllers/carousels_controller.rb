@@ -10,7 +10,7 @@ class CarouselsController < ApplicationController
   # GET /carousels/1
   # GET /carousels/1.json
   def show
-    @carruselAssets = CarouselAsset.all
+    # @carruse = CarouselAsset.all
     #@carruselAssets.path if carouselAssets.present?
   end
 
@@ -59,17 +59,18 @@ class CarouselsController < ApplicationController
   def upload
     @carousel = Carousel.find(params[:carousel_id])
 
-    asset = params[:carousel][:carouselAsset]
+    @carousel.avatar = params[:carousel][:avatar]
 
-    unless asset.blank?
-      @origin = @carousel.carouselAssets.build
-      @origin.asset = asset
-    end
+    # unless asset.blank?
+    #   @origin = @carousel.carouselAssets.build
+    #   @origin.asset = asset
+    # end
 
-    @carousel.update(carousel_params)
+    @carousel.save
     
     respond_to do |format|
-      format.js
+      format.js{render_js carousels_url}
+      # format.js
     end
   end
 

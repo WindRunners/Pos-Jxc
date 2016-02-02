@@ -17,14 +17,17 @@ class JxcStorage
   field :latitude, type:String #仓库地址  纬度
   field :address, type:String  #仓库详细地址信息
   field :telephone, type:String #仓库固定电话
-  field :admin, type:String  #仓库负责人姓名
-  field :admin_phone, type:String #仓库负责人手机
+  # field :admin, type:String  #仓库负责人姓名
+  # field :admin_phone, type:String #仓库负责人手机
 
 
   field :data_1, type: String       #备用属性
   field :data_2, type: String
   field :data_3, type: String
   field :data_4, type: String
+
+  #仓库负责人
+  belongs_to :admin, class_name:'User', foreign_key: :admin_id
 
   #采购单
   has_many :jxc_purchase_orders

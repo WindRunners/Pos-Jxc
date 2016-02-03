@@ -91,14 +91,6 @@
       };
 
 
-      $(".hd").click(function(){
-
-        $(".role_pic").attr("src","/images/share_integrals/share_up.png");
-        $(".text-box").toggle();
-        $('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);
-
-      });
-
     $('#btn_mobile').bind('input propertychange', function() {
 
       if($(this).val().length==3||$(this).val().length==8){

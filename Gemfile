@@ -96,14 +96,18 @@ gem 'rest-client'
 gem 'httparty'
 
 gem "puma"
+gem 'mina-puma', :require => false
+
 gem 'message_bus'
 gem 'workflow', '~> 1.2'
 
 gem 'aasm'
 
-gem 'resque', :require => "resque/server"
+gem 'resque'
+gem 'resque-web', require: 'resque_web'
 gem 'resque-pool'
 gem 'resque-scheduler'
+gem 'resque-scheduler-web'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'

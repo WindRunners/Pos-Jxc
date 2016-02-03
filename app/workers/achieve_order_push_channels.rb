@@ -42,7 +42,7 @@ class AchieveOrderPushChannels
         next
       end
 
-      unless r.result
+      if r.result == false and r.error_code != 30608
         fail_channels << channel
       end
 

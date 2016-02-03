@@ -47,7 +47,7 @@ class OrderV1API < Grape::API
         order.customer_integral = current_customer.integral
         order.customer_id = current_customer.id
         if current_customer.integral > 10
-          usecan = (order.totalcost * 0.1 * 100).to_i / 10 * 10  #查询当前订单最多抵扣积分数
+          usecan = (order.totalcost * 0.05 * 100).to_i / 10 * 10  #查询当前订单最多抵扣积分数
           usecan > current_customer.integral ? order.useintegral = (current_customer.integral / 10 * 10) : order.useintegral = usecan
         end
         Rails.logger.info "小c查询结束#{current_customer}"
@@ -244,7 +244,10 @@ class OrderV1API < Grape::API
 
     if order.commit_order!(false)
       ordercompleted = Ordercompleted.build(order)
-      ordercompleted.commit_order!
+      ordercompleted.commit_order2!
+      #移除定时队列
+      # Resque.enqueue_at(24.hours.from_now, AchieveOrderCompleted, order_id)
+      Resque.remove_delayed(AchieveOrderCompleted, params[:orderid])
 
       {result:'success'}
     else

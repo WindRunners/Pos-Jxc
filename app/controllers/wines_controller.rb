@@ -216,6 +216,9 @@ class WinesController < ApplicationController
     end
   end
 
+  def picture_upload
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_wine

@@ -30,7 +30,7 @@ module GiftBagV1APIHelper
       spiritRoomProduct = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :product_id => product_id, :userinfo_id => userinfo_id).first #酒库商品
       product = Product.shop_id(userinfo_id).where(id: product_id).first #商品
 
-      # next if !product.present?
+      next if !product.present?
 
       if spiritRoomProduct.present?
         spiritRoomProduct.count += v['count'] #累加

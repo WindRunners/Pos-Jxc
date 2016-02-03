@@ -5,7 +5,7 @@ class ProductTicketsController < ApplicationController
   # GET /product_tickets
   # GET /product_tickets.json
   def index
-    @product_tickets = ProductTicket.all
+    @product_tickets = ProductTicket.where(:userinfo_id => current_user.userinfo.id)
   end
 
   # GET /product_tickets/1

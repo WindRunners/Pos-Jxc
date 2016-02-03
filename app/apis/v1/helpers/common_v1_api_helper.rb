@@ -46,6 +46,8 @@ module CommonV1APIHelper
           register_card_bag =card_bag.product_ticket.card_bags.build()
           register_card_bag.customer_id = register_customer.id
           register_card_bag.source = 1
+          register_card_bag.start_date = card_bag.start_date
+          register_card_bag.end_date = card_bag.end_date
           register_card_bag.save
 
           #更新记录表状态

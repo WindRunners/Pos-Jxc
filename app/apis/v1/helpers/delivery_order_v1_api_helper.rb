@@ -43,7 +43,7 @@ module DeliveryOrderV1APIHelper
     #接单
     order.take_order!
     #设置配送员属性
-    Order.where(id: order_id).update({'delivery_user_id'=> deliveryUser.id.to_s})
+    Order.where(id: order_id).update({'delivery_user_id'=> deliveryUser.id.to_s,'delivery_real_name'=>deliveryUser.real_name,'delivery_user_desc'=>deliveryUser.user_desc,'delivery_mobile'=>deliveryUser.mobile})
     {msg: '接单成功!', flag: 1}
   end
 

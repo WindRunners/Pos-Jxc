@@ -24,7 +24,10 @@ module Entities
     expose :lng, documentation: {type: String, desc: '经度'}
     expose :lat, documentation: {type: String, desc: '纬度'}
     expose :remarks, documentation: {type: String, desc: '备注'}
-
+    expose :delivery_real_name, documentation: {type: String, desc: '配送员真实名'}
+    expose :delivery_user_desc, documentation: {type: String, desc: '配送员用户描述'}
+    expose :delivery_mobile, documentation: {type: String, desc: '配送员手机号码'}
+    expose :store_name, documentation: {type: String, desc: '门店名称'}
   end
 end
 

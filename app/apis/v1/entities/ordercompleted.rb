@@ -18,6 +18,11 @@ module Entities
     expose :ordergoodcompleteds, using: Entities::Ordergoodcompleted, documentation: {type: Ordergoodcompleted, desc: '订单商品集合'}
     expose :getcoupons, documentation: {type: String, desc: '获赠优惠券列表', is_array: true}
     expose :workflow_state, documentation: {type: String, desc: '订单状态'}
+
+    expose :delivery_real_name, documentation: {type: String, desc: '配送员真实名'}
+    expose :delivery_user_desc, documentation: {type: String, desc: '配送员用户描述'}
+    expose :delivery_mobile, documentation: {type: String, desc: '配送员手机号码'}
+    expose :store_name, documentation: {type: String, desc: '门店名称'}
   end
 end
 

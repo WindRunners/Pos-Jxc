@@ -15,7 +15,9 @@ class OrderTrack
 
   def set_track_info
 
-    state = self.order.current_state.name.to_s
+    order_obj = self.order.present? ? self.order : self.ordercompleted
+    state = order_obj.current_state.name.to_s
+
     if state == 'paid'
       self.remarks = "待抢单"
     elsif state == 'generation'

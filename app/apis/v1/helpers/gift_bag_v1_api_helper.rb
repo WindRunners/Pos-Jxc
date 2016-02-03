@@ -20,6 +20,8 @@ module GiftBagV1APIHelper
 
     return {msg: '当前礼包已经领取,请查看酒库!', flag: 0} if giftBag.sign_status == 1
 
+    fail_product_list = []
+
     #遍历礼包商品信息
     giftBag.product_list.each do |k, v|
 
@@ -30,7 +32,9 @@ module GiftBagV1APIHelper
       spiritRoomProduct = SpiritRoomProduct.where(:spirit_room_id => spiritRoom.id, :product_id => product_id, :userinfo_id => userinfo_id).first #酒库商品
       product = Product.shop_id(userinfo_id).where(id: product_id).first #商品
 
-      next if !product.present?
+      if !product.present?
+        fail_product_list << {'product_id'=>product_id,'userinfo_id'=>userinfo_id}
+      end
 
       if spiritRoomProduct.present?
         spiritRoomProduct.count += v['count'] #累加
@@ -48,6 +52,7 @@ module GiftBagV1APIHelper
     giftBag.sign_status = 1
     giftBag.receiver_customer_id = customerUser.id.to_s
     giftBag.sign_time = Time.now
+    giftBag.fail_product_list = fail_product_list
     giftBag.save! #更新礼包状态
 
     spiritRoomLog = SpiritRoomLog.new
@@ -198,6 +203,8 @@ module GiftBagV1APIHelper
       product_id = k_arry[0] #商品id
       userinfo_id = k_arry[1] #运营商id
       product = Product.shop_id(userinfo_id).where(id: product_id).first #商品
+
+      next if !product.present?
       product['count'] = v['count']
       product_list << product
       product_count+= v['count']

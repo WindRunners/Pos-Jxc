@@ -269,16 +269,23 @@ class ImportBagsController < ApplicationController
     def set_product_list
 
       #回显商品列表
-      @product_list = Product.shop_id(current_user['userinfo_id']).find(@import_bag.product_list.keys) if @import_bag.product_list.present?;
+      @product_list = Product.shop_id(current_user['userinfo_id']).where({:id=>{'$in' => @import_bag.product_list.keys}}) if @import_bag.product_list.present?
 
       if @product_list.present?
+
+        product_list = []
         @product_list.each do |product|
           # puts "数量:#{@import_bag.product_list[product.id.to_s]['count']}"
           product["count"] = @import_bag.product_list[product.id.to_s]['count'] #设置数量属性
+          product_list << product
         end
+
+        @product_list = product_list
       else
         @product_list = []
       end
+
+
     end
 
 

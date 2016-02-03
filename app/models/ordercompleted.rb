@@ -46,6 +46,7 @@ class Ordercompleted
       event :line_order_creat, :transitions_to => :completed
       event :cancel_order, :transitions_to => :cancelled
       event :commit_order, :transitions_to => :completed
+      event :commit_order2, :transitions_to => :completed
     end
 
     # 已取消
@@ -201,6 +202,75 @@ class Ordercompleted
                                                :is_gift => ordergood.is_gift)
     end
     return ordercompleted
+  end
+
+
+  #确认收货
+  def commit_order(auto)
+
+    #==!!!!!!!!!!!!!!!!
+    self.userinfo.integral -= self.goodsvalue.round
+    self.userinfo.user_integrals.build(:integral_date => Time.now,
+                                       :order_no => self.orderno,
+                                       :cash => self.paycost,
+                                       :integral => self.goodsvalue.round,
+                                       :state => 2,
+                                       :type => 6)
+    #==!!!!!!!!!!!!!!!!
+
+    #本单购买总积分
+    integral_order = 0
+    self.ordergoodcompleteds.each do |ordergoodcompleted|
+      integral_order += ordergoodcompleted.integral * ordergoodcompleted.quantity
+    end
+    self.userinfo.user_integrals.build(:integral_date => Time.now,
+                                       :order_no => self.orderno,
+                                       :cash => self.paycost,
+                                       :integral => integral_order,
+                                       :state => 2,
+                                       :type => 5)
+
+    current_customer = Customer.find(self.customer_id)
+    if auto == false
+      #计算个人本次购买所获积分
+      current_customer.integral += integral_order
+    end
+
+    if self.getintegral > 0
+      #赠送活动积分
+      current_customer.integral += self.getintegral
+    end
+    current_customer.save!
+
+    if !self.getcoupons.empty?
+
+      #获取优惠劵暂时不用
+      # Resque.enqueue(AchieveOrderSendCoupons, self.id)
+
+    end
+
+    #增加小B用户积分
+    if self.useintegral > 0
+      self.userinfo.integral += self.useintegral #积分核增
+      self.userinfo.user_integrals.build(:integral_date => Time.now,
+                                         :order_no => self.orderno,
+                                         :cash => self.paycost,
+                                         :integral => self.useintegral,
+                                         :state => 1,
+                                         :type => 2)
+    end
+
+    #存入统计表
+    retailDate = Time.now.strftime("%Y-%m-%d")
+    self.ordergoodcompleteds.each do |og|
+      statistic = Statistic.new(:retailDate => retailDate)
+      statistic.qrcode = og.qrcode
+      statistic.productName = og.title
+      statistic.purchasePrice = og.purchasePrice
+      statistic.retailPrice = og.price
+      statistic.quantity = og.quantity
+      statistic.save
+    end
   end
 
   after_save do

@@ -212,7 +212,7 @@ Rails.application.routes.draw do
 
   mount ElephantV1Api => '/api/v1/'
 
-  mount Resque::Server.new, :at => "/resque"
+  mount ResqueWeb::Engine => "/resque"
 
   namespace :api do
     namespace :v1 do

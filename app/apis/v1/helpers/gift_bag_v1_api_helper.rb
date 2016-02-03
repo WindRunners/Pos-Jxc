@@ -64,10 +64,16 @@ module GiftBagV1APIHelper
 
 
   #礼包认领
-  def GiftBagV1APIHelper.claim_list(customerUser)
+  def GiftBagV1APIHelper.claim_list(customerUser,postInfo)
 
-    giftBags = GiftBag.where(:receiver_mobile => customerUser.mobile, :expiry_time.gt => Time.now, :sign_status => 0).order('expiry_time desc')
+    page = postInfo['page']
+
     giftBagsBak = []
+
+    # wait_giftBags = GiftBag.where(:receiver_mobile => customerUser.mobile, :expiry_time.gt => Time.now, :sign_status => 0).order('expiry_time desc')
+
+    giftBags = GiftBag.where(:receiver_mobile => customerUser.mobile).order('sign_status asc ,expiry_time desc').page(page).per(20)
+
     #通过查询得到的集合,循环块内改变块内元素,不影响集合信息
     giftBags.each do |giftBag|
 
@@ -87,10 +93,10 @@ module GiftBagV1APIHelper
   end
 
   #礼包历史列表
-  def GiftBagV1APIHelper.his_list(customerUser)
+  def GiftBagV1APIHelper.his_list(customerUser,postInfo)
+    page = postInfo['page']
 
-
-    giftBags = GiftBag.where({"$or" => [{:customer_id=> customerUser.id.to_s}, {:receiver_customer_id =>customerUser.id.to_s}]}).order('updated_at desc')
+    giftBags = GiftBag.where({"$or" => [{:customer_id=> customerUser.id.to_s}, {:receiver_customer_id =>customerUser.id.to_s}]}).order('updated_at desc').page(page).per(20)
     giftBagsBak = []
     #通过查询得到的集合,循环块内改变块内元素,不影响集合信息
     giftBags.each do |giftBag|
@@ -214,6 +220,12 @@ module GiftBagV1APIHelper
       num+=1
     end
     {msg: '同步失效礼包成功!', flag: 1, data: num}
+  end
+
+  #礼包认领数量
+  def GiftBagV1APIHelper.claim_rows(customerUser)
+
+    return GiftBag.where(:receiver_mobile => customerUser.mobile, :expiry_time.gt => Time.now, :sign_status => 0).count
   end
 
   private

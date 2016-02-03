@@ -451,11 +451,11 @@ class Order
     paid_count = self.userinfo.orders.where(:workflow_state => :paid).count
 
     if workflow_state == 'paid'
-      data = {
-          orderno: self.orderno,
-          order_id: self.id
-      }
-      MessageBus.publish "/channel/#{self.userinfo.id}", data
+      # data = {
+      #     orderno: self.orderno,
+      #     order_id: self.id
+      # }
+      # MessageBus.publish "/channel/#{self.userinfo.id}", data
 
       # push_log = PushLog.create(order_id:self.id, userinfo_id:self.userinfo.id)
       #

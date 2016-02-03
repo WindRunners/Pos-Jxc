@@ -170,10 +170,10 @@ a {
     margin-right: auto;
     line-height: 20px;
     text-align: center;
-    color: #cccccc;
+    color: #8c8c8c;
     font-size: 150%;
     margin-top: 4%;
-    border: 1px solid #e5e5e5;
+    border: 1px solid #8c8c8c;
     -webkit-appearance: none;
 }
 
@@ -194,7 +194,7 @@ a {
 }
 .role_content_box{
     font-family: "SimHei";
-    color: #4d4d4d;
+    color: #464646;
     font-size: 120%;
     margin-top: 5%;
     padding-left:5%;

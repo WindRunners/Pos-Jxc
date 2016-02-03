@@ -5,7 +5,13 @@ module Entities
     expose :read_num, documentation: {type: Integer, desc: '阅读量'}
     # expose :is_top, documentation: {type: Integer, desc: '是否置顶'}
     # expose :sequence, documentation: {type: Integer, desc: '排序字段'}
-    expose :source, documentation: {type: String, desc: '来源'}
+    expose :source, documentation: {type: String, desc: '来源'}do |announcement, options|
+      if announcement.source.present?
+        announcement.source =announcement.source
+      else
+        announcement.source ='小达快讯'
+      end
+    end
     expose :pic_path, documentation: {type: Array, desc: '列表图片路径数组'} do |announcement, options|
       if announcement.pic_thumb_path.present? && !announcement.pic_thumb_path.empty?
         announcement.pic_path = announcement.pic_thumb_path

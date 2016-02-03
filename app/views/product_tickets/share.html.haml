@@ -61,17 +61,19 @@
 
 
 :javascript
+
+
+  function mobile_submit_change(){
+
+    $(".btn_style_04").css('background-color','#fa6261');
+    $("#btn_register").click();
+
+  };
+
+
   $(function(){
 
      $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
-
-    $('#btn_mobile').bind('input propertychange', function() {
-      //$('.msg').html($(this).val().length + ' characters');
-      if ($(this).val().length>=11){
-      $(".btn_style_04").css('background-color','#F50806');
-      };
-    });
-
 
 
      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
@@ -86,14 +88,16 @@
       };
 
 
-      //$(".hd").click(function(){
-      //
-      //  $(".role_pic").attr("src","/images/share_integrals/share_up.png");
-      //  $(".text-box").toggle();
-      //  $('html,body').animate({scrollTop:$('.text-box p').offset().top}, 800);
-      //
-      //});
+    $('#btn_mobile').bind('input propertychange', function() {
 
+      if($(this).val().length==3||$(this).val().length==8){
+        $(this).val($(this).val() + ' ');
+      }
+      if ($(this).val().length>=13){
+        $(this).blur();
+        setTimeout('mobile_submit_change()',1500);
+      };
+    });
 
 
 
@@ -103,12 +107,13 @@
 
 
   function register(){
-    var mobile = $("input:text").val();
+    var mobile = $("input:text").val().replace(/\s+/g,"");
     var product_ticket_id = $("#product_ticket_id").val();
     var shared_customer_id = $("#shared_customer_id").val();
-    if (mobile == undefined || mobile == ""|| mobile.length!=11) {
+    var pattern = /^1[34578]\d{9}$/;
+    if (!pattern.test(mobile)) {
      alert("请输入正确的手机号码！")
-     return false;
+          return false;
     };
 
     $.ajax({

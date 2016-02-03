@@ -184,4 +184,69 @@ class JxcSellStockOutBill < JxcBaseModel
     return result
   end
 
+  #POS生成销售出库单
+  def self.generate_sell_out_bill(current_user,total_amount,receivable_amount,bill_detail_array_json)
+    #结果集
+    result = {}
+    result[:flag] = 0
+
+    store = current_user.jxc_storage #当前用户对应的仓库信息
+    retail_consumer = JxcContactsUnit.find_by(:unit_name => '零售客户') #零售客户
+    # financial_account
+
+    begin
+      #录入销售出库单
+      @sell_out_bill = self.new
+      @sell_out_bill.bill_no = @sell_out_bill.generate_bill_no
+      @sell_out_bill.jxc_storage = store
+      @sell_out_bill.consumer = retail_consumer
+      @sell_out_bill.collection_date = Time.now #收款日期
+      @sell_out_bill.stock_out_date = Time.now  #出库日期
+      @sell_out_bill.handler << current_user  #经手人
+      @sell_out_bill.bill_maker << current_user #制单人
+      @sell_out_bill.total_amount = total_amount  #总金额
+      @sell_out_bill.receivable_amount = receivable_amount  #实收金额
+      @sell_out_bill.discount_amount = total_amount.to_d - receivable_amount.to_d #优惠
+
+      @sell_out_bill.save
+
+      #单据明细
+      bill_detail_array = JSON.parse(bill_detail_array_json)
+      bill_detail_array.each do |bill_detail|
+
+        @temp_bill_detail = JxcBillDetail.new
+
+        @temp_bill_detail.resource_product_id = bill_detail[:product_id]
+        @temp_bill_detail.unit = bill_detail[:unit]
+        @temp_bill_detail.price = bill_detail[:price]
+        @temp_bill_detail.count = bill_detail[:count]
+        @temp_bill_detail.amount = bill_detail[:price].to_d * bill_detail[:count].to_d
+
+        @temp_bill_detail.jxc_storage = store
+        @temp_bill_detail.jxc_contacts_unit = retail_consumer
+        @temp_bill_detail.jxc_sell_stock_out_bill = @sell_out_bill
+
+        @temp_bill_detail.save
+      end
+
+    rescue
+      result[:msg] = '销售出库单生成失败，请重试'
+      return result
+    end
+
+    #审核单据
+    audit_result = @sell_out_bill.audit(current_user)
+
+    #返回结果集
+    if audit_result[:flag] == 1
+      result[:flag] = 1
+      result[:msg] = '销售出库单成功录入，且库存已成功转化。'
+    else
+      result[:flag] = 0
+      result[:msg] = audit_result[:msg]
+    end
+
+    result
+  end
+
 end

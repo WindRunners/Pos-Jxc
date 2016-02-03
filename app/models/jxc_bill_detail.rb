@@ -38,7 +38,7 @@ class JxcBillDetail
 
   belongs_to :jxc_cost_adjust_bill, foreign_key: :cost_adjust_bill_id #成本调整单
 
-  # has_many :traceabilities #产品溯源条码
+  has_many :traceabilities #产品溯源条码
 
   #计算商品金额
   def calculate_amount(price,count)

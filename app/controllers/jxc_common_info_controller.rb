@@ -15,12 +15,11 @@ class JxcCommonInfoController < ApplicationController
 
     #如果传入单位类型ID为空，则查询所有供应商
     if unitType.blank?
-      suppliersList = JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total'=>JxcContactsUnit.where(:unit_property => '0',:unit_name => /#{unit_param}/).count,'rows'=>suppliersList}
+      suppliersList = JxcContactsUnit.and({:unit_property => '0'},{:unit_name => /#{unit_param}/})
     else
-      suppliersList = JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total'=>JxcContactsUnit.where(unit_property:'0',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows'=>suppliersList}
+      suppliersList = JxcContactsUnit.and({:unit_property => '0'},{:unit_name => /#{unit_param}/},{:unit_type => unitType})
     end
+    render json: {'total' => suppliersList.count, 'rows' => suppliersList.page(page).per(rows)}
   end
 
   #客户
@@ -32,12 +31,12 @@ class JxcCommonInfoController < ApplicationController
 
     #如果传入单位类型ID为空，则查询所有客户
     if unitType.blank?
-      consumersList = JxcContactsUnit.where(unit_property:'1',:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total'=>JxcContactsUnit.where(unit_property:'1',:unit_name => /#{unit_param}/).count,'rows'=>consumersList}
+      consumersList = JxcContactsUnit.and({unit_property:'1'},{:unit_name => /#{unit_param}/})
     else
-      consumersList = JxcContactsUnit.where(unit_property:'1',unit_type:unitType,:unit_name => /#{unit_param}/).page(page).per(rows)
-      render json: {'total'=>JxcContactsUnit.where(unit_property:'1',unit_type:unitType,:unit_name => /#{unit_param}/).count,'rows'=>consumersList}
+      consumersList = JxcContactsUnit.and({unit_property:'1'},{:unit_name => /#{unit_param}/},{unit_type:unitType})
     end
+
+    render json: {'total' => consumersList.count,'rows' => consumersList.page(page).per(rows)}
   end
 
   #进销存仓库类型
@@ -51,15 +50,46 @@ class JxcCommonInfoController < ApplicationController
     page = params[:page]
     rows = params[:rows]
     store_param = params[:searchParam] || ''
+    resultList = []
+
+    if storage_type.present?
+      storageList = JxcStorage.includes(:admin).and({storage_type:storage_type},{:storage_name => /#{store_param}/})
+    else
+      storageList = JxcStorage.includes(:admin).where({:storage_name => /#{store_param}/})
+    end
+
+    if storageList.present?
+      storageList.page(page).per(rows).each do |storage|
+        storage[:admin_name] = storage.admin.name
+        storage[:admin_phone] = storage.admin.mobile
+        resultList << storage
+      end
+    end
+
+    render json:{'total' => storageList.count, 'rows' => resultList}
 
     #如果传入仓库类型ID为空，则查询所有仓库
-    if storage_type.blank?
-      storageList = JxcStorage.where(:storage_name => /#{store_param}/).page(page).per(rows)
-      render json:{'total'=>JxcStorage.where(:storage_name => /#{store_param}/).count,'rows'=>storageList}
-    else
-      storageList = JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).page(page).per(rows)
-      render json:{'total'=>JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).count,'rows'=>storageList}
-    end
+    # if storage_type.blank?
+    #   storageList = JxcStorage.includes(:admin).where(:storage_name => /#{store_param}/).page(page).per(rows)
+    #   if storageList.present?
+    #     storageList.each do |storage|
+    #       storage[:admin_name] = storage.admin.name
+    #       storage[:admin_phone] = storage.admin.mobile
+    #       resultList << storage
+    #     end
+    #   end
+    #   render json:{'total'=>JxcStorage.where(:storage_name => /#{store_param}/).count,'rows'=>resultList}
+    # else
+    #   storageList = JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).page(page).per(rows)
+    #   if storageList.present?
+    #     storageList.each do |storage|
+    #       storage[:admin_name] = storage.admin.name
+    #       storage[:admin_phone] = storage.admin.mobile
+    #       resultList << storage
+    #     end
+    #   end
+    #   render json:{'total'=>JxcStorage.where(storage_type:storage_type,:storage_name => /#{store_param}/).count,'rows'=>resultList}
+    # end
   end
 
   #选择进销存仓库负责人

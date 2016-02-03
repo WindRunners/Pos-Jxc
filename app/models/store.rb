@@ -63,6 +63,7 @@ class Store
 
     storeId = 0
     distance = 0
+    store_name = ''
     if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #
 
       location = [order.location.to_a[1],order.location.to_a[0]] #调整经纬度
@@ -77,6 +78,7 @@ class Store
       if near_store.present?
         storeId = near_store.id
         distance = get_distance_for_points(near_store.location.to_a[0], near_store.location.to_a[1], order.location.to_a[1], order.location.to_a[0])
+        store_name = near_store.name
       end
     end
 
@@ -84,6 +86,7 @@ class Store
     if storeId == 0
       near_store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
       storeId = near_store.id if near_store.present?
+      store_name = near_store.name
     end
 
     channels = []
@@ -101,7 +104,7 @@ class Store
 
 
     #更新订单门店及配送距离
-    Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance})
+    Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance,'store_name'=>store_name})
     OrderStateChange.find(order_id).update(:store_id => storeId) #更新订单总表门店信息
   end
 

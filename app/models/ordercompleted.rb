@@ -40,6 +40,10 @@ class Ordercompleted
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
+  field :delivery_real_name, type: String #配送员真实名
+  field :delivery_user_desc, type: String #配送员用户描述
+  field :delivery_mobile, type: String #配送员手机号码
+  field :store_name, type: String #门店名称
 
   workflow do
     state :new do
@@ -185,7 +189,11 @@ class Ordercompleted
                                         :distance => order.distance,
                                         :delivery_user_id => order.delivery_user_id,
                                         :coupons => order.coupons,
-                                        :activities => order.activities
+                                        :activities => order.activities,
+                                        :delivery_real_name => order.delivery_real_name,
+                                        :delivery_user_desc => order.delivery_user_desc,
+                                        :delivery_mobile => order.delivery_mobile,
+                                        :store_name => order.store_name
                                          )
 
     order.ordergoods.each do |ordergood|

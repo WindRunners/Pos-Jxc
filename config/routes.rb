@@ -442,6 +442,7 @@ Rails.application.routes.draw do
   post 'jxc_sell_stock_out_bills/audit'
   post 'jxc_sell_stock_out_bills/strike_a_balance'
   post 'jxc_sell_stock_out_bills/invalid'
+  post 'jxc_sell_stock_out_bills/generate_sell_out_bill'
   resources :jxc_sell_stock_out_bills
 
   post 'jxc_sell_orders/audit'

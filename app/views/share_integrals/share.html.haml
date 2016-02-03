@@ -62,6 +62,18 @@
     %input#shared_customer_id{:type => "hidden", :value => @shared_customer_id }
 
 :javascript
+
+
+  function mobile_submit_change(){
+
+    $(".btn_style_04").css('background-color','#fa6261');
+    $("#btn_register").click();
+
+  };
+
+
+
+
   $(function(){
 
      $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
@@ -93,8 +105,8 @@
         $(this).val($(this).val() + ' ');
       }
       if ($(this).val().length>=13){
-      $(".btn_style_04").css('background-color','#fa6261');
-      $("#btn_register").click();
+        $(this).blur();
+        setTimeout('mobile_submit_change()',1500);
       };
     });
 

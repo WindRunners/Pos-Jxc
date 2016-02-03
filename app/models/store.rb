@@ -106,6 +106,17 @@ class Store
     #更新订单门店及配送距离
     Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance,'store_name'=>store_name})
     OrderStateChange.find(order_id).update(:store_id => storeId) #更新订单总表门店信息
+
+
+    #推送web端
+    data = {
+        orderno: order.orderno,order_id: order.id
+    }
+    web_users = User.where({'store_ids'=>storeId})
+    web_users.each do |web_user|
+      MessageBus.publish "/channel/#{web_user.id.to_s}", data
+    end
+
   end
 
 

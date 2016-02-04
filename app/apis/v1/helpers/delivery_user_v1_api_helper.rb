@@ -61,10 +61,7 @@ module DeliveryUserV1APIHelper
         end
       end
 
-      deliveryUser.channel_ids << channel unless deliveryUser.channel_ids.include? channel
-
-
-      deliveryUser.push_channels.find_or_create_by(channel_id: channel)
+      deliveryUser.push_channels.find_or_create_by(channel_id: channel) if channel.present?
 
 
       deliveryUser.set_delivery_user_track

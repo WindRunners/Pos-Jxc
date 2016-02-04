@@ -33,10 +33,10 @@ class DeliveryUserV1API < Grape::API
     requires :verifycode, type: String, desc: '验证码'
     optional :longitude, type: Float, desc: '位置纬度'
     optional :latitude, type: Float, desc: '位置经度'
-    optional :position, type: String, desc: '位置描述' , default: 'location failure'
-    optional :province, type: String, desc: '定位所在省' , default: 'location failure'
-    optional :city,type: String, desc: '定位所在市区' , default: 'location failure'
-    optional :district,type: String, desc: '定位所在县区' , default: 'location failure'
+    optional :position, type: String, desc: '位置描述', default: 'location failure'
+    optional :province, type: String, desc: '定位所在省', default: 'location failure'
+    optional :city, type: String, desc: '定位所在市区', default: 'location failure'
+    optional :district, type: String, desc: '定位所在县区', default: 'location failure'
   end
   post 'register' do
 
@@ -86,13 +86,14 @@ class DeliveryUserV1API < Grape::API
     mobile = params[:mobile]
     verifycode = params[:verifycode]
 
-    channel = params[:channel_type] + "|" + params[:channel_id]
+    channel = ''
+    channel = params[:channel_type] + "|" + params[:channel_id] if params[:channel_id].present?
 
     return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
     return {msg: '验证码不合法', flag: 0} if !RegexV1APIHelper.verifycode(verifycode)
 
     status 200 #修改post默认返回状态
-    data = DeliveryUserV1APIHelper.login(mobile,verifycode, channel)
+    data = DeliveryUserV1APIHelper.login(mobile, verifycode, channel)
 
     if (data.class == DeliveryUser)
       present data, with: Entities::DeliveryUser
@@ -108,7 +109,7 @@ class DeliveryUserV1API < Grape::API
   post 'get_login_verifycode' do
 
     mobile = params[:mobile]
-    return  {msg: '手机号不合法!',flag:0} if !RegexV1APIHelper.mobile(mobile)
+    return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
 
     status 200 #修改post默认返回状态
     DeliveryUserV1APIHelper.get_login_verifycode(mobile)
@@ -141,7 +142,6 @@ class DeliveryUserV1API < Grape::API
     result = DeliveryUser.where(mobile: mobile).delete
     {msg: "配送员删除成功,信息为#{result.to_json}!", flag: 1}
   end
-
 
 
   #需要身份验证的接口
@@ -179,7 +179,7 @@ class DeliveryUserV1API < Grape::API
 
       status 200 #修改post默认返回状态
 
-      Rails.logger.info  "配送员注销参数为:#{declared(params)}"
+      Rails.logger.info "配送员注销参数为:#{declared(params)}"
 
       channel = params[:channel_type] + "|" + params[:channel_id]
 
@@ -187,9 +187,13 @@ class DeliveryUserV1API < Grape::API
       current_deliveryUser.authentication_token = ''
       current_deliveryUser.save
 
-      current_deliveryUser.push_channels.find_by(channel_id: channel).delete
+      begin
+        current_deliveryUser.push_channels.find_by(channel_id: channel).delete
+      rescue
+      end
 
-      Rails.logger.info  "配送员注销成功"
+
+      Rails.logger.info "配送员注销成功"
       {msg: "注销成功!", flag: 1}
     end
 
@@ -199,17 +203,17 @@ class DeliveryUserV1API < Grape::API
     end
     params do
       requires :token, type: String, desc: '身份认证token'
-      requires :work_status, type: Integer, desc: '0:离岗 1:在岗',values:[1,0]
+      requires :work_status, type: Integer, desc: '0:离岗 1:在岗', values: [1, 0]
     end
     post 'update_work_status' do
 
       status 200 #修改post默认返回状态
       status = params[:work_status]
       #更新配送员状态
-      if current_deliveryUser.update({'work_status'=>status})
-        {msg: status==1? '在岗成功!':'离岗成功！' , flag: 1}
+      if current_deliveryUser.update({'work_status' => status})
+        {msg: status==1 ? '在岗成功!' : '离岗成功！', flag: 1}
       else
-        {msg: '操作失败！' , flag: 0}
+        {msg: '操作失败！', flag: 0}
       end
 
     end

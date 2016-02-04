@@ -93,7 +93,7 @@ class Store
     dusers = DeliveryUser.where(:store_ids => storeId, :work_status => 1)
 
     dusers.each do |user|
-      channels.concat user.channel_ids if user.channel_ids.present?
+      channels.concat user.push_channels.collect(&:channel_id)
     end
 
     logger.info channels

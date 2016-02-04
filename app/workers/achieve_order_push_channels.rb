@@ -46,6 +46,13 @@ class AchieveOrderPushChannels
         fail_channels << channel
       end
 
+      if r.error_code == 30608
+        begin
+          PushChannel.find_by(channel_id: channel).delete
+        rescue
+        end
+      end
+
       json = r.to_json
 
       json[:pushed_at] = Time.now

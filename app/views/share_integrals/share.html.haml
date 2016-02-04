@@ -93,10 +93,10 @@
 
     $('#btn_mobile').bind('input propertychange', function() {
 
-      if($(this).val().length==3||$(this).val().length==8){
-        $(this).val($(this).val() + ' ');
-      }
-      if ($(this).val().length>=13){
+      //if($(this).val().length==3||$(this).val().length==8){
+      //  $(this).val($(this).val() + ' ');
+      //}
+      if ($(this).val().length>=11){
         $(this).blur();
         setTimeout('mobile_submit_change()',1000);
       };
@@ -107,7 +107,8 @@
 
 
   function register(){
-    var mobile = $("input:text").val().replace(/\s+/g,"");
+      var mobile = $("input:text").val();
+    //var mobile = $("input:text").val().replace(/\s+/g,"");
     var share_integral_id = $("#share_integral_id").val();
     var shared_customer_id = $("#shared_customer_id").val();
 

@@ -162,7 +162,7 @@ class JxcCommonInfoController < ApplicationController
 
     conditions = {
         category_id: params[:category_id],
-        tag:'JYD',
+        # tag:'JYD',
         searchText: product_param,
         page: page,
         per: rows

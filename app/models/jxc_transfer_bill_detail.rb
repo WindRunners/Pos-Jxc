@@ -36,7 +36,11 @@ class JxcTransferBillDetail
 
   #查询关联商品信息
   def product
-    @product = Warehouse::Product.find(self.resource_product_id)
+    begin
+      @product = Warehouse::Product.find(self.resource_product_id)
+    rescue
+      @product = nil
+    end
   end
 
   def assign_out_stock

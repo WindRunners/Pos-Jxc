@@ -57,7 +57,11 @@ class JxcBillDetail
   end
 
   def product
-    @product = Warehouse::Product.find(self.resource_product_id)
+    begin
+      @product = Warehouse::Product.find(self.resource_product_id)
+    rescue
+      @product = nil
+    end
   end
 
   #获取

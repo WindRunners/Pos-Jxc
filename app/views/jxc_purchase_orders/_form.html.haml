@@ -106,31 +106,32 @@
           %tbody#billDetail
             - if !@bill_details.blank?
               - @bill_details.each do |billDetail|
-                %tr{id:billDetail.product.id}
-                  %td
-                    = billDetail.product.title
-                    %input#billDetail_id{type:'hidden',name:'billDetail[][id]',value:billDetail.id}
-                    %input#billDetail_product_id{type:'hidden',name:'billDetail[][product_id]',value:billDetail.product.id}
-                  %td
-                    = billDetail.product.qrcode
-                  %td
-                    = billDetail.product.specification
-                  %td
-                    = billDetail.unit
-                  %td
-                    %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
-                  %td
-                    %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][purchase_price]',value:billDetail.price,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
-                  %td
-                    %input#billDetail_amount.billDetailInput{type:'text',name:'billDetail[][amount]',value:billDetail.amount,readonly:true}
-                  %td
-                    %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
-                  %td
-                    %input#billDetail_have_done_count.billDetailInput{type:'text',name:'billDetail[][receive_count]',value:billDetail[:receive_count],onblur:'calcOtherCount(\''+billDetail.product.id+'\')'}
-                  %td
-                    %input#billDetail_other_count.billDetailInput{type:'text',name:'billDetail[][other_count]',value:billDetail[:other_count],readonly:true}
-                  %td.del-icon-td
-                    %i.red.ace-icon.fa.fa-trash-o.bigger-130.del-icon{onclick:'delBillDetail("'+billDetail.product.id+'")'}
+                - if billDetail.product.present?
+                  %tr{id:billDetail.product.id}
+                    %td
+                      = billDetail.product.title
+                      %input#billDetail_id{type:'hidden',name:'billDetail[][id]',value:billDetail.id}
+                      %input#billDetail_product_id{type:'hidden',name:'billDetail[][product_id]',value:billDetail.product.id}
+                    %td
+                      = billDetail.product.qrcode
+                    %td
+                      = billDetail.product.specification
+                    %td
+                      = billDetail.unit
+                    %td
+                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
+                    %td
+                      %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][purchase_price]',value:billDetail.price,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
+                    %td
+                      %input#billDetail_amount.billDetailInput{type:'text',name:'billDetail[][amount]',value:billDetail.amount,readonly:true}
+                    %td
+                      %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
+                    %td
+                      %input#billDetail_have_done_count.billDetailInput{type:'text',name:'billDetail[][receive_count]',value:billDetail[:receive_count],onblur:'calcOtherCount(\''+billDetail.product.id+'\')'}
+                    %td
+                      %input#billDetail_other_count.billDetailInput{type:'text',name:'billDetail[][other_count]',value:billDetail[:other_count],readonly:true}
+                    %td.del-icon-td
+                      %i.red.ace-icon.fa.fa-trash-o.bigger-130.del-icon{onclick:'delBillDetail("'+billDetail.product.id+'")'}
 
     %tr
       %td

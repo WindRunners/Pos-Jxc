@@ -122,7 +122,7 @@
                     %td
                       %input#billDetail_package_count.billDetailInput{type:'text',name:'billDetail[][package_count]',value:billDetail.package_count,onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
                     %td
-                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count}
+                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,readonly:true}
                     %td
                       %input#billDetail_price.billDetailInput{type:'text',name:'billDetail[][purchase_price]',value:billDetail.price,onblur:'calcBillDetailAmount(\''+billDetail.product.id+'\')'}
                     %td

@@ -18,11 +18,11 @@ class AchieveOrderPushChannels
     }
 
     android_msg = {
-      title: "小达快跑",
-      description: "您有新的订单,请注意查收",
-      notification_builder_id: 0,
-      notification_basic_style: "2",
-      open_type:3
+        title: "小达快跑",
+        description: "您有新的订单,请注意查收",
+        notification_builder_id: 0,
+        notification_basic_style: "2",
+        open_type: 3
     }
 
     push_log = PushLog.find(log_id)
@@ -42,18 +42,34 @@ class AchieveOrderPushChannels
         next
       end
 
-      if r.result == false and r.error_code != 30608
+      if r.result == false and ![30602, 30608].include? r.error_code
         fail_channels << channel
       end
 
+      begin
+        pushChannel = PushChannel.find_by(channel_id: channel)
+
+        if r.result
+          pushChannel.inc(success_count: 1)
+        elsif [30602, 30608].include? r.error_code
+          pushChannel.destroy
+        else
+          pushChannel.inc(fail_count: 1)
+        end
+      rescue
+      end
+
+
       json = r.to_json
 
+      json[:channel] = channel
       json[:pushed_at] = Time.now
 
       push_log.logs << json
 
       Rails.logger.info json
     end
+
     push_log.save!
 
 

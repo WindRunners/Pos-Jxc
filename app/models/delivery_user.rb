@@ -39,6 +39,7 @@ class DeliveryUser
   has_many :orders  #关联订单 配送很多个订单
   has_many :ordercompleteds #关联已完成的订单 已经配送完成的订单
   has_many :feedbacks #关联建议反馈 用户反馈的多条建议
+  has_many :push_channels #管理推送通道
 
 
 

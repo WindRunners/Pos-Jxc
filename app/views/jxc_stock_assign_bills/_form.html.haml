@@ -80,28 +80,29 @@
           %tbody#billDetail
             - if @bill_details.present?
               - @bill_details.each do |billDetail|
-                %tr{id:billDetail.product.id}
-                  %td
-                    = billDetail.product.title
-                    %input#billDetail_id{type:'hidden',name:'billDetail[][id]',value:billDetail.id}
-                    %input#billDetail_product_id{type:'hidden',name:'billDetail[][product_id]',value:billDetail.product.id}
-                  %td
-                    = billDetail.product.qrcode
-                  %td
-                    = billDetail.product.specification
-                  %td
-                    = billDetail.unit
-                  %td
-                    1&times;&nbsp;
-                    %input#billDetail_pack_spec.billDetailInput{type:'text',name:'billDetail[][pack_spec]',value:billDetail.pack_spec,style:'width:50px;',onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
-                  %td
-                    %input#billDetail_package_count.billDetailInput{type:'text',name:'billDetail[][package_count]',value:billDetail.package_count,onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
-                  %td
-                    %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count}
-                  %td
-                    %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
-                  %td.del-icon-td
-                    %i.red.ace-icon.fa.fa-trash-o.bigger-130.del-icon{onclick:'delBillDetail("'+billDetail.product.id+'")'}
+                - if billDetail.product.present?
+                  %tr{id:billDetail.product.id}
+                    %td
+                      = billDetail.product.title
+                      %input#billDetail_id{type:'hidden',name:'billDetail[][id]',value:billDetail.id}
+                      %input#billDetail_product_id{type:'hidden',name:'billDetail[][product_id]',value:billDetail.product.id}
+                    %td
+                      = billDetail.product.qrcode
+                    %td
+                      = billDetail.product.specification
+                    %td
+                      = billDetail.unit
+                    %td
+                      1&times;&nbsp;
+                      %input#billDetail_pack_spec.billDetailInput{type:'text',name:'billDetail[][pack_spec]',value:billDetail.pack_spec,style:'width:50px;',onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
+                    %td
+                      %input#billDetail_package_count.billDetailInput{type:'text',name:'billDetail[][package_count]',value:billDetail.package_count,onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
+                    %td
+                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,readonly:true}
+                    %td
+                      %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
+                    %td.del-icon-td
+                      %i.red.ace-icon.fa.fa-trash-o.bigger-130.del-icon{onclick:'delBillDetail("'+billDetail.product.id+'")'}
 
 
     - if @operation == 'show'
@@ -187,7 +188,7 @@
       queryParams:{},
       columns:[[
         {title:'仓库名称',field:'storage_name',width:'18%'},
-        {title:'管理人',field:'admin',width:'18%'},
+        {title:'管理人',field:'admin_name',width:'18%'},
         {title:'联系电话',field:'admin_phone',width:'18%'},
         {title:'仓库地址',field:'address',width:'28%'},
         {title:'备注',field:'memo',width:'18%'}

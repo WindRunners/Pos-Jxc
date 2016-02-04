@@ -38,6 +38,10 @@ class JxcStorageJournal
 
   # 定义获取 商品信息的方法
   def product
-    @product = Warehouse::Product.find(self.resource_product_id)
+    begin
+      @product = Warehouse::Product.find(self.resource_product_id)
+    rescue
+      @product = nil
+    end
   end
 end

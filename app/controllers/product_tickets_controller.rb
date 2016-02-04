@@ -1,6 +1,6 @@
 class ProductTicketsController < ApplicationController
   before_action :set_product_ticket, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share]
+  skip_before_action :authenticate_user!, only: [:register, :share_time_check, :share,:product_ticket_role]
 
   # GET /product_tickets
   # GET /product_tickets.json

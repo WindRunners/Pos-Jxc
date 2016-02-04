@@ -213,7 +213,8 @@ class DeliveryUserV1API < Grape::API
       deliveryUser = current_deliveryUser
       #更新配送员状态
       if deliveryUser.update({'work_status' => status})
-        deliveryUser.push_channels.find_or_create_by(channel_id: channel) if channel.present?
+        channel_id = params[:channel_id]
+        deliveryUser.push_channels.find_or_create_by(channel_id: channel_id) if channel_id.present?
         {msg: status==1 ? '在岗成功!' : '离岗成功！', flag: 1}
       else
         {msg: '操作失败！', flag: 0}

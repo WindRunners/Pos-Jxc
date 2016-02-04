@@ -8,7 +8,7 @@ class JxcSellStockOutBill < JxcBaseModel
   field :customize_bill_no, type: String  #自定义单据编号
   field :collection_date, type: DateTime  #收款日期
   field :stock_out_date, type: DateTime   #出库日期
-  field :current_collection, type: BigDecimal  #本次收款
+  field :current_collection, type: BigDecimal, default: 0.00  #本次收款
   field :remark, type: String             #备注
 
   field :total_amount, type: BigDecimal         #合计金额

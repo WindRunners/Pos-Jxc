@@ -110,7 +110,7 @@ class GiftBagV1API < Grape::API
     end
 
 
-    desc '礼包认领列表' do
+    desc '礼包待签收数量' do
       detail '数量'
     end
     params do

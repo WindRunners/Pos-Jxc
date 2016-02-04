@@ -204,13 +204,17 @@ class DeliveryUserV1API < Grape::API
     params do
       requires :token, type: String, desc: '身份认证token'
       requires :work_status, type: Integer, desc: '0:离岗 1:在岗', values: [1, 0]
+      optional :channel_id, type: String, desc: '设备channel_id'
     end
     post 'update_work_status' do
 
       status 200 #修改post默认返回状态
       status = params[:work_status]
+      deliveryUser = current_deliveryUser
       #更新配送员状态
-      if current_deliveryUser.update({'work_status' => status})
+      if deliveryUser.update({'work_status' => status})
+        channel_id = params[:channel_id]
+        deliveryUser.push_channels.find_or_create_by(channel_id: channel_id) if channel_id.present?
         {msg: status==1 ? '在岗成功!' : '离岗成功！', flag: 1}
       else
         {msg: '操作失败！', flag: 0}

@@ -3,7 +3,6 @@ class PushChannel
   include Mongoid::Timestamps
 
   belongs_to :delivery_user
-  has_many :push_logs
 
   field :channel_id #移动设备推送ID
   field :success_count, type: Integer, default: 0 #成功次数

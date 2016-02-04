@@ -8,7 +8,7 @@
   }
 </script>
 
-<form id="form_id" action="<%= panic_buying_add_product_url(@panic_buying_id) %>" method="post" data-remote="true">
+<form id="form_id" action="<%= panic_buying_add_product_path(@panic_buying_id) %>" method="post" data-remote="true">
   <input type="hidden" name="panic_quantity" id="quantity"/>
   <input type="hidden" name="panic_price" id="price"/>
   <input type="hidden" name="product_id" id="product_id"/>
@@ -31,7 +31,7 @@
         <th style="text-align: center;width: 10%">库存</th>
         <th style="text-align: center;width: 10%">秒杀数</th>
         <th style="text-align: center;width: 10%">零售价</th>
-        <th style="text-align: center;width: 10%">活动数</th>
+        <th style="text-align: center;width: 10%">秒杀价</th>
         <th style="text-align: center">操作</th>
       </tr>
       </thead>

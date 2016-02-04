@@ -9,8 +9,8 @@
       $(function () {
           $.get('<%= order_state_count_orders_path%>', {}, function (data, status) {
               if (status == 'success') {
-                  $('#paid_order_count').text(data.order_all_count);
-                  $('#all_order_count').text('当前订单总数：' + data.order_all_count);
+                  $('#paid_order_count').text(data.order_paid_count);
+                  $('#all_order_count').text('订单数量');
                   $('#new_order_count').text('+' + data.order_paid_count);
                   $('#distribution_order_count').text('+' +data.order_distribution_count);
               } else {

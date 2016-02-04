@@ -4,7 +4,7 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{:charset => "utf-8"}/
-    %title= content_for?(:title) ? yield(:title) : "elephant"
+    %title= "酒运达"
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
     = csrf_meta_tags
     %script{type:"text/javascript",src:"http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"}
@@ -51,6 +51,49 @@
 %html
   :javascript
 
+    $(document).ready(function(){
+        ahoy.trackAll();
+
+        $('.datepicker').datepicker({
+            language: 'zh-CN',
+            format: "yyyy-mm-dd",
+            autoclose: true
+        });
+
+        /* Activating Best In Place */
+        jQuery(".best_in_place").best_in_place();
+
+        $("#jplayer").jPlayer({
+            ready: function () {
+              $(this).jPlayer("setMedia", {
+                mp3: "/audio/neworder.mp3"
+              });
+            },
+            supplied: "mp3",
+            loop: true
+        });
+
+        MessageBus.start();
+        //MessageBus.callbackInterval = 100;
+        MessageBus.alwaysLongPoll = true;
+        MessageBus.subscribe("/channel/#{current_user.id.to_s}", function(data){
+
+          if(data != null){
+            $.gritter.add({
+              title: '您有一条新的订单!',
+              text: '订单号码：<a href="#/orders/' + data.order_id + '?tab=all">' + data.orderno + '</a>',
+              class_name: 'gritter-success gritter-light'
+            });
+            $("#jplayer").jPlayer('play');
+          }else{
+            $("#jplayer").jPlayer('stop');
+          }
+
+          getOrderCount();
+
+        });
+    });
+
     $('.page-content-area').ace_ajax({
       content_url: function(hash) {
         //hash is the value from document url hash
@@ -69,3 +112,17 @@
       ,
       loading_icon: "fa-cog fa-2x blue"
     });
+
+
+    function getOrderCount(){
+      $.get('<%= order_state_count_orders_path%>', {}, function (data, status) {
+              if (status == 'success') {
+                  $('#paid_order_count').text(data.order_paid_count);
+                  $('#all_order_count').text('订单数量');
+                  $('#new_order_count').text('+' + data.order_paid_count);
+                  $('#distribution_order_count').text('+' +data.order_distribution_count);
+              } else {
+                  ;
+              }
+          });
+    }

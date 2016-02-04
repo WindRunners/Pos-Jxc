@@ -5,7 +5,7 @@ class AchieveOrderPushChannels
 
     channels, badge, log_id = args.first, args[1], args.last
 
-    ios_client = Baidu::CloudPush.new('4w1C44Xvs5yYAdvVUpqOqnna', 'p8Qs0n0dWPOVdTOGgprFiGLjGQMLlOT4')
+    ios_client = Baidu::CloudPush.new('jZ73ExSqodxLIsT9WgwVUb2E', 'xG4q4XzqEeSbLG2A2GWQrIWO4hEaGS44')
     android_client = Baidu::CloudPush.new('YSG5VESAS4QsuKhUoiAFdPuH', 'uK7R7g9fX1pvomK1cBMFEmsYjbrGEtT3')
 
 
@@ -42,8 +42,15 @@ class AchieveOrderPushChannels
         next
       end
 
-      unless r.result
+      if r.result == false and ![30602,30608].include? r.error_code
         fail_channels << channel
+      end
+
+      if r.error_code == 30608
+        begin
+          PushChannel.find_by(channel_id: channel).delete
+        rescue
+        end
       end
 
       json = r.to_json

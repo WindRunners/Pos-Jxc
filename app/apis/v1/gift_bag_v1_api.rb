@@ -34,10 +34,11 @@ class GiftBagV1API < Grape::API
     end
     params do
       requires :customer_id, type: String, desc: '小Cid'
+      optional :page, type: Integer, desc: '页码', default: 1
     end
     post 'claim_list' do
 
-      present GiftBagV1APIHelper.claim_list(current_customerUser), with: Entities::GiftBagClaim
+      present GiftBagV1APIHelper.claim_list(current_customerUser,declared(params)), with: Entities::GiftBagClaim
     end
 
     desc '小C礼包历史列表' do
@@ -45,10 +46,11 @@ class GiftBagV1API < Grape::API
     end
     params do
       requires :customer_id, type: String, desc: '小Cid'
+      optional :page, type: Integer, desc: '页码', default: 1
     end
     post 'his_list' do
 
-      present GiftBagV1APIHelper.his_list(current_customerUser), with: Entities::GiftBagHis
+      present GiftBagV1APIHelper.his_list(current_customerUser,declared(params)), with: Entities::GiftBagHis
     end
 
 
@@ -105,6 +107,18 @@ class GiftBagV1API < Grape::API
     post 'syn_expiry_gift_bags' do
 
       return GiftBagV1APIHelper.syn_expiry_gift_bags()
+    end
+
+
+    desc '礼包认领列表' do
+      detail '数量'
+    end
+    params do
+      requires :customer_id, type: String, desc: '小Cid'
+    end
+    post 'claim_rows' do
+
+      return GiftBagV1APIHelper.claim_rows(current_customerUser)
     end
 
   end

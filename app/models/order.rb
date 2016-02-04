@@ -42,6 +42,10 @@ class Order
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
+  field :delivery_real_name, type: String #配送员真实名
+  field :delivery_user_desc, type: String #配送员用户描述
+  field :delivery_mobile, type: String #配送员手机号码
+  field :store_name, type: String #门店名称
 
   index({location: "2d"}, {min: -200, max: 200})
 
@@ -447,11 +451,11 @@ class Order
     paid_count = self.userinfo.orders.where(:workflow_state => :paid).count
 
     if workflow_state == 'paid'
-      data = {
-          orderno: self.orderno,
-          order_id: self.id
-      }
-      MessageBus.publish "/channel/#{self.userinfo.id}", data
+      # data = {
+      #     orderno: self.orderno,
+      #     order_id: self.id
+      # }
+      # MessageBus.publish "/channel/#{self.userinfo.id}", data
 
       # push_log = PushLog.create(order_id:self.id, userinfo_id:self.userinfo.id)
       #

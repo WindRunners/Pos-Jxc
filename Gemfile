@@ -10,7 +10,6 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 gem 'yui-compressor', '~> 0.12.0'
-gem 'sass-rails', '~> 5.0'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -96,14 +95,18 @@ gem 'rest-client'
 gem 'httparty'
 
 gem "puma"
+gem 'mina-puma', :require => false
+
 gem 'message_bus'
 gem 'workflow', '~> 1.2'
 
 gem 'aasm'
 
-gem 'resque', :require => "resque/server"
+gem 'resque'
+gem 'resque-web', require: 'resque_web'
 gem 'resque-pool'
 gem 'resque-scheduler'
+gem 'resque-scheduler-web'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'

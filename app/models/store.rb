@@ -63,6 +63,7 @@ class Store
 
     storeId = 0
     distance = 0
+    store_name = ''
     if order.location.present? && order.location.to_a[0] != 0 && order.location.to_a[1] != 0 #
 
       location = [order.location.to_a[1],order.location.to_a[0]] #调整经纬度
@@ -77,6 +78,7 @@ class Store
       if near_store.present?
         storeId = near_store.id
         distance = get_distance_for_points(near_store.location.to_a[0], near_store.location.to_a[1], order.location.to_a[1], order.location.to_a[0])
+        store_name = near_store.name
       end
     end
 
@@ -84,13 +86,14 @@ class Store
     if storeId == 0
       near_store = Store.where({'userinfo_id'=>order['userinfo_id'],'type'=>0}).first
       storeId = near_store.id if near_store.present?
+      store_name = near_store.name
     end
 
     channels = []
     dusers = DeliveryUser.where(:store_ids => storeId, :work_status => 1)
 
     dusers.each do |user|
-      channels.concat user.channel_ids if user.channel_ids.present?
+      channels.concat user.push_channels.collect(&:channel_id)
     end
 
     logger.info channels
@@ -101,8 +104,19 @@ class Store
 
 
     #更新订单门店及配送距离
-    Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance})
+    Order.where(id: order_id).update({'store_id'=> storeId,'distance'=>distance,'store_name'=>store_name})
     OrderStateChange.find(order_id).update(:store_id => storeId) #更新订单总表门店信息
+
+
+    #推送web端
+    data = {
+        orderno: order.orderno,order_id: order.id
+    }
+    web_users = User.where({'store_ids'=>storeId})
+    web_users.each do |web_user|
+      MessageBus.publish "/channel/#{web_user.id.to_s}", data
+    end
+
   end
 
 

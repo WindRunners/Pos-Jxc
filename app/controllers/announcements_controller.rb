@@ -1,6 +1,6 @@
 class AnnouncementsController < ApplicationController
   before_action :set_announcement, only: [:show, :edit, :update, :destroy]
-  skip_before_action :authenticate_user!, only: [:app_show]
+  skip_before_action :authenticate_user!, only: [:app_show,:announcement_hit]
 
   # GET /announcements
   # GET /announcements.json
@@ -53,7 +53,7 @@ class AnnouncementsController < ApplicationController
           # 压缩图片
           begin
             img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-            thumb = img.crop_resized!(420, 330, Magick::NorthGravity)
+            thumb = img.crop_resized!(420, 330, Magick::CenterGravity)
             thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
             # 将压缩图片地址存进数组
             @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'
@@ -65,8 +65,7 @@ class AnnouncementsController < ApplicationController
         end
       end
       # 替换content原图片链接并转化城IMG标签
-      a.replace 'src="/upload/image/announcements/' + @announcement.id + '/' + uuid + '.jpg'
-      a.insert(5, '/') if a[5]!='/'
+      a.replace 'src="/upload/image/announcements/' + @announcement.id.to_s + '/' + uuid + '.jpg'
     }
     respond_to do |format|
       if @announcement.save
@@ -102,7 +101,7 @@ class AnnouncementsController < ApplicationController
             # 压缩图片
             begin
               img =  Magick::Image.read('public/upload/image/announcements/'+ b + '/' + uuid + '.jpg').first
-              thumb = img.crop_resized!(420, 330, Magick::NorthGravity)
+              thumb = img.crop_resized!(420, 330, Magick::CenterGravity)
               thumb.write('public/upload/image/announcements/'+ b + '/thumb_' + uuid + '.jpg')
               # 将压缩图片地址存进数组
               @announcement.pic_thumb_path << '/upload/image/announcements/' + b + '/thumb_' + uuid + '.jpg'

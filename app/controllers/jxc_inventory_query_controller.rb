@@ -18,11 +18,12 @@ class JxcInventoryQueryController < ApplicationController
       inventoryInfo = queryInfo.page(page).per(rows)
       inventoryInfo.each do |inventory|
         product = inventory.product
-        inventory[:title] = product.title
-        inventory[:brand] = product.brand
-        inventory[:specification] = product.specification
-
-        inventory_list << inventory
+        if product.present?
+          inventory[:title] = product.title
+          inventory[:brand] = product.brand
+          inventory[:specification] = product.specification
+          inventory_list << inventory
+        end
       end
 
       render json:{'total'=>queryInfo.count,'rows'=>inventory_list}

@@ -52,7 +52,11 @@ class JxcStorageProductDetail
 
   # 查询商品信息
   def product
-    @product = Warehouse::Product.find(self.resource_product_id)
+    begin
+      @product = Warehouse::Product.find(self.resource_product_id)
+    rescue
+      @product = nil
+    end
   end
 
   #查询商品分类信息

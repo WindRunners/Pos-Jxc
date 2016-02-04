@@ -187,6 +187,8 @@ class DeliveryUserV1API < Grape::API
       current_deliveryUser.authentication_token = ''
       current_deliveryUser.save
 
+      current_deliveryUser.push_channels.find_by(channel_id: channel).delete
+
       Rails.logger.info  "配送员注销成功"
       {msg: "注销成功!", flag: 1}
     end

@@ -33,12 +33,20 @@
         = f.text_field :storage_code,:class=>'form-control'
     %tr
       %td
-        = f.button t('mongoid.attributes.jxc_storage.admin'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageAdmin()'
+        = f.button t('mongoid.attributes.jxc_storage.userinfo'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageUserinfo()'
       %td
         %span.input-icon{style:'width:100%;'}
           -#= f.text_field :admin,:class=>'form-control',readonly:true
-          %input.form-control#jxc_storage_admin{value: @jxc_storage.admin.present? ? @jxc_storage.admin.to_s : '',readonly:true }
-          = f.hidden_field :admin_id
+          %input.form-control#jxc_storage_userinfo{value: @jxc_storage.userinfo.present? ? @jxc_storage.userinfo.shopname : '',readonly:true }
+          = f.hidden_field :userinfo_id
+          %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.button t('mongoid.attributes.jxc_storage.store'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageStore()'
+      %td
+        %span.input-icon{style:'width:100%;'}
+          -#= f.text_field :admin,:class=>'form-control',readonly:true
+          %input.form-control#jxc_storage_store{value: @jxc_storage.store.present? ? @jxc_storage.store.name : '',readonly:true }
+          = f.hidden_field :store_id
           %i.ace-icon.fa.fa-leaf.green
       -#%td
       -#  = f.label :admin_phone
@@ -138,26 +146,55 @@
 
 
   //选择仓库负责人信息
-  function getStorageAdmin(){
-    $('.modal-title').text('选择仓库负责人');
+  function getStorageUserinfo(){
+    $('.modal-title').text('选择仓库所属运营商');
     $('.modal-dialog').removeClass('tree-table');
     $('#jxc-select-tree').addClass('jxc-disappear-tree');
     $('#jxc-select-table').removeClass('jxc-disappear-table');
     $('#jxc-select-table').removeClass('jxc-select-table');
-    $('#confirm-button').attr('data-type','storageAdmin');
+    $('#confirm-button').attr('data-type','storageUserinfo');
     $('#searchParam').val('');
 
     $('#selectModal').modal('show');
 
     tableSetting = {
-      title: '仓库负责人',
-      url:'/jxc_common_info/getJxcStorageAdmin',
+      title: '仓库运营商',
+      url:'/jxc_common_info/getJxcStorageUserinfo',
       width:600,
       singleSelect:true,
       queryParams:{},
       columns:[[
-        {title:'姓名',field:'name',width:'50%'},
-        {title:'手机',field:'mobile',width:'50%'}
+        {title:'运营商名称',field:'shopname',width:'50%'},
+        {title:'责任人',field:'name',width:'50%'}
+      ]]
+    };
+
+    //初始化表格
+    initDataGrid(tableSetting);
+  }
+
+
+  //选择仓库 所属门店信息
+  function getStorageStore(){
+    $('.modal-title').text('选择仓库所属门店');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').addClass('jxc-disappear-tree');
+    $('#jxc-select-table').removeClass('jxc-disappear-table');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storageStore');
+    $('#searchParam').val('');
+
+    $('#selectModal').modal('show');
+
+    tableSetting = {
+      title: '仓库所属门店',
+      url:'/jxc_common_info/getJxcStorageStore',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'门店名称',field:'name',width:'50%'},
+        {title:'责任人',field:'manager',width:'50%'}
       ]]
     };
 
@@ -176,13 +213,21 @@
         alert('请单击选择仓库类型');
         return;
       }
-    }else if(dataType == 'storageAdmin'){
+    }else if(dataType == 'storageUserinfo'){
       var selectData = $('#dataTable').datagrid('getSelections');
       if(selectData.length == 0){
         alert('请选择数据');
       }else{
-        $('#jxc_storage_admin').val(selectData[0].name);
-        $('#jxc_storage_admin_id').val(selectData[0]._id);
+        $('#jxc_storage_userinfo').val(selectData[0].shopname);
+        $('#jxc_storage_userinfo_id').val(selectData[0]._id);
+      }
+    }else if(dataType == 'storageStore'){
+      var selectData = $('#dataTable').datagrid('getSelections');
+      if(selectData.length == 0){
+        alert('请选择数据');
+      }else{
+        $('#jxc_storage_store').val(selectData[0].name);
+        $('#jxc_storage_store_id').val(selectData[0]._id);
       }
     }
 

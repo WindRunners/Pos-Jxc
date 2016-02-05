@@ -26,8 +26,9 @@ class JxcStorage
   field :data_3, type: String
   field :data_4, type: String
 
-  #仓库负责人
-  belongs_to :admin, class_name:'User', foreign_key: :admin_id
+  # belongs_to :admin, class_name:'User', foreign_key: :admin_id
+  belongs_to :userinfo, foreign_key: :userinfo_id  #所属运营商
+  belongs_to :store, foreign_key: :store_id #所属门店
 
   #采购单
   has_many :jxc_purchase_orders

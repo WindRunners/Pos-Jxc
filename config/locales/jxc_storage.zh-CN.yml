@@ -14,6 +14,8 @@ zh-CN:
 
         address: '仓库地址'
         telephone: '仓库固话'
+        userinfo: '所属运营商'
+        store: '所属门店'
         admin: '负责人'
         admin_phone: '负责人电话'
         longitude: '仓库地址 经度'

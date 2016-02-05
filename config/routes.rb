@@ -528,7 +528,8 @@ Rails.application.routes.draw do
   get 'jxc_common_info/getJxcUnits' #供应商
   get 'jxc_common_info/getJxcDictionaryByDesc' #根据字典项获  取字典
   get 'jxc_common_info/getBillDetailInfo' #单据明细
-  get 'jxc_common_info/getJxcStorageAdmin' #选取仓库负责人
+  get 'jxc_common_info/getJxcStorageUserinfo' #选取仓库负责人
+  get 'jxc_common_info/getJxcStorageStore' #选取仓库负责人
   ##
 
 end

@@ -92,10 +92,17 @@ class JxcCommonInfoController < ApplicationController
     # end
   end
 
-  #选择进销存仓库负责人
-  def getJxcStorageAdmin
+  #选择进销存仓库 所属运营商
+  def getJxcStorageUserinfo
     search_param = params[:searchParam] || ''
-    query = User.or({:name => /#{search_param}/},{:mobile => /#{search_param}/})
+    query = Userinfo.or({:name => /#{search_param}/},{:shopname => /#{search_param}/})
+    render json: {'total'=>query.count,'rows'=>query.page(params[:page]).per(params[:rows])}
+  end
+
+  #选择进销存仓库 所属门店
+  def getJxcStorageStore
+    search_param = params[:searchParam] || ''
+    query = Store.or({:name => /#{search_param}/},{:manager => /#{search_param}/})
     render json: {'total'=>query.count,'rows'=>query.page(params[:page]).per(params[:rows])}
   end
 

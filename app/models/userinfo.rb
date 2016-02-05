@@ -13,6 +13,7 @@ class Userinfo
   has_many :userinfo_oppenids
   has_many :share_integrals
   has_many :product_tickets
+  has_many :jxc_storage  #进销存仓库
 
 
   has_and_belongs_to_many :keywords

@@ -111,8 +111,6 @@ class User
 
   has_many :jxc_storage_journals  #仓库变更明细中的 创建人
 
-  has_one :jxc_storage  #每个负责人 负责一个仓库
-
   #addby dfj
  # def send_password_reset
  #   generate_token(:reset_password_token)

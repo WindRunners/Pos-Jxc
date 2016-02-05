@@ -142,18 +142,6 @@ class Ordercompleted
     self.orderno = time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
 
     success = true
-    retailDate = time.strftime("%Y-%m-%d")
-
-    self.ordergoodcompleteds.each do |og|
-      statistic = Statistic.new(:retailDate => retailDate)
-      statistic.qrcode = og.qrcode
-      statistic.productName = og.title
-      statistic.purchasePrice = og.product.purchasePrice
-      statistic.retailPrice = og.price
-      statistic.quantity = og.quantity
-      success &= statistic.save
-    end
-
     return success
 
   end
@@ -268,17 +256,6 @@ class Ordercompleted
                                          :type => 2)
     end
 
-    #存入统计表
-    retailDate = Time.now.strftime("%Y-%m-%d")
-    self.ordergoodcompleteds.each do |og|
-      statistic = Statistic.new(:retailDate => retailDate)
-      statistic.qrcode = og.qrcode
-      statistic.productName = og.title
-      statistic.purchasePrice = og.purchasePrice
-      statistic.retailPrice = og.price
-      statistic.quantity = og.quantity
-      statistic.save
-    end
   end
 
   after_save do

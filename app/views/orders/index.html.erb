@@ -52,7 +52,7 @@
                         console.log("获取订单列表数据错误，状态码为："+status);
                     }
                 });
-        order_state_count();
+        //order_state_count();
     }
 
 
@@ -159,14 +159,12 @@
             <div>
               <p>
                 <select class="input-sm" style="width:90%" id="ordertype">
-                  <option value="" selected>全部</option>
+                  <option value="" >全部</option>
                   <option value="0"
                           <% if "0" == params[:ordertype] %> selected
                           <% end %>>线下订单
                   </option>
-                  <option value="1"
-                          <% if "1" == params[:ordertype] %> selected
-                          <% end %>>线上订单
+                  <option value="1" selected>线上订单
                   </option>
                   <option value="2"
                           <% if "2" == params[:ordertype] %> selected

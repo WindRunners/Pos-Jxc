@@ -80,7 +80,7 @@
               <% if  :distribution == workflow_state%>
                   <p><%= order.address %></p>
               <% else %>
-                  <p><%= format_encryption(order.address) %></p>
+                  <p><%= order.address %></p>
               <% end %>
             </div>
             <div style="text-align: center" class="col-xs-2">

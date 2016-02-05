@@ -209,7 +209,7 @@
                   <p>买家：</p>
                 </td>
                 <td>
-                  <p><%= format_encryption(@order.consignee) %></p>
+                  <p><%= @order.consignee %></p>
                 </td>
               </tr>
               <tr>
@@ -222,7 +222,7 @@
                   <p>联系方式：</p>
                 </td>
                 <td>
-                  <p><%= format_encryption(@order.telephone) %></p>
+                  <p><%= @order.telephone %></p>
                 </td>
               </tr>
               <tr>
@@ -230,7 +230,7 @@
                   <p>收货信息：</p>
                 </td>
                 <td style="word-wrap:break-word;">
-                  <p><%= format_encryption(@order.address) %></p>
+                  <p><%= @order.address %></p>
                 </td>
               </tr>
 
@@ -259,6 +259,16 @@
               <p><%= @store.name if @store.present? %></p>
             </td>
           </tr>
+          <% if @order.ordertype == 2 %>
+              <tr>
+                <td align="">
+                  <p>业务人员：</p>
+                </td>
+                <td>
+                  <p><%= @order.business_user %></p>
+                </td>
+              </tr>
+          <% end %>
           </tbody>
         </table>
       </td>

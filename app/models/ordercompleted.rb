@@ -15,7 +15,7 @@ class Ordercompleted
 
   field :customer_id                 #个人用户ID
   field :orderno, type: String      #订单号码
-  field :ordertype, type: Integer    #订单类型  0-线下订单  1-线上订单
+  field :ordertype, type: Integer    #订单类型  0-线下订单  1-线上订单 2-线下挂账单
   field :consignee, type: String, default: ''    #收货人
   field :address, type: String, default: ''    #收货人地址
   field :location, type: Point, spatial: true, default: []
@@ -31,11 +31,12 @@ class Ordercompleted
   field :profit,type: Float, default: 0.00     #利润
   field :fright,type: Float, default: 0.00         #运费
   field :paycost,type: Float, default: 0.00  #支付金额
-  field :paymode,type: Integer  #支付方式
+  field :paymode,type: Integer  #支付方式 0-货到付款 1-支付宝 2-微信支付 3-酒库提酒
   field :online_paid, type: Integer, default: 0 #线上支付 0-未付款 1-已付款 2-已退款 3-酒库提酒
   field :remarks  #备注
   field :getcoupons, type: Array, default: [] #获取的优惠券列表
   field :workflow_state  #付款方式
+  field :business_user , type: String, default: 0 #线下业务人员
 
   field :store_id  # 门店id
   field :distance  # 配送距离
@@ -51,6 +52,12 @@ class Ordercompleted
       event :cancel_order, :transitions_to => :cancelled
       event :commit_order, :transitions_to => :completed
       event :commit_order2, :transitions_to => :completed
+      event :line_order_creat_unpaid, :transitions_to => :generation #挂账单
+    end
+
+    # 挂账单未支付
+    state :generation do
+      event :payment_order, :transitions_to => :completed
     end
 
     # 已取消
@@ -79,8 +86,76 @@ class Ordercompleted
   end
 
 
-  #线下订单生成
-  def line_order_creat(orderjson)
+  # #线下订单生成
+  # def line_order_creat(orderjson)
+  #   products = []
+  #   orderjsonback = OrderJsonBack.new
+  #
+  #   current_customer = nil
+  #   if self.customer_id.present?
+  #     current_customer = Customer.find(self.customer_id)
+  #   end
+  #
+  #   orderjson["ordergoods"].each do |ordergoodcompleted|
+  #     good = self.ordergoodcompleteds.build(ordergoodcompleted)
+  #
+  #     product = good.product
+  #     good.qrcode = product.qrcode
+  #     good.title = product.title
+  #     good.price = product.price
+  #     good.integral = product.integral
+  #     good.specification = product.specification
+  #     good.avatar_url = product.avatar_url
+  #
+  #     if product.stock < good.quantity
+  #       products << {"title" => product.title,"stock" => product.stock}
+  #       next
+  #     else
+  #       #计算货值
+  #       self.goodsvalue += good.price * good.quantity
+  #       #本次购买积分
+  #       if current_customer != nil
+  #         current_customer.integral += good.integral * good.quantity
+  #         self.userinfo.integral -= good.integral * good.quantity
+  #       end
+  #     end
+  #
+  #   end
+  #
+  #   if products.size > 0
+  #     orderjsonback.state = 601
+  #     orderjsonback.products = products
+  #     return orderjsonback
+  #   end
+  #
+  #
+  #   #计算总价
+  #   self.totalcost = self.goodsvalue
+  #
+  #   if current_customer != nil
+  #     if self.useintegral > 0
+  #       current_customer.integral -= self.useintegral
+  #       self.userinfo.integral += self.useintegral
+  #       self.paycost = self.goodsvalue - self.useintegral * 0.01
+  #     else
+  #       self.paycost = self.goodsvalue
+  #     end
+  #     current_customer.update_attributes(:integral => current_customer.integral)
+  #   else
+  #     self.paycost = self.goodsvalue
+  #   end
+  #
+  #   time = Time.now
+  #   self.orderno = time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
+  #
+  #   success = true
+  #   return success
+  #
+  # end
+
+
+  def line_order_creat_do(orderjson)
+
     products = []
     orderjsonback = OrderJsonBack.new
 
@@ -108,7 +183,7 @@ class Ordercompleted
         self.goodsvalue += good.price * good.quantity
         #本次购买积分
         if current_customer != nil
-          current_customer.integral += good.integral * good.quantity
+          self.getintegral  += good.integral * good.quantity
           self.userinfo.integral -= good.integral * good.quantity
         end
       end
@@ -125,25 +200,43 @@ class Ordercompleted
     #计算总价
     self.totalcost = self.goodsvalue
 
-    if current_customer != nil
+    if current_customer.present?
       if self.useintegral > 0
-        current_customer.integral -= self.useintegral
+        self.getintegral -= self.useintegral
         self.userinfo.integral += self.useintegral
         self.paycost = self.goodsvalue - self.useintegral * 0.01
       else
         self.paycost = self.goodsvalue
       end
-      current_customer.update_attributes(:integral => current_customer.integral)
+
+      current_customer.update_attributes(:integral => current_customer.integral+self.getintegral) if self.ordertype==0
     else
       self.paycost = self.goodsvalue
     end
-
     time = Time.now
     self.orderno = time.strftime("%Y%m%d%H%M%S") + time.usec.to_s
 
+    if self.ordertype == 0
+      self.line_order_creat! #线下生成订单
+    else
+      self.line_order_creat_unpaid! #线下生成挂账订单
+    end
     success = true
     return success
+  end
 
+  #挂账单付款后，会员更新积分
+  def paid_order
+    current_customer = nil
+    if self.customer_id.present?
+      begin
+
+        current_customer = Customer.find(self.customer_id)
+        current_customer.update_attributes(:integral => current_customer.integral+self.getintegral)
+      rescue
+        Rails.logger.info "订单#{self.id},同步会员积分失败！"
+      end
+    end
   end
 
 
@@ -259,12 +352,11 @@ class Ordercompleted
   end
 
   after_save do
-    if self.ordertype == 0
-      #写入队列同步总库
-      orderjson = (self.to_json(:include => {:ordergoodcompleteds => {:except => :product_id}}).to_s).force_encoding('UTF-8')
-      Resque.enqueue(AchieveOrderSynchronous, orderjson)
+    if self.ordertype==0 || self.ordertype==2
+      # #写入队列同步总库
+      # orderjson = (self.to_json(:include => {:ordergoodcompleteds => {:except => :product_id}}).to_s).force_encoding('UTF-8')
+      # Resque.enqueue(AchieveOrderSynchronous, orderjson)
     else
-
 
       #删除未完成订单表中的数据
       Order.find(self.id).destroy

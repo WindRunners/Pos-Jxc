@@ -154,6 +154,7 @@ Rails.application.routes.draw do
     post "alipay_notify", :on => :member
     post "alipay_refund_notify", :on => :member
     post "alipay_dback_notify", :on => :member
+    get 'line_payment_order', :on => :collection
   end
 
 

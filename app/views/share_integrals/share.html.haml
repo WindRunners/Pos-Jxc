@@ -67,7 +67,6 @@
   function mobile_submit_change(){
 
     $(".btn_style_04").css('background-color','#fa6261');
-    $("#btn_register").click();
 
   };
 
@@ -76,7 +75,10 @@
 
   $(function(){
 
-     $("#btn_mobile").click(function(){$("#btn_mobile").val("");});
+     $("#btn_mobile").click(function(){
+      $(this).val("");
+       $(this).css("color","#707070")
+     });
 
 
      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {

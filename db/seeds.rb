@@ -12,12 +12,12 @@ userinfo = Userinfo.create(:name => '管理员',
                            :location => [0,0],
                            :pdistance => 500)
 
-User.find_or_create_by(:name => "管理员",
-                       :mobile => "12345678900",
-                       :email => "admin@aibuluo.com",
-                       :password => "123456",
-                       :password_confirmation => "123456",
-                       :userinfo => userinfo)
+user = User.find_or_create_by( :name => "管理员",
+                               :mobile => "12345678900",
+                               :email => "admin@aibuluo.com",
+                               :password => "123456",
+                               :password_confirmation => "123456",
+                               :userinfo => userinfo)
 
 
 State.create(:name => "已上架",
@@ -75,11 +75,11 @@ JxcDictionary.create(:dic => '深圳发展银行',:dic_desc => 'bank_type',:piny
 #往来单位类别
 JxcDictionary.create(:dic => '酒水供应商',:dic_desc => 'jxc_contacts_unit_category',:pinyin_code => 'jsgys')
 JxcDictionary.create(:dic => '团购客户',:dic_desc => 'jxc_contacts_unit_category',:pinyin_code => 'tgkh')
-JxcDictionary.create(:dic => '门店零售客户',:dic_desc => 'jxc_contacts_unit_category',:pinyin_code => 'mdlskh')
+store_retail_consumer = JxcDictionary.create(:dic => '门店零售客户',:dic_desc => 'jxc_contacts_unit_category',:pinyin_code => 'mdlskh')
 
 #仓库类别
-JxcDictionary.create(:dic => '总仓库',:dic_desc => 'storage_type',:pinyin_code => 'zck')
-JxcDictionary.create(:dic => '分仓库',:dic_desc => 'storage_type',:pinyin_code => 'fck')
+central_store_category = JxcDictionary.create(:dic => '总仓库',:dic_desc => 'storage_type',:pinyin_code => 'zck')
+sub_store_category = JxcDictionary.create(:dic => '分仓库',:dic_desc => 'storage_type',:pinyin_code => 'fck')
 JxcDictionary.create(:dic => '门店仓库',:dic_desc => 'storage_type',:pinyin_code => 'mdck')
 
 #其他入库类型
@@ -93,4 +93,27 @@ JxcDictionary.create(:dic => '赠予',:dic_desc => 'stock_out_type',:pinyin_code
 JxcDictionary.create(:dic => '借出',:dic_desc => 'stock_out_type',:pinyin_code => 'jc')
 JxcDictionary.create(:dic => '返还',:dic_desc => 'stock_out_type',:pinyin_code => 'fh')
 
+#默认仓库( 总库 )
+JxcStorage.create(:storage_name => '总库',
+                  :spell_code => 'zk',
+                  :storage_type => '总仓库',
+                  :admin => user
+                  )
 
+JxcStorage.create(:storage_name => '分库',
+                  :spell_code => 'fk',
+                  :storage_type => '分仓库',
+                  :admin => user
+                  )
+
+#默认往来单位
+JxcContactsUnit.create( :unit_name => '零售客户',
+                        :unit_property => '1',
+                        :unit_type => '门店零售客户',
+                        :spell_code => 'lskh'
+                        )
+JxcContactsUnit.create( :unit_name => '测试供应商',
+                        :unit_property => '0',
+                        :unit_type => '酒水供应商',
+                        :spell_code => 'csgys'
+                      )

@@ -53,15 +53,17 @@ class JxcCommonInfoController < ApplicationController
     resultList = []
 
     if storage_type.present?
-      storageList = JxcStorage.and({storage_type:storage_type},{:storage_name => /#{store_param}/})
+      storageList = JxcStorage.includes(:admin).and({storage_type:storage_type},{:storage_name => /#{store_param}/})
     else
-      storageList = JxcStorage.where({:storage_name => /#{store_param}/})
+      storageList = JxcStorage.includes(:admin).where({:storage_name => /#{store_param}/})
     end
 
     if storageList.present?
       storageList.page(page).per(rows).each do |storage|
-        storage[:admin_name] = storage.admin.name
-        storage[:admin_phone] = storage.admin.mobile
+        if storage.admin.present?
+          storage[:admin_name] = storage.admin.name
+          storage[:admin_phone] = storage.admin.mobile
+        end
         resultList << storage
       end
     end
@@ -106,6 +108,13 @@ class JxcCommonInfoController < ApplicationController
     render json: {'total'=>query.count,'rows'=>query.page(params[:page]).per(params[:rows])}
   end
 
+  #选择用户信息
+  def getUsersList
+    search_param = params[:searchParam] || ''
+    query = User.or({:name => /#{search_param}/},{:mobile => /#{search_param}/})
+    render json: {'total'=>query.count,'rows'=>query.page(params[:page]).per(params[:rows])}
+  end
+
   #进销存 账户信息
   # def getJxcAccountsInfo
   #   account_param = params[:searchParam] || ''
@@ -113,12 +122,12 @@ class JxcCommonInfoController < ApplicationController
   #   render json: {'total':JxcAccount.where(:account_name => /#{account_param}/).count,'rows':accountsList}
   # end
 
-  #部门
+  # 部门
   # def getDepartmentsInfo
   #   render json: Department.all
   # end
-
-  #经手人
+  #
+  # # 经手人
   # def getHandlersInfo
   #   department_id = params[:department_id]
   #   page = params[:page]

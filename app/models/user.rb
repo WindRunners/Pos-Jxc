@@ -23,6 +23,7 @@ class User
   has_many :announcements
 
   has_and_belongs_to_many :stores #有多个门店
+  has_many :jxc_storages  #有多个仓库
 
   has_many :searches
   has_many :wines

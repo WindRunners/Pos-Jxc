@@ -47,6 +47,14 @@
 .col-xs-4{:style => "padding-right: 0px;"}
   .input-group.margin-bottom-20
     %span.input-group-addon
+      门店:
+    %span.input-group-addon
+      %i@
+    %select#ordertype.form-control
+      %option{:value=>'0'} 正常订单
+      %option{:value=>'2'} 挂账订单
+  .input-group.margin-bottom-20
+    %span.input-group-addon
       订单类型:
     %span.input-group-addon
       %i@

@@ -37,7 +37,9 @@ class Ordercompleted
   field :getcoupons, type: Array, default: [] #获取的优惠券列表
   field :workflow_state  #付款方式
   field :business_user , type: String, default: 0 #线下业务人员
+  field :user_id #后台操作人id（线下订单时用到）
 
+  field :is_inventory_syn, type:Integer,default: 0 #库存是否同步
   field :store_id  # 门店id
   field :distance  # 配送距离
   field :delivery_user_id #配送员id
@@ -352,23 +354,20 @@ class Ordercompleted
   end
 
   after_save do
-    if self.ordertype==0 || self.ordertype==2
-      # #写入队列同步总库
-      # orderjson = (self.to_json(:include => {:ordergoodcompleteds => {:except => :product_id}}).to_s).force_encoding('UTF-8')
-      # Resque.enqueue(AchieveOrderSynchronous, orderjson)
-    else
 
-      #删除未完成订单表中的数据
-      Order.find(self.id).destroy
-    end
+    Order.find(self.id).destroy if self.ordertype==1 #如果为线上订单，删除未完成订单表中的数据
 
     if "completed" == workflow_state
-        subscribe(Statistic.new)
-        subscribe(OrderStatistic.new)
-        subscribe(StatisticTotal.new)
-        subscribe(CustomerOrderStatic.new)
 
-        broadcast(:completed_order_successful, id.to_s)
+      #同步库存
+      Resque.enqueue(AchieveOrderInventorySynchronous, self.id) if self.is_inventory_syn == 0
+
+      subscribe(Statistic.new)
+      subscribe(OrderStatistic.new)
+      subscribe(StatisticTotal.new)
+      subscribe(CustomerOrderStatic.new)
+
+      broadcast(:completed_order_successful, id.to_s)
       begin
         cashOrder=CashOrder.new
         cashOrder.userinfo_id = self.userinfo.id

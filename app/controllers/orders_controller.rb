@@ -11,15 +11,35 @@ class OrdersController < ApplicationController
   def line_order_creat
 
     orderpar = JSON.parse(params[:order])
-    ordercompleted = Ordercompleted.new(:ordertype => orderpar['ordertype'], :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"],:business_user => orderpar['business_user'],:user_id => current_user.id,:store_id => orderpar['store_id'])
+    jxc_storage = JxcStorage.find(orderpar['storage_id'])
+    ordercompleted = Ordercompleted.new(:ordertype => orderpar['ordertype'], :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"], :business_user => orderpar['business_user'], :user_id => current_user.id, :store_id => jxc_storage['store_id'])
 
     respond_to do |format|
 
       begin
-        format.json { render :json => {success: true} } if ordercompleted.line_order_creat_do(orderpar)
+
+        msg = ""
+        flag = true
+
+        orderpar["ordergoods"].each do |ordergoodcompleted|
+          product_id = ordergoodcompleted['product_id']
+          quantity = ordergoodcompleted['quantity']
+          if JxcStorageProductDetail.where({'resource_product_id' => product_id, 'count' => {'$gte' => quantity}}).count() == 0
+            product = Product.shop_id(current_user['userinfo_id']).find(product_id)
+            msg = "商品【#{product.title}】库存不足！"
+            flag = false
+            break
+          end
+        end
+
+        if flag
+          format.json { render :json => {:success => true} } if ordercompleted.line_order_creat_do(orderpar)
+        else
+          format.json { render :json => {:success => false, :msg => msg} }
+        end
       rescue Exception => e
         Rails.logger.info "线下订单生成失败，异常信息为：#{e.message}"
-        format.json { render :json => {success: false} }
+        format.json { render :json => {:success => false, :msg => "服务器端异常！"} }
       end
     end
 
@@ -49,6 +69,7 @@ class OrdersController < ApplicationController
     parm[:paymode] = params[:paymode] if !params[:paymode].nil? && !params[:paymode].blank?
     parm[:created_at.gte] = params[:beginTime] if !params[:beginTime].nil? && !params[:beginTime].blank?
     parm[:created_at.lte] = params[:endTime] if !params[:endTime].nil? && !params[:endTime].blank?
+    parm[:business_user] = /#{params[:business_user]}/ if params[:business_user].present?
 
 
     state_parm = params[:workflow_state].to_sym if !params[:workflow_state].nil?

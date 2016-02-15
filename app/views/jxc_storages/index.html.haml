@@ -5,7 +5,7 @@
     = @jxc_storages.size
     条)
 %div.btn-group.btn-corner{style:'padding-bottom:8px;'}
-  %button.btn#addStorageType{type:'button','data-toggle':'modal','data-target':'#addDicModal',onclick:'addStorageType()'}
+  %button.btn#addStorageType{type:'button','data-toggle'=>'modal','data-target'=>'#addDicModal',onclick:'addStorageType()'}
     添加仓库类别
 %div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
   %div{class:'col-xs-6'}
@@ -54,13 +54,13 @@
         %td= jxc_storage.address
         %td= jxc_storage.telephone
         %td= jxc_storage.memo
-        %td= link_to t('helpers.links.show'),'','data-href':jxc_storage_path(jxc_storage),class:'btn btn-xs btn-info'
-        %td= link_to t('helpers.links.edit'),'','data-href':edit_jxc_storage_path(jxc_storage),class:'btn btn-xs btn-warning'
+        %td= link_to t('helpers.links.show'),'','data-href'=>jxc_storage_path(jxc_storage),class:'btn btn-xs btn-info'
+        %td= link_to t('helpers.links.edit'),'','data-href'=>edit_jxc_storage_path(jxc_storage),class:'btn btn-xs btn-warning'
         %td= link_to t('helpers.links.destroy'), jxc_storage_path(jxc_storage),:method => :delete,remote:true, :data => { :confirm => '您确定删除此条数据吗?' },class:'btn btn-xs btn-danger'
 
 %br
 
-= link_to t('helpers.links.new'),'','data-href':new_jxc_storage_path,:class => 'btn btn-primary'
+= link_to t('helpers.links.new'),'','data-href'=> new_jxc_storage_path,:class => 'btn btn-primary'
 
 = render 'jxc_modal/jxc_addDictionary_modal'
 

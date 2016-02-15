@@ -43,6 +43,7 @@
                     paymode: $('#paymode').val(),
                     beginTime: $('#beginTime').val(),
                     endTime: $('#endTime').val(),
+                    business_user: $('#business_user').val(),
                     page: page
                 },
                 function (data, status) {
@@ -245,7 +246,7 @@
               <lable><h6>下单时间：</h6></lable>
             </div>
           </div>
-          <div class="col-xs-10">
+          <div class="col-xs-6">
             <div>
               <p>
                 <input id="beginTime" type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
@@ -254,7 +255,20 @@
               </p>
             </div>
           </div>
+
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>业务人员：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p><input type="text" id="business_user" style="width:90%" class="input-sm" value="<%= params[:business_user] %>"></p>
+            </div>
+          </div>
         </div>
+
+
         <div class="row">
           <div class="col-xs-2">
 

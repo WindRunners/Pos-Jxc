@@ -47,12 +47,12 @@
 .col-xs-4{:style => "padding-right: 0px;"}
   .input-group.margin-bottom-20
     %span.input-group-addon
-      &nbsp;&nbsp;&nbsp;&nbsp;门店:&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;仓库:&nbsp;&nbsp;&nbsp;&nbsp;
     %span.input-group-addon
       %i@
-    %select#stores.form-control
-      - @stores.each do |store|
-        %option{:value=>"#{store.id}"} #{store.name}
+    %select#jxc_storages.form-control
+      - @jxc_storages.each do |jxc_storage|
+        %option{:value=>"#{jxc_storage.id}"} #{jxc_storage.storage_name}
   .input-group.margin-bottom-20
     %span.input-group-addon
       订单类型:

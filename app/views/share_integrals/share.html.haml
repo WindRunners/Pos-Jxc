@@ -5,10 +5,10 @@
     %meta{:charset => "utf-8"}
     %meta{:content => "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no", :name => "viewport"}
     = stylesheet_link_tag "share_integrals", :media => "all"
-    %script{:src => "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"}
-    %script{:src => "//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"}
-    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css", :rel => "stylesheet"}
-    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
+    %link{:href => "../../css/bootstrap.min.css", :rel => "stylesheet"}
+    %link{:href => "../../css/bootstrap-theme.min.css", :rel => "stylesheet"}
+    %script{:src => "../../js/jquery.min.js"}
+    %script{:src => "../../js/bootstrap.min.js"}
     %title
       =@share_integral.title
   %body
@@ -67,6 +67,7 @@
   function mobile_submit_change(){
 
     $(".btn_style_04").css('background-color','#fa6261');
+    $("#btn_register").click();
 
   };
 

@@ -4,7 +4,7 @@ class AchieveOrderInventorySynchronous
 
   def self.perform(orderid)
 
-    Rails.logger.info "订单【#{orderid}】同步库存开始"
+    Rails.logger.info "订单【#{orderid}】同步库存开始123"
 
     ordercompleted = Ordercompleted.find(orderid)
 
@@ -25,7 +25,10 @@ class AchieveOrderInventorySynchronous
       bill_detail_array << bill_detail
     end
 
-    JxcSellStockOutBill.generate_sell_out_bill(current_user, retail_store, total_amount, receivable_amount, bill_detail_array.to_json)
+    result = JxcSellStockOutBill.generate_sell_out_bill(current_user, retail_store, total_amount, receivable_amount, bill_detail_array.to_json)
+
+    Rails.logger.info "订单【#{orderid}】同步库存结果:#{result}"
+
     #更新库存同步状态
     Ordercompleted.where(:id => orderid).update({'is_inventory_syn' => 1})
 

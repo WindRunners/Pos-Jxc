@@ -5,7 +5,7 @@ class CashiersController < ApplicationController
   # GET /cashiers.json
   def index
     @cashiers = Cashier.all
-    @stores = current_user.stores
+    @jxc_storages = JxcStorage.where({'store_id' => {'$in' => current_user['store_ids']}})
   end
 
   # GET /cashiers/1

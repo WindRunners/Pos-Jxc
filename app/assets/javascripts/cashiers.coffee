@@ -64,9 +64,9 @@ is_clearing = false
     $("#business_user").focus()
     return
 
-  store_id = $('#stores').val()
-  if !store_id? && store_id==""
-    new Pop "", "javascript:void(0)", "请在用户管理设置负责的门店！"
+  storage_id = $('#jxc_storages').val()
+  if !storage_id? && storage_id==""
+    new Pop "", "javascript:void(0)", "请选择仓库！"
     $("#stores").focus()
     return
 
@@ -101,7 +101,7 @@ is_clearing = false
     ordergoods: ogs
     ordertype: ordertype
     business_user: business_user
-    store_id: store_id
+    storage_id: storage_id
   $.post(
     "/orders/line_order_creat"
     order: JSON.stringify(orderPara)
@@ -116,7 +116,7 @@ is_clearing = false
             new Pop "结算成功！", "#/cashiers|hash#{Math.random() * 10000}", "实收：#{$('#realMoney').val()} 找零：#{$('#change').val()} 使用了 #{useIntegral} 积分"
             is_clearing = true
       else
-        do -> new Pop "结算失败！", "javascript:void(0)", "有可能是网络问题，请检查一下网络。"
+        do -> new Pop "结算失败！", "javascript:void(0)", data.msg
     "json"
   )
   undefined

@@ -41,13 +41,17 @@
       %td
         = f.button t('mongoid.attributes.jxc_stock_transfer_bill.transfer_out_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'transfer_out\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_transfer_bill_transfer_out_stock{value: @jxc_stock_transfer_bill.transfer_out_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_out_stock.storage_name,readonly:true }
-        = f.hidden_field :transfer_out_stock_ids
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_stock_transfer_bill_transfer_out_stock{value: @jxc_stock_transfer_bill.transfer_out_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_out_stock.storage_name,readonly:true }
+          = f.hidden_field :transfer_out_stock_ids
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.button t('mongoid.attributes.jxc_stock_transfer_bill.transfer_in_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'transfer_in\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_transfer_bill_transfer_in_stock{value: @jxc_stock_transfer_bill.transfer_in_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_in_stock.storage_name,readonly:true }
-        = f.hidden_field :transfer_in_stock_ids
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_stock_transfer_bill_transfer_in_stock{value: @jxc_stock_transfer_bill.transfer_in_stock.nil? ? '':@jxc_stock_transfer_bill.transfer_in_stock.storage_name,readonly:true }
+          = f.hidden_field :transfer_in_stock_ids
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       %td
         = f.label :remark

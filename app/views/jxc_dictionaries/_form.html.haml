@@ -10,16 +10,22 @@
       %td
         = f.label :dic
       %td
-        = f.text_field :dic,:class=>'form-control',onblur:'generatePinyinCode("jxc_dictionary_dic","jxc_dictionary_pinyin_code")'
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :dic,:class=>'form-control',onblur:'generatePinyinCode("jxc_dictionary_dic","jxc_dictionary_pinyin_code")'
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.label :pinyin_code
       %td
-        = f.text_field :pinyin_code,:class=>'form-control'
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :pinyin_code,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       %td
         = f.label :dic_desc
       %td
-        = f.text_field :dic_desc,:class=>'form-control'
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :dic_desc,:class=>'form-control'
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.label :sort
       %td

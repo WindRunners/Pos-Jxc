@@ -1,10 +1,6 @@
 = form_for @jxc_storage,remote:true do |f|
-  - if @jxc_storage.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@jxc_storage.errors.count, "error")} prohibited this jxc_storage from being saved:"
-      %ul
-        - @jxc_storage.errors.full_messages.each do |msg|
-          %li= msg
+  #error_explanation{"style"=>"display:none"}
+    %ul
 
   %table{class: "table table-bordered table-hover"}
     %tr
@@ -36,14 +32,14 @@
           = f.hidden_field :admin_id
           %i.ace-icon.fa.fa-leaf.green
     %tr
-      %td
-        = f.button t('mongoid.attributes.jxc_storage.userinfo'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageUserinfo()'
-      %td
-        %span.input-icon{style:'width:100%;'}
-          -#= f.text_field :admin,:class=>'form-control',readonly:true
-          %input.form-control#jxc_storage_userinfo{value: @jxc_storage.userinfo.present? ? @jxc_storage.userinfo.shopname : '',readonly:true }
-          = f.hidden_field :userinfo_id
-          %i.ace-icon.fa.fa-leaf.green
+      -#%td
+      -#  = f.button t('mongoid.attributes.jxc_storage.userinfo'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageUserinfo()'
+      -#%td
+      -#  %span.input-icon{style:'width:100%;'}
+      -#    -#= f.text_field :admin,:class=>'form-control',readonly:true
+      -#    %input.form-control#jxc_storage_userinfo{value: @jxc_storage.userinfo.present? ? @jxc_storage.userinfo.shopname : '',readonly:true }
+      -#    = f.hidden_field :userinfo_id
+      -#    %i.ace-icon.fa.fa-leaf.green
       %td
         = f.button t('mongoid.attributes.jxc_storage.store'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageStore()'
       %td
@@ -52,6 +48,11 @@
           %input.form-control#jxc_storage_store{value: @jxc_storage.store.present? ? @jxc_storage.store.name : '',readonly:true }
           = f.hidden_field :store_id
           %i.ace-icon.fa.fa-leaf.green
+
+      %td
+        = f.label :storage_code
+      %td
+        = f.text_field :storage_code,:class=>'form-control'
       -#%td
       -#  = f.label :admin_phone
       -#%td
@@ -68,10 +69,6 @@
       %td
         = f.text_field :telephone,:class=>'form-control'
     %tr
-      %td
-        = f.label :storage_code
-      %td
-        = f.text_field :storage_code,:class=>'form-control'
       %td
         = f.label :memo
       %td

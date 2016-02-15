@@ -40,7 +40,7 @@
           .li_name.col-xs-4
             所在产区:
           .li_content.col-xs-8
-            =@data['chateau'].region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+            =@data['region_str']
         .row
           .li_name.col-xs-4
             详细地址:

@@ -48,6 +48,7 @@ class User
   field :audit_desc, type: String #审批备注信息
 
   field :channel_id #移动设备推送ID
+  field :user_flag, type: Integer #用户标识  0为普通用户，1：初始化用户（不可修改和删除）
 
   #field :admin
 

@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
   def line_order_creat
 
     orderpar = JSON.parse(params[:order])
-    ordercompleted = Ordercompleted.new(:ordertype => orderpar['ordertype'], :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"],:business_user => orderpar['business_user'],:user_id => current_user.id)
+    ordercompleted = Ordercompleted.new(:ordertype => orderpar['ordertype'], :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"],:business_user => orderpar['business_user'],:user_id => current_user.id,:store_id => orderpar['store_id'])
 
     respond_to do |format|
 
@@ -24,8 +24,6 @@ class OrdersController < ApplicationController
     end
 
   end
-
-
 
 
   # GET /orders

@@ -22,7 +22,7 @@ class User
   has_many :comments
   has_many :announcements
 
-  has_many :stores #有多个门店
+  has_and_belongs_to_many :stores #有多个门店
 
   has_many :searches
   has_many :wines

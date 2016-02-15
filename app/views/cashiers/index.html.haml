@@ -47,12 +47,12 @@
 .col-xs-4{:style => "padding-right: 0px;"}
   .input-group.margin-bottom-20
     %span.input-group-addon
-      门店:
+      &nbsp;&nbsp;&nbsp;&nbsp;门店:&nbsp;&nbsp;&nbsp;&nbsp;
     %span.input-group-addon
       %i@
-    %select#ordertype.form-control
-      %option{:value=>'0'} 正常订单
-      %option{:value=>'2'} 挂账订单
+    %select#stores.form-control
+      - @stores.each do |store|
+        %option{:value=>"#{store.id}"} #{store.name}
   .input-group.margin-bottom-20
     %span.input-group-addon
       订单类型:

@@ -64,6 +64,12 @@ is_clearing = false
     $("#business_user").focus()
     return
 
+  store_id = $('#stores').val()
+  if !store_id? && store_id==""
+    new Pop "", "javascript:void(0)", "请在用户管理设置负责的门店！"
+    $("#stores").focus()
+    return
+
   console.log "business_user:#{business_user}"
   console.log "ordertype:#{ordertype}"
 #  return
@@ -95,6 +101,7 @@ is_clearing = false
     ordergoods: ogs
     ordertype: ordertype
     business_user: business_user
+    store_id: store_id
   $.post(
     "/orders/line_order_creat"
     order: JSON.stringify(orderPara)

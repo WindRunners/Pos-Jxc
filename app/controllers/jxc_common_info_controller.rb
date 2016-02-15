@@ -53,9 +53,9 @@ class JxcCommonInfoController < ApplicationController
     resultList = []
 
     if storage_type.present?
-      storageList = JxcStorage.includes(:admin).and({storage_type:storage_type},{:storage_name => /#{store_param}/})
+      storageList = JxcStorage.and({storage_type:storage_type},{:storage_name => /#{store_param}/})
     else
-      storageList = JxcStorage.includes(:admin).where({:storage_name => /#{store_param}/})
+      storageList = JxcStorage.where({:storage_name => /#{store_param}/})
     end
 
     if storageList.present?

@@ -2,7 +2,7 @@ class JxcStoragesController < ApplicationController
   before_action :set_jxc_storage, only: [:show, :edit, :update, :destroy]
 
   def index
-    @jxc_storages = JxcStorage.order_by(:created_at => :desc).page(params[:page]).per(10)
+    @jxc_storages = JxcStorage.includes(:admin).order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show
@@ -62,6 +62,6 @@ class JxcStoragesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_storage_params
-    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :userinfo_id, :store_id, :address, :telephone, :status, :memo, :data_1, :data_2, :data_3, :data_4)
+    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :userinfo_id, :store_id, :admin_id, :address, :telephone, :status, :memo, :data_1, :data_2, :data_3, :data_4)
   end
 end

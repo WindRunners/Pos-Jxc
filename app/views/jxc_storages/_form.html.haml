@@ -28,9 +28,13 @@
           = f.text_field :storage_type,:class=>'form-control',readonly:true
           %i.ace-icon.fa.fa-leaf.green
       %td
-        = f.label :storage_code
+        = f.button t('mongoid.attributes.jxc_storage.admin'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageAdmin()'
       %td
-        = f.text_field :storage_code,:class=>'form-control'
+        %span.input-icon{style:'width:100%;'}
+          -#= f.text_field :admin,:class=>'form-control',readonly:true
+          %input.form-control#jxc_storage_admin{value: @jxc_storage.admin.present? ? @jxc_storage.admin.name : '',readonly:true }
+          = f.hidden_field :admin_id
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       %td
         = f.button t('mongoid.attributes.jxc_storage.userinfo'),type:'button',class:'btn btn-white btn-success',onclick:'getStorageUserinfo()'
@@ -64,6 +68,10 @@
       %td
         = f.text_field :telephone,:class=>'form-control'
     %tr
+      %td
+        = f.label :storage_code
+      %td
+        = f.text_field :storage_code,:class=>'form-control'
       %td
         = f.label :memo
       %td
@@ -145,7 +153,7 @@
   }
 
 
-  //选择仓库负责人信息
+  //选择仓库所属运营商信息
   function getStorageUserinfo(){
     $('.modal-title').text('选择仓库所属运营商');
     $('.modal-dialog').removeClass('tree-table');
@@ -202,6 +210,40 @@
     initDataGrid(tableSetting);
   }
 
+  //选择仓库负责人信息
+  function getStorageAdmin(){
+    $('.modal-title').text('选择仓库负责人');
+    $('.modal-dialog').removeClass('tree-table');
+    $('#jxc-select-tree').addClass('jxc-disappear-tree');
+    $('#jxc-select-table').removeClass('jxc-disappear-table');
+    $('#jxc-select-table').removeClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storageAdmin');
+    $('#searchParam').val('');
+
+    $('#selectModal').modal('show');
+
+    //dataGrid设置
+    tableSetting = {
+      title: '职员信息',
+      url:'/jxc_common_info/getUsersList',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'员工编号',field:'sid',width:'18%'},
+        {title:'姓名',field:'name',width:'18%'},
+        {title:'性别',field:'sex',width:'18%'},
+        {title:'手机号码',field:'mobile',width:'18%'},
+        {title:'Email',field:'email',width:'28%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始表
+    initDataGrid(tableSetting);
+  }
+
   function selectData(){
     var dataType = $('#confirm-button').attr('data-type');
 
@@ -228,6 +270,14 @@
       }else{
         $('#jxc_storage_store').val(selectData[0].name);
         $('#jxc_storage_store_id').val(selectData[0]._id);
+      }
+    }else if(dataType == 'storageAdmin'){
+      var selectData = $('#dataTable').datagrid('getSelections');
+      if(selectData.length == 0){
+        alert('请选择数据');
+      }else{
+        $('#jxc_storage_admin').val(selectData[0].name);
+        $('#jxc_storage_admin_id').val(selectData[0]._id);
       }
     }
 

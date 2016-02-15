@@ -11,22 +11,19 @@ class OrdersController < ApplicationController
   def line_order_creat
 
     orderpar = JSON.parse(params[:order])
-
-    ordercompleted = Ordercompleted.new(:ordertype => 0, :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"])
+    ordercompleted = Ordercompleted.new(:ordertype => orderpar['ordertype'], :telephone => orderpar["telephone"], :useintegral => orderpar["useintegral"], :userinfo => current_user.userinfo, :customer_id => orderpar["customer_id"], :serial_number => orderpar["serial_number"],:business_user => orderpar['business_user'],:user_id => current_user.id,:store_id => orderpar['store_id'])
 
     respond_to do |format|
 
       begin
-        ordercompleted.line_order_creat!(orderpar)
-        format.json { render :json => {success: true} }
-      rescue
+        format.json { render :json => {success: true} } if ordercompleted.line_order_creat_do(orderpar)
+      rescue Exception => e
+        Rails.logger.info "线下订单生成失败，异常信息为：#{e.message}"
         format.json { render :json => {success: false} }
       end
     end
 
   end
-
-
 
 
   # GET /orders
@@ -39,14 +36,16 @@ class OrdersController < ApplicationController
 
 
   def orders_table_data
+
+    ordertype = params[:ordertype]
     parm = Hash.new
-    parm[:userinfo] = current_user.userinfo
-    parm[:store_id] = {"$in" => current_user['store_ids']}
+    parm[:userinfo_id] = current_user['userinfo_id']
+    parm[:store_id] = {"$in" => current_user['store_ids']} if ordertype!="0" && ordertype!="2"
 
     parm[:orderno] = params[:orderno] if !params[:orderno].nil? && !params[:orderno].blank?
     parm[:consignee] = params[:consignee] if !params[:consignee].nil? && !params[:consignee].blank?
     parm[:telephone] = params[:telephone] if !params[:telephone].nil? && !params[:telephone].blank?
-    parm[:ordertype] = params[:ordertype] if !params[:ordertype].nil? && !params[:ordertype].blank?
+    parm[:ordertype] = ordertype.to_i if ordertype.present?
     parm[:paymode] = params[:paymode] if !params[:paymode].nil? && !params[:paymode].blank?
     parm[:created_at.gte] = params[:beginTime] if !params[:beginTime].nil? && !params[:beginTime].blank?
     parm[:created_at.lte] = params[:endTime] if !params[:endTime].nil? && !params[:endTime].blank?
@@ -55,8 +54,9 @@ class OrdersController < ApplicationController
     state_parm = params[:workflow_state].to_sym if !params[:workflow_state].nil?
 
     orders = []
-    if :cancelled == state_parm || :completed == state_parm
-      parm[:workflow_state] = state_parm
+    if :cancelled == state_parm || :completed == state_parm || ordertype=="0" || ordertype=="2"
+
+      parm[:workflow_state] = state_parm if :all!=state_parm
       ordercompleteds = Ordercompleted.where(parm).order(created_at: :desc)
 
       ordercompleteds.each do |ordercompleted|
@@ -262,6 +262,19 @@ class OrdersController < ApplicationController
 
   def statistic
     
+  end
+
+  def line_payment_order
+
+    ordercompleted = Ordercompleted.find(params[:id]);
+    respond_to do |format|
+
+      if ordercompleted.payment_order!
+        format.json { render json: {:flag=>'1',:msg=>'挂账订单结算成功！'} }
+      else
+        format.json { render json: {:flag=>'1',:msg=>'挂账订单结算成功！'} }
+      end
+    end
   end
 
   private

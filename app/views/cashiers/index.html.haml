@@ -46,6 +46,28 @@
   .scroll-tbody#select-products-body
 .col-xs-4{:style => "padding-right: 0px;"}
   .input-group.margin-bottom-20
+    %span.input-group-addon
+      &nbsp;&nbsp;&nbsp;&nbsp;门店:&nbsp;&nbsp;&nbsp;&nbsp;
+    %span.input-group-addon
+      %i@
+    %select#stores.form-control
+      - @stores.each do |store|
+        %option{:value=>"#{store.id}"} #{store.name}
+  .input-group.margin-bottom-20
+    %span.input-group-addon
+      订单类型:
+    %span.input-group-addon
+      %i@
+    %select#ordertype.form-control
+      %option{:value=>'0'} 正常订单
+      %option{:value=>'2'} 挂账订单
+  .input-group.margin-bottom-20
+    %span.input-group-addon
+      业务人员:
+    %span.input-group-addon
+      %i@
+    %input#business_user.form-control{:type => "text",:placeholder => "业务人员", :value => ""}
+  .input-group.margin-bottom-20
     %span.input-group-addon 应收现金:
     %span.input-group-addon
       %i.fa.fa-jpy
@@ -61,6 +83,7 @@
     %span.input-group-addon
       %i.fa.fa-jpy
     %input#change.form-control{:type => "number", :disabled => "disabled", :value => "0.00"}
+
   .btn-group.btn-group-justified.cashier-operat{:role => "group", "aria-label" => "..."}
     .btn-group{:role => "group"}
       %button.btn.btn-primary.btn-xlg.radius-10{:type => "button", :onclick => "clearing()"} 结算

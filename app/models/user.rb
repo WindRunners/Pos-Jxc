@@ -22,7 +22,8 @@ class User
   has_many :comments
   has_many :announcements
 
-  has_many :stores #有多个门店
+  has_and_belongs_to_many :stores #有多个门店
+  has_many :jxc_storages  #有多个仓库
 
   has_many :searches
   has_many :wines
@@ -110,8 +111,6 @@ class User
   has_and_belongs_to_many :jxc_cost_adjust_bills #成本调整单
 
   has_many :jxc_storage_journals  #仓库变更明细中的 创建人
-
-  has_one :jxc_storage  #每个负责人 负责一个仓库
 
   #addby dfj
  # def send_password_reset

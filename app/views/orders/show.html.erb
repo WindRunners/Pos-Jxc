@@ -30,6 +30,18 @@
         $("#btn_order_id").val(order_id);
     }
     ;
+    function line_payment_order(order_id){
+
+        $.ajax({
+            type: "get",
+            url: "/orders/line_payment_order?id="+order_id,
+            dataType: "json",
+            success: function (data) {
+                alert(data.msg);
+                location.hash = location.hash+"&f="+get_rand_num();
+            }
+        });
+    }
 
 
 </script>
@@ -197,7 +209,7 @@
                   <p>买家：</p>
                 </td>
                 <td>
-                  <p><%= format_encryption(@order.consignee) %></p>
+                  <p><%= @order.consignee %></p>
                 </td>
               </tr>
               <tr>
@@ -210,7 +222,7 @@
                   <p>联系方式：</p>
                 </td>
                 <td>
-                  <p><%= format_encryption(@order.telephone) %></p>
+                  <p><%= @order.telephone %></p>
                 </td>
               </tr>
               <tr>
@@ -218,7 +230,7 @@
                   <p>收货信息：</p>
                 </td>
                 <td style="word-wrap:break-word;">
-                  <p><%= format_encryption(@order.address) %></p>
+                  <p><%= @order.address %></p>
                 </td>
               </tr>
 
@@ -247,6 +259,16 @@
               <p><%= @store.name if @store.present? %></p>
             </td>
           </tr>
+          <% if @order.ordertype == 2 %>
+              <tr>
+                <td align="">
+                  <p>业务人员：</p>
+                </td>
+                <td>
+                  <p><%= @order.business_user %></p>
+                </td>
+              </tr>
+          <% end %>
           </tbody>
         </table>
       </td>
@@ -291,6 +313,8 @@
                   <% if :paid == workflow_state %>
                       <!-- Button trigger modal -->
                       <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal" onclick="set_btn_order_id('<%=@order.id%>');"><i class="ace-icon">接&nbsp;&nbsp;单</i></button>
+                  <% elsif :generation==workflow_state && @order.ordertype==2%>
+                      <button type="button" class="btn btn-sm" onclick="line_payment_order('<%=@order.id%>');"><i class="ace-icon">结算</i></button>
                   <% end %>
                   <a data-href="<%= orders_path(:workflow_state =>"paid") %>" class="btn btn-sm btn-info"><i class="ace-icon">返&nbsp;回</i></a>
                 </p>

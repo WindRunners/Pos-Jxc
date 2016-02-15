@@ -5,6 +5,7 @@ class CashiersController < ApplicationController
   # GET /cashiers.json
   def index
     @cashiers = Cashier.all
+    @stores = current_user.stores
   end
 
   # GET /cashiers/1

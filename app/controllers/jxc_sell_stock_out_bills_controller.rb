@@ -232,10 +232,10 @@ class JxcSellStockOutBillsController < ApplicationController
   end
 
   #POS生成销售出库单，并自动审核
-  def generate_sell_out_bill
-    result = JxcSellStockOutBill.generate_sell_out_bill(current_user)
-    render json:result
-  end
+  # def generate_sell_out_bill
+  #   result = JxcSellStockOutBill.generate_sell_out_bill(current_user)
+  #   render json:result
+  # end
 
   private
   def set_jxc_sell_stock_out_bill

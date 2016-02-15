@@ -184,13 +184,13 @@ class JxcSellStockOutBill < JxcBaseModel
     return result
   end
 
-  #POS生成销售出库单
-  def self.generate_sell_out_bill(current_user,total_amount,receivable_amount,bill_detail_array_json)
+  #POS生成销售出库单(当前用户，门店，总金额，实收金额，销售商品json[商品ID、商品单位、商品零售价、商品数量])
+  def self.generate_sell_out_bill(current_user,retail_store,total_amount,receivable_amount,bill_detail_array_json)
     #结果集
     result = {}
     result[:flag] = 0
 
-    store = current_user.jxc_storage #当前用户对应的仓库信息
+    store = retail_store.jxc_storage #门店对应的仓库信息
     retail_consumer = JxcContactsUnit.find_by(:unit_name => '零售客户') #零售客户
     # financial_account
 
@@ -212,25 +212,26 @@ class JxcSellStockOutBill < JxcBaseModel
 
       #单据明细
       bill_detail_array = JSON.parse(bill_detail_array_json)
+      Rails.logger.info "销售出库单:#{bill_detail_array}"
       bill_detail_array.each do |bill_detail|
 
         @temp_bill_detail = JxcBillDetail.new
 
-        @temp_bill_detail.resource_product_id = bill_detail[:product_id]
-        @temp_bill_detail.unit = bill_detail[:unit]
-        @temp_bill_detail.price = bill_detail[:price]
-        @temp_bill_detail.count = bill_detail[:count]
-        @temp_bill_detail.amount = bill_detail[:price].to_d * bill_detail[:count].to_d
+        @temp_bill_detail.resource_product_id = bill_detail['product_id']
+        @temp_bill_detail.unit = bill_detail['unit']
+        @temp_bill_detail.price = bill_detail['price']
+        @temp_bill_detail.count = bill_detail['count']
+        @temp_bill_detail.amount = bill_detail['price'].to_d * bill_detail['count'].to_d
 
         @temp_bill_detail.jxc_storage = store
         @temp_bill_detail.jxc_contacts_unit = retail_consumer
         @temp_bill_detail.jxc_sell_stock_out_bill = @sell_out_bill
 
-        @temp_bill_detail.save
+        @temp_bill_detail.save!
       end
 
-    rescue
-      result[:msg] = '销售出库单生成失败，请重试'
+    rescue Exception => e
+      result[:msg] = "销售出库单生成失败，请重试#{e.message}"
       return result
     end
 

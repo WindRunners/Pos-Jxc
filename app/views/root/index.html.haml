@@ -9,11 +9,12 @@
     = csrf_meta_tags
     %script{type:"text/javascript",src:"http://api.map.baidu.com/api?v=2.0&ak=PxeMqAnIzuRf8UGGuQ9zNlor"}
     = stylesheet_link_tag "application", :media => "all"
+    = stylesheet_link_tag "all", :media => "all"
 
     = javascript_include_tag "angular.min.js"
 
     = javascript_include_tag "application"
-
+    = javascript_include_tag "app"
 
     /[if lte IE 9]
       = stylesheet_link_tag "ace/ace-part2.css"

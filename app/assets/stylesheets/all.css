@@ -119,3 +119,9 @@ table.dataTable tbody tr.selected {
   padding: 2px;
   background-color: red;
 }
+
+
+/*
+*= require jxc_contacts_units
+*= require jxc_inventory_query
+ */

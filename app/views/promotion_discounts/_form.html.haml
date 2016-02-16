@@ -13,9 +13,9 @@
 
   .form-group{:style => "height: 240px; margin-bottom: 10px;"}
     - if @promotion_discount.avatar.present?
-      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @promotion_discount.avatar}"}
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::PRODUCT_SERVER + @promotion_discount.avatar}"}
     - else
-      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @promotions[0].avatar if 0 < @promotions.count}"}
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::PRODUCT_SERVER + @promotions[0].avatar if 0 < @promotions.count}"}
   .form-group
     = f.label t(:avatar, scope: "mongoid.attributes.PromotionDiscount") + ":", :class => "col-sm-2 control-label no-padding-right"
     .col-sm-10
@@ -108,6 +108,6 @@
         取消
 :javascript
   $(document).ready(function () {
-    var img_server = "#{RestConfig::IMG_SERVER}";
+    var img_server = "#{RestConfig::PRODUCT_SERVER}";
     promotionDiscount(img_server);
   });

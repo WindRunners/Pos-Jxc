@@ -79,7 +79,7 @@ class OrderJsonBack
             good.purchasePrice = product.purchasePrice
             good.integral = product.integral
             good.qrcode = product.qrcode
-            good.avatar_url = product.avatar_url
+            good.avatar = product.avatar
             good.specification = product.specification
           end
           good.title = product.title

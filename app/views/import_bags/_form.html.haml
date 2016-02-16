@@ -67,7 +67,7 @@
     .col-sm-offset-2.col-sm-8
       = f.submit '保存',class: 'btn btn-default',onclick: 'return save_check()'
 
-%input{"type"=>"hidden","id"=>"img_server","value"=>""}
+%input{"type"=>"hidden","id"=>"img_server","value"=>"#{RestConfig::PRODUCT_SERVER}"}
 
 /模态框
 .modal.fade.bs-example-modal-lg#myModal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}

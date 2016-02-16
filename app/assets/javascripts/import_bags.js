@@ -14,7 +14,7 @@ $(function(){
             "type":"POST"
         },
         "columns" : [
-            { "data": "avatar_url" },
+            { "data": "avatar" },
             { "data": "title" },
             { "data": "mobile_category_name" },
             { "data": "price" }
@@ -28,7 +28,7 @@ $(function(){
         },
         "columnDefs": [ {
             "targets": 0,
-            "data": "avatar_url",
+            "data": "avatar",
             "render": function ( data, type, full, meta ) {
                 return "<img class='product_avatar' src='"+img_server+data+"'/>";
             }

@@ -175,7 +175,7 @@ class Ordercompleted
       good.price = product.price
       good.integral = product.integral
       good.specification = product.specification
-      good.avatar_url = product.avatar_url
+      good.avatar = product.avatar
 
       if product.stock < good.quantity
         products << {"title" => product.title,"stock" => product.stock}
@@ -289,7 +289,7 @@ class Ordercompleted
                                                :purchasePrice => ordergood.purchasePrice,
                                                :integral => ordergood.integral,
                                                :quantity => ordergood.quantity,
-                                               :avatar_url => ordergood.avatar_url,
+                                               :avatar => ordergood.avatar,
                                                :is_gift => ordergood.is_gift)
     end
     return ordercompleted

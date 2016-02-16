@@ -83,6 +83,14 @@ class Product
     end
   end
 
+  def thumb_url
+    if self.thumb.present?
+      RestConfig::PRODUCT_SERVER + self.thumb
+    else
+      'missing.png'
+    end
+  end
+
   def desc_url
     if self.desc.present?
       RestConfig::PRODUCT_SERVER + self.desc

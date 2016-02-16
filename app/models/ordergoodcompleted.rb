@@ -12,8 +12,13 @@ class Ordergoodcompleted
   field :price, type: Float #
   field :integral, type: Integer #积分
   field :quantity, type: Integer
-  field :avatar_url
+  field :avatar
   field :is_gift,type: Boolean, default: false
+
+  def avatar_url
+    self.avatar ||= 'missing.png'
+    RestConfig::PRODUCT_SERVER + self.avatar
+  end
 
   def product
     @product ||= Product.shop_id(self.ordercompleted.userinfo.id).find(self.product_id)

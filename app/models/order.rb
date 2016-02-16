@@ -151,7 +151,7 @@ class Order
       good.specification = product.specification
       good.qrcode = product.qrcode
       good.title = product.title
-      good.avatar_url = product.avatar_url
+      good.avatar = product.avatar
       good.is_gift = true
 
       self.totalquantity += good.quantity

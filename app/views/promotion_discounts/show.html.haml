@@ -40,7 +40,7 @@
       - @promotion_discount.participateProducts.each do |product|
         %tr{:class => "cls_#{product.id}"}
           %td
-            %img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+            %img{:src => "#{RestConfig::PRODUCT_SERVER + product.avatar_url}"}
           %td= product.qrcode
           %td= product.title
           %td= format("%.2f", product.purchasePrice).to_f

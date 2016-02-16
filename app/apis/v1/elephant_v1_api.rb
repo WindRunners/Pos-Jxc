@@ -102,6 +102,8 @@ class ElephantV1Api < Grape::API
   mount ChateauV1API => 'chateau'
 
   mount WineV1API => 'wine'
+  mount PhoneBookV1API => 'phonebook'
+
 
   mount CityV1API => 'city'
   mount CommonV1API => 'common'

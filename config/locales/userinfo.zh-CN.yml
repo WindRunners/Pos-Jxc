@@ -1,13 +1,13 @@
 zh-CN:
   mongoid:
     models:
-      userinfo: ""
+      userinfo: "联盟商"
     attributes:
       userinfo:
-        name: "运营者姓名"
+        name: "法人姓名"
         idnumber: "身份证号码"
         address: "地址"
-        shopname: "商店名称"
-        location: "经纬度"
-        integral: "积分"
-        pdistance: "配送距离"
+        pusher_phone: "手机号码"
+        email: "邮箱地址"
+        province: "省份"
+        city: "城市"

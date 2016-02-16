@@ -186,7 +186,7 @@ class JxcSellStockOutBill < JxcBaseModel
   end
 
   #POS生成销售出库单(当前用户，门店，总金额，实收金额，销售商品json[商品ID、商品单位、商品零售价、商品数量])
-  def self.generate_sell_out_bill(current_user,retail_store,total_amount,receivable_amount,bill_detail_array_json)
+  def self.generate_sell_out_bill(current_user,order_id,retail_store,total_amount,receivable_amount,bill_detail_array_json)
     #结果集
     result = {}
     result[:flag] = 0
@@ -208,6 +208,15 @@ class JxcSellStockOutBill < JxcBaseModel
       @sell_out_bill.total_amount = total_amount  #总金额
       @sell_out_bill.receivable_amount = receivable_amount  #实收金额
       @sell_out_bill.discount_amount = total_amount.to_d - receivable_amount.to_d #优惠
+
+
+      begin
+        order = Order.find(order_id)
+      rescue
+        order = nil
+      end
+
+      @sell_out_bill.order = order
 
       @sell_out_bill.save
 

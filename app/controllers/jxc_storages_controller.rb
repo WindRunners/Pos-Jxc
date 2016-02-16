@@ -25,12 +25,12 @@ class JxcStoragesController < ApplicationController
         # format.html { redirect_to jxc_storages_path, notice: '仓库信息成功创建.' }
         # format.js { render_js jxc_storages_path, notice: '仓库信息成功创建.' }
         # format.json { render :show, status: :created, location: @jxc_storage }
-        format.json { render json: get_render_json(1,nil,jxc_storages_path)}
+        format.json { render json: get_render_common_json(@jxc_storage,jxc_storages_path)}
       else
         # format.html { render :new }
         # format.js { render_js new_jxc_storage_path}
         # format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@jxc_storage.errors.full_messages)}
+        format.json { render json: get_render_common_json(@jxc_storage)}
       end
     end
   end
@@ -42,12 +42,12 @@ class JxcStoragesController < ApplicationController
         # format.html { redirect_to jxc_storages_path, notice: '仓库信息成功更新.' }
         # format.js { render_js jxc_storages_path, notice: '仓库信息成功更新.' }
         # format.json { render :show, status: :ok, location: @jxc_storage }
-        format.json { render json: get_render_json(1,nil,jxc_storages_path)}
+        format.json { render json: get_render_common_json(@jxc_storage,jxc_storages_path)}
       else
         # format.html { render :edit }
         # format.js { render_js edit_jxc_storage_path(@jxc_storage) }
         # format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@jxc_storage.errors.full_messages)}
+        format.json { render json: get_render_common_json(@jxc_storage)}
       end
     end
   end

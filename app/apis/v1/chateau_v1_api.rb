@@ -10,11 +10,10 @@ class ChateauV1API < Grape::API
     success Entities::Chateau
   end
   params do
-    requires :page, type: String, desc: '当前页'
-    requires :per_page, type: String, desc: '每页纪录数目'
+    requires :page, type: String, desc: '第几页，从零开始'
   end
   get 'all' do
-    present Chateau.all.page(params[:page]).per(params[:per_page]), with: Entities::Chateau
+    present Chateau.all.page(params[:page]).per(8), with: Entities::Chateau
   end
 
 
@@ -57,8 +56,7 @@ class ChateauV1API < Grape::API
 
   params do
     requires :region_id, type: String, desc: 'region_id'
-    requires :page, type: String, desc: '当前页'
-    requires :per_page, type: String, desc: '每页纪录数目'
+    requires :page, type: String, desc: '第几页，从零开始'
   end
 
   get 'chateau_list' do
@@ -69,7 +67,7 @@ class ChateauV1API < Grape::API
     region.descendants_and_self.each do |r|
       region_id_array << r['_id']
     end
-    present Chateau.where({:status => 1, 'region_id' => {"$in" => region_id_array}}).page(params[:page]).per(params[:per_page]).order('created_at DESC'), with: Entities::Chateau
+    present Chateau.where({:status => 1, 'region_id' => {"$in" => region_id_array}}).page(params[:page]).per(8).order('created_at DESC'), with: Entities::Chateau
   end
 
 
@@ -118,10 +116,14 @@ class ChateauV1API < Grape::API
     chateau_comment = ChateauComment.new
     chateau_comment.content = params[:content]
     chateau.chateau_comments << chateau_comment
+    data ={}
     if chateau.save
-      {:success => true}
+      data['flag'] = 1
+      data['message'] = '评论成功！'
+
     else
-      {:success => false}
+      data['flag'] = 0
+      data['message'] = '评论失败！'
     end
 
   end

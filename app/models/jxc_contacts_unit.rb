@@ -48,6 +48,8 @@ class JxcContactsUnit
   field :receive_deadline, type: Integer #收款期限
   field :payment_deadline, type: Integer #付款期限
 
+  validates :unit_name,:spell_code,:unit_property,:unit_type, presence: true
+
   # 所属部门
   # belongs_to :department, foreign_key: :department_id
 

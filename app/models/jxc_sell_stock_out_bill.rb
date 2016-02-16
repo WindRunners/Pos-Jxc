@@ -24,6 +24,7 @@ class JxcSellStockOutBill < JxcBaseModel
   has_and_belongs_to_many :bill_maker, class_name:'User', foreign_key: :maker_id  #制单人
 
   has_many :jxc_bill_details  #单据商品明细
+  belongs_to :order # 销售订单
 
   #生成销售出库单编号
   def generate_bill_no

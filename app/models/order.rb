@@ -7,6 +7,7 @@ class Order
   include Mongoid::Attributes::Dynamic
 
   has_many :order_tracks
+  has_many :jxc_sell_stock_out_bills  #进销存 销售出库单
 
   has_many :ordergoods,:autosave => true, :dependent => :destroy
   accepts_nested_attributes_for :ordergoods

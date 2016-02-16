@@ -30,7 +30,7 @@ class JxcStoragesController < ApplicationController
         # format.html { render :new }
         # format.js { render_js new_jxc_storage_path}
         # format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@jxc_storage.errors.messages)}
+        format.json { render json: get_render_json(0,@jxc_storage.errors.full_messages)}
       end
     end
   end
@@ -47,7 +47,7 @@ class JxcStoragesController < ApplicationController
         # format.html { render :edit }
         # format.js { render_js edit_jxc_storage_path(@jxc_storage) }
         # format.json { render json: @jxc_storage.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@jxc_storage.errors.messages)}
+        format.json { render json: get_render_json(0,@jxc_storage.errors.full_messages)}
       end
     end
   end

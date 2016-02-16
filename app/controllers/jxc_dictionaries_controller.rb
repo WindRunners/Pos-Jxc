@@ -21,11 +21,13 @@ class JxcDictionariesController < ApplicationController
     respond_to do |format|
       if @jxc_dictionary.save
         # format.html { redirect_to jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
-        format.js { render_js jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
-        format.json { render :show, status: :created, location: @jxc_dictionary }
+        # format.js { render_js jxc_dictionaries_path, notice: '进销存字典创建成功.'  }
+        # format.json { render :show, status: :created, location: @jxc_dictionary }
+        format.json { render json: get_render_common_json(@jxc_dictionary,jxc_dictionaries_path) }
       else
-        format.js { render_js new_jxc_dictionary_path }
-        format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
+        # format.js { render_js new_jxc_dictionary_path }
+        # format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@jxc_dictionary) }
       end
     end
   end
@@ -34,11 +36,13 @@ class JxcDictionariesController < ApplicationController
     respond_to do |format|
       if @jxc_dictionary.update(jxc_dictionary_params)
         # format.html { redirect_to @jxc_dictionary, notice: '进销存字典更新成功.' }
-        format.js { render_js jxc_dictionaries_path(@jxc_dictionary), notice: '进销存字典更新成功.' }
-        format.json { render :show, status: :ok, location: @jxc_dictionary }
+        # format.js { render_js jxc_dictionaries_path(@jxc_dictionary), notice: '进销存字典更新成功.' }
+        # format.json { render :show, status: :ok, location: @jxc_dictionary }
+        format.json { render json: get_render_common_json(@jxc_dictionary,jxc_dictionaries_path) }
       else
-        format.js { render_js edit_jxc_dictionary_path }
-        format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
+        # format.js { render_js edit_jxc_dictionary_path }
+        # format.json { render json: @jxc_dictionary.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@jxc_dictionary) }
       end
     end
   end

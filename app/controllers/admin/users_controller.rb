@@ -75,13 +75,14 @@ class Admin::UsersController < ApplicationController
           # format.js { render_js admin_users_path }
           # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
           # format.json { render :show, status: :ok }
-
           # end
-          format.json { render json: get_render_json(1, nil, admin_users_path) }
+          # format.json { render json: get_render_json(1, nil, admin_users_path) }
+          format.json { render json: get_render_common_json(@user,admin_users_path(@user)) }
         else
           # format.html { render :new }
           # format.json { render json: @user.errors, status: :unprocessable_entity }
-          format.json { render json: get_render_json(0, @user.errors.messages) }
+          # format.json { render json: get_render_json(0, @user.errors.messages) }
+          format.json { render json: get_render_common_json(@user) }
         end
       rescue Exception => e
         p e.message

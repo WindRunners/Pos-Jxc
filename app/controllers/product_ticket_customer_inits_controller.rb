@@ -43,9 +43,9 @@ class ProductTicketCustomerInitsController < ApplicationController
       begin
 
         if @product_ticket_customer_init.save
-          format.json { render json: get_render_json(1,nil,'') }
+          format.json { render json: get_render_common_json(@product_ticket_customer_init,product_ticket_product_ticket_customer_inits_path(@product_ticket)) }
         else
-          format.json { render json: get_render_json(0,@product_ticket_customer_init.errors.messages,nil) }
+          format.json { render json: get_render_common_json(@product_ticket_customer_init) }
         end
       rescue Exception => e
         p e.message
@@ -63,9 +63,9 @@ class ProductTicketCustomerInitsController < ApplicationController
 
     respond_to do |format|
       if @product_ticket_customer_init.update(product_ticket_customer_init_params)
-        format.json { render json: get_render_json(1,nil,product_ticket_product_ticket_customer_inits_path(@product_ticket)) }
+        format.json { render json: get_render_common_json(@product_ticket_customer_init,product_ticket_product_ticket_customer_inits_path(@product_ticket)) }
       else
-        format.json { render json: get_render_json(0,@product_ticket_customer_init.errors.messages,nil) }
+        format.json { render json: get_render_common_json(@product_ticket_customer_init) }
       end
     end
   end

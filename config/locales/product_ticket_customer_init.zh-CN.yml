@@ -1,0 +1,7 @@
+zh-CN:
+  mongoid:
+    models:
+      product_ticket_customer_init: "酒劵接受用户"
+    attributes:
+      product_ticket_customer_init:
+        mobile: '手机号'

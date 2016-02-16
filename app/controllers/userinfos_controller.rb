@@ -226,16 +226,10 @@ class UserinfosController < ApplicationController
     @userinfo = Userinfo.find(params[:userinfo_id])
     respond_to do |format|
       if @userinfo.update(userinfo_params)
-        format.json { render json: get_render_json(1, nil, jyd_index_userinfos_path()) }
-        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        # format.json { head :no_content }
+        format.json { render json: get_render_common_json(@userinfo,jyd_index_userinfos_path) }
       else
-        format.json { render json: get_render_json(0, @userinfo.errors.messages) }
-        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        # format.json { head :no_content }
+        format.json { render json: get_render_common_json(@userinfo) }
       end
-      # format.html
-      # format.js { render_js jyd_index_userinfos_path() }
     end
   end
 

@@ -1,0 +1,9 @@
+zh-CN:
+  mongoid:
+    models:
+      import_bag: "后台酒库礼包"
+    attributes:
+      import_bag:
+        name: '名称'
+        business_user: '业务人员'
+        business_mobile: '业务人员手机号码'

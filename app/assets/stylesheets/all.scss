@@ -113,3 +113,9 @@
 table.dataTable tbody tr.selected {
   background-color: #b0bed9;
 }
+
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+}

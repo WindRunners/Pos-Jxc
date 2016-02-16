@@ -25,7 +25,7 @@ class AchieveOrderInventorySynchronous
       bill_detail_array << bill_detail
     end
 
-    result = JxcSellStockOutBill.generate_sell_out_bill(current_user, retail_store, total_amount, receivable_amount, bill_detail_array.to_json)
+    result = JxcSellStockOutBill.generate_sell_out_bill(current_user,ordercompleted.id, retail_store, total_amount, receivable_amount, bill_detail_array.to_json)
 
     Rails.logger.info "订单【#{orderid}】同步库存结果:#{result}"
 

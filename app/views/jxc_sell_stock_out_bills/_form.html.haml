@@ -43,13 +43,17 @@
       %td
         = f.button t('mongoid.attributes.jxc_sell_stock_out_bill.consumer'),type:'button',class:'btn btn-white btn-success',onclick:'getConsumersInfo()',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_sell_stock_out_bill_consumer{value: @jxc_sell_stock_out_bill.consumer.nil? ? '':@jxc_sell_stock_out_bill.consumer.unit_name,readonly:true }
-        = f.hidden_field :consumer_id
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_sell_stock_out_bill_consumer{value: @jxc_sell_stock_out_bill.consumer.nil? ? '':@jxc_sell_stock_out_bill.consumer.unit_name,readonly:true }
+          = f.hidden_field :consumer_id
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.button t('mongoid.attributes.jxc_sell_stock_out_bill.jxc_storage'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo()',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_sell_stock_out_bill_jxc_storage{value: @jxc_sell_stock_out_bill.jxc_storage.nil? ? '':@jxc_sell_stock_out_bill.jxc_storage.storage_name,readonly:true }
-        = f.hidden_field :storage_id
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_sell_stock_out_bill_jxc_storage{value: @jxc_sell_stock_out_bill.jxc_storage.nil? ? '':@jxc_sell_stock_out_bill.jxc_storage.storage_name,readonly:true }
+          = f.hidden_field :storage_id
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       -#%td
       -#  = f.button t('mongoid.attributes.jxc_sell_stock_out_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false

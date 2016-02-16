@@ -347,7 +347,7 @@ class OrderV1API < Grape::API
   end
   get 'search_orders_distribution' do
     orders = Rails.cache.fetch([self, 'search_orders_distribution']) do
-       Order.where(:customer_id => params[:customer_id], :workflow_state => :distribution).order(created_at: :desc).page(params[:page]).per(20)
+       Order.where(:customer_id => params[:customer_id], :workflow_state => {'$in'=>[:distribution]}).order(created_at: :desc).page(params[:page]).per(20)
     end
     present orders, with: Entities::Order
   end

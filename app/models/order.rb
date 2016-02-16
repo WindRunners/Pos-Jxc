@@ -7,6 +7,7 @@ class Order
   include Mongoid::Attributes::Dynamic
 
   has_many :order_tracks
+  has_many :jxc_sell_stock_out_bills  #进销存 销售出库单
 
   has_many :ordergoods,:autosave => true, :dependent => :destroy
   accepts_nested_attributes_for :ordergoods
@@ -37,7 +38,7 @@ class Order
   field :paymode,type: Integer  #支付方式 0-货到付款 1-支付宝 2-微信支付 3-酒库提酒
   field :online_paid, type: Integer, default: 0 #线上支付 0-未付款 1-已付款 2-已退款
   field :remarks  #备注
-  field :workflow_state  #
+  field :workflow_state  #状态 generation:待付款,paid:待抢单,take:待接货,distribution:配送中,receive:配送完成,completed:确认收货,cancelled:取消订单
 
   field :store_id  # 门店id
   field :distance  # 配送距离

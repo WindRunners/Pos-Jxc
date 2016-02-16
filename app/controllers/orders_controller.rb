@@ -24,7 +24,7 @@ class OrdersController < ApplicationController
         orderpar["ordergoods"].each do |ordergoodcompleted|
           product_id = ordergoodcompleted['product_id']
           quantity = ordergoodcompleted['quantity']
-          if JxcStorageProductDetail.where({'resource_product_id' => product_id, 'count' => {'$gte' => quantity}}).count() == 0
+          if JxcStorageProductDetail.where({'resource_product_id' => product_id, 'jxc_storage_id' => jxc_storage.id, 'count' => {'$gte' => quantity}}).count() == 0
             product = Product.shop_id(current_user['userinfo_id']).find(product_id)
             msg = "商品【#{product.title}】库存不足！"
             flag = false

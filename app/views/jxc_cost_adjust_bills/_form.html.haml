@@ -39,8 +39,10 @@
       %td
         = f.button t('mongoid.attributes.jxc_cost_adjust_bill.jxc_storage'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo()',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_cost_adjust_bill_jxc_storage{value: @jxc_cost_adjust_bill.jxc_storage.nil? ? '':@jxc_cost_adjust_bill.jxc_storage.storage_name,readonly:true }
-        = f.hidden_field :storage_id
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_cost_adjust_bill_jxc_storage{value: @jxc_cost_adjust_bill.jxc_storage.nil? ? '':@jxc_cost_adjust_bill.jxc_storage.storage_name,readonly:true }
+          = f.hidden_field :storage_id
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.label :handler
       %td

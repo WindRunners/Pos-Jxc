@@ -86,7 +86,7 @@ $(function () {
                 datatable.ajax.url($('#product_ticket_customer').data('source')).load();//刷新主页
             }else{
             }
-            alert(result.data);
+            alert(result.msg);
             //alert("Data: " + JSON.stringify(data) + "nStatus: " + status);
         });
 

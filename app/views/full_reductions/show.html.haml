@@ -82,7 +82,7 @@
           %tr
             %td= check_box_tag "product_id", product.id
             %td
-              %img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+              %img{:src => "#{product.avatar_url}"}
             %td= product.qrcode
             %td= product.title
             %td= format("%.2f", product.purchasePrice).to_f
@@ -108,7 +108,7 @@
         %tr
           %td= check_box_tag "product_id", product.id
           %td
-            %img{:src => "#{RestConfig::IMG_SERVER + product.avatar_url}"}
+            %img{:src => "#{product.avatar_url}"}
           %td= product.qrcode
           %td= product.title
           %td= format("%.2f", product.purchasePrice).to_f

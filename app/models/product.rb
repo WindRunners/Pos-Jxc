@@ -31,10 +31,10 @@ class Product
   field :qrcode
   field :qrcode_suffix
 
-  field :avatar_url
-  field :main_url
-  field :desc_url
-  field :thumb_url
+  field :avatar
+  field :thumb
+  field :mains, type: Array, default: [] #主图
+  field :desc
 
   field :mobile_category_name, default: '其他' #类别名称
   field :mobile_category_num, type: Integer, default: 0 #类别排序号
@@ -69,30 +69,26 @@ class Product
   has_many :jxc_storage_journal #仓库变更明细中的 商品信息
   has_many :jxc_storage_product_detail   #仓库商品明细中的 商品信息
 
-  def pid
-    id
+  def avatar_url
+    self.avatar ||= 'missing.png'
+    RestConfig::PRODUCT_SERVER + self.avatar
   end
 
-  def avatar
-    self.avatar_url ||= 'missing.png'
-    RestConfig::IMG_SERVER + self.avatar_url
-  end
-
-  def main
-    if self.main_url.present?
-      RestConfig::IMG_SERVER + self.main_url
+  #商品图片路径
+  def main_url
+    if self.mains.present?
+      RestConfig::PRODUCT_SERVER + self.mains[0]
     else
       'missing.png'
     end
   end
 
-  def desc
-    if self.desc_url.present?
-      RestConfig::IMG_SERVER + self.desc_url
+  def desc_url
+    if self.desc.present?
+      RestConfig::PRODUCT_SERVER + self.desc
     else
       'missing.png'
     end
-
   end
 
   def coupon

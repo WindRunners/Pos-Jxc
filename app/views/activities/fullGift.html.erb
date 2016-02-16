@@ -96,7 +96,7 @@ a:hover{ text-decoration:none;}
           <% @products.each do |product| %>
             <div class="main_cx_cx">
               <div class=" col-xs-5 main_cx_con02">
-                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
               </div>
               <div class="col-xs-7 main_cx_con03">
                 <div class="main_cx_con04"><%= product.title %></div>
@@ -124,7 +124,7 @@ a:hover{ text-decoration:none;}
             <div class="col-xs-6 con_dh_img">
               <div class="con_dh_img01">
                 <div class="con_dh_image">
-                  <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                  <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
                 </div>
                 <div class="con_dh_zi">
                   <div class=" con_dh_left">

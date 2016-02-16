@@ -110,7 +110,7 @@ line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #f
           <% @products.each do |product| %>
             <div class="col-xs-12 qg_con">
               <div class="col-xs-4 qg_con_left">
-                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
               </div>
               <div class="col-xs-7 col-xs-offset-1  qg_con_right">
                 <div class="qg_con_right01">
@@ -139,7 +139,7 @@ line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #f
                     <div class="col-xs-6 qg_con01_fr">
                         <div class="qg_con_fr01">
                             <div class="qg_con_fr01_img">
-                            	<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                            	<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
                             </div>
                         </div>  <!--qg_con_fr01-->
                         <div class="qg_con_fr02"><%= product.title %></div>

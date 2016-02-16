@@ -86,7 +86,7 @@ img{ width:100% ;}
     <div class="bb">
       <% @products.each do |product| %>
         <div class="bb01">
-          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
           <div class="cc01"><%= product.title %></div>
           <div class="cc01_mz">买<%= @fullReduction.purchase_quantity %>赠<%= @gift_count %></div>
           <div class="cc02"><%= product.specification %></div>
@@ -103,7 +103,7 @@ img{ width:100% ;}
     <div class="bb">
       <% @hotProducts.each do |product| %>
         <div class="bb01">
-          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+          <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
           <div class="cc01"><%= product.title %></div>
           <div class="cc02"><%= product.specification %></div>
           <div class="cc03">¥<%= product.price %></div>

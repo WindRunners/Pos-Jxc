@@ -55,7 +55,7 @@
     - @product_list.each do |product|
       %tr#bag_product_tr
         %td
-          %img{'src'=>"#{RestConfig::IMG_SERVER}#{product.avatar_url}",'class'=>"product_avatar"}
+          %img{'src'=>"#{product.avatar_url}",'class'=>"product_avatar"}
         %td #{product.title}
         %td #{product.mobile_category_name}
         %td

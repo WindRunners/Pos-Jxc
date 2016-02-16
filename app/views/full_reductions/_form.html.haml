@@ -14,9 +14,9 @@
   .hr.hr-16.hr-dotted
   .form-group{:style => "height: 240px; margin-bottom: 10px;"}
     - if @full_reduction.avatar.present?
-      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @full_reduction.avatar}"}
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{@full_reduction.avatar}"}
     - else
-      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{RestConfig::IMG_SERVER + @promotionImages[0].avatar if 0 < @promotionImages.count}"}
+      %img.col-sm-10.col-sm-offset-2{:id => 'avatar_img', :style => "width: 600px; height: 240px;", :src => "#{@promotionImages[0].avatar if 0 < @promotionImages.count}"}
   .form-group
     = f.label t(:avatar, scope: "mongoid.attributes.FullReduction") + ":", :class => "col-sm-2 control-label no-padding-right" 
     .col-sm-10
@@ -198,7 +198,7 @@
         取消
 :javascript
   $(document).ready(function () {
-    var img_server = "#{RestConfig::IMG_SERVER}";
+    var img_server = "";
     fullReduction(img_server);
     initDataTable("#{@full_reduction.preferential_way}")
   });

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :phone_books
   resources :feedbacks
   resources :roles
   resources :card_bags do
@@ -329,7 +330,7 @@ Rails.application.routes.draw do
     post 'picture_upload', :on => :collection
   end
   post 'ckeditor/pictures' => 'wines#upload'
-
+  post 'phone_books/upload'
   get 'share_integrals/share' => 'share_integrals#share'
 
   resources :share_integrals do

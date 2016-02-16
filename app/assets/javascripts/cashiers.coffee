@@ -57,6 +57,22 @@ is_clearing = false
     $("#realMoney").focus()
     return
 
+  business_user = $('#business_user').val()
+  ordertype = $('#ordertype').val()
+  if ordertype == "2" && (!business_user? || business_user=="")
+    new Pop "", "javascript:void(0)", "挂账单业务人员不能为空！"
+    $("#business_user").focus()
+    return
+
+  storage_id = $('#jxc_storages').val()
+  if !storage_id? && storage_id==""
+    new Pop "", "javascript:void(0)", "请选择仓库！"
+    $("#stores").focus()
+    return
+
+  console.log "business_user:#{business_user}"
+  console.log "ordertype:#{ordertype}"
+#  return
   if 0 == Number($('#receivablesMoney').val())
     new Pop "", "javascript:void(0)", "没有购买商品，无法结算！"
     $("#realMoney").val ""
@@ -83,6 +99,9 @@ is_clearing = false
     useintegral: useIntegral
     serial_number: searialNumber
     ordergoods: ogs
+    ordertype: ordertype
+    business_user: business_user
+    storage_id: storage_id
   $.post(
     "/orders/line_order_creat"
     order: JSON.stringify(orderPara)
@@ -97,7 +116,7 @@ is_clearing = false
             new Pop "结算成功！", "#/cashiers|hash#{Math.random() * 10000}", "实收：#{$('#realMoney').val()} 找零：#{$('#change').val()} 使用了 #{useIntegral} 积分"
             is_clearing = true
       else
-        do -> new Pop "结算失败！", "javascript:void(0)", "有可能是网络问题，请检查一下网络。"
+        do -> new Pop "结算失败！", "javascript:void(0)", data.msg
     "json"
   )
   undefined

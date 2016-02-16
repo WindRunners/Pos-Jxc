@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :phone_books
   resources :feedbacks
   resources :roles
   resources :card_bags do
@@ -163,6 +164,7 @@ Rails.application.routes.draw do
     post "alipay_notify", :on => :member
     post "alipay_refund_notify", :on => :member
     post "alipay_dback_notify", :on => :member
+    get 'line_payment_order', :on => :collection
   end
 
 
@@ -337,7 +339,7 @@ Rails.application.routes.draw do
     post 'picture_upload', :on => :collection
   end
   post 'ckeditor/pictures' => 'wines#upload'
-
+  post 'phone_books/upload'
   get 'share_integrals/share' => 'share_integrals#share'
 
   resources :share_integrals do
@@ -524,8 +526,8 @@ Rails.application.routes.draw do
   get 'jxc_common_info/getStorageTypesInfo' #仓库类型
   get 'jxc_common_info/getStorageInfo' #仓库
   get 'jxc_common_info/getJxcAccountsInfo' #进销存账户
-  get 'jxc_common_info/getDepartmentsInfo' #部门
-  get 'jxc_common_info/getHandlersInfo' #经手人 <部门职员>
+  # get 'jxc_common_info/getDepartmentsInfo' #部门
+  # get 'jxc_common_info/getHandlersInfo' #经手人 <部门职员>
   get 'jxc_common_info/getProductCategoriesInfo' #商品分类
   get 'jxc_common_info/getProductsInfo' #商品
   get 'jxc_common_info/getAccountingItemsInfo' #会计科目
@@ -537,7 +539,9 @@ Rails.application.routes.draw do
   get 'jxc_common_info/getJxcUnits' #供应商
   get 'jxc_common_info/getJxcDictionaryByDesc' #根据字典项获  取字典
   get 'jxc_common_info/getBillDetailInfo' #单据明细
-  get 'jxc_common_info/getJxcStorageAdmin' #选取仓库负责人
+  get 'jxc_common_info/getJxcStorageUserinfo' #选取仓库所属单位
+  get 'jxc_common_info/getJxcStorageStore' #选取仓库所属门店
+  get 'jxc_common_info/getUsersList' #选取仓库负责人
   ##
 
 end

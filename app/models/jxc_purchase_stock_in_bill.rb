@@ -11,7 +11,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
   field :customize_bill_no, type: String  #自定义单据编号
   field :payment_date, type: DateTime         #付款日期
   field :stock_in_date, type: DateTime        #入库日期
-  field :current_payment, type: BigDecimal     #本次付款
+  field :current_payment, type: BigDecimal, default:0.00     #本次付款
   field :remark, type: String   #备注
   field :total_amount, type: BigDecimal   #合计金额
   field :discount, type: Integer, default:100   #整单折扣

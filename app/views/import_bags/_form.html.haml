@@ -52,7 +52,7 @@
           - @product_list.each do |product|
             %tr#bag_product_tr
               %td.product_avatar_url
-                %img{'src'=>"#{RestConfig::IMG_SERVER}#{product.avatar_url}",'class'=>"product_avatar"}
+                %img{'src'=>"#{product.avatar_url}",'class'=>"product_avatar"}
               %td.product_name #{product.title}
               %td
                 %input.form-control{"type"=>"number","name"=>"product_num[]","placeholder"=>"商品数量","value"=>"#{product.count}"}
@@ -67,7 +67,7 @@
     .col-sm-offset-2.col-sm-8
       = f.submit '保存',class: 'btn btn-default',onclick: 'return save_check()'
 
-%input{"type"=>"hidden","id"=>"img_server","value"=>"#{RestConfig::IMG_SERVER}"}
+%input{"type"=>"hidden","id"=>"img_server","value"=>""}
 
 /模态框
 .modal.fade.bs-example-modal-lg#myModal{'tabindex'=>-1,'role'=>'dialog','aria-labelledby'=>'myModalLabel'}

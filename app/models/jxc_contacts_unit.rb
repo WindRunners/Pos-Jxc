@@ -8,7 +8,7 @@ class JxcContactsUnit
 
   # 基本信息
   field :unit_name, type: String  #单位名称
-  field :unit_property, type: String  #单位性质（供应商 | 客户）
+  field :unit_property, type: String  #单位性质（供应商：0 | 客户：1 ）
   field :unit_type, type: String  #单位类别
   field :spell_code, type: String   #拼音编码（首字母集）
   field :unit_address, type: String #单位地址
@@ -50,6 +50,8 @@ class JxcContactsUnit
 
   field :receive_deadline, type: Integer #收款期限
   field :payment_deadline, type: Integer #付款期限
+
+  validates :unit_name,:spell_code,:unit_property,:unit_type, presence: true
 
   # 所属部门
   # belongs_to :department, foreign_key: :department_id

@@ -41,13 +41,17 @@
       %td
         = f.button t('mongoid.attributes.jxc_stock_assign_bill.assign_out_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'assign_out\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_assign_bill_assign_out_stock{value: @jxc_stock_assign_bill.assign_out_stock.nil? ? '':@jxc_stock_assign_bill.assign_out_stock.storage_name,readonly:true }
-        = f.hidden_field :assign_out_stock_ids
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_stock_assign_bill_assign_out_stock{value: @jxc_stock_assign_bill.assign_out_stock.nil? ? '':@jxc_stock_assign_bill.assign_out_stock.storage_name,readonly:true }
+          = f.hidden_field :assign_out_stock_ids
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.button t('mongoid.attributes.jxc_stock_assign_bill.assign_in_stock'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo(\'assign_in\')',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_stock_assign_bill_assign_in_stock{value: @jxc_stock_assign_bill.assign_in_stock.nil? ? '':@jxc_stock_assign_bill.assign_in_stock.storage_name,readonly:true }
-        = f.hidden_field :assign_in_stock_ids
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_stock_assign_bill_assign_in_stock{value: @jxc_stock_assign_bill.assign_in_stock.nil? ? '':@jxc_stock_assign_bill.assign_in_stock.storage_name,readonly:true }
+          = f.hidden_field :assign_in_stock_ids
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       %td
         = f.label :remark
@@ -98,7 +102,7 @@
                     %td
                       %input#billDetail_package_count.billDetailInput{type:'text',name:'billDetail[][package_count]',value:billDetail.package_count,onblur:'calcPrimaryCount(\''+billDetail.product.id+'\')'}
                     %td
-                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count}
+                      %input#billDetail_count.billDetailInput{type:'text',name:'billDetail[][count]',value:billDetail.count,readonly:true}
                     %td
                       %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
                     %td.del-icon-td

@@ -1,9 +1,9 @@
-.modal#selectModal{tabindex:'-1',role:'dialog','aria-labelledby':'selectModalLabel'}
+.modal#selectModal{tabindex:'-1',role:'dialog','aria-labelledby'=>'selectModalLabel'}
   .modal-dialog{role:'document'}
     .modal-content
       .modal-header
-        %button{type:'button',class:'close','data-dismiss':'modal','aria-label':'Close'}
-          %span{'aria-hidden':'true'}
+        %button{type:'button',class:'close','data-dismiss'=>'modal','aria-label'=>'Close'}
+          %span{'aria-hidden'=>'true'}
             &times;
         %h4{class:'modal-title',id:'selectModalLabel'}
       .modal-body
@@ -20,8 +20,8 @@
             %div
               %table#dataTable.easyui-datagrid
       .modal-footer
-        %button{type:'button',class:'btn btn-default',id:'close-modal','data-dismiss':'modal'}关闭
-        %button{type:'button',class:'btn btn-primary',id:'confirm-button','data-type':'',onclick:'selectData()'}确定
+        %button{type:'button',class:'btn btn-default',id:'close-modal','data-dismiss'=>'modal'}关闭
+        %button{type:'button',class:'btn btn-primary',id:'confirm-button','data-type'=>'',onclick:'selectData()'}确定
 
 :javascript
 
@@ -32,6 +32,15 @@
       //dataGrid设置
       tableSetting.queryParams.searchParam = $('#searchParam').val();
       initDataGrid(tableSetting);
+    });
+
+    //监听 回车按下 事件
+    $(document).keydown(function(event){
+      if(event.keyCode == 13){
+        //dataGrid设置
+        tableSetting.queryParams.searchParam = $('#searchParam').val();
+        initDataGrid(tableSetting);
+      }
     });
   });
 

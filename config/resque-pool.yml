@@ -8,6 +8,7 @@ achieves_queue_gift_bag_expiry: 1
 achieves_queue_refund_online_payment: 1
 achieves_order_push_channels: 1
 achieves_queue_announcements_batch: 1
+achieve_order_inventory_synchronous: 1
 
 production:
   "achieves_queue_send_message": 2
@@ -20,3 +21,4 @@ production:
   "achieves_queue_refund_online_payment": 2
   "achieves_order_push_channels": 2
   "achieves_queue_announcements_batch": 2
+  "achieve_order_inventory_synchronous": 2

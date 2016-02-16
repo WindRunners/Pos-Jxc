@@ -3,4 +3,5 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).ready ->
   pagination_ajax()
+  common_form_ajax_deal()
   return

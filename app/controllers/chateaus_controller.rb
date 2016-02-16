@@ -204,6 +204,16 @@ class ChateausController < ApplicationController
       mark_array<< mark
     end
     @data['mark'] = mark_array
+    region_str = ""
+    region_array = @chateau.region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+    region_array.each do |r|
+      if region_str == ""
+        region_str+= r
+      else
+        region_str+= ">>#{r}"
+      end
+    end
+    @data['region_str'] = region_str
     @data
     render :layout => nil
   end

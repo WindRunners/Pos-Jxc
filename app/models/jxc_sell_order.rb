@@ -11,7 +11,7 @@ class JxcSellOrder < JxcBaseModel
   field :customize_order_no, type: String   #自定义订单编号
   field :consign_goods_date, type: DateTime #发货日期
   field :order_date, type: DateTime         #订单日期
-  field :receivable_deposit, type: BigDecimal    #预收定金
+  field :receivable_deposit, type: BigDecimal, default: 0.00    #预收定金
   field :remark, type: String               #备注
 
   field :total_amount, type: BigDecimal                    #合计金额

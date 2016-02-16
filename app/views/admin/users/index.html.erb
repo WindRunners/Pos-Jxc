@@ -43,14 +43,15 @@
                 <i class="ace-icon fa fa-pencil bigger-130">门店管理</i>
               </a>
 
-              <% if @current_user.id!=user.id %>
-
-                  <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
-                              admin_user_path(user),
-                              :remote => true,
-                              :method => :delete,
-                              :data => {:confirm => '你确定删除该用户吗?'},
-                              :class => 'btn btn-xs btn-danger' %>
+              <% if user.user_flag==0 %>
+                  <% if @current_user.id!=user.id %>
+                      <%= link_to raw("<i class='ace-icon fa fa-trash-o bigger-130'></i>"),
+                                  admin_user_path(user),
+                                  :remote => true,
+                                  :method => :delete,
+                                  :data => {:confirm => '你确定删除该用户吗?'},
+                                  :class => 'btn btn-xs btn-danger' %>
+                  <% end %>
               <% end %>
           <% end %>
         </td>

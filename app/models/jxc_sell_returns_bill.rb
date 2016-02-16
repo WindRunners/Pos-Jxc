@@ -11,7 +11,7 @@ class JxcSellReturnsBill < JxcBaseModel
   field :customize_bill_no, type: String  #自定义单据编号
   field :refund_date, type: DateTime      #退款日期
   field :returns_date, type: DateTime     #退货日期
-  field :current_refund, type: BigDecimal      #本次退款
+  field :current_refund, type: BigDecimal, default: 0.00      #本次退款
   field :remark, type: String             #备注
 
 

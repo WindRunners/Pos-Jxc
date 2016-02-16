@@ -15,6 +15,8 @@ class CustomerOrderStatic
     order = Ordercompleted.find(order_id)
     begin
 
+      return if !order['customer_id'].present? #订单可能是线下订单与会员无关
+
       isorder_count = CustomerOrderStatic.where(:customer_id => order['customer_id'],order_ids: order_id).count() #检测当期订单是否已统计
       return if isorder_count > 0
 

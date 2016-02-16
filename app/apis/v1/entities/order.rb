@@ -20,7 +20,7 @@ module Entities
     expose :activities, documentation: {type: String, desc: '活动列表', is_array: true}, if: lambda { |order, options| !order.activities.nil? && !order.activities.empty? }
     expose :coupons, documentation: {type: String, desc: '可用优惠券列表', is_array: true}
     expose :getcoupons, documentation: {type: String, desc: '获赠优惠券列表', is_array: true}
-    expose :workflow_state, documentation: {type: String, desc: '订单状态'}, if: lambda { |order, options| !order.workflow_state.nil?}
+    expose :workflow_state, documentation: {type: String, desc: '订单状态状态 generation:待付款,paid:待抢单,take:待接货,distribution:配送中,receive:配送完成,completed:确认收货,cancelled:取消订单'}, if: lambda { |order, options| !order.workflow_state.nil?}
     expose :lng, documentation: {type: String, desc: '经度'}
     expose :lat, documentation: {type: String, desc: '纬度'}
     expose :remarks, documentation: {type: String, desc: '备注'}

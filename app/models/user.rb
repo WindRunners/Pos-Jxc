@@ -22,7 +22,8 @@ class User
   has_many :comments
   has_many :announcements
 
-  has_many :stores #有多个门店
+  has_and_belongs_to_many :stores #有多个门店
+  has_many :jxc_storages  #有多个仓库
 
   has_many :searches
   has_many :wines
@@ -47,6 +48,7 @@ class User
   field :audit_desc, type: String #审批备注信息
 
   field :channel_id #移动设备推送ID
+  field :user_flag, type: Integer, default: 0 #用户标识  0为普通用户，1：初始化用户（不可修改和删除）
 
   #field :admin
 
@@ -54,8 +56,8 @@ class User
 
   validates_attachment_content_type :avatar, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
-  validates :name, presence: true,length: { maximum: 20, too_long: "名称最大长度为%{count}" }
-  validates :mobile, presence: true, uniqueness: true,format: {with: /\A\d{11}\z/, message: "手机号不合法!"}
+  validates :name, presence: true,length: { maximum: 20, too_long: "最大长度为%{count}个字符" }
+  validates :mobile, presence: true, uniqueness: true,format: {with: /\A\d{11}\z/, message: "不合法!"}
   validates :email, presence: true
 
   ## Recoverable
@@ -110,8 +112,6 @@ class User
   has_and_belongs_to_many :jxc_cost_adjust_bills #成本调整单
 
   has_many :jxc_storage_journals  #仓库变更明细中的 创建人
-
-  has_one :jxc_storage  #每个负责人 负责一个仓库
 
   #addby dfj
  # def send_password_reset

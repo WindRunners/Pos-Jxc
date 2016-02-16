@@ -39,6 +39,7 @@ class Store
   index({location: "2d"}, {min: -200, max: 200})
 
   belongs_to :userinfo #门店隶属于联盟商userinfo
+  has_one :jxc_storage  #门店对应的进销存仓库
   has_and_belongs_to_many :delivery_users,
                           :autosave => true #门店下面有多个配送员负责配送
 

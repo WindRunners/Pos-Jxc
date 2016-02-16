@@ -1,0 +1,12 @@
+zh-CN:
+  mongoid:
+    models:
+      phone_book: "电话簿"
+    attributes:
+      phone_book:
+        telephone:  "电话(手机)号码"
+        name:   "名称"
+        city:   "城市"
+        nature:  "性质"
+        url: "网址"
+        address: "地址"

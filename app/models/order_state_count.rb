@@ -33,7 +33,7 @@ class OrderStateCount
 
     orderStateCount = OrderStateCount.new()
 
-    curren_user_orders = Order.where(:userinfo_id => userinfo_id,:store_id => {"$in" => store_ids})
+    curren_user_orders = Order.where(:userinfo_id => userinfo_id,:store_id => {"$in" => store_ids},:ordertype => 1)
     orders = curren_user_orders.map_reduce(map, reduce).out(inline: true)
 
     begin

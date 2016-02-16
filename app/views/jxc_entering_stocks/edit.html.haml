@@ -1,0 +1,12 @@
+%div.col-sm-12
+  %div.widget-box.weidget-color-blue2
+    %div.widget-header
+      %h4.widget-title.lighter.smaller 修改库存录入
+    %div.widget-body
+      %div.widget-main.padding-8
+
+        = render 'form'
+
+        = link_to '查看', @jxc_entering_stock,class:'btn btn-info'
+        \|
+        = link_to '返回', jxc_entering_stocks_path,class:'btn btn-default'

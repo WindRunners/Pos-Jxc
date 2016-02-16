@@ -107,9 +107,9 @@ class JxcCommonInfoController < ApplicationController
   # end
 
   #部门
-  # def getDepartmentsInfo
-  #   render json: Department.all
-  # end
+  def getDepartmentsInfo
+    render json: Department.all
+  end
 
   #经手人
   # def getHandlersInfo
@@ -151,6 +151,7 @@ class JxcCommonInfoController < ApplicationController
 
   #单据明细
   def getBillDetailInfo
+    p  "params-----------#{params.as_json}"
     # category_name = params[:category_name]  #商品分类
     storage_id = params[:storage_id]   #仓库
     product_param = params[:searchParam] || '' #检索商品条件
@@ -210,23 +211,24 @@ class JxcCommonInfoController < ApplicationController
   end
 
   #经手人
-  # def getHandlersPageInfo #easyui
-  #   department_id = params[:department_id]
-  #   handlerList = []
-  #   if !department_id.blank?
-  #     handlerList = Staff.where(department_id:department_id).page(params[:page]).per(params[:rows])
-  #   end
-  #   render json: {"total"=>Staff.where(department_id:department_id).size,"rows"=>handlerList}
-  # end
+  def getHandlersPageInfo #easyui
+    department_id = params[:department_id]
+    handlerList = []
+    if !department_id.blank?
+      handlerList = Staff.where(department_id:department_id).page(params[:page]).per(params[:rows])
+    end
+    render json: {"total"=>Staff.where(department_id:department_id).size,"rows"=>handlerList}
+  end
 
   #进销存仓库 （根据仓库类型）easyui
   def getStoragePageInfo
-    p params[:storage_type]
+    p "params[:storage_type]params[:storage_type]:#{params.as_json}"
     storage_type = params[:storage_type]
     storageList = []
     if !storage_type.nil?
       storageList = JxcStorage.where(storage_type:storage_type)
     end
+    p
     render json: {'total'=>JxcStorage.where(storage_type:storage_type).size,'rows'=>storageList}
   end
 

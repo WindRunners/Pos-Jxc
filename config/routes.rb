@@ -5,6 +5,15 @@ Rails.application.routes.draw do
   resources :card_bags do
 
   end
+  resources :clients do
+    get "on_off"
+  end
+  resources :jxc_bill_detail
+  resources :jxc_entering_stocks do
+    get "prev", :on => :collection
+    get "next", :on => :collection
+    get "audit"
+  end
   resources :product_tickets do
     # post 'import_customers', :on => :collection
     get 'customers_import'

@@ -3,6 +3,9 @@ class JxcSellReturnsBill < JxcBaseModel
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :bill_no, type: String            #单据编号
   field :customize_bill_no, type: String  #自定义单据编号

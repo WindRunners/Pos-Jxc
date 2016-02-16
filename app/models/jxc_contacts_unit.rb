@@ -2,6 +2,9 @@ class JxcContactsUnit
   # 往来单位
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   # 基本信息
   field :unit_name, type: String  #单位名称

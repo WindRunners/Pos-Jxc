@@ -1,0 +1,33 @@
+%h1= t("mongoid.models.client")
+
+
+
+.row
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4{:class => "widget-title lighter smaller"} 帐套列表
+    .widget-body
+      .widget-main.padding-12
+        %table{class:"table table-striped table-bordered table-hover"}
+          %thead
+            %tr
+              %th 状态
+              %th=t("mongoid.attributes.client.jxc_building_user")
+              %th=t("mongoid.attributes.client.name")
+
+          %tbody
+            - @clients.each do |client|
+              %tr
+                %td
+                  - if client.aasm_state == 'waiting' || client.aasm_state == 'stoping'
+                    = link_to '启用',client_on_off_path(:client_id=>client.id,:state=>"on"),:method=>:get,class:"btn btn-xs btn-info"
+                  - if client.aasm_state == 'starting'
+                    = link_to '停用',client_on_off_path(:client_id=>client.id,:state=>"off"),:method=>:get,class:"btn btn-xs btn-warning"
+                %td= client.jxc_building_user
+                %td= client.name
+
+
+        %br
+
+        = link_to '创建帐套', new_client_path,class:"btn btn-primary"
+

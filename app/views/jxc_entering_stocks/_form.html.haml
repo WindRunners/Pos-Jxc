@@ -1,0 +1,413 @@
+%div.col-xs-12
+  %div.widget-box.weidget-color-blue2
+    %div.widget-header
+      %h4.widget-title.lighter.smaller 添加期初库存录入
+    %div.widget-body
+      %div.widget-main.padding-8
+        .container-fluid{style:"height:700px"}
+          = form_for @jxc_entering_stock do |f|
+            = f.hidden_field :id
+            = f.hidden_field :enteringstock_no
+            - if @jxc_entering_stock.errors.any?
+              #error_explanation
+                %h2= "#{pluralize(@jxc_entering_stock.errors.count, "error")} prohibited this jxc_entering_stock from being saved:"
+                %ul
+                  - @jxc_entering_stock.errors.full_messages.each do |msg|
+                    %li= msg
+            .form-group
+              .row
+                .col-sm-7
+                  :javascript
+                      var state='#{@jxc_entering_stock.aasm_state}'
+                      $(function(){
+                        if(state=='watting'){
+                          $("#state_result").html("等待审核");
+                          $("a#nullify").attr("href","#");
+                          $("a#dashed").attr("href","#");
+                          $("a#nullify").attr("disabled","disabled");
+                          $("a#dashed").attr("disabled","disabled");
+                        }else if(state=='audit'){
+                        $("#state_result").html("已审核");
+                          $("a#audit").attr("href","#");
+                          $("a#nullify").attr("href","#");
+                          $("a#audit").attr("disabled","disabled");
+                          $("a#nullify").attr("disabled","disabled");
+                        }else if(state=="nullify" || state=="dashed" ){
+                          if(state=='nullify'){
+                          $("#state_result").html("已作废");
+                          }
+                          if(state=='dashed'){
+                          $("#state_result").html("已红冲");
+                          }
+                          $("a#nullify").attr("href","#");
+                          $("a#dashed").attr("href","#");
+                          $("a#audit").attr("href","#");
+                          $("a#nullify").attr("disabled","disabled");
+                          $("a#dashed").attr("disabled","disabled");
+                          $("a#audit").attr("disabled","disabled");
+                        }
+                      })
+                  .btn-group.btn-corner
+                    %a{href:'#'+jxc_entering_stocks_path,class:"btn btn-primary" ,type:"button"}新建
+                    %input{id:"stock_submit",class:"btn btn-success" ,value:"保存",type:"button"}
+                    %a{href:'#'+ prev_jxc_entering_stocks_path(:no=>@jxc_entering_stock.sort ),class:"btn" ,type:"button"} 上一单
+                    %a{href:'#'+ next_jxc_entering_stocks_path(:no=>@jxc_entering_stock.sort),class:"btn" ,type:"button"} 下一单
+                    %a{href:jxc_entering_stock_audit_path(:state=>"audit",:jxc_entering_stock_id=>@jxc_entering_stock.id),class:"btn btn-inverse" ,type:"button" ,:id=>"audit"} 审核
+                    %a{href:jxc_entering_stock_audit_path(:state=>"nullify",:jxc_entering_stock_id=>@jxc_entering_stock.id),class:"btn btn-danger" ,type:"button",:id=>"nullify"} 作废
+                    %a{href:jxc_entering_stock_audit_path(:state=>"dashed",:jxc_entering_stock_id=>@jxc_entering_stock.id),class:"btn btn-primary" ,type:"button",:id=>"dashed"} 红冲
+                .col-sm-5
+                  %span#state_result{style:"color:red;"}
+                  = f.label :enteringstock_no,class:"label label-xlg label-light arrowed-in-right"
+                  .label.label-lg.label-purple.arrowed
+                    = @jxc_entering_stock.enteringstock_no
+            .form-group
+              .row
+                .col-sm-4
+                  %label{id:'jxcStorage'} 仓库信息:
+                  %input{type:'text',placeholder:"仓库信息",class:'form-control',id:'jxc_entering_stock_jxc_storage',name:'jxc_entering_stock[jxc_storage[storage_name]]',value:"#{@jxc_entering_stock.jxc_storage.storage_name if @jxc_entering_stock.jxc_storage.present?}"}
+                  -#= f.text_field :jxc_storage ,placeholder:"仓库信息",class:'form-control'
+                  %input{type:'hidden',name:'jxc_entering_stock[jxc_storage]',id:'jxc_storage_id'}
+                .col-sm-4
+                  %label{id:'handler'} 经手人:
+                  %input{type:'text',placeholder:"经手人",class:'form-control col-sm-4',id:'jxc_entering_stock_handler',name:'jxc_entering_stock[handler[name]]',value:"#{current_user.name}",onFocus:"this.blur()"}
+                  -#= f.text_field :handler,placeholder:"经手人",class:'form-control col-sm-4'
+                  %input{type:'hidden',name:'jxc_entering_stock[handler]',id:'handler_id'}
+                .col-sm-4
+                  %label 备注信息:
+                  =f.text_field :remark,placeholder:"备注信息",class:'form-control col-sm-4'
+                .col-sm-3
+                  .field
+                    = f.label :creator
+                    = f.text_field :creator,class:"form-control",onFocus:"this.blur()"
+                .col-sm-3
+                  .field
+                    = f.label :created_at
+                    = f.text_field :created_at,class:"form-control",onFocus:"this.blur()"
+                .col-sm-3
+                  .field
+                    = f.label :verifier
+                    = f.text_field :verifier,class:"form-control",onFocus:"this.blur()"
+                .col-sm-3
+                  .field
+                    = f.label :audit_date
+                    = f.text_field :audit_date,class:"form-control",onFocus:"this.blur()"
+            .form-group
+              %table{title:"单据明细",id:"entering_stocks_dg",class:'easyui-datagrid',style:"width:100%;height:500px"}
+              -#%input{type:"hidden",id:"jxc_bill_details",name:"jxc_entering_stock[jxc_bill_detail[]]"}
+            -#.form-group
+            -#  .actions
+            -#    %button{id:"stock_submit",class:"btn btn-success"}
+        =render 'jxc_modal/jxc_general_modal'
+-#%div#item_form{class:"easyui-dialog",title:"添加会计科目","data-options"=>"iconCls:'icon-save'",style:"width:500px;height:auto;",closed:"true"}
+-#  = render 'stock_form'
+:javascript
+  var entering_stocks_dg=$('#entering_stocks_dg');
+  var stock_data={};
+  var storage=$('#jxc_entering_stock_jxc_storage');
+  var handler=$('#jxc_entering_stock_handler');
+  var generalFormModal=$("#generalFormModal");
+  var jxc_storage_id=$("#jxc_storage_id");
+  var handler_id=$("#handler_id");
+  var settings;
+  var editIndex;
+  var title;
+  var specification;
+  var amount;
+  var count;
+  var price;
+  var product_id;
+  var remark;
+  var stock_id;
+  var footer={}
+  var rows=[];
+   var toolbar=[{
+              iconCls:'icon-add',
+              text:'添加',
+              handler:function(){
+                if(editing()){
+                 //$("#item_form").dialog('open')
+                  entering_stocks_dg.datagrid('appendRow',{});
+                  editIndex = entering_stocks_dg.datagrid('getRows').length - 1;
+                  entering_stocks_dg.datagrid('selectRow', editIndex)
+                          .datagrid('beginEdit', editIndex);
+                  title = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'title'});
+                  specification = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'specification'});
+                  amount = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'amount'});
+                  count = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'count'});
+                  price = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'price'});
+                  product_id = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'product_id'});
+                  remark = entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'remark'});
+                  stock_id= entering_stocks_dg.datagrid('getEditor', {index:editIndex,field:'stock_id'});
+                  title.target.click(function(){
+                    generalFormModal.modal('show').css({width: 'auto'});
+                    settings={
+                      treeclickParam:'id',//tree 点击加在datagrid的参数名字
+                      treeKey:{name:'title',url:'#'},//tree 叶子名称
+                      treeUrl:'/jxc_common_info/getProductCategoriesInfo',//tree url
+                      datagridUrl:'/jxc_common_info/getBillDetailInfo?category_id', // datgrid url
+                      columns:[[ //datagrid列配置
+                        {title:'商品名称',field:'title',width:'25%'},
+                        {title:'品牌',field:'brand',width:'15%'},
+                        {title:'规格',field:'specification',width:'15%'},
+                        {title:'单价',field:'price',width:'5%'},
+                        {title:'产地',field:'origin',width:'20%'},
+                        {title:'生产商',field:'manufacturer',width:'20%'},
+                        ]],
+                        returnVal:['title','specification','id'],//填充到文本框中的{name:"jerry"}
+                        returnInput:[title.target,specification.target,product_id.target],//填充的文本框对象
+                        modalTitle:'选择商品',//modal 标题
+                        gridTitle:'商品信息'//datagrid 标
+                      }
+
+                    general(
+                      settings // datagrid settings
+                      );
+                      })
+
+                  $(amount.target).prop('readonly',true);
+                  var c= $(count.target);
+                  var p=$(price.target);
+                  c.numberbox({"onChange":function(){
+                    calc();
+                  }
+                  });
+                  p.numberbox({"onChange":function(){
+                    calc();
+                  }
+                  });
+                  function calc(){
+                    amount.target.numberbox('setValue',accMul(c.numberbox('getValue'),p.numberbox('getValue')));
+                  }
+                  $(stock_id.target).val($("#jxc_entering_stock_id").val());
+                }
+              }
+          },
+          {
+              iconCls:'icon-edit',
+              text:'编辑',
+              handler:function(){
+              var row=entering_stocks_dg.datagrid('getSelected');
+              if(row){
+
+              }else{
+              alert('请选择一行进行编辑')
+              }
+              }
+          },
+          //{
+          //    iconCls:'icon-save',
+          //    text:'保存',
+          //    handler:function(){
+          //    entering_stocks_dg.datagrid('selectRow', editIndex)
+          //                .datagrid('endEdit', editIndex);
+          //    var row=entering_stocks_dg.datagrid('getSelected')
+          //    var json={}
+          //    json.product_id=row.product_id
+          //    json.unit=row.unit
+          //    json.count=row.count
+          //    json.price=row.price
+          //    json.amount=row.amount
+          //    json.remark=row.remark
+          //    $.ajax({
+          //    url:'jxc_entering_stocks/'+$('#jxc_entering_stock_id').val()+'/bill_detail_create',
+          //    type:'post',
+          //    data:json,
+          //    success:function(data, textStatus, jqXHR){
+          //    if(data!=null){
+          //      $('#new_jxc_entering_stock').append('<input type="hidden" name="jxc_entering_stock[jxc_bill_detail_id][]" value='+data._id+' />')
+          //     }
+          //    alert('添加成功');
+          //    }
+          //    })
+          //    }
+          //},
+          {
+              iconCls:'icon-remove',
+              text:'删除',
+              handler:function(){
+                var row = $('#entering_stocks_dg').datagrid('getSelected');
+                if(row){
+                alert(JSON.stringify(row))
+                  //$.ajax({
+                  //  url:$('#jxc_entering_stock_id').val()+'/bill_detail_destroy/'+row._id,
+                  //  type:'DELETE',
+                  //  success:function(data){
+                  //  alert('删除成功')
+                  //  }
+                  //})
+                }
+              }
+          }];
+
+
+  $(document).ready(function(){
+    //bindData();
+    entering_stocks_dg.datagrid({
+          rownumbers: true,
+          pagination: true,
+          singleSelect:true,
+          toolbar:toolbar,
+          showFooter: true,
+          //method:'get',
+          columns:[[
+            {title:'商品编码',field:'orgin',width:'15%',editor:'text'},
+            {title:'商品名称',field:'title',width:'15%',editor:'text'},
+            {title:'规格',field:'specification',width:'10%',editor:'text'},
+            {title:'单位',field:'unit',width:'10%',
+             formatter: function(value,row,index){
+                return value
+                },
+              editor:{
+                type:'combobox',
+                options:{
+                  valueField:'dic',
+                  textField:'dic',
+                  method:'get',
+                  url:'/jxc_common_info/getJxcDictionaryByDesc?desc=jxc_amount_unit',
+                  required:true
+                }
+            }},
+            {title:'库存数量',field:'count',width:'10%',editor:{type:'numberbox'}},
+            {title:'成本价',field:'price',width:'10%',editor:{type:'numberbox',options:{precision:2}}},
+            {title:'库存金额',field:'amount',width:'10%',editor:{type:'numberbox',options:{precision:2}}},
+            {title:'备注',field:'remark',width:'20%',editor:'text'},
+            {title:'',field:'product_id',width:'0%',hidden:true,editor:'text'},
+            {title:'',field:'stock_id',width:'0%',hidden:true,editor:'text'},
+            ]]
+        });
+
+        //仓库
+        storage.click(function(){
+          generalFormModal.modal('show').css({width: 'auto'});
+          settings={
+            treeclickParam:'dic',//tree 点击加在datagrid的参数名字
+            treeKey:{name:'dic'},
+            treeUrl:'/jxc_common_info/getStorageTypesInfo',//tree url
+            datagridUrl:'/jxc_common_info/getStoragePageInfo?storage_type', // datgrid url
+            columns:[[
+              {title:'仓库名称',field:'storage_name',width:'30%'},
+              {title:'仓库编码',field:'storage_code',width:'15%'},
+              {title:'仓库类别',field:'storage_type',width:'25%'},
+              {title:'拼音码',field:'spell_code',width:'15%'},
+              {title:'备注',field:'memo',width:'15%'},
+            ]],
+            returnVal:['storage_name',"_id"],
+            returnInput:[storage,jxc_storage_id],
+            modalTitle:'选择仓库',
+            gridTitle:'仓库信息',
+            singleSelect:true
+          }
+          general(
+            settings // datagrid settings
+          );
+        })
+        //handler.click(function(){
+        //generalFormModal.modal('show').css({width: 'auto'});
+        //settings={
+        //        treeclickParam:'_id',//tree 点击加在datagrid的参数名字
+        //        treeKey:{name:'title'},//tree 叶子名称
+        //        treeUrl:'/jxc_common_info/getDepartmentsInfo',//tree url
+        //        datagridUrl:'/jxc_common_info/getHandlersPageInfo?department_id', // datgrid url
+        //        columns:[[ //datagrid列配置
+        //          {title:'员工编号',field:'sid',width:'25%'},
+        //          {title:'员工姓名',field:'name',width:'25%'},
+        //          {title:'手机',field:'mobile',width:'25%'},
+        //          {title:'联系电话',field:'officephone',width:'25%'},
+        //         ]],
+        //         returnVal:['name','_id'],//填充到文本框中的{name:"jerry"}
+        //         returnInput:[handler,handler_id],//填充的文本框对象
+        //         modalTitle:'选择经手人',//modal 标题
+        //         gridTitle:'人员信息'//datagrid 标题
+        //        }
+        //
+        //general(
+        // settings // datagrid settings
+        // );
+        //})
+
+          $("#stock_submit").click(function(){
+            save();
+          });
+
+        bindData();
+        });
+
+
+
+  function editing(){
+    if (editIndex == undefined){return true}
+    if (entering_stocks_dg.datagrid('validateRow', editIndex)){
+      footer.title="共"+stock_data.rows.length+"条明细";
+      footer.count+= $(count.target).numberbox('getValue')!="" ? parseInt($(count.target).numberbox('getValue')) : 0;
+      footer.amount+= $(amount.target).numberbox('getValue')!="" ? parseFloat($(amount.target).numberbox('getValue')) : 0.00;
+      entering_stocks_dg.datagrid('reloadFooter',[footer]);
+      entering_stocks_dg.datagrid('endEdit', editIndex);
+      editIndex = undefined;
+      return true;
+    }else{
+      return false;
+    }
+    }
+
+    function save(){
+      if(editing()){
+      //alert(JSON.stringify(entering_stocks_dg.datagrid("getRows")))
+      //  alert(JSON.stringify(stock_data))
+      //  alert(JSON.stringify(entering_stocks_dg.datagrid("getRows")))
+      var bills=entering_stocks_dg.datagrid("getRows");
+      //alert(JSON.stringify(bills))
+      //alert(JSON.stringify($('#new_jxc_entering_stock').serialize()))
+        $.ajax({
+            url:"/jxc_bill_detail",
+            type:"post",
+            data:{"postData":entering_stocks_dg.datagrid("getRows")},
+            success:function(data,status,xhr){
+              $("#new_jxc_entering_stock").submit();
+            }
+          })
+      }
+   }
+
+   function bindData(){
+   //{title:'商品名称',field:'title',width:'15%',editor:'text'},
+   //         {title:'商品编码',field:'orgin',width:'15%',editor:'text'},
+   //         {title:'规格',field:'specification',width:'10%',editor:'text'},
+   //         {title:'单位',field:'unit',width:'10%',editor:'text'},
+   //         {title:'库存数量',field:'count',width:'10%',editor:{type:'numberbox'}},
+   //         {title:'成本价',field:'price',width:'10%',editor:{type:'numberbox',options:{precision:2}}},
+   //         {title:'库存金额',field:'amount',width:'10%',editor:{type:'numberbox',options:{precision:2}}},
+   //         {title:'备注',field:'remark',width:'20%',editor:'text'},
+   //         {title:'',field:'product_id',width:'0%',hidden:true,editor:'text'},
+   //         {title:'',field:'id',width:'0%',hidden:true,editor:'text'},
+
+   $.ajaxSettings.async = false;
+   footer.count=0;
+   footer.amount=0.00;
+    $.getJSON('/jxc_bill_detail?stock_id='+$("#jxc_entering_stock_id").val(),function(d,status,xhr){
+      //alert(JSON.stringify(d))
+      $(d).each(function(){
+        var obj={};
+        obj.product_id=this.product.id;
+        obj.title=this.product.title;
+        obj.specification=this.product.specification;
+        obj.unit=this.unit;
+        obj.count=this.count;
+        obj.price=this.price;
+        obj.remark=this.remark;
+        obj.amount=this.amount;
+        rows.push(obj);
+        footer.count+=parseInt(this.count)
+        footer.amount+=parseFloat(this.amount)
+      })
+      stock_data.rows=rows;
+      stock_data.total=rows.length;
+      footer.title="共"+rows.length+"条明细";
+      footer.unit="合计:";
+      stock_data.footer=[footer];
+    })
+    $.ajaxSettings.async = true;
+    //alert(JSON.stringify(stock_data));
+    entering_stocks_dg.datagrid('loadData',stock_data)
+   }
+
+

@@ -209,14 +209,7 @@ class JxcSellStockOutBill < JxcBaseModel
       @sell_out_bill.receivable_amount = receivable_amount  #实收金额
       @sell_out_bill.discount_amount = total_amount.to_d - receivable_amount.to_d #优惠
 
-
-      begin
-        order = Order.find(order_id)
-      rescue
-        order = nil
-      end
-
-      @sell_out_bill.order = order
+      @sell_out_bill['order_id'] = order_id
 
       @sell_out_bill.save
 

@@ -39,27 +39,12 @@ class ImportBagReceiversController < ApplicationController
     @import_bag = @import_bag_receiver.import_bag
     #验证权限
     authorize  @import_bag ,:update?
-
-    countRows = ImportBagReceiver.where(receiver_mobile: @import_bag_receiver.receiver_mobile,import_bag_id: params[:import_bag_id]).count
-
-    # if countRows > 0
-    #   render_js new_import_bag_import_bag_receiver_path(@import_bag)
-    #   # redirect_to new_import_bag_import_bag_receiver_path(@import_bag), notice: "账号#{@import_bag_receiver.receiver_mobile}已经添加无需再添加!"
-    #   return
-    # end
-
     respond_to do |format|
 
-      if countRows > 0
-
-        format.json { render json: get_render_json(0,{'repeat'=>'当前会员已经添加！'}) }
+      if @import_bag_receiver.save
+        format.json { render json: get_render_common_json(@import_bag_receiver,import_bag_receiver_path(@import_bag_receiver)) }
       else
-
-        if @import_bag_receiver.save
-          format.json { render json: get_render_json(1,nil,import_bag_receiver_path(@import_bag_receiver)) }
-        else
-          format.json { render json: get_render_json(0,@import_bag_receiver.errors.messages) }
-        end
+        format.json { render json: get_render_common_json(@import_bag_receiver) }
       end
     end
   end
@@ -72,21 +57,14 @@ class ImportBagReceiversController < ApplicationController
     @import_bag = @import_bag_receiver.import_bag
     authorize  @import_bag ,:update?
 
-    import_bag_receiver_bak = ImportBagReceiver.where(receiver_mobile: params[:import_bag_receiver][:receiver_mobile],import_bag_id: @import_bag.id).first
+    # import_bag_receiver_bak = ImportBagReceiver.where(receiver_mobile: params[:import_bag_receiver][:receiver_mobile],import_bag_id: @import_bag.id).first
 
     respond_to do |format|
 
-      if import_bag_receiver_bak.present? && import_bag_receiver_bak.id!=@import_bag_receiver.id
-
-        format.json { render json: get_render_json(0,{'repeat'=>'当前会员已经添加！'}) }
+      if @import_bag_receiver.update(import_bag_receiver_params)
+        format.json { render json: get_render_common_json(@import_bag_receiver,import_bag_receiver_path(@import_bag_receiver)) }
       else
-
-        if @import_bag_receiver.update(import_bag_receiver_params)
-
-          format.json { render json: get_render_json(1,nil,import_bag_receiver_path(@import_bag_receiver)) }
-        else
-          format.json { render json: get_render_json(0,@import_bag_receiver.errors.messages) }
-        end
+        format.json { render json: get_render_common_json(@import_bag_receiver) }
       end
     end
   end

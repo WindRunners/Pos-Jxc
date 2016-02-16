@@ -98,6 +98,7 @@ class ApplicationController < ActionController::Base
     result
   end
 
+  #【obj=对象，path=跳转路径】
   #获取对象保存操作的json信息[flag:标识（1成功、0失败），msg:信息提示，error_attrs:对象错误的属性值，path：要跳转的路径]
   def get_render_common_json(obj=nil,path='')
     result={}

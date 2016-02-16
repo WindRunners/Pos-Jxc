@@ -1,0 +1,8 @@
+zh-CN:
+  mongoid:
+    models:
+      import_bag_receiver: "后台酒库礼包收礼人"
+    attributes:
+      import_bag_receiver:
+        receiver_mobile: '收礼人手机号'
+        memo: '备注'

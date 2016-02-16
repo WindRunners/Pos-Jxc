@@ -141,7 +141,7 @@ class ProductTicketCustomerInitsController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render json: get_render_json(1,"导入成功#{rows}条记录！",nil) }
+      format.json { render json: {:flag =>1,:msg => "导入成功#{rows}条记录！"} }
     end
   end
 

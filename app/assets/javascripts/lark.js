@@ -95,8 +95,13 @@ function common_form_ajax_deal(){
             eval(xhr.path);
         }else{
 
+            //重置样式和提示信息
             $("#error_explanation ul").html("");
-
+            $(".field_with_errors").each(function(){
+                var model_name = $(this).attr('_model')
+                console.log(model_name)
+                $("#"+model_name).unwrap();
+            });
 
             //错误信息
             $(xhr.msg).each(function(m,v){
@@ -106,7 +111,7 @@ function common_form_ajax_deal(){
 
             //样式添加
             $(xhr.error_attrs).each(function(m,v){
-                $("#"+model+"_"+v).wrap("<div class='field_with_errors'></div>");
+                $("#"+model+"_"+v).wrap("<div class='field_with_errors' _model='"+model+"_"+v+"'></div>");
             });
         }
     });

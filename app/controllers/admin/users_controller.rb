@@ -133,14 +133,16 @@ class Admin::UsersController < ApplicationController
             @user.add_role role
           end
         end
-        format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok }
-        format.js { render_js admin_user_path(@user) }
+        # format.html { redirect_to [:admin, @user], notice: 'User was successfully updated.' }
+        # format.json { render :show, status: :ok }
+        # format.js { render_js admin_users_path(@user) }
+        format.json { render json: get_render_common_json(@user,admin_users_path(@user)) }
 
       else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-        format.js { render_js edit_admin_user_path(@user) }
+        # format.html { render :edit }
+        # format.json { render json: @user.errors, status: :unprocessable_entity }
+        # format.js { render_js edit_admin_user_path(@user) }
+        format.json { render json: get_render_common_json(@user) }
       end
     end
   end

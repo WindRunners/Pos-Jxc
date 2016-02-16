@@ -54,10 +54,10 @@ class ProductsController < ApplicationController
     gon.searchBar = true
     #tag: 'JYD',
     conditions = {:category_id => params[:category_id],
-                  :mark => {'$exists'=>false},
-                  :searchText =>  params[:searchText],
+                  :mark => {'$exists' => false},
+                  :searchText => params[:searchText],
                   :page => params[:page],
-                  :per =>  20}
+                  :per => 20}
     products = Warehouse::Product.where(conditions)
 
     @products = Kaminari::PaginatableArray.new(
@@ -77,7 +77,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.js {render_js warehouse_index_products_path(page:params[:page]) }
+      format.js { render_js warehouse_index_products_path(page: params[:page]) }
     end
 
   end
@@ -151,6 +151,11 @@ class ProductsController < ApplicationController
         format.js
       end
     rescue
+      json[:mains] = []
+      json[:mains] << json.delete('main') if json['main'].present?
+      json[:mains] << json.delete('main1') if json['main1'].present?
+      json[:mains] << json.delete('main2') if json['main2'].present?
+
       @product = Product.new(json)
 
       if params[:stock].blank?
@@ -201,12 +206,17 @@ class ProductsController < ApplicationController
     json = JSON.parse(response.body)
 
 
-
     begin
       @product = Product.shop(current_user).find(json['id'])
 
       render_js product_path @product, notice: '该产品已存在.'
     rescue
+      json[:mains] = []
+
+      json[:mains] << json.delete('main') if json['main'].present?
+      json[:mains] << json.delete('main1') if json['main1'].present?
+      json[:mains] << json.delete('main2') if json['main2'].present?
+
       @product = Product.new(json)
       @product.state = State.find_by(value: "offline")
       if @product.shop(current_user).save
@@ -259,6 +269,12 @@ class ProductsController < ApplicationController
       begin
         @product = Product.with(collection: current_user.shop_id).find(p['id'])
       rescue
+        p[:mains] = []
+
+        p[:mains] << p.delete('main') if p['main'].present?
+        p[:mains] << p.delete('main1') if p['main1'].present?
+        p[:mains] << p.delete('main2') if p['main2'].present?
+
         @product = Product.new(p)
         @product.price = Faker::Commerce.price + 1
         @product.purchasePrice = @product.price * 0.8
@@ -360,7 +376,6 @@ class ProductsController < ApplicationController
     end
 
 
-
     if @product.shop(current_user).save
       notice = "商品#{@product.state.name}成功"
     else
@@ -406,8 +421,8 @@ class ProductsController < ApplicationController
     rescue
     end
     # @products.each {|p| @exposureNum += p.exposure_num}
-    exposureNumProducts = @products.map {|p| [p.title, p.exposure_num]}
-    exposureAttriveNumProducts = @products.map {|p| [p.title, p.exposure_attrive_num]}
+    exposureNumProducts = @products.map { |p| [p.title, p.exposure_num] }
+    exposureAttriveNumProducts = @products.map { |p| [p.title, p.exposure_attrive_num] }
     @result << {:name => '商品曝光次数', :data => exposureNumProducts}
     @result << {:name => '商品曝光到达次数', :data => exposureAttriveNumProducts}
 
@@ -449,7 +464,7 @@ class ProductsController < ApplicationController
   end
 
   def statistic
-    
+
   end
 
   private

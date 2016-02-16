@@ -12,12 +12,11 @@ development:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: elephant
+      database: elephant_development
       # Provides the hosts the default client can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:
-         - www.ibuluo.me:24617
-#        - 203.171.230.91:24617
+         - 127.0.0.1:27017
       options:
         # Change the default write concern. (default = { w: 1 })
         # write:

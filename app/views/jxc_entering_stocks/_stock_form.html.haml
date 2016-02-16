@@ -1,0 +1,38 @@
+= form_for ''  do |f|
+  %input{type:'hidden',id:'jxc_bill_detail_id',name:"jxc_bill_detail['id']"}
+  %div.control-group
+    = f.label :product_title,'商品编码',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'product_title',name:"jxc_bill_detail['product_title']",class:'form-control'}
+  %div.control-group
+    = f.label :product_title,'商品名称',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'product_title',name:"jxc_bill_detail['product_title']",class:'form-control'}
+  %div.control-group
+    = f.label :product_specification,'规格',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'product_specification',name:"jxc_bill_detail['product_specification']",class:'form-control'}
+  %div.control-group
+    = f.label :unit,'单位',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'unit',name:"jxc_bill_detail['unit']",class:'form-control'}
+  %div.control-group
+    = f.label :count,'库存数量',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'count',name:"jxc_bill_detail['count']",class:'form-control'}
+  %div.control-group
+    = f.label :purchase_price,'单价',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'purchase_price',name:"jxc_bill_detail['purchase_price']",class:'form-control'}
+  %div.control-group
+    = f.label :amount,'库存金额',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'amount',name:"jxc_bill_detail['amount']",class:'form-control'}
+  %div.control-group
+    = f.label :remark,'备注',class:'control-label'
+    %div.controls
+      %input{type:'text',id:'remark',name:"jxc_bill_detail['remark']",class:'form-control'}
+  %div.control-group{style:'align:right'}
+  .action
+    %a{href:'#',onclick:"javascript:if($('#jxc_bill_detail_id').val()!='undefined'&&$('#jxc_bill_detail_id').val()!=null){update();}else{create();}",class:"btn btn-primary"} 保存
+    %a{href:'#',onclick:"javascript:$('#item_form').dialog('close');clearForm();",class:"btn btn-default"} 取消

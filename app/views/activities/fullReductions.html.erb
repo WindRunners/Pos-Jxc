@@ -100,7 +100,7 @@ line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #f
 		                <div class="con_bk_naverbox">
 		                    <div class="col-xs-12 con_bk01">
 		                        <div class="col-xs-4 con_bk01_img">
-                                    <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                                    <a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
 		                        </div>
 		                        <div class="col-xs-8"> 
 		                            <p class="con_bk_p1"><%= product.title %></p>
@@ -127,7 +127,7 @@ line-height:170%; text-align:center; background:-webkit-linear-gradient(top,  #f
                     <% @hotProducts.each do |product| %>
                     	<div class="col-xs-6 con_bk_rm">
                         	<div class="con_bk_rmimg">
-                        		<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= RestConfig::IMG_SERVER + product.avatar_url %>"/></a>
+                        		<a href="javascript:void(0)" onclick="productDetails('<%= product.id %>','<%= @platform %>')"><img class="qg_con_img" src="<%= product.avatar_url %>"/></a>
                             </div>
                             <div class="con_bk_rmspan">
                                 <span class="con_bk_rmspan01"><%= product.title %></span><br/>

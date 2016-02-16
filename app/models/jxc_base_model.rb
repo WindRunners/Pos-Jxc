@@ -1,5 +1,8 @@
 class JxcBaseModel
   include Mongoid::Document
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   #单据类型
   BillType_PurchaseStockIn = 'purchase_stock_in'  #采购入库

@@ -1,0 +1,95 @@
+.modal.fade{role:"dialog",id:"generalFormModal","aria-labelledby"=>"generalModalLabel","aria-hidden"=>"true"}
+  .modal-dialog{style:'width:60%'}
+    .modal-content
+      .modal-header
+        %button{class:"close",type:"button","data-dismiss"=>"modal","aria-hidden"=>"true"}
+          &times;
+        %h4#modal_title.modal-title
+      .modal-body
+        .row
+          .col-xs-12.col-md-4
+            %div#ztree.ztree
+          .col-xs-12.col-md-8
+            %table{id:"modal_dg",class:'easyui-datagrid',style:"width:100%;height:400px"}
+      .modal-footer
+        %a{href:"#",class:"btn btn-default",id:"general_cancel",onclick:"javascript:$('#generalFormModal').modal('hide')"} 取消
+        %a{href:"#",class:"btn btn-primary",id:"general_ok"} 确定
+
+:javascript
+  $('#generalFormModal').modal({
+    show: false
+  });
+
+  var general_ok=$('#general_ok');
+  var modal_dg=$('#modal_dg');
+  var s={};
+  var general=function(settings){
+    s=settings;
+    var zNodes;       //zTree 数据
+    $('#modal_dg').datagrid({
+      title:settings.gridTitle,
+      rownumbers: true,
+      pagination: true,
+      singleSelect:settings.singleSelect,
+      columns:settings.columns
+    });
+
+    $('#modal_title').html(settings.modalTitle);
+
+    $.get(settings.treeUrl,{},function(resData){
+        zNodes = [];
+
+        $(resData).each(function(node){
+          zNodes.push(this);
+        });
+        var t = $('#ztree');
+        t = $.fn.zTree.init(t,setting,zNodes);
+        var zTree = $.fn.zTree.getZTreeObj('ztree');
+        zTree.expandAll(false);
+
+    });
+    //init zTree
+    var setting = {
+          check: {
+              //enable: true
+          },
+          view: {
+              //addHoverDom: addHoverDom,
+              //removeHoverDom: removeHoverDom,
+              dblClickExpand: false,
+              showLine: true,
+              selectedMulti: false
+          },
+          data: {
+              key:settings.treeKey,
+              simpleData: {
+                  enable:true,
+                  idKey: "_id",
+                  pIdKey: "parent_id",
+                  rootPId: ""
+              }
+          },
+          callback: {
+              onClick: function(event,treeId,treeNode){  //tree点击事件
+                //alert('#'+settings.datagridUrl+'='+treeNode[settings['treeclickParam']])
+                $('#modal_dg').datagrid({
+                  url:settings.datagridUrl+'='+treeNode[settings['treeclickParam']],
+                  method:'get'
+                });
+              }
+          }
+    };
+  };
+
+  general_ok.click(function(){
+    var data=modal_dg.datagrid('getSelected');
+    if(data){
+      for(var i=0;i<s.returnInput.length;i++){
+        s.returnInput[i].val(data[s.returnVal[i]])
+      }
+      modal_dg.datagrid("reload",{url:'',method:"get"});
+      $('#generalFormModal').modal('hide')
+    }else{
+      alert('请选中一行！')
+    }
+  });

@@ -3,6 +3,9 @@ class JxcTransferBillDetail
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :unit, type: String                 #商品单位
   field :pack_spec, type: String            #商品装箱规格

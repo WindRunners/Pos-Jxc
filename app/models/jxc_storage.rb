@@ -3,6 +3,9 @@ class JxcStorage
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :storage_name, type: String #仓库名称
   field :spell_code, type: String   #拼音码

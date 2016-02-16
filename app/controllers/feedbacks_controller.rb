@@ -38,11 +38,13 @@ class FeedbacksController < ApplicationController
         # format.js { render_js feedbacks_path, notice: 'Feedback was successfully created.' }
         # format.html { redirect_to @feedback, notice: 'Feedback was successfully created.' }
         # format.json { render :show, status: :created, location: @feedback }
-        format.json { render json: get_render_json(1,nil,feedbacks_path) }
+        # format.json { render json: get_render_json(1,nil,feedbacks_path) }
+        format.json { render json: get_render_common_json(@feedback,feedbacks_path(@feedback)) }
       else
         # format.html { render :new }
         # format.json { render json: @feedback.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@feedback.errors.messages) }
+        # format.json { render json: get_render_json(0,@feedback.errors.messages) }
+        format.json { render json: get_render_common_json(@feedback) }
       end
     end
   end
@@ -55,11 +57,13 @@ class FeedbacksController < ApplicationController
         # format.js { render_js feedbacks_path, notice: 'Feedback was successfully updated.' }
         # format.html { redirect_to @feedback, notice: 'Feedback was successfully updated.' }
         # format.json { render :show, status: :ok, location: @feedback }
-        format.json { render json: get_render_json(1,nil,feedbacks_path) }
+        # format.json { render json: get_render_json(1,nil,feedbacks_path) }
+        format.json { render json: get_render_common_json(@feedback,feedbacks_path(@feedback)) }
       else
         # format.html { render :edit }
         # format.json { render json: @feedback.errors, status: :unprocessable_entity }
-        format.json { render json: get_render_json(0,@feedback.errors.messages) }
+        # format.json { render json: get_render_json(0,@feedback.errors.messages) }
+        format.json { render json: get_render_common_json(@feedback) }
       end
     end
   end

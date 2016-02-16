@@ -190,3 +190,4 @@ gem 'rb-readline'
 gem 'rqrcode'
 
 gem 'mongoid-multitenancy'
+gem 'aasm'

@@ -203,6 +203,8 @@ class UserinfosController < ApplicationController
     @userinfo.role_marks = ['business']
     respond_to do |format|
       if @userinfo.save
+        client=Client.new(:userinfo=>@userinfo,:creator=>current_user)
+        client.save
         format.json { render json: get_render_common_json(@userinfo,jyd_index_userinfos_path) }
 
       else

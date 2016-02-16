@@ -3,6 +3,9 @@ class JxcBillDetail
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :unit, type: String #计量单位
   field :pack_spec, type: Integer, default:0 #装箱规格
@@ -34,7 +37,7 @@ class JxcBillDetail
   belongs_to :jxc_stock_count_bill, foreign_key: :stock_count_bill_id #盘点单
   belongs_to :jxc_stock_overflow_bill, foreign_key: :stock_overflow_bill_id #报溢单
   belongs_to :jxc_stock_reduce_bill, foreign_key: :stock_reduce_bill_id #报损单
-  # belongs_to :jxc_entering_stock, foreign_key: :entering_stock_id #期初库存录入
+  belongs_to :jxc_entering_stock, foreign_key: :entering_stock_id #期初库存录入
 
   belongs_to :jxc_cost_adjust_bill, foreign_key: :cost_adjust_bill_id #成本调整单
 

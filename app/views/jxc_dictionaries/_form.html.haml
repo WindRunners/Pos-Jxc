@@ -1,10 +1,7 @@
 = form_for @jxc_dictionary,remote:true do |f|
-  - if @jxc_dictionary.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@jxc_dictionary.errors.count, "error")} prohibited this jxc_dictionary from being saved:"
-      %ul
-        - @jxc_dictionary.errors.full_messages.each do |msg|
-          %li= msg
+  #error_explanation{"style"=>"display:none"}
+    %ul
+
   %table{class: "table table-bordered table-hover"}
     %tr
       %td

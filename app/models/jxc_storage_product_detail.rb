@@ -3,6 +3,9 @@ class JxcStorageProductDetail
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :unit, type: String    #基本单位
   field :cost_price, type: BigDecimal, default: 0.00    #成本价

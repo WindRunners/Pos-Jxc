@@ -92,9 +92,12 @@ function common_form_ajax_deal(){
         }else{
             $("#error_explanation ul").html("");
             msg_data = xhr.data
+            //for (msg in msg_data){
+            //    $("#error_explanation ul").append("<li>"+msg+":"+msg_data[msg]+"</li>");
+            //    //$("form[data-remote='true'][id$=_"+msg+"]").parent().addClass("field_with_errors");
+            //}
             for (msg in msg_data){
-                $("#error_explanation ul").append("<li>"+msg+":"+msg_data[msg]+"</li>");
-                //$("form[data-remote='true'][id$=_"+msg+"]").parent().addClass("field_with_errors");
+                $("#error_explanation ul").append("<li>"+msg_data+"</li>");
             }
             $("#error_explanation").show();
         }

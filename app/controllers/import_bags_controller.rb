@@ -73,7 +73,7 @@ class ImportBagsController < ApplicationController
         # result['data'] = @import_bag.errors.messages
         # get_post_product_list
         # format.html { render :new }
-        format.json { render json: get_render_json(0,@import_bag.errors.messages) }
+        format.json { render json: get_render_json(0,@import_bag.errors.full_messages) }
       end
     end
   end

@@ -2,6 +2,9 @@ class JxcSellExchangeGoodsBill
   ## 进销存 销售换货单
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :bill_no, type: String            #单据编号
   field :customize_bill_no, type: String  #自定义单据编号

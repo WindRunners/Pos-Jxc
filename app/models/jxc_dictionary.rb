@@ -2,6 +2,9 @@ class JxcDictionary
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :dic, type: String #字典名称
   field :dic_desc, type: String #字典描述

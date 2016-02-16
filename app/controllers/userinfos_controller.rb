@@ -203,13 +203,12 @@ class UserinfosController < ApplicationController
     @userinfo.role_marks = ['business']
     respond_to do |format|
       if @userinfo.save
-        format.json { render json: get_render_json(1, nil, jyd_index_userinfos_path) }
-        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        # format.json { head :no_content }
+        client=Client.new(:userinfo=>@userinfo,:creator=>current_user)
+        client.save
+        format.json { render json: get_render_common_json(@userinfo,jyd_index_userinfos_path) }
+
       else
-        format.json { render json: get_render_json(0, @userinfo.errors.messages) }
-        # format.js { render_js jyd_index_userinfos_path, notice: 'Userinfo was successfully destroyed.' }
-        # format.json { head :no_content }
+        format.json { render json: get_render_common_json(@userinfo) }
       end
     end
   end

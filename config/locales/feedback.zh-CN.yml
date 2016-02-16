@@ -1,0 +1,9 @@
+zh-CN:
+  mongoid:
+    models:
+      feedback: "用户反馈信息"
+    attributes:
+      feedback:
+        real_name: '配送员姓名'
+        mobile: '手机号码'
+        feedback_content: '反馈内容信息'

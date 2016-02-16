@@ -1,0 +1,8 @@
+zh-CN:
+  mongoid:
+    models:
+      client: "帐套管理"
+    attributes:
+      client:
+        name: "帐套名称"
+        jxc_building_user: "使用单位"

@@ -3,6 +3,9 @@ class JxcStorageJournal
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :bill_no, type: String #产生仓库商品流水的单据编号
   field :bill_status, type: String #单据状态
@@ -33,7 +36,7 @@ class JxcStorageJournal
   belongs_to :jxc_stock_reduce_bill #报损单
   belongs_to :jxc_stock_transfer_bill #调拨单
   belongs_to :jxc_cost_adjust_bill #成本调整单
-  # belongs_to :jxc_entering_stock #期初库存录入
+  belongs_to :jxc_entering_stock #期初库存录入
   belongs_to :jxc_stock_assign_bill #要货单
 
   # 定义获取 商品信息的方法

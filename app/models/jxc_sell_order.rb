@@ -3,6 +3,9 @@ class JxcSellOrder < JxcBaseModel
   include Mongoid::Document
   include Mongoid::Timestamps
   include Mongoid::Attributes::Dynamic
+  include Mongoid::Multitenancy::Document
+
+  tenant(:client)
 
   field :order_no, type: String             #订单编号
   field :customize_order_no, type: String   #自定义订单编号

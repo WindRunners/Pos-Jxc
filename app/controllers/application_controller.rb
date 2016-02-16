@@ -14,8 +14,24 @@ class ApplicationController < ActionController::Base
   after_filter :track_action
 
   rescue_from ::Exception, with: :error_occurred
+  before_filter :set_current_client
+  before_filter :set_current_user
 
   protected
+  def set_current_client
+    if current_user.present?
+      client_instance = Client.where(:userinfo_id => current_user.userinfo.id).first
+      # client_instance = Client.find_or_create_by(:userinfo_id => current_user.userinfo.id)
+      # client_instance = Userinfo.where(:id=>current_user.userinfo)
+      Mongoid::Multitenancy.current_tenant = client_instance
+      Rails.logger.info "client_instance:#{client_instance}"
+    end
+  end
+  def set_current_user
+    if current_user.present?
+      JxcSetting.current =(current_user)
+    end
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :mobile

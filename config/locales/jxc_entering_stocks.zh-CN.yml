@@ -1,0 +1,14 @@
+zh-CN:
+  mongoid:
+    models:
+      jxc_entering_stock: "期初库存录入"
+    attributes:
+      jxc_entering_stock:
+        remark: "备注"
+        product_name: "商品名称"
+        product_code: "商品编码"
+        enteringstock_no: "单据编号"
+        created_at: "制单日期"
+        creator: "制单人"
+        verifier: "审核人"
+        audit_date: "审核日期"

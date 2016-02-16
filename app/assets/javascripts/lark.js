@@ -86,20 +86,28 @@ function common_form_ajax_deal(){
 
     $("form[data-remote='true']").on('ajax:success', function(event, xhr, status, error) {
 
+        console.log("返回信息为："+JSON.stringify(xhr));
+        var model = xhr.model
+
+        //{flag:标识（1成功、0失败），model:模型，msg:信息提示，error_attrs:对象错误的属性值，path：要跳转的路径}
         if(xhr.flag==1){
             $("#error_explanation").hide();
             eval(xhr.path);
         }else{
+
             $("#error_explanation ul").html("");
-            msg_data = xhr.data
-            //for (msg in msg_data){
-            //    $("#error_explanation ul").append("<li>"+msg+":"+msg_data[msg]+"</li>");
-            //    //$("form[data-remote='true'][id$=_"+msg+"]").parent().addClass("field_with_errors");
-            //}
-            for (msg in msg_data){
-                $("#error_explanation ul").append("<li>"+msg_data+"</li>");
-            }
+
+
+            //错误信息
+            $(xhr.msg).each(function(m,v){
+                $("#error_explanation ul").append("<li>"+v+"</li>");
+            });
             $("#error_explanation").show();
+
+            //样式添加
+            $(xhr.error_attrs).each(function(m,v){
+                $("#"+model+"_"+v).wrap("<div class='field_with_errors'></div>");
+            });
         }
     });
 }

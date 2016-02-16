@@ -98,4 +98,31 @@ class ApplicationController < ActionController::Base
     result
   end
 
+  #获取对象保存操作的json信息[flag:标识（1成功、0失败），msg:信息提示，error_attrs:对象错误的属性值，path：要跳转的路径]
+  def get_render_common_json(obj=nil,path='')
+    result={}
+    flag = 1 #标识
+    #对象名称
+    if obj.present?
+      result['model'] = underline_tranfer(obj.class.to_s)
+      result['msg'] = obj.errors.full_messages
+      result['error_attrs'] = obj.errors.messages.keys
+      flag = 0 if obj.errors.count > 0
+    end
+    result['flag'] = flag
+    if path.present?
+      path += path.include?("?") ? "&hash_rand=#{rand(1000)}" : "?hash_rand=#{rand(1000)}"
+      result['path'] = "location.hash = '##{path}'"
+    end
+    result
+  end
+
+  def underline_tranfer(str)
+    str.gsub!(/[A-Z]/) { |match|
+      "_#{match}"
+    }
+    str.downcase!
+    str[1,str.length]
+  end
+
 end

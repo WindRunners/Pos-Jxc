@@ -67,13 +67,13 @@ class ImportBagsController < ApplicationController
         # format.js {render_js import_bag_path(@import_bag) }
         # format.html { redirect_to @import_bag, notice: '礼包创建成功!' }
         # get_render_json(flag,data={},path='')
-        format.json { render json: get_render_json(1,nil,import_bag_path(@import_bag)) }
+        format.json { render json: get_render_common_json(@import_bag,import_bag_path(@import_bag)) }
       else
         # result['flag'] = 0
         # result['data'] = @import_bag.errors.messages
         # get_post_product_list
         # format.html { render :new }
-        format.json { render json: get_render_json(0,@import_bag.errors.full_messages) }
+        format.json { render json: get_render_common_json(@import_bag) }
       end
     end
   end

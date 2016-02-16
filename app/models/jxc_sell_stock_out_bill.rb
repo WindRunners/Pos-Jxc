@@ -185,7 +185,7 @@ class JxcSellStockOutBill < JxcBaseModel
     return result
   end
 
-  #POS生成销售出库单(当前用户，门店，总金额，实收金额，销售商品json[商品ID、商品单位、商品零售价、商品数量])
+  #POS生成销售出库单(当前用户，订单ID，门店，总金额，实收金额，销售商品json[商品ID、商品单位、商品零售价、商品数量])
   def self.generate_sell_out_bill(current_user,order_id,retail_store,total_amount,receivable_amount,bill_detail_array_json)
     #结果集
     result = {}

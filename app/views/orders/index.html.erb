@@ -43,6 +43,7 @@
                     paymode: $('#paymode').val(),
                     beginTime: $('#beginTime').val(),
                     endTime: $('#endTime').val(),
+                    business_user: $('#business_user').val(),
                     page: page
                 },
                 function (data, status) {
@@ -52,7 +53,7 @@
                         console.log("获取订单列表数据错误，状态码为："+status);
                     }
                 });
-        order_state_count();
+        //order_state_count();
     }
 
 
@@ -159,14 +160,16 @@
             <div>
               <p>
                 <select class="input-sm" style="width:90%" id="ordertype">
-                  <option value="" selected>全部</option>
+                  <option value="" >全部</option>
                   <option value="0"
                           <% if "0" == params[:ordertype] %> selected
                           <% end %>>线下订单
                   </option>
-                  <option value="1"
-                          <% if "1" == params[:ordertype] %> selected
-                          <% end %>>线上订单
+                  <option value="1" selected>线上订单
+                  </option>
+                  <option value="2"
+                          <% if "2" == params[:ordertype] %> selected
+                          <% end %>>挂账订单
                   </option>
                 </select>
               </p>
@@ -243,7 +246,7 @@
               <lable><h6>下单时间：</h6></lable>
             </div>
           </div>
-          <div class="col-xs-10">
+          <div class="col-xs-6">
             <div>
               <p>
                 <input id="beginTime" type="datetime" class="input-sm" value="<%= params[:beginTime] %>">
@@ -252,7 +255,20 @@
               </p>
             </div>
           </div>
+
+          <div class="col-xs-2">
+            <div style="text-align: right">
+              <lable><h6>业务人员：</h6></lable>
+            </div>
+          </div>
+          <div class="col-xs-2">
+            <div>
+              <p><input type="text" id="business_user" style="width:90%" class="input-sm" value="<%= params[:business_user] %>"></p>
+            </div>
+          </div>
         </div>
+
+
         <div class="row">
           <div class="col-xs-2">
 

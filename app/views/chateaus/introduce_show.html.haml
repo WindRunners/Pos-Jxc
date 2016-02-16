@@ -2,10 +2,10 @@
 %html
   %head
     %meta{:content => "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no", :name => "viewport"}
-    %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css", :rel => "stylesheet"}
-      %link{:href => "//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css", :rel => "stylesheet"}
-        %script{:src => "//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"}
-        %script{:src => "//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"}
+      %link{:href => "../../css/bootstrap.min.css", :rel => "stylesheet"}
+        %link{:href => "../../css/bootstrap-theme.min.css", :rel => "stylesheet"}
+          %script{:src => "../../js/jquery.min.js"}
+          %script{:src => "../../js/bootstrap.min.js"}
   %body
     .container
       -if @chateau.pictures.present?
@@ -32,36 +32,36 @@
 
 
         .row
-          .li_name.col-xs-2
+          .li_name.col-xs-4
             酒庄主人:
-          .li_content.col-xs-10
+          .li_content.col-xs-8
             =@data['chateau'].owner
         .row
-          .li_name.col-xs-2
+          .li_name.col-xs-4
             所在产区:
-          .li_content.col-xs-10
-            =@data['chateau'].region.ancestors_and_self.map{|c|c.name}.drop(1) if @chateau.region.present?
+          .li_content.col-xs-8
+            =@data['region_str']
         .row
-          .li_name.col-xs-2
+          .li_name.col-xs-4
             详细地址:
-          .li_content.col-xs-10
+          .li_content.col-xs-8
             =@data['chateau'].address
         .row
-          .li_name.col-xs-2
+          .li_name.col-xs-4
             联系电话:
-          .li_content.col-xs-10
+          .li_content.col-xs-8
             =@data['chateau'].phone
         .row
-          .li_name.col-xs-2
+          .li_name.col-xs-4
             酒庄网址:
-          .li_content.col-xs-10
+          .li_content.col-xs-8
             =@data['chateau'].urls
         - @data['mark'].each do |m|
           .row
             - m.each do |k,v|
-              .li_name.col-xs-2
+              .li_name.col-xs-4
                 = k + ':'
-              .li_content.col-xs-10
+              .li_content.col-xs-8
                 = v.to_s.strip
 
 

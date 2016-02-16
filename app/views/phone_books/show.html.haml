@@ -1,0 +1,51 @@
+%p#notice= notice
+
+%p
+  %b 图标
+  = image_tag(@phone_book.photo.url,:size=>"80X80",id:"phone_book_photo")
+
+%p
+  %b=t('mongoid.attributes.phone_book.telephone')
+  = @phone_book.telephone
+%p
+  %b=t('mongoid.attributes.phone_book.name')
+  = @phone_book.name
+%p
+  %b=t('mongoid.attributes.phone_book.url')
+  = @phone_book.url
+%p
+  %b=t('mongoid.attributes.phone_book.city')
+  = @phone_book.city
+%p
+  %b=t('mongoid.attributes.phone_book.address')
+  = @phone_book.address
+%p
+  %b=t('mongoid.attributes.phone_book.nature')
+  = @phone_book.nature
+
+
+.row
+  .widget-box.widget-color-blue2
+    .widget-header
+      %h4{:class => "widget-title lighter smaller"} 图片上传
+    .widget-body
+      .widget-main.padding-8
+        %ul{:class => "ace-thumbnails clearfix", :id => "photoFiles"}
+
+
+        = form_tag 'upload', method: "post", id: "upload_phonebook_photo" do
+          %span{:class => "btn btn-success fileinput-button"}
+            %i{:class => "glyphicon glyphicon-plus"}
+            %span 上传图片
+            %input{:type=>"hidden",:name=>"id",:id=>"id",:value=>"#{@phone_book.id}"}
+            %input{:type => "file", :name => "phone_book[photo]",:id=>"upload_photo", :multiple => ""}
+        %script{:id => "template-upload-origin", :type => "text/x-tmpl"}
+          .upload
+            {%=o.name%}
+            .progress
+              .bar{:style => "width: 0%"}
+
+
+= link_to '编辑','', 'data-href' => edit_phone_book_path(@phone_book),class:'btn btn-xs btn-warning'
+\|
+= link_to '返回','', 'data-href' => phone_books_path,class:'btn btn-xs btn-default'

@@ -40,9 +40,9 @@
         %td= jxc_sell_order.remark
         %td{style:'color:red;font-weight:bold;'}
           = jxc_sell_order.bill_status == '0' ? '已创建' : (jxc_sell_order.bill_status == '1' ? '已审核' : '已红冲')
-        %td= link_to t("helpers.links.show"), '', 'data-href': jxc_sell_order_path(jxc_sell_order),class:'btn btn-xs btn-info'
-        %td= link_to t("helpers.links.edit"), '','data-href': edit_jxc_sell_order_path(jxc_sell_order),class:'btn btn-xs btn-warning',disabled:jxc_sell_order.bill_status == '0' ? false:true
+        %td= link_to t("helpers.links.show"), '', 'data-href'=> jxc_sell_order_path(jxc_sell_order),class:'btn btn-xs btn-info'
+        %td= link_to t("helpers.links.edit"), '','data-href'=> edit_jxc_sell_order_path(jxc_sell_order),class:'btn btn-xs btn-warning',disabled:jxc_sell_order.bill_status == '0' ? false:true
         -#%td= link_to 'Destroy', jxc_sell_order, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
-= link_to t("helpers.links.new"),'','data-href': new_jxc_sell_order_path,:class => 'btn btn-primary'
+= link_to t("helpers.links.new"),'','data-href'=> new_jxc_sell_order_path,:class => 'btn btn-primary'

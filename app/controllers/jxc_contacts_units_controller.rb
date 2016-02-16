@@ -27,11 +27,13 @@ class JxcContactsUnitsController < ApplicationController
     respond_to do |format|
       if @jxc_contacts_unit.save
         # format.html { redirect_to jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
-        format.js { render_js jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
-        format.json { render :show, status: :created, location: @jxc_contacts_unit }
+        # format.js { render_js jxc_contacts_units_path, notice: '进销存往来单位已成功创建.' }
+        # format.json { render :show, status: :created, location: @jxc_contacts_unit }
+        format.json { render json: get_render_common_json(@jxc_contacts_unit,jxc_contacts_units_path) }
       else
-        format.html { render :new }
-        format.json { render json: @jxc_contacts_unit.errors, status: :unprocessable_entity }
+        # format.html { render :new }
+        # format.json { render json: @jxc_contacts_unit.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@jxc_contacts_unit) }
       end
     end
   end
@@ -45,11 +47,13 @@ class JxcContactsUnitsController < ApplicationController
 
       if @jxc_contacts_unit.update(jxc_contacts_unit_params)
         # format.html { redirect_to @jxc_contacts_unit, notice: '进销存往来单位已成功更新.' }
-        format.js { render_js jxc_contacts_unit_path(@jxc_contacts_unit), notice: '进销存往来单位已成功更新.' }
-        format.json { render :show, status: :ok, location: @jxc_contacts_unit }
+        # format.js { render_js jxc_contacts_unit_path(@jxc_contacts_unit), notice: '进销存往来单位已成功更新.' }
+        # format.json { render :show, status: :ok, location: @jxc_contacts_unit }
+        format.json { render json: get_render_common_json(@jxc_contacts_unit,jxc_contacts_units_path) }
       else
-        format.html { render :edit }
-        format.json { render json: @jxc_contacts_unit.errors, status: :unprocessable_entity }
+        # format.html { render :edit }
+        # format.json { render json: @jxc_contacts_unit.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@jxc_contacts_unit) }
       end
     end
   end

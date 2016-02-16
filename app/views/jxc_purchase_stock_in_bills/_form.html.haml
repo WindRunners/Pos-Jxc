@@ -42,13 +42,17 @@
       %td
         = f.button t('mongoid.attributes.jxc_purchase_stock_in_bill.supplier'),type:'button',class:'btn btn-white btn-success',onclick:'getSuppliersInfo()',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_purchase_stock_in_bill_supplier{value: @jxc_purchase_stock_in_bill.supplier.nil? ? '':@jxc_purchase_stock_in_bill.supplier.unit_name,readonly:true }
-        = f.hidden_field :supplier_id
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_purchase_stock_in_bill_supplier{value: @jxc_purchase_stock_in_bill.supplier.nil? ? '':@jxc_purchase_stock_in_bill.supplier.unit_name,readonly:true }
+          = f.hidden_field :supplier_id
+          %i.ace-icon.fa.fa-leaf.green
       %td
         = f.button t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_storage'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcStorageInfo()',disabled: @operation == 'show' ? true:false
       %td
-        %input.form-control#jxc_purchase_stock_in_bill_jxc_storage{value: @jxc_purchase_stock_in_bill.jxc_storage.nil? ? '':@jxc_purchase_stock_in_bill.jxc_storage.storage_name,readonly:true }
-        = f.hidden_field :storage_id
+        %span.input-icon{style:'width:100%;'}
+          %input.form-control#jxc_purchase_stock_in_bill_jxc_storage{value: @jxc_purchase_stock_in_bill.jxc_storage.nil? ? '':@jxc_purchase_stock_in_bill.jxc_storage.storage_name,readonly:true }
+          = f.hidden_field :storage_id
+          %i.ace-icon.fa.fa-leaf.green
     %tr
       -#%td
       -#  = f.button t('mongoid.attributes.jxc_purchase_stock_in_bill.jxc_account'),type:'button',class:'btn btn-white btn-success',onclick:'getJxcAccountsInfo()',disabled: @operation == 'show' ? true:false
@@ -170,7 +174,7 @@
   .actions
     = f.submit '保存',class:'btn btn-info',style:'display:'+(@operation == 'show' ? 'none':'inline' )+''
     &nbsp;&nbsp;&nbsp;
-    %a{class:'btn','data-href': jxc_purchase_stock_in_bills_path}
+    %a{class:'btn','data-href'=> jxc_purchase_stock_in_bills_path}
       %i{class:'ace-icon fa fa-return bigger-110'}返回
 
 =render 'jxc_modal/jxc_common_modal'

@@ -48,11 +48,13 @@
           %input.form-control#jxc_storage_store{value: @jxc_storage.store.present? ? @jxc_storage.store.name : '',readonly:true }
           = f.hidden_field :store_id
           %i.ace-icon.fa.fa-leaf.green
+      %td
+        = f.label :inventory_warning
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :inventory_warning, :class => 'form-control'
+          %i.ace-icon.fa.fa-leaf.green
 
-      %td
-        = f.label :storage_code
-      %td
-        = f.text_field :storage_code,:class=>'form-control'
       -#%td
       -#  = f.label :admin_phone
       -#%td
@@ -69,6 +71,10 @@
       %td
         = f.text_field :telephone,:class=>'form-control'
     %tr
+      %td
+        = f.label :storage_code
+      %td
+        = f.text_field :storage_code,:class=>'form-control'
       %td
         = f.label :memo
       %td

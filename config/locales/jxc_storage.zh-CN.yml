@@ -11,6 +11,7 @@ zh-CN:
         status: '仓库状态'
         capacity: '仓库库容'
         current_capacity: '当前存量'
+        inventory_warning: '库存预警数量'
 
         address: '仓库地址'
         telephone: '仓库固话'

@@ -70,8 +70,11 @@ class Product
   has_many :jxc_storage_product_detail   #仓库商品明细中的 商品信息
 
   def avatar_url
-    self.avatar ||= 'missing.png'
-    RestConfig::PRODUCT_SERVER + self.avatar
+    if self.avatar.present?
+      RestConfig::PRODUCT_SERVER + self.avatar
+    else
+      "#{RestConfig::ELEPHANT_HOST}missing.png"
+    end
   end
 
   #商品图片路径
@@ -79,7 +82,7 @@ class Product
     if self.mains.present?
       RestConfig::PRODUCT_SERVER + self.mains[0]
     else
-      'missing.png'
+      "#{RestConfig::ELEPHANT_HOST}missing.png"
     end
   end
 
@@ -87,7 +90,7 @@ class Product
     if self.thumb.present?
       RestConfig::PRODUCT_SERVER + self.thumb
     else
-      'missing.png'
+      "#{RestConfig::ELEPHANT_HOST}missing.png"
     end
   end
 
@@ -95,7 +98,7 @@ class Product
     if self.desc.present?
       RestConfig::PRODUCT_SERVER + self.desc
     else
-      'missing.png'
+      "#{RestConfig::ELEPHANT_HOST}missing.png"
     end
   end
 

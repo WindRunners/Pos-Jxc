@@ -10,7 +10,7 @@ $(function () {
             //要做的事情
         }
         if (e && e.keyCode == 13) { // enter 键
-            search();
+                search();
         }
     };
     pagination_ajax();
@@ -110,10 +110,14 @@ function showLocationInfo(pt, rs) {
 //查询
 function search() {
     var name = $("#search-scope #name").val();
-    var prefix_url = "?name=" + name;
+    var prefix_url = null;
+    if($("#user_id").val()){
+        prefix_url = "?name=" + name + "&u_id="+$("#user_id").val();
+    }else{
+        prefix_url = "?name=" + name;
+    }
     window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
 }
-
 
 //用户确认负责门店
 function manage_store(store_id,user_id) {

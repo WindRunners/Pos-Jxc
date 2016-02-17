@@ -287,13 +287,22 @@ class OrdersController < ApplicationController
 
   def line_payment_order
 
-    ordercompleted = Ordercompleted.find(params[:id]);
+    ordercompleted = Ordercompleted.find(params[:id])
     respond_to do |format|
-
-      if ordercompleted.payment_order!
-        format.json { render json: {:flag=>'1',:msg=>'挂账订单结算成功！'} }
+      flag = params[:flag] #0:拒收，1：结算
+      if flag == "0"
+        if ordercompleted.cancel_order!
+          format.json { render json: {:flag => '1', :msg => '挂账订单拒收成功！'} }
+        else
+          format.json { render json: {:flag => '0', :msg => '挂账订单拒收失败！'} }
+        end
       else
-        format.json { render json: {:flag=>'1',:msg=>'挂账订单结算成功！'} }
+
+        if ordercompleted.payment_order!
+          format.json { render json: {:flag => '1', :msg => '挂账订单结算成功！'} }
+        else
+          format.json { render json: {:flag => '0', :msg => '挂账订单结算失败！'} }
+        end
       end
     end
   end

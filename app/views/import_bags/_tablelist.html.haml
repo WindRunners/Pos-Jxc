@@ -37,7 +37,7 @@
           = link_to '详细', '', 'data-href' =>import_bag_path(import_bag), :class => 'btn btn-minier btn-yellow'
           = link_to '目标人员', '', 'data-href' =>import_bag_import_bag_receivers_path(import_bag), :class => 'btn btn-minier btn-yellow'
           - if import_bag.current_state.to_s == 'passed'
-            = link_to '认领情况', '', 'data-href' =>" /gift_bags/#{import_bag.id}/index", :class => 'btn btn-minier btn-yellow'
+            = link_to '认领情况', '', 'data-href' =>"/gift_bags/#{import_bag.id}/index", :class => 'btn btn-minier btn-yellow'
           - if policy(import_bag).update?
             = link_to '修改', '', 'data-href' =>edit_import_bag_path(import_bag),:class => 'btn btn-minier btn-primary'
           - if policy(import_bag).destroy?

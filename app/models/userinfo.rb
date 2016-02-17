@@ -75,7 +75,7 @@ class Userinfo
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
   field :role_marks, type:Array,default: [] #角色标识 business: 运营商角色（对运营商），platform：平台角色（对平台）
 
-  validates :name,:province,:city,:email,:pusher_phone, presence: true #名称，种类不能为空
+  validates :name,:province,:city,:email,:pusher_phone,:shopname, presence: true #名称，种类不能为空
   validates :email,:pusher_phone,uniqueness: true #名称唯一
 
   index({location: "2d"}, {min: -200, max: 200})
@@ -140,6 +140,15 @@ class Userinfo
       p '启用'
     else
       p '停用'
+    end
+  end
+
+
+  #联盟商省市区唯一
+  def position_check
+    userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district)
+    if userinfo.present?
+      errors.add(:city, "该区域已经存在联盟商,请进行修改!")
     end
   end
 

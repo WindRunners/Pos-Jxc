@@ -50,12 +50,9 @@ class StoresController < ApplicationController
     @store.userinfo_id = current_user.userinfo.id
     respond_to do |format|
       if @store.save
-        format.js { render_js stores_path }
-        # format.html { redirect_to @store, notice: 'Store was successfully created.' }
-        format.json { render :show, status: :created, location: @store }
+        format.json { render json: get_render_common_json(@store,stores_path) }
       else
-        format.html { render :new }
-        format.json { render json: @store.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@store) }
       end
     end
   end
@@ -69,12 +66,9 @@ class StoresController < ApplicationController
   def update
     respond_to do |format|
       if @store.update(store_params)
-        format.js { render_js stores_path }
-        # format.html { redirect_to @store, notice: 'Store was successfully updated.' }
-        format.json { render :show, status: :ok, location: @store }
+        format.json { render json: get_render_common_json(@store,stores_path) }
       else
-        format.html { render :edit }
-        format.json { render json: @store.errors, status: :unprocessable_entity }
+        format.json { render json: get_render_common_json(@store) }
       end
     end
   end

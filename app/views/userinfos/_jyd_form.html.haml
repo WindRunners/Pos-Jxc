@@ -60,7 +60,6 @@
             .actions.col-sm-8
               = link_to '返回','', 'data-href' => jyd_index_userinfos_path,:class=> 'btn btn-info'
 
-
 :javascript
     //jquery 初始化函数
   $(function () {
@@ -77,8 +76,8 @@
 
 
     if (userinfo_city == "" || userinfo_city == undefined) {
-    var point = new BMap.Point(113.663221, 34.7568711);
-    map.centerAndZoom(point, 15);//初始化地图中心点
+      var point = new BMap.Point(113.663221, 34.7568711);
+      map.centerAndZoom(point, 15);//初始化地图中心点
     }
     else{
       map.centerAndZoom(userinfo_city,15);
@@ -95,26 +94,16 @@
     map.addEventListener("click", function (e) {
       gc.getLocation(e.point, function (rs) {
 
-      var addComp = rs.addressComponents;
-      $('#userinfo_address').val(addComp.province  + addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
-      $('#userinfo_province').val(addComp.province);
-      $('#userinfo_city').val(addComp.city);
-      $('#userinfo_district').val(addComp.district);
+        var addComp = rs.addressComponents;
+        $('#userinfo_address').val(addComp.province  + addComp.city + addComp.district  + addComp.street  + addComp.streetNumber);
+        $('#userinfo_province').val(addComp.province);
+        $('#userinfo_city').val(addComp.city);
+        $('#userinfo_district').val(addComp.district);
       });
 
     });
 
 
-  common_form_ajax_deal();
+    common_form_ajax_deal();
 
   });
-
-
-  function submit_check(){
-
-
-
-
-  }
-
-

@@ -15,7 +15,7 @@ class Store
   field :position, type: String #位置描述
   field :idf_url, type: String # 身份真正面
   field :idb_url, type: String # 身份证反面
-  field :bp_url, type: String # 身份证反面
+  field :bp_url, type: String # 营业执照照片
   field :location, type: Point, spatial: true, default: []
 
   has_mongoid_attached_file :idpf,
@@ -130,6 +130,14 @@ class Store
     lng_sin = Math.sin(lng_diff/2.0) ** 2
     first = Math.sqrt(lat_sin + Math.cos(lat1*PI/180.0) * Math.cos(lat2*PI/180.0) * lng_sin)
     Math.asin(first) * 2 * 6378137.0
+  end
+
+  def type_str
+    if self.type==1
+      p '实体门店'
+    else
+      p '虚拟门店'
+    end
   end
 
 end

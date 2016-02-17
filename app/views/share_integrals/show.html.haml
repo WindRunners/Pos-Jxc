@@ -1,19 +1,19 @@
 %p#notice= notice
 
 %p
-  %b Title:
+  %b 标题:
   = @share_integral.title
 %p
-  %b Start date:
+  %b 开始时间:
   = @share_integral.start_date
 %p
-  %b End date:
+  %b 结束时间:
   = @share_integral.end_date
 %p
-  %b Shared give integral:
+  %b 分享者获赠积分:
   = @share_integral.shared_give_integral
 %p
-  %b Register give integral:
+  %b 注册者获赠积分:
   = @share_integral.register_give_integral
 
 = link_to 'Edit','','data-href' => edit_share_integral_path(@share_integral)

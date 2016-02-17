@@ -75,9 +75,10 @@ class Userinfo
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
   field :role_marks, type:Array,default: [] #角色标识 business: 运营商角色（对运营商），platform：平台角色（对平台）
 
-  validates :name,:province,:city,:email,:pusher_phone,:shopname, presence: true #名称，种类不能为空
-  validates :email,:pusher_phone,uniqueness: true #名称唯一
-
+  validates :name,:province,:city,:email,:shopname, presence: true #名称，种类不能为空
+  validates :email,uniqueness: true #邮箱唯一
+  validates :pusher_phone,presence: true,uniqueness: true,format: {with: /\A\d{11}\z/, message: "不合法!"}
+  validates :idnumber,presence: true,uniqueness: true,format: {with: /\A(\A\d{15}\z|\A\d{18}\z|\A\d{17}(\d|X|x))\z/, message: "不合法!"}
   index({location: "2d"}, {min: -200, max: 200})
 
   has_mongoid_attached_file :busp,:default_url => '/missing.png'

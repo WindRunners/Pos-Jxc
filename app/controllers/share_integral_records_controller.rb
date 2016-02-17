@@ -4,7 +4,13 @@ class ShareIntegralRecordsController < ApplicationController
   # GET /share_integral_records
   # GET /share_integral_records.json
   def index
-    @share_integral_records = ShareIntegralRecord.all.page(params[:page]).order('created_at DESC')
+    conditionParams = {}
+    shared_customer_mobile = params[:shared_customer_mobile] || ''
+    customer = Customer.find_by_mobile(shared_customer_mobile) if shared_customer_mobile!=""
+    if customer.present?
+      conditionParams['shared_customer_id'] = /#{customer.id.to_s}/
+    end
+    @share_integral_records = ShareIntegralRecord.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
 
   # GET /share_integral_records/1

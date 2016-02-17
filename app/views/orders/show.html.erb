@@ -30,11 +30,11 @@
         $("#btn_order_id").val(order_id);
     }
     ;
-    function line_payment_order(order_id){
+    function line_payment_order(order_id,flag){
 
         $.ajax({
             type: "get",
-            url: "/orders/line_payment_order?id="+order_id,
+            url: "/orders/line_payment_order?id="+order_id+"&flag="+flag,
             dataType: "json",
             success: function (data) {
                 alert(data.msg);
@@ -314,7 +314,8 @@
                       <!-- Button trigger modal -->
                       <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#myModal" onclick="set_btn_order_id('<%=@order.id%>');"><i class="ace-icon">接&nbsp;&nbsp;单</i></button>
                   <% elsif :generation==workflow_state && @order.ordertype==2%>
-                      <button type="button" class="btn btn-sm" onclick="line_payment_order('<%=@order.id%>');"><i class="ace-icon">结算</i></button>
+                      <button type="button" class="btn btn-sm" onclick="line_payment_order('<%=@order.id%>','1');"><i class="ace-icon">结算</i></button>
+                      <button type="button" class="btn btn-sm" onclick="line_payment_order('<%=@order.id%>','0');"><i class="ace-icon">客户拒收</i></button>
                   <% end %>
                   <a data-href="<%= orders_path(:workflow_state =>"paid") %>" class="btn btn-sm btn-info"><i class="ace-icon">返&nbsp;回</i></a>
                 </p>

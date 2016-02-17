@@ -60,6 +60,7 @@ class Ordercompleted
     # 挂账单未支付
     state :generation do
       event :payment_order, :transitions_to => :completed
+      event :cancel_order, :transitions_to => :cancelled
     end
 
     # 已取消

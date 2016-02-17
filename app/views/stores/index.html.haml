@@ -1,7 +1,15 @@
 %h1 门店列表
 %br
 %div{class:'row',style:'background-color:#EFF3F8'}
-  -if @manage_store!="manage_store"
+  -if @user_id.present?
+    %div{class:'col-xs-6'}
+      %form#search-scope.form-inline{'method'=>'post','accept-charset'=>'UTF-8','action'=>stores_path,'data-remote'=>'true'}
+        .form-group
+          %label{"for"=>"qrcode"} 店名:
+          %input#name.form-control{'name'=>'名称'}
+        %a.btn.btn-primary.btn-sm{'href'=>'javascript:search();'} 搜索
+        %input{"type"=>"hidden","id"=>"user_id","value"=>"#{@user_id}"}
+  -else
     %div{class:'col-xs-6'}
       = link_to '新建门店',"##{new_store_path}",'data-href' =>new_store_path,:class => 'btn btn-info'
     %div{class:'col-xs-6'}
@@ -35,7 +43,7 @@
             %td= store.position
             %td= store.created_at
             %td
-              -if @manage_store.present?
+              -if @user_id.present?
                 -if @store_ids.include?(store.id)
                   = link_to '取消负责',"javascript:unmanage_store('"+store.id+"','"+@user_id+"')",:class => 'btn btn-xs btn-danger',:id => "unmanage_store_href#{store.id.to_s}"
                   = link_to '确认负责',"javascript:manage_store('"+store.id+"','"+@user_id+"')",:class => 'btn btn-xs btn-info',:id => "manage_store_href#{store.id.to_s}",style: 'display: none'

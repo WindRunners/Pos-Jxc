@@ -39,4 +39,4 @@
         %td= gift_bag.sign_time.present? ? gift_bag.sign_time.to_s(:db):gift_bag.sign_time
         %td= gift_bag.content
 %br
-
+= link_to '返回礼包列表', '', 'data-href'=>import_bags_path,class: 'btn btn-default'

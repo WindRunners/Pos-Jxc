@@ -17,8 +17,11 @@ class Ordergood
 
 
   def avatar_url
-    self.avatar ||= 'missing.png'
-    RestConfig::PRODUCT_SERVER + self.avatar
+    if self.avatar.present?
+      RestConfig::PRODUCT_SERVER + self.avatar
+    else
+      "#{RestConfig::ELEPHANT_HOST}missing.png"
+    end
   end
 
   def product

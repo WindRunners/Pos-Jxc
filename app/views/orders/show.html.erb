@@ -382,7 +382,7 @@
         <% @order.ordergoods.each do |ordergood| %>
             <tr>
               <td style="text-align: center">
-                <img src="<%= ordergood.avatar_url.present? ? RestConfig::PRODUCT_SERVER + ordergood.avatar_url : "missing.png" %>" height="60px" width="60px">
+                <img src="<%= ordergood.avatar_url %>" height="60px" width="60px">
               </td>
               <td style="text-align: center">
                 <a href="#<%= product_path(ordergood.product_id) %>"><%= ordergood.title %></a></td>

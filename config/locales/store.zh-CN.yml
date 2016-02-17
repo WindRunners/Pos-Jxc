@@ -1,0 +1,16 @@
+zh-CN:
+  mongoid:
+    models:
+      store: "门店"
+    attributes:
+      store:
+        name: '门店名称'
+        describe: "门店描述"
+        manager: "门店店长"
+        type: "门店类型"
+        longitude: "门店经度"
+        latitude: "门店纬度"
+        position: "位置"
+        idf_url: "身份证正面照片"
+        idb_url: "身份证反面照片"
+        bp_url: "营业执照照片"

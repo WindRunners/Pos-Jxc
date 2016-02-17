@@ -14,7 +14,7 @@ $(function () {
         }
     };
     pagination_ajax();
-
+    common_form_ajax_deal();
 
 });
 

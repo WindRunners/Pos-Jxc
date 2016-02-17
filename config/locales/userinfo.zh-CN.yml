@@ -11,3 +11,5 @@ zh-CN:
         email: "邮箱地址"
         province: "省份"
         city: "城市"
+        district: "县/区"
+        shopname: "公司名称"

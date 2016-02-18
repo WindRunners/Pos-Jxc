@@ -21,7 +21,7 @@ class StoresController < ApplicationController
     else
       name_condition=params[:name] || ''
       conditionParams = {}
-      conditionParams['name'] = /#{name_condition}/ if name_condition.present?
+      conditionParams['name'] =  /#{name_condition}/ if name_condition.present?
       if current_user.userinfo.present?
         conditionParams['userinfo_id'] = current_user.userinfo.id
         @stores = Store.where(conditionParams).page(params[:page]).order('created_at DESC')

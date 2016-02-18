@@ -6,7 +6,7 @@ class ShareIntegralV1API < Grape::API
   end
   params do
     requires :customer_id, type: String, desc: '小Cid'
-    requires :userinfo_id, type: String, desc: '小Bid'
+    requires :userinfo_id, type: String, desc: '小Bid,不用填'
   end
   post 'share_info' do
 

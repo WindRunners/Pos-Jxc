@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
     ordertype = params[:ordertype]
     parm = Hash.new
     parm[:userinfo_id] = current_user['userinfo_id']
-    parm[:store_id] = {"$in" => current_user['store_ids']} if ordertype!="0" && ordertype!="2"
+    parm[:store_id] = {"$in" => current_user['store_ids'].present? ? current_user['store_ids'] : []} if ordertype!="0" && ordertype!="2"
 
     parm[:orderno] = params[:orderno] if !params[:orderno].nil? && !params[:orderno].blank?
     parm[:consignee] = params[:consignee] if !params[:consignee].nil? && !params[:consignee].blank?

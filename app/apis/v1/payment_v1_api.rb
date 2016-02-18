@@ -28,7 +28,7 @@ class PaymentV1API < Grape::API
     }
 
     if order.paymode == 1 #支付宝
-      params[:total_fee] = 0.01
+      params[:total_fee] = order.paycost
       params[:subject] = '商品主题'
       params[:notify_url] = "#{RestConfig::ELEPHANT_HOST}/orders/#{order.id}/alipay_notify"
 
@@ -42,7 +42,7 @@ class PaymentV1API < Grape::API
       }
 
     elsif order.paymode == 2 #微信支付
-      params[:total_fee] = 1
+      params[:total_fee] = (order.paycost*100).to_i
       params[:spbill_create_ip] = request.ip
       params[:trade_type] = 'APP' # could be "JSAPI", "NATIVE" or "APP",
       params[:notify_url] = "#{RestConfig::ELEPHANT_HOST}/orders/#{order.id}/wx_notify"

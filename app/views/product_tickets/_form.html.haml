@@ -78,7 +78,7 @@
                   %tr#product_tr
                     -if @product.present?
                       %td#product_avatar
-                        %img{:style => "height:100px;width:200px",:src=>@product.avatar}
+                        %img{:style => "height:100px;width:200px",:src=>@product.avatar_url}
                       %td#product_name
                         =@product.title
                       %td
@@ -92,9 +92,9 @@
 
             .hr.hr-16.hr-dotted
             .actions.col-sm-1.col-sm-offset-3
-              = f.submit 'Save',:class=> 'btn btn-success',onclick: 'return save_check()'
+              = f.submit '保存',:class=> 'btn btn-success',onclick: 'return save_check()'
             .actions.col-sm-8
-              = link_to 'Back','', 'data-href' => product_tickets_path,:class=>'btn btn-primary'
+              = link_to '返回','', 'data-href' => product_tickets_path,:class=>'btn btn-primary'
 
 %input{"type"=>"hidden","id"=>"img_server","value"=>"#{RestConfig::PRODUCT_SERVER}"}
 

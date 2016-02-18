@@ -74,7 +74,7 @@ class Userinfo
   field :end_business, type: String #营业结束时间
   field :channel_ids, type:Array,default: [] #移动设备推送IDs
   field :role_marks, type:Array,default: [] #角色标识 business: 运营商角色（对运营商），platform：平台角色（对平台）
-
+  validate :position_check
   validates :name,:province,:city,:email,:shopname, presence: true #名称，种类不能为空
   validates :email,uniqueness: true #邮箱唯一
   validates :pusher_phone,presence: true,uniqueness: true,format: {with: /\A\d{11}\z/, message: "不合法!"}
@@ -149,7 +149,11 @@ class Userinfo
   def position_check
     userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district)
     if userinfo.present?
-      errors.add(:city, "该区域已经存在联盟商,请进行修改!")
+      if self.district.present?
+        errors.add(:district, "已经存在联盟商,请进行修改!")
+      else
+        errors.add(:city, "已经存在联盟商,请进行修改!")
+      end
     end
   end
 

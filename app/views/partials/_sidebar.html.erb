@@ -282,46 +282,48 @@
     <% end %>
 
 
-    <li class="open">
+    <% if current_user.has_role?(:admin) %>
+        <li class="open">
 
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-pencil-square-o"></i>
-        <span class="menu-text">营销活动</span>
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-pencil-square-o"></i>
+            <span class="menu-text">营销活动</span>
 
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-
-      <ul class="submenu">
-
-        <!--<li class="">-->
-          <!--<a data-href="<%= panic_buyings_path %>">-->
-            <!--<i class="menu-icon fa fa-caret-right"></i>-->
-            <!--秒杀-->
-          <!--</a>-->
-
-          <!--<b class="arrow"></b>-->
-        <!--</li>-->
-
-        <li class="">
-          <a data-href="<%= "#{share_integrals_path}" %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            推荐有礼
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= "#{product_tickets_path}?type=0" %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            酒券
+            <b class="arrow fa fa-angle-down"></b>
           </a>
 
           <b class="arrow"></b>
+
+          <ul class="submenu">
+
+            <!--<li class="">-->
+              <!--<a data-href="<%= panic_buyings_path %>">-->
+                <!--<i class="menu-icon fa fa-caret-right"></i>-->
+                <!--秒杀-->
+              <!--</a>-->
+
+              <!--<b class="arrow"></b>-->
+            <!--</li>-->
+            <% if current_user.has_role?(:SuperAdmin) %>
+            <li class="">
+              <a data-href="<%= "#{share_integrals_path}" %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                推荐有礼
+              </a>
+              <b class="arrow"></b>
+            </li>
+            <% end %>
+            <li class="">
+              <a data-href="<%= "#{product_tickets_path}?type=0" %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                酒券
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+          </ul>
         </li>
-      </ul>
-    </li>
+    <% end %>
 
     <% if current_user.has_role?(:business) || current_user.has_role?(:admin) %>
     <li class="">

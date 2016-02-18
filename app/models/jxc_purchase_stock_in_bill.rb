@@ -115,6 +115,9 @@ class JxcPurchaseStockInBill < JxcBaseModel
           #仓库商品明细变更后，记录变更日志
           cost_price = (billDetail.price * (discount.to_d / 100)).round(2) #成本价
           inventoryChangeLog(self,billDetail,store,previous_count,after_count,cost_price,OperationType_StockIn,BillType_PurchaseStockIn,BillStatus_Audit)
+
+          #库存商品明细变更后，消除库存预警
+          inventory_warning_judge(store,store_product_detail)
         end
       end
 

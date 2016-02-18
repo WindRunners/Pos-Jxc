@@ -49,7 +49,7 @@ class JxcSellStockOutBill < JxcBaseModel
     result = {}
     result[:flag] = 0
 
-    #如果单据状态为： 已创建 或 未通过审核
+    #如果单据状态为： 已创建
     if self.bill_status == BillStatus_Create
       #单据商品详情
       billDetailsArray = JxcBillDetail.where(:sell_out_bill_id => self.id)
@@ -85,6 +85,10 @@ class JxcSellStockOutBill < JxcBaseModel
               #记录仓库明细变更日志
               storageChangeLog = newInventoryChangeLog(self,billDetail,store,previous_count,later_count,store_product_detail.cost_price,OperationType_StockOut,BillType_SellStockOut,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
+
+              #判断是否触发库存预警
+              inventory_warning_judge(store,store_product_detail)
+
             end
           else
             result[:msg] = billDetail.product.title.inspect+'库存中不存在，并且系统不允许负库存，请尝试用其他仓库出库!'

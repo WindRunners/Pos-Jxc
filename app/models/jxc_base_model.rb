@@ -172,4 +172,18 @@ class JxcBaseModel
     inventoryChangeLog.save
   end
 
+
+  #判断库存是否达到预警数量
+  def inventory_warning_judge(store_info,store_product_detail)
+    #如果达到库存预警数量，将 库存商品信息 添加到库存预警商品列表中
+    if store_product_detail.count <= store_info.inventory_warning
+      InventoryWarningProduct.add_inventory_warning_product(store_product_detail.resource_product_id,store_info.id,store_product_detail.count,store_info.inventory_warning)
+    end
+
+    #如果库存预警商品及时补货，将 库存商品信息 从库存预警商品列表中移除
+    if store_product_detail.count > store_info.inventory_warning
+      InventoryWarningProduct.remove_inventory_warning_product(store_product_detail.resource_product_id,store_info.id)
+    end
+  end
+
 end

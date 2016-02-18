@@ -1,0 +1,19 @@
+%h1 Listing expired_warning_products
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @expired_warning_products.each do |expired_warning_product|
+      %tr
+        %td= link_to 'Show', expired_warning_product
+        %td= link_to 'Edit', edit_expired_warning_product_path(expired_warning_product)
+        %td= link_to 'Destroy', expired_warning_product, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Expired warning product', new_expired_warning_product_path

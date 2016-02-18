@@ -35,7 +35,7 @@
     });
 
     //监听 回车按下 事件
-    $(document).keydown(function(event){
+    $(document).keypress(function(event){
       if(event.keyCode == 13){
         //dataGrid设置
         tableSetting.queryParams.searchParam = $('#searchParam').val();

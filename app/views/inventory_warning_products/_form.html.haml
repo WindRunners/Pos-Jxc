@@ -1,0 +1,10 @@
+= form_for @inventory_warning_product do |f|
+  - if @inventory_warning_product.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@inventory_warning_product.errors.count, "error")} prohibited this inventory_warning_product from being saved:"
+      %ul
+        - @inventory_warning_product.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

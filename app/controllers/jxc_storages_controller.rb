@@ -74,6 +74,6 @@ class JxcStoragesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def jxc_storage_params
-    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :store_id, :admin_id, :address, :telephone, :status, :memo, :inventory_warning, :data_1, :data_2, :data_3, :data_4)
+    params.require(:jxc_storage).permit(:storage_name, :spell_code, :storage_type, :storage_code, :store_id, :admin_id, :address, :telephone, :status, :memo, :inventory_warning, :expiration_date_warning, :data_1, :data_2, :data_3, :data_4)
   end
 end

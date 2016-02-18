@@ -639,6 +639,38 @@
       </ul>
     </li>
 
+    <li class="">
+        <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+			    <span class="menu-text">
+				商品预警查询
+				</span>
+
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+
+        <b class="arrow"></b>
+
+        <ul class="submenu">
+            <li class="">
+                  <a data-href="<%= inventory_warning_products_path %>">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    库存预警查询
+                  </a>
+
+                  <b class="arrow"></b>
+            </li>
+            <li class="">
+                  <a data-href="<%= expired_warning_products_path %>">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    保质期预警查询
+                  </a>
+
+                  <b class="arrow"></b>
+            </li>
+        </ul>
+    </li>
+
     <% end %>
 
   </ul><!-- /.nav-list -->

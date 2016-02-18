@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+
   resources :phone_books
   resources :feedbacks
   resources :roles
@@ -496,6 +497,9 @@ Rails.application.routes.draw do
   resources :jxc_cost_adjust_bills
 
 
+  resources :expired_warning_products #商品过期预警
+
+  resources :inventory_warning_products #商品库存预警
 
   resources :jxc_dictionaries #字典项
 

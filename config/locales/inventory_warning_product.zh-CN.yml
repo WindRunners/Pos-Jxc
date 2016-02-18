@@ -1,0 +1,10 @@
+zh-CN:
+  mongoid:
+    models:
+      inventory_warning_product: '库存预警商品'
+    attributes:
+      inventory_warning_product:
+        jxc_storage: '预警仓库'
+        product: '预警商品'
+        current_inventory: '当前库存'
+        inventory_warning_count: '库存预警数量'

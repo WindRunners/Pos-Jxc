@@ -1,0 +1,9 @@
+zh-CN:
+  mongoid:
+    models:
+      expired_warning_product: '过期预警商品'
+    attributes:
+      expired_warning_product:
+        jxc_storage: '过期预警仓库'
+        product: '过期预警商品'
+        current_inventory: '当前库存'

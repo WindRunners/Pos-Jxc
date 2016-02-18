@@ -1,0 +1,10 @@
+= form_for @expired_warning_product do |f|
+  - if @expired_warning_product.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@expired_warning_product.errors.count, "error")} prohibited this expired_warning_product from being saved:"
+      %ul
+        - @expired_warning_product.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

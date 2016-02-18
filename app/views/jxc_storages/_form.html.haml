@@ -48,11 +48,20 @@
           %input.form-control#jxc_storage_store{value: @jxc_storage.store.present? ? @jxc_storage.store.name : '',readonly:true }
           = f.hidden_field :store_id
           %i.ace-icon.fa.fa-leaf.green
+
+    %tr
       %td
         = f.label :inventory_warning
       %td
         %span.input-icon{style:'width:100%;'}
           = f.text_field :inventory_warning, :class => 'form-control'
+          %i.ace-icon.fa.fa-leaf.green
+
+      %td
+        = f.label :expiration_date_warning
+      %td
+        %span.input-icon{style:'width:100%;'}
+          = f.text_field :expiration_date_warning, :class => 'form-control'
           %i.ace-icon.fa.fa-leaf.green
 
       -#%td

@@ -15,7 +15,8 @@ class JxcStorage
   field :capacity, type: Integer  #仓库库容
   field :current_capacity, type: Integer  #仓库当前存量
   field :memo, type: String         #备注
-  field :inventory_warning, type: Integer, default: 0 #库存预警数量
+  field :inventory_warning, type: Integer, default: 10 #库存预警数量
+  field :expiration_date_warning, type: Integer, default:30  #保质期预警天数
 
   field :longitude, type:String #仓库地址 经度
   field :latitude, type:String #仓库地址  纬度
@@ -30,7 +31,7 @@ class JxcStorage
   field :data_3, type: String
   field :data_4, type: String
 
-  validates :storage_name,:spell_code,:storage_type,:admin,:userinfo,:store, presence: true
+  validates :storage_name,:spell_code,:storage_type,:admin,:userinfo,:store,:inventory_warning,:expiration_date_warning, presence: true
   validates :storage_name,:store, uniqueness: true
 
   belongs_to :admin, class_name:'User', foreign_key: :admin_id

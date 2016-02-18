@@ -103,11 +103,11 @@ function add_tr(data){
 
     var trmodel = $("#bag_product_tr").clone();
     trmodel.find(".product_name").html(data.title);
-    trmodel.find(".product_avatar_url").html("<img src='"+img_server+data.avatar_url+"'/>");
+    trmodel.find(".product_avatar_url").html("<img src='"+img_server+data.avatar+"' class='product_avatar'/>");
     trmodel.find("input [name='product_num[]']").val(1);
     trmodel.find("[name='product_id[]']").val(data._id);
     trmodel.find("[name='product_title[]']").val(data.title);
-    trmodel.find("[name='product_avatar_url[]']").val(data.avatar_url);
+    trmodel.find("[name='product_avatar_url[]']").val(data.avatar);
     trmodel.find("a").click(function(){
         //移除元素
         $(this).parent().parent().remove();

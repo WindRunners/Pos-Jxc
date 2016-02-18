@@ -86,13 +86,17 @@
               class_name: 'gritter-success gritter-light'
             });
             $("#jplayer").jPlayer('play');
-            $("#jplayer").jPlayer('stop');
           }else{
             $("#jplayer").jPlayer('stop');
           }
 
           getOrderCount();
 
+        });
+
+        MessageBus.subscribe("/channel/grab/#{current_user.id.to_s}", function(data){
+            $("#jplayer").jPlayer('stop');
+            getOrderCount();
         });
     });
 

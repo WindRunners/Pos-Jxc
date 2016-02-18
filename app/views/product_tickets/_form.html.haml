@@ -78,7 +78,7 @@
                   %tr#product_tr
                     -if @product.present?
                       %td#product_avatar
-                        %img{:style => "height:100px;width:200px",:src=>@product.avatar}
+                        %img{:style => "height:100px;width:200px",:src=>@product.avatar_url}
                       %td#product_name
                         =@product.title
                       %td

@@ -93,11 +93,6 @@
           getOrderCount();
 
         });
-
-        MessageBus.subscribe("/channel/grab/#{current_user.id.to_s}", function(data){
-            $("#jplayer").jPlayer('stop');
-            getOrderCount();
-        });
     });
 
     $('.page-content-area').ace_ajax({

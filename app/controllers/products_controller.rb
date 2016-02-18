@@ -77,7 +77,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.js { render_js warehouse_index_products_path(page: params[:page]) }
+      format.js { render_js warehouse_index_products_path(params) }
     end
 
   end

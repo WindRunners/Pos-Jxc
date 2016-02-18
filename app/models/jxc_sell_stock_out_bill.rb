@@ -85,10 +85,6 @@ class JxcSellStockOutBill < JxcBaseModel
               #记录仓库明细变更日志
               storageChangeLog = newInventoryChangeLog(self,billDetail,store,previous_count,later_count,store_product_detail.cost_price,OperationType_StockOut,BillType_SellStockOut,BillStatus_Audit)
               storageChangeLogArray << storageChangeLog
-
-              #判断是否触发库存预警
-              inventory_warning_judge(store,store_product_detail)
-
             end
           else
             result[:msg] = billDetail.product.title.inspect+'库存中不存在，并且系统不允许负库存，请尝试用其他仓库出库!'
@@ -99,6 +95,9 @@ class JxcSellStockOutBill < JxcBaseModel
 
       updateStorageArray.each do |updateInfo|
         updateInfo.update
+
+        #判断是否触发库存预警
+        inventory_warning_judge(store,updateInfo)
       end
 
       storageChangeLogArray.each do |changeLog|
@@ -153,6 +152,9 @@ class JxcSellStockOutBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_StockIn,BillType_SellStockOut,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(store,store_product_detail)
           end
         end
       end

@@ -100,6 +100,9 @@ class JxcPurchaseReturnsBill < JxcBaseModel
 
       updateInventoryArray.each do |updateInfo|
         updateInfo.update
+
+        #库存预警判断
+        inventory_warning_judge(store,updateInfo)
       end
 
       storageChangeLogArray.each do |changeLog|
@@ -155,6 +158,9 @@ class JxcPurchaseReturnsBill < JxcBaseModel
 
             bill_price = (billDetail.price * (discount.to_d / 100)).round(2)
             inventoryChangeLog(self,billDetail,store,previous_count,after_count,bill_price,OperationType_StrikeBalance,BillType_PurchaseReturns,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(store,store_product_detail)
           end
         end
       end

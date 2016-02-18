@@ -92,6 +92,9 @@ class JxcOtherStockInBill < JxcBaseModel
 
           #仓库商品明细变更后，记录变更日志
           inventoryChangeLog(self,billDetail,store,previous_count,after_count,billDetail.price,OperationType_StockIn,BillType_OtherStockIn,BillStatus_Audit)
+
+          #库存预警判断
+          inventory_warning_judge(store,store_product_detail)
         end
       end
 
@@ -148,6 +151,9 @@ class JxcOtherStockInBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             inventoryChangeLog(self,billDetail,store,previous_count,after_count,billDetail.price,OperationType_StrikeBalance,BillType_OtherStockIn,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(store,store_product_detail)
           end
         end
       end

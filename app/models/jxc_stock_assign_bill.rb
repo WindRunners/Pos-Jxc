@@ -90,6 +90,9 @@ class JxcStockAssignBill < JxcBaseModel
 
       storageUpdateArray.each do |updateInfo|
         updateInfo.update
+
+        #库存预警判断
+        inventory_warning_judge(out_store,updateInfo)
       end
 
       storageChangeLogArray.each do |changeLog|
@@ -144,6 +147,9 @@ class JxcStockAssignBill < JxcBaseModel
 
           ##记录 要货仓库 库存变更日志
           inventoryChangeLog(self,billDetail,in_store,previous_count,after_count,in_store_product_detail.cost_price,OperationType_StockIn,BillType_StockAssign,BillStatus_Audit)
+
+          #库存预警判断
+          inventory_warning_judge(in_store,in_store_product_detail)
         end
       end
 
@@ -201,6 +207,9 @@ class JxcStockAssignBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             inventoryChangeLog(self,billDetail,in_store,previous_count,after_count,in_store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockAssign,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(in_store,in_store_product_detail)
           end
 
 
@@ -224,6 +233,9 @@ class JxcStockAssignBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             inventoryChangeLog(self,billDetail,out_store,previous_count,after_count,out_store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockAssign,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(out_store,out_store_product_detail)
           end
         end
       end

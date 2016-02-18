@@ -65,6 +65,7 @@ class JxcStorage
   has_and_belongs_to_many :jxc_transfer_bill_details  #调拨单 商品详情
   has_many :jxc_storage_journals  #仓库变更明细
   has_many :jxc_storage_product_details   #仓库商品明细
+  has_many :inventory_warning_products  #库存预警商品信息
 
   def to_s
     self.storage_name

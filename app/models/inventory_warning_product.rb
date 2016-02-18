@@ -9,7 +9,7 @@ class InventoryWarningProduct
   tenant(:client)
 
   field :resource_product_id, type: String  #预警商品ID
-  has_one :jxc_storage, foreign_key: :storage_id  #预警仓库
+  belongs_to :jxc_storage, foreign_key: :storage_id  #预警仓库
 
   field :current_inventory, type: Integer #当前库存
   field :inventory_warning_count, type: Integer #预警数量
@@ -29,7 +29,7 @@ class InventoryWarningProduct
     else
       @inventoryWarningProduct = InventoryWarningProduct.new
       @inventoryWarningProduct.resource_product_id = product_id
-      @inventoryWarningProduct[:storage_id] = storage_id
+      @inventoryWarningProduct.storage_id = storage_id
       @inventoryWarningProduct.current_inventory = current_inventory
       @inventoryWarningProduct.inventory_warning_count = inventory_warning_count
       @inventoryWarningProduct.save

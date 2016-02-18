@@ -4,6 +4,17 @@
     (总共
     = @inventory_warning_products.size
     条)
+
+#query_condition.query_option
+  %button.btn.btn-white.btn-success{onclick:'getJxcStorageInfo()'}
+    选择仓库
+  %input#storage.inventory-storage.form-control{readonly:true,placeholder:'请选择仓库'}
+  %input#storage_id{type:'hidden'}
+
+  %button#inventoryWarningQuery.ColVis_Button.ColVis_MasterButton.btn.btn-white.btn-success.btn-bold{type:'button',style:'width:50px;'}
+    %span
+      %i.fa.fa-search
+
 %div{class:'row',style:'background-color:#EFF3F8;margin:0px;'}
   %div{class:'col-xs-6'}
     %div{class:'dataTables_info',id:'dynamic-table_info',role:'status',"aria-live"=>'polite',style:'padding-top:13px;'}
@@ -14,6 +25,8 @@
         %li{class:'paginate_button previous disabled',id:'dynamic-table_previous',"aria-controls"=>'dynamic-table',"tabindex"=>'0'}
           = paginate @inventory_warning_products
 .space.space-4
+
+
 %table{class: "table table-striped table-bordered table-hover"}
   %thead
     %tr
@@ -30,10 +43,114 @@
         %td=inventory_warning_product.current_inventory
         %td=inventory_warning_product.inventory_warning_count
 
-
         -#%td= link_to 'Show', inventory_warning_product
         -#%td= link_to 'Edit', edit_inventory_warning_product_path(inventory_warning_product)
         -#%td= link_to 'Destroy', inventory_warning_product, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
+=render 'jxc_modal/jxc_common_modal'
+
 -#%br
 -#= link_to 'New Inventory warning product', new_inventory_warning_product_path
+
+:javascript
+  //zTree默认设置
+  var zTreeSetting = {
+    async:{
+      url:'',
+      type:'get',
+      enable:true
+    },
+    view: {
+      dblClickExpand: false,
+      showLine: true,
+      selectedMulti: false
+    },
+    data: {
+      key:{
+        name:"",
+        url:"#"
+      },
+      simpleData: {
+        enable:true,
+        idKey: "_id",
+        pIdKey: "parent_id",
+        rootPId: ""
+      }
+    },
+    callback: {}
+  };
+
+  //EasyUI DataGrid设置
+  var tableSetting = {};
+
+  var storage_id;
+
+  //选择仓库信息
+  function getJxcStorageInfo(){
+    $('.modal-title').text('选择入货仓库');
+    $('.modal-dialog').addClass('tree-table');
+    $('#jxc-select-tree').removeClass('jxc-disappear-tree');
+    $('#jxc-select-table').addClass('jxc-select-table');
+    $('#confirm-button').attr('data-type','storage');
+
+    //zTree设置
+    zTreeSetting.async.url = '/jxc_common_info/getStorageTypesInfo';
+    zTreeSetting.data.key.name = 'dic';
+    zTreeSetting.callback = {
+      onClick: function(event,treeId,treeNode){
+        tableSetting.queryParams = {
+          storage_type:treeNode.dic
+        };
+        initDataGrid(tableSetting);
+      }
+    };
+
+    //dataGrid设置
+    tableSetting = {
+      title: '仓库信息',
+      url:'/jxc_common_info/getStorageInfo',
+      width:600,
+      singleSelect:true,
+      queryParams:{},
+      columns:[[
+        {title:'仓库名称',field:'storage_name',width:'18%'},
+        {title:'管理人',field:'admin_name',width:'18%'},
+        {title:'联系电话',field:'admin_phone',width:'18%'},
+        {title:'仓库地址',field:'address',width:'28%'},
+        {title:'备注',field:'memo',width:'18%'}
+      ]]
+    };
+
+    $('#selectModal').modal('show');
+
+    //初始化树和表
+    initZTree(zTreeSetting);
+    initDataGrid(tableSetting);
+  }
+
+  function selectData(){
+    var dataType = $('#confirm-button').attr('data-type');
+    var selectData = $('#dataTable').datagrid('getSelections');
+
+    if(selectData.length == 0){
+      alert('请选择数据');
+    }else{
+      if(dataType == 'storage'){
+        $('#storage').val(selectData[0].storage_name);
+        $('#storage_id').val(selectData[0]._id);
+
+        storage_id = $('#storage_id').val();
+      }
+
+      //模态框隐藏
+      $('#selectModal').modal('hide');
+    }
+  }
+
+  $(function(){
+
+    $('#inventoryWarningQuery').bind('click',function(){
+      window.location.assign('/#/inventory_warning_products?storage_id='+storage_id);
+    });
+
+  })

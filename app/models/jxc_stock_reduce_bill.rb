@@ -89,6 +89,9 @@ class JxcStockReduceBill < JxcBaseModel
 
       updateStorageArray.each do |updateInfo|
         updateInfo.update
+
+        #库存预警判断
+        inventory_warning_judge(store,updateInfo)
       end
 
       storageChangeLogArray.each do |changeLog|
@@ -144,6 +147,9 @@ class JxcStockReduceBill < JxcBaseModel
 
             #仓库商品明细变更后，记录变更日志
             inventoryChangeLog(self,billDetail,store,previous_count,after_count,store_product_detail.cost_price,OperationType_StrikeBalance,BillType_StockReduce,BillStatus_StrikeBalance)
+
+            #库存预警判断
+            inventory_warning_judge(store,store_product_detail)
           end
         end
       end

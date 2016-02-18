@@ -51,77 +51,79 @@
       <b class="arrow"></b>
     </li>
 
-    <li class="open">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-							<span class="menu-text">
-								商品库
-							</span>
-
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= new_product_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            上架商品
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= products_path(:state => 'online') %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            出售中的商品
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= products_path(:state => 'restocking') %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            已售罄的商品
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= products_path(:state => 'alarm') %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            库存告警商品
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= products_path(:state => 'offline') %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            仓库中的商品
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= mobile_categories_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            商品分组
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
-
     <% if policy(:user).isAdmin? %>
+
+        <li class="open">
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+                                <span class="menu-text">
+                                    商品库
+                                </span>
+
+            <b class="arrow fa fa-angle-down"></b>
+          </a>
+
+          <b class="arrow"></b>
+
+          <ul class="submenu">
+
+            <li class="">
+              <a data-href="<%= new_product_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                上架商品
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= products_path(:state => 'online') %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                出售中的商品
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= products_path(:state => 'restocking') %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                已售罄的商品
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= products_path(:state => 'alarm') %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                库存告警商品
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= products_path(:state => 'offline') %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                仓库中的商品
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= mobile_categories_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                商品分组
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+          </ul>
+        </li>
+
+
 
         <li class="">
           <a href="#" class="dropdown-toggle">
@@ -155,19 +157,49 @@
 
           </ul>
         </li>
+
+        <li class="open">
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">数据中心</span>
+            <b class="arrow fa fa-angle-down"></b>
+          </a>
+
+          <b class="arrow"></b>
+          <ul class="submenu">
+
+            <li class="">
+              <a data-href="<%= statistic_products_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                商品统计
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= statistic_orders_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                订单统计
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+          </ul>
+        </li>
     <% end %>
 
 
 
     <% if current_user.has_role?(:store)%>
-    <li class="">
-      <a data-href="<%= cashiers_path %>">
-        <i class="menu-icon fa fa-list-alt"></i>
-        <span class="menu-text">POS收银</span>
-      </a>
+    <!--<li class="">-->
+      <!--<a data-href="<%= cashiers_path %>">-->
+        <!--<i class="menu-icon fa fa-list-alt"></i>-->
+        <!--<span class="menu-text">POS收银</span>-->
+      <!--</a>-->
 
-      <b class="arrow"></b>
-    </li>
+      <!--<b class="arrow"></b>-->
+    <!--</li>-->
 
     <li class="">
       <a data-href="<%= orders_path(:workflow_state => "paid") %>">
@@ -179,38 +211,6 @@
       <b class="arrow"></b>
     </li>
     <% end %>
-
-
-    <li class="open">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-        <span class="menu-text">数据中心</span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= statistic_products_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            商品统计
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= statistic_orders_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            订单统计
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
-
 
     <% if current_user.has_role?(:xiaoda_kuaixun||:admin) %>
         <li class="open">
@@ -295,14 +295,14 @@
 
       <ul class="submenu">
 
-        <li class="">
-          <a data-href="<%= panic_buyings_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            秒杀
-          </a>
+        <!--<li class="">-->
+          <!--<a data-href="<%= panic_buyings_path %>">-->
+            <!--<i class="menu-icon fa fa-caret-right"></i>-->
+            <!--秒杀-->
+          <!--</a>-->
 
-          <b class="arrow"></b>
-        </li>
+          <!--<b class="arrow"></b>-->
+        <!--</li>-->
 
         <li class="">
           <a data-href="<%= "#{share_integrals_path}" %>">

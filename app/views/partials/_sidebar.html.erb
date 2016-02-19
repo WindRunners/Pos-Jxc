@@ -18,11 +18,11 @@
       </a>
 
       <!-- #section:basics/sidebar.layout.shortcuts -->
-      <a data-href="<%= coupons_path %>" class="btn btn-warning">
+      <a data-href="" class="btn btn-warning">
         <i class="ace-icon fa fa-gift"></i>
       </a>
 
-      <a data-href="<%= userinfos_path %>" class="btn btn-danger">
+      <a data-href="" class="btn btn-danger">
         <i class="ace-icon fa fa-cog"></i>
       </a>
 
@@ -122,74 +122,7 @@
             </li>
           </ul>
         </li>
-
-
-
-        <li class="">
-          <a href="#" class="dropdown-toggle">
-            <i class="menu-icon fa fa-list"></i>
-            <span class="menu-text"> 用户管理 </span>
-
-            <b class="arrow fa fa-angle-down"></b>
-          </a>
-
-          <b class="arrow"></b>
-
-          <ul class="submenu">
-            <li class="">
-              <a data-href="<%= admin_users_path %>">
-                <i class="menu-icon fa fa-caret-right"></i>
-                用户
-              </a>
-
-              <b class="arrow"></b>
-            </li>
-
-            <% if current_user.has_role?(:SuperAdmin)%>
-            <li class="">
-              <a data-href="<%= jyd_index_userinfos_path %>">
-                <i class="menu-icon fa fa-caret-right"></i>
-                联盟商管理
-              </a>
-              <b class="arrow"></b>
-            </li>
-            <% end %>
-
-          </ul>
-        </li>
-
-        <li class="open">
-          <a href="#" class="dropdown-toggle">
-            <i class="menu-icon fa fa-desktop"></i>
-            <span class="menu-text">数据中心</span>
-            <b class="arrow fa fa-angle-down"></b>
-          </a>
-
-          <b class="arrow"></b>
-          <ul class="submenu">
-
-            <li class="">
-              <a data-href="<%= statistic_products_path %>">
-                <i class="menu-icon fa fa-caret-right"></i>
-                商品统计
-              </a>
-
-              <b class="arrow"></b>
-            </li>
-
-            <li class="">
-              <a data-href="<%= statistic_orders_path %>">
-                <i class="menu-icon fa fa-caret-right"></i>
-                订单统计
-              </a>
-
-              <b class="arrow"></b>
-            </li>
-          </ul>
-        </li>
     <% end %>
-
-
 
     <% if current_user.has_role?(:store)%>
     <!--<li class="">-->
@@ -213,7 +146,7 @@
     <% end %>
 
     <% if current_user.has_role?(:xiaoda_kuaixun||:admin) %>
-        <li class="open">
+        <li class="">
           <a data-href="#" class="dropdown-toggle">
             <i class="menu-icon fa fa-file-o"></i>
             <span class="menu-text">小达快讯</span>
@@ -242,7 +175,7 @@
         </li>
     <% end %>
     <% if current_user.has_role?(:jiu_world||:admin) %>
-        <li class="open">
+        <li class="">
           <a data-href="#" class="dropdown-toggle">
             <i class="menu-icon fa fa-pencil-square-o"></i>
             <span class="menu-text">酒江湖</span>
@@ -282,48 +215,53 @@
     <% end %>
 
 
-    <li class="open">
-
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-pencil-square-o"></i>
-        <span class="menu-text">营销活动</span>
-
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-
-      <ul class="submenu">
-
-        <!--<li class="">-->
-          <!--<a data-href="<%= panic_buyings_path %>">-->
-            <!--<i class="menu-icon fa fa-caret-right"></i>-->
-            <!--秒杀-->
-          <!--</a>-->
-
-          <!--<b class="arrow"></b>-->
-        <!--</li>-->
-
+    <% if current_user.has_role?(:admin) || current_user.has_role?(:SuperAdmin)%>
         <li class="">
-          <a data-href="<%= "#{share_integrals_path}" %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            推荐有礼
-          </a>
-          <b class="arrow"></b>
-        </li>
 
-        <li class="">
-          <a data-href="<%= "#{product_tickets_path}?type=0" %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            酒券
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-pencil-square-o"></i>
+            <span class="menu-text">营销活动</span>
+
+            <b class="arrow fa fa-angle-down"></b>
           </a>
 
           <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
 
-    <% if current_user.has_role?(:business) || current_user.has_role?(:admin) %>
+          <ul class="submenu">
+
+            <!--<li class="">-->
+              <!--<a data-href="<%= panic_buyings_path %>">-->
+                <!--<i class="menu-icon fa fa-caret-right"></i>-->
+                <!--秒杀-->
+              <!--</a>-->
+
+              <!--<b class="arrow"></b>-->
+            <!--</li>-->
+            <% if current_user.has_role?(:SuperAdmin) %>
+            <li class="">
+              <a data-href="<%= "#{share_integrals_path}" %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                推荐有礼
+              </a>
+              <b class="arrow"></b>
+            </li>
+            <% else %>
+
+                <li class="">
+                  <a data-href="<%= "#{product_tickets_path}?type=0" %>">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    酒券
+                  </a>
+
+                  <b class="arrow"></b>
+                </li>
+            <% end %>
+
+          </ul>
+        </li>
+    <% end %>
+
+    <% if current_user.has_role?(:business) || current_user.has_role?(:admin)%>
     <li class="">
       <a href="#" class="dropdown-toggle">
         <i class="menu-icon fa fa-desktop"></i>
@@ -354,291 +292,93 @@
         <% end %>
       </ul>
     </li>
-
-    <li class="">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-        <span class="menu-text">门店管理</span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= stores_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            门店管理
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-        <li class="">
-          <a data-href="<%= delivery_users_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            配送员管理
-          </a>
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
     <% end %>
 
 
-
-
-
-    <% if current_user.has_role?(:SuperAdmin)%>
-    <li class="">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-        <span class="menu-text"> 进销存 </span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-
-      <ul class="submenu">
+    <% if current_user.has_role?(:business) || current_user.has_role?(:admin) || current_user.has_role?(:SuperAdmin)%>
         <li class="">
-          <a data-href="<%= clients_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            客户端
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">系统管理</span>
+            <b class="arrow fa fa-angle-down"></b>
           </a>
 
           <b class="arrow"></b>
+          <ul class="submenu">
+
+            <% if current_user.has_role?(:admin)%>
+            <li class="">
+              <a data-href="<%= stores_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                门店管理
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= admin_users_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                用户管理
+              </a>
+              <b class="arrow"></b>
+            </li>
+
+            <% end %>
+
+            <li class="">
+              <a data-href="<%= delivery_users_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                配送员管理
+              </a>
+              <b class="arrow"></b>
+            </li>
+
+            <% if current_user.has_role?(:SuperAdmin)%>
+                <li class="">
+                  <a data-href="<%= jyd_index_userinfos_path %>">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    联盟商管理
+                  </a>
+                  <b class="arrow"></b>
+                </li>
+            <% end %>
+
+          </ul>
         </li>
+    <% end %>
+
+
+    <% if policy(:user).isAdmin?%>
         <li class="">
-          <a data-href="<%= jxc_inventory_query_inventory_index_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            库存查询
+          <a href="#" class="dropdown-toggle">
+            <i class="menu-icon fa fa-desktop"></i>
+            <span class="menu-text">数据中心</span>
+            <b class="arrow fa fa-angle-down"></b>
           </a>
 
           <b class="arrow"></b>
+          <ul class="submenu">
+
+            <li class="">
+              <a data-href="<%= statistic_products_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                商品统计
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+
+            <li class="">
+              <a data-href="<%= statistic_orders_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                订单统计
+              </a>
+
+              <b class="arrow"></b>
+            </li>
+          </ul>
         </li>
-        <li class="">
-          <a data-href="<%= jxc_entering_stocks_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            期初库存录入
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_purchase_orders_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            采购订单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_purchase_stock_in_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            采购入库单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_purchase_returns_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            采购退货单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_sell_orders_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            销售订单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_sell_stock_out_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            销售出库单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_sell_returns_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            销售退货单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_other_stock_in_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            其他入库单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_other_stock_out_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            其他出库单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_stock_count_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            盘点单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_stock_reduce_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            报损单
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_stock_overflow_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            报溢单
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-
-        <li class="">
-          <a data-href="<%= jxc_stock_transfer_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            调拨单
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_stock_assign_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            要货单
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_cost_adjust_bills_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            成本调整单
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-      </ul>
-    </li>
-
-    <li class="">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-        <span class="menu-text"> 基本信息 </span>
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-      <ul class="submenu">
-        <li class="">
-          <a data-href="<%= jxc_dictionaries_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            字典项管理
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_contacts_units_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            往来单位
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_storages_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            仓库
-          </a>
-          <b class="arrow"></b>
-        </li>
-
-        <li class="">
-          <a data-href="<%= jxc_product_classify_standards_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            商品利润分类
-          </a>
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
-
-    <li class="">
-      <a href="#" class="dropdown-toggle">
-        <i class="menu-icon fa fa-desktop"></i>
-							<span class="menu-text">
-								产品溯源
-							</span>
-
-        <b class="arrow fa fa-angle-down"></b>
-      </a>
-
-      <b class="arrow"></b>
-
-      <ul class="submenu">
-
-        <li class="">
-          <a data-href="<%= traceabilities_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            溯源查询
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-        <li class="">
-          <a data-href="<%= origincode_traceabilities_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            入库条码打印
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-        <li class="">
-          <a data-href="<%= subcode_traceabilities_path %>">
-            <i class="menu-icon fa fa-caret-right"></i>
-            门店条码打印
-          </a>
-
-          <b class="arrow"></b>
-        </li>
-      </ul>
-    </li>
-
     <% end %>
 
   </ul><!-- /.nav-list -->

@@ -42,7 +42,7 @@
                   <div class="form-group">
                     <%= f.label :mobile_category, :class => 'col-sm-3 control-label no-padding-right' %>
                     <div class="col-sm-6">
-                      <%= f.collection_select :mobile_category_id, MobileCategory.all, :id, :title, :prompt => "请选择APP显示的类别", :class => 'form-control' %>
+                      <%= f.collection_select :mobile_category_id, MobileCategory.where({'userinfo_id' => current_user['userinfo_id']}), :id, :title, :prompt => "请选择APP显示的类别", :class => 'form-control' %>
                     </div>
                   </div>
 

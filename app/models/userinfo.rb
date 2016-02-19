@@ -147,7 +147,7 @@ class Userinfo
 
   #联盟商省市区唯一
   def position_check
-    userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district)
+    userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district,:id=>{'$ne'=>self.id}).first
     if userinfo.present?
       if self.district.present?
         errors.add(:district, "已经存在联盟商,请进行修改!")

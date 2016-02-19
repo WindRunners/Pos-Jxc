@@ -65,7 +65,7 @@ class ProductV1API < Grape::API
       end
     end
 
-    products = Product.shop_id(params[:id]).where(where_params).order_by(:category_name => :desc)
+    products = Product.shop_id(params[:id]).where(where_params).order_by(:mobile_category_num => :desc)
 
     # Product.shop_id(params[:id]).where(where_params).inc(:exposure_num => 1)
     # products.each {|p| p.shop_id(params[:id]).inc(:exposure_num => 1) } #遍历递增曝光量太耗时

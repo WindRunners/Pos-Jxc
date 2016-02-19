@@ -83,9 +83,3 @@ function checkPwd(){
 
 }
 
-function initForm() {
-    $("#old_password").val("");
-    $("#new_password").val("");
-    $("#confirm_password").val("");
-}
-

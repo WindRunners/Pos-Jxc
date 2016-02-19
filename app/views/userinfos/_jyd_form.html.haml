@@ -51,6 +51,17 @@
               = f.text_field :email,{:class=>'form-control'}
           .form-group
             .field
+              = f.label :默认运费,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :fright,{:class=>'form-control'}
+          .form-group
+            .field
+              = f.label :默认起送价格,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :lowestprice,{:class=>'form-control'}
+
+          .form-group
+            .field
               = f.label :百度地图,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-9
               #userinfo_map{style:'width:630px;height:230px;border:1px solid gray'}

@@ -213,12 +213,13 @@ class Admin::UsersController < ApplicationController
       if params[:new_password].present? && BCrypt::Password.new(@current_user.encrypted_password)==params[:old_password]
         @current_user.password = params[:new_password]
         if @current_user.save
-          format.json { render json: get_render_json(1, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+          format.json { render json: {:flag => 1, :msg => '密码修改成功'} }
         else
-          format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+          format.json { render json: {:flag => 0, :msg => "密码修改失败,#{@current_user.errors.full_messages.join()}"} }
         end
       else
-        format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
+        format.json { render json: {:flag => 0, :msg => "旧密码错误,请重新输入!"} }
+        # format.json { render json: get_render_json(0, nil, "/admin/users/#{@current_user.id}/modify_loginpasswordForm") }
       end
     end
   end

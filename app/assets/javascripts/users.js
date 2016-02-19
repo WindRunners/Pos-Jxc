@@ -59,19 +59,23 @@ function checkPwd(){
         alert("确认新密码不能为空")
         return false;
     }else if($("#new_password").val()!=$("#confirm_password").val()){
-        alert("新密码和确认新密码两次输入密码不一样")
+        alert("新密码和确认新密码,两次输入密码不同")
         return false;
     }else{
         $.post("/admin/users/modify_loginpassword",data,function(data,status){
             if(data.flag==1){
-                alert("密码修改成功,请确认重新登录!")
+                alert(data.msg)
                 window.location.href="/users/sign_in"
 
             }else{
-                alert("密码修改失败,旧密码错误或服务器异常!")
+                alert(data.msg)
+                $("#old_password").val("");
+                $("#new_password").val("");
+                $("#confirm_password").val("");
             }
         });
         return;
     }
 
 }
+

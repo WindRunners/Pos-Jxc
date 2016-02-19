@@ -12,12 +12,12 @@ $(function(){
     });
 
 
-    //当月商品关注排名
-    $.post("dashboards/exposure_product_data",function(data){
-
-        $('#exposure_product_container').highcharts(data);
-        //alert(data);
-    });
+    ////当月商品关注排名
+    //$.post("dashboards/exposure_product_data",function(data){
+    //
+    //    $('#exposure_product_container').highcharts(data);
+    //    //alert(data);
+    //});
 
 
     ////当月商品关注排名

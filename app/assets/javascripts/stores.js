@@ -109,12 +109,12 @@ function showLocationInfo(pt, rs) {
 
 //查询
 function search() {
-    var name = $("#search-scope #name").val();
+    var mobile = $("#search-scope #mobile").val();
     var prefix_url = null;
     if($("#user_id").val()){
-        prefix_url = "?name=" + name + "&u_id="+$("#user_id").val();
+        prefix_url = "?mobile=" + mobile + "&u_id="+$("#user_id").val();
     }else{
-        prefix_url = "?name=" + name;
+        prefix_url = "?mobile=" + mobile;
     }
     window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
 }

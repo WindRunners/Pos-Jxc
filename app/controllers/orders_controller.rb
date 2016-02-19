@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
     ordertype = params[:ordertype]
     parm = Hash.new
     parm[:userinfo_id] = current_user['userinfo_id']
-    parm[:store_id] = {"$in" => current_user['store_ids']} if ordertype!="0" && ordertype!="2"
+    parm[:store_id] = {"$in" => current_user['store_ids'].present? ? current_user['store_ids'] : []} if ordertype!="0" && ordertype!="2"
 
     parm[:orderno] = params[:orderno] if !params[:orderno].nil? && !params[:orderno].blank?
     parm[:consignee] = params[:consignee] if !params[:consignee].nil? && !params[:consignee].blank?
@@ -80,7 +80,7 @@ class OrdersController < ApplicationController
       parm[:workflow_state] = state_parm if :all!=state_parm
       ordercompleteds = Ordercompleted.where(parm).order(created_at: :desc)
 
-      ordercompleteds.each do |ordercompleted|
+      ordercompleteds.page(params[:page]).per(5).each do |ordercompleted|
         ordercompleted['ordergoods'] = ordercompleted.ordergoodcompleteds
         orders << ordercompleted
         # order = Order.new(ordercompleted.as_json)
@@ -89,7 +89,7 @@ class OrdersController < ApplicationController
         # end
         # orders << order
       end
-      @orders = Kaminari.paginate_array(orders, total_count: orders.size).page(params[:page]).per(5)
+      @orders = Kaminari.paginate_array(orders, total_count: ordercompleteds.count()).page(params[:page]).per(5)
     elsif :generation == state_parm || :paid == state_parm || :distribution == state_parm || :receive == state_parm
       parm.delete :store_id if :generation == state_parm #待付款时移除门店限制
 

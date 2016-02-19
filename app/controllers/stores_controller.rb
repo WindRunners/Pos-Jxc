@@ -90,9 +90,11 @@ class StoresController < ApplicationController
   # 门店自主选择配送员
 
   def delivery_users
-    name_condition=params[:name] || ''
+    mobile_condition=params[:mobile] || ''
     conditionParams = {}
-    conditionParams['real_name'] = /#{name_condition}/ if name_condition.present?
+    conditionParams['mobile'] = /#{mobile_condition}/ if mobile_condition.present?
+    conditionParams['userinfo_id'] = current_user.userinfo.id if current_user.present?
+    conditionParams['status'] = 1
     @store = Store.find(params[:store_id])
     @delivery_users = DeliveryUser.where(conditionParams).page(params[:page]).order('created_at DESC')
   end
@@ -100,15 +102,15 @@ class StoresController < ApplicationController
 
   # 配送员增加
   def add_delivery_user
-    @du = DeliveryUser.find(params[:delivery_user_id])
-    @store = Store.find(params[:store_id])
-    @store.delivery_users << @du
+    delivery_user = DeliveryUser.find(params[:delivery_user_id])
+    store = Store.find(params[:store_id])
+    delivery_user.stores << store
     respond_to do |format|
-      if @store.save && @du.save
-        format.js { render_js store_delivery_users_path() }
+      if store.save && delivery_user.save
+        format.js { render_js store_delivery_users_path }
         format.json { head :no_content }
       else
-        format.js { render_js store_delivery_users_path() }
+        format.js { render_js store_delivery_users_path }
         format.json { head :no_content }
       end
     end
@@ -117,15 +119,15 @@ class StoresController < ApplicationController
 
   # 配送员移除
   def reduce_delivery_user
-    @du = DeliveryUser.find(params[:delivery_user_id])
-    @store = Store.find(params[:store_id])
-    @store.delivery_users.delete(@du)
+    delivery_user = DeliveryUser.find(params[:delivery_user_id])
+    store = Store.find(params[:store_id])
+    delivery_user.stores.delete(store)
     respond_to do |format|
-      if @store.save && @du.save
-        format.js { render_js store_delivery_users_path() }
+      if store.save && delivery_user.save
+        format.js { render_js store_delivery_users_path }
         format.json { head :no_content }
       else
-        format.js { render_js store_delivery_users_path() }
+        format.js { render_js store_delivery_users_path }
         format.json { head :no_content }
       end
     end

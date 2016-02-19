@@ -1,8 +1,12 @@
+function initForm() {
+    $("#old_password").val("");
+    $("#new_password").val("");
+    $("#confirm_password").val("");
+};
+
 //jquery 初始化函数
 $(function () {
-
-    //pagination_ajax();
-
+    initForm();
     //键盘enter事件
     document.onkeydown = function (event) {
         var e = event || window.event || arguments.callee.caller.arguments[0];
@@ -77,5 +81,11 @@ function checkPwd(){
         return;
     }
 
+}
+
+function initForm() {
+    $("#old_password").val("");
+    $("#new_password").val("");
+    $("#confirm_password").val("");
 }
 

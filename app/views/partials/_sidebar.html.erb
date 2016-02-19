@@ -344,6 +344,17 @@
                 </li>
             <% end %>
 
+
+            <% if current_user.has_role?(:admin)%>
+                <li class="">
+                  <a data-href="/userinfos/jyd_edit/<%=current_user['userinfo_id'] %> ">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    基本信息维护
+                  </a>
+                  <b class="arrow"></b>
+                </li>
+            <% end %>
+
           </ul>
         </li>
     <% end %>

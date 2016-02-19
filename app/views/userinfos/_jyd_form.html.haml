@@ -59,6 +59,11 @@
               = f.label :默认起送价格,:class=>'col-sm-2 control-label no-padding-right'
             .col-sm-9
               = f.number_field :lowestprice,{:class=>'form-control'}
+          .form-group
+            .field
+              = f.label :预警库存数量,:class=>'col-sm-2 control-label no-padding-right'
+            .col-sm-9
+              = f.number_field :alarm_stock,{:class=>'form-control'}
 
           .form-group
             .field
@@ -69,7 +74,11 @@
             .actions.col-sm-1.col-sm-offset-3
               = f.submit '保存',:class=> 'btn btn-success'
             .actions.col-sm-8
-              = link_to '返回','', 'data-href' => jyd_index_userinfos_path,:class=> 'btn btn-info'
+              -if current_user.has_role?(:SuperAdmin)
+                = link_to '返回','','data-href' =>jyd_index_userinfos_path,:class => 'btn btn-info'
+              -else
+                = link_to '返回','','data-href' => nil,:class => 'btn btn-info'
+
 
 :javascript
     //jquery 初始化函数

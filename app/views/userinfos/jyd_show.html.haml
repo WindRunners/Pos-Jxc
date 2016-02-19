@@ -23,6 +23,12 @@
   %b 默认起送价格:
   = @userinfo.lowestprice
 %p
+  %b 预警库存数量:
+  = @userinfo.alarm_stock
+%p
 = link_to '编辑',"",'data-href' =>'/userinfos/jyd_edit/'+ @userinfo.id,:class => 'btn btn-info'
 \|
-= link_to '返回',"",'data-href' =>jyd_index_userinfos_path,:class => 'btn btn-info'
+-if current_user.has_role?(:SuperAdmin)
+  = link_to '返回',"",'data-href' =>jyd_index_userinfos_path,:class => 'btn btn-info'
+-else
+  = link_to '返回',"",'data-href' => '/userinfos/jyd_edit/'+@userinfo.id,:class => 'btn btn-info'

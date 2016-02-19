@@ -23,7 +23,7 @@ class PaymentV1API < Grape::API
     # order.id = params[:id]
 
     params = {
-        body: '测试商品',
+        body: "订单（#{order.orderno}）",
         out_trade_no: order.id.to_s
     }
 

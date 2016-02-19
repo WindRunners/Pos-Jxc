@@ -187,7 +187,7 @@
             "type":"POST"
         },
         "columns" : [
-            { "data": "avatar_url" },
+            { "data": "avatar" },
             { "data": "title" },
             { "data": "mobile_category_name" },
             { "data": "price" }
@@ -201,7 +201,7 @@
         },
         "columnDefs": [ {
             "targets": 0,
-            "data": "avatar_url",
+            "data": "avatar",
             "render": function ( data, type, full, meta ) {
                 return "<img class='product_avatar' src='"+img_server+data+"'/>";
             }
@@ -303,5 +303,5 @@
     $("#product_id").val(data._id);
     $("#product_avatar").val(data.avatar_url);
     $("#product_name").html(data.title);
-    $("#product_avatar").html("<img src='"+img_server+data.avatar_url+"'>");
+    $("#product_avatar").html("<img src='"+img_server+data.avatar+"'>");
   }

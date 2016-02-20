@@ -265,7 +265,6 @@ class UserinfosController < ApplicationController
     init_user.role_ids = role_array
     init_user.save
     @userinfo.status=1
-
     @userinfo.save
     if @userinfo.users.present?
 
@@ -275,7 +274,6 @@ class UserinfosController < ApplicationController
       end
 
     end
-
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path,'启用成功' }

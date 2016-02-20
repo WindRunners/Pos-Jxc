@@ -33,7 +33,7 @@
             = link_to '启用', '/userinfos/jyd_check/'+ userinfo.id, :remote=>true, :method => :post,:class => 'btn btn-minier btn-primary'
           -else
             = link_to '停用','/userinfos/jyd_check_out/'+ userinfo.id, :remote=>true, :method => :post,:class => 'btn btn-minier btn-warning'
-          = link_to '删除', 'userinfos/jyd_destroy/'+userinfo.id, :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
+          -#= link_to '删除', 'userinfos/jyd_destroy/'+userinfo.id, :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 = paginate @userinfos
 
 

@@ -105,28 +105,32 @@ class DeliveryUserV1API < Grape::API
   desc '获取配送员登录验证码'
   params do
     requires :mobile, type: String, desc: '手机号'
+    optional :type, type: String, desc: '短信设置sms,语音设置voice', default: 'sms'
   end
   post 'get_login_verifycode' do
 
     mobile = params[:mobile]
+    type = params[:type]
     return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
 
     status 200 #修改post默认返回状态
-    DeliveryUserV1APIHelper.get_login_verifycode(mobile)
+    DeliveryUserV1APIHelper.get_login_verifycode(mobile,type)
   end
 
 
   desc '获取配送员注册验证吗'
   params do
     requires :mobile, type: String, desc: '手机号'
+    optional :type, type: String, desc: '短信设置sms,语音设置voice', default: 'sms'
   end
   post 'get_register_verifycode' do
 
     mobile = params[:mobile]
+    type = params[:type]
     return {msg: '手机号不合法!', flag: 0} if !RegexV1APIHelper.mobile(mobile)
 
     status 200 #修改post默认返回状态
-    DeliveryUserV1APIHelper.get_register_verifycode(mobile)
+    DeliveryUserV1APIHelper.get_register_verifycode(mobile,type)
   end
 
 

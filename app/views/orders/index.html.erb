@@ -193,6 +193,10 @@
                           <% if "paid" == params[:workflow_state] %> selected
                           <% end %>>待接单
                   </option>
+                  <option value="take"
+                          <% if "take" == params[:workflow_state] %> selected
+                          <% end %>>待接货
+                  </option>
                   <option value="distribution"
                           <% if "distribution" == params[:workflow_state] %> selected
                           <% end %>>配送中
@@ -300,6 +304,12 @@
       <a name="generation" data-toggle="tab" href="#home">
         待付款
         <span id="generation_count" class="badge badge-danger"></span>
+      </a>
+    </li>
+    <li class="">
+      <a name="take" data-toggle="tab" href="#home">
+        待接货
+        <span id="take_count" class="badge badge-danger"></span>
       </a>
     </li>
     <li class="">

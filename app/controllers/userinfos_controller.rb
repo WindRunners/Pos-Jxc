@@ -236,6 +236,7 @@ class UserinfosController < ApplicationController
   def jyd_destroy
     @userinfo = Userinfo.find(params[:userinfo_id])
     @userinfo.destroy
+    @userinfo.users.destroy
     respond_to do |format|
       format.html
       format.js { render_js jyd_index_userinfos_path() }
@@ -261,16 +262,23 @@ class UserinfosController < ApplicationController
       end
     end
     init_user.mobile = @userinfo.pusher_phone
-    init_user.password = '123456'
     init_user.role_ids = role_array
     init_user.save
     @userinfo.status=1
-    @userinfo.save
 
+    @userinfo.save
+    if @userinfo.users.present?
+
+      @userinfo.users.each do |user|
+        user.password = '123456'
+        user.save
+      end
+
+    end
 
     respond_to do |format|
       format.html
-      format.js { render_js jyd_index_userinfos_path() }
+      format.js { render_js jyd_index_userinfos_path,'启用成功' }
     end
   end
 
@@ -284,7 +292,7 @@ class UserinfosController < ApplicationController
     @userinfo.save
     respond_to do |format|
       format.html
-      format.js { render_js jyd_index_userinfos_path() }
+      format.js { render_js jyd_index_userinfos_path,'停用成功' }
     end
   end
 

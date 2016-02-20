@@ -27,12 +27,12 @@
         %td= userinfo.address
         %td= userinfo.status_str
         %td
-          = link_to '详细',"",'data-href' => '/userinfos/jyd_show/'+ userinfo.id,:class => 'btn btn-minier btn-primary'
+          = link_to '详细',"",'data-href' => '/userinfos/jyd_show/'+ userinfo.id,:class => 'btn btn-minier btn-info'
           = link_to '编辑',"",'data-href' => '/userinfos/jyd_edit/'+ userinfo.id,:class => 'btn btn-minier btn-primary'
           -if userinfo.status==0||userinfo.status==-1
             = link_to '启用', '/userinfos/jyd_check/'+ userinfo.id, :remote=>true, :method => :post,:class => 'btn btn-minier btn-primary'
           -else
-            = link_to '停用','/userinfos/jyd_check_out/'+ userinfo.id, :remote=>true, :method => :post,:class => 'btn btn-minier btn-primary'
+            = link_to '停用','/userinfos/jyd_check_out/'+ userinfo.id, :remote=>true, :method => :post,:class => 'btn btn-minier btn-warning'
           = link_to '删除', 'userinfos/jyd_destroy/'+userinfo.id, :remote=>true, :method => :delete, :data => { :confirm => 'Are you sure?' },:class => 'btn btn-minier btn-danger'
 = paginate @userinfos
 

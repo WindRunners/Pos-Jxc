@@ -123,8 +123,8 @@ class PaymentV1API < Grape::API
   get 'paymode_list' do
     list = []
     list << {:mode=>0 , :enable => true ,:is_select => true}
-    list << {:mode=>1 , :enable => false ,:is_select => false}
-    list << {:mode=>2 , :enable => false ,:is_select => false}
+    list << {:mode=>1 , :enable => true ,:is_select => false}
+    list << {:mode=>2 , :enable => true ,:is_select => false}
   end
 
 end

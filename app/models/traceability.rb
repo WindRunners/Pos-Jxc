@@ -13,6 +13,9 @@ class Traceability
 
   field :resource_product_id, type: String #溯源商品信息 (商品为：ActiveResource Object)
 
+  field :production_date, type: Time #商品生产日期
+  field :expiration_date, type: Integer  #商品保质期（ 天数 ）
+
   belongs_to :parent, :class_name => "Traceability", :foreign_key => :parent_id #上级科目
   has_many :childs, :class_name => "Traceability", :autosave => true, :dependent => :destroy #下级科目
 

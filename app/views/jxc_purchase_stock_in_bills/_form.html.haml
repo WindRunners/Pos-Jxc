@@ -102,6 +102,10 @@
             %th
               金额
             %th
+              生产日期
+            %th
+              保质期(天)
+            %th
               备注
             %th
               操作
@@ -133,6 +137,11 @@
                       %input#billDetail_retail_price.billDetailInput{type:'text',name:'billDetail[][retail_price]',value:billDetail.retail_price}
                     %td
                       %input#billDetail_amount.billDetailInput{type:'text',name:'billDetail[][amount]',value:billDetail.amount,readonly:true}
+                    %td
+                      -#%input#billDetail_production_date.billDetailInput{type:'text',name:'billDetail[][production_date]',style:'min-width:100px;',onclick:'choseDate(\''+billDetail.product.id+'\')'}
+                      %input#billDetail_production_date.billDetailInput{type:'text',name:'billDetail[][production_date]',style:'min-width:100px;',onfocus:"HS_setDate(this)",value:billDetail.production_date.present? ? billDetail.production_date.strftime('%Y-%m-%d') : '',readonly:true }
+                    %td
+                      %input#billDetail_expiration_date.billDetailInput{type:'text',name:'billDetail[][expiration_date]',value:billDetail.expiration_date}
                     %td
                       %input#billDetail_remark.billDetailInput{type:'text',name:'billDetail[][remark]',value:billDetail.remark}
                     %td.del-icon-td
@@ -210,7 +219,7 @@
   //EasyUI DataGrid设置
   var tableSetting = {};
 
-  var storage_id;
+  var storage_id = $('#jxc_purchase_stock_in_bill_storage_id').val();
 
   //选择供应商信息
   function getSuppliersInfo(){
@@ -418,6 +427,8 @@
                          '<td><input type="text" class="billDetailInput" id="billDetail_price" name="billDetail[][purchase_price]" value="0.00" onblur="calcBillDetailAmount(\''+this.id+'\')"></td>'+    //采购单价
                          '<td><input type="text" class="billDetailInput" id="billDetail_retail_price" name="billDetail[][retail_price]" value="0.00"></td>'+                                              //零售单价
                          '<td><input type="text" class="billDetailInput" id="billDetail_amount" value="0.00" readonly></td>'+          //金额
+                         '<td><input type="text" class="billDetailInput" id="billDetail_production_date" style="min-width:100px;" onfocus="HS_setDate(this)" readonly ></td>'+   //生产日期
+                         '<td><input type="text" class="billDetailInput" id="billDetail_expiration_date" value="0" > </td>'+     //保质期（天）
                          '<td><input type="text" class="billDetailInput" id="billDetail_remark" name="billDetail[][remark]"></td>'+    //备注
                          '<td class="del-icon-td"><i class="red ace-icon fa fa-trash-o bigger-130 del-icon" onclick="delBillDetail(\''+this.id+'\')"></i></td>'+    //删除
                          '</tr>';
@@ -474,4 +485,22 @@
         $('#bill_status').val('已作废');
       }
     });
+  }
+
+  function choseDate(detailID){
+    //alert(detailID);
+    //$('#'+detailID).find('#billDetail_production_date_'+detailID).datepicker({
+    //        numberOfMonths:1,//显示几个月
+    //        showButtonPanel:true,//是否显示按钮面板
+    //        dateFormat: 'yy-mm-dd',//日期格式
+    //        clearText:"清除",//清除日期的按钮名称
+    //        closeText:"关闭",//关闭选择框的按钮名称
+    //        yearSuffix: '年', //年的后缀
+    //        showMonthAfterYear:true,//是否把月放在年的后面
+    //        monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+    //        dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+    //        dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+    //        dayNamesMin: ['日','一','二','三','四','五','六'],
+    //        currentText: '今天'
+    //}).val();
   }

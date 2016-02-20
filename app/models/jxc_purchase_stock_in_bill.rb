@@ -239,6 +239,8 @@ class JxcPurchaseStockInBill < JxcBaseModel
           @traceObj.subCodeCount = billDetail.pack_spec #溯源条码 子码个数 ( 商品装箱规格 )
           @traceObj.resource_product_id = billDetail.resource_product_id  #溯源的商品
           @traceObj.jxc_storage = billDetail.jxc_storage  #采购入库仓库
+          @traceObj.production_date = billDetail.production_date  #本箱产品的 生产日期
+          @traceObj.expiration_date = billDetail.expiration_date  #本箱产品的 保质期
 
           @traceObj.save
         end

@@ -107,6 +107,11 @@ class JxcPurchaseStockInBillsController < ApplicationController
       #商品 入库仓库
       tempBillDetail.storage_id = storage_id
 
+      #商品生产日期
+      tempBillDetail.production_date = billDetailInfo[:production_date].to_time
+      #商品保质期
+      tempBillDetail.expiration_date = billDetailInfo[:expiration_date].to_i
+
       tempBillDetail.save
       #单据合计金额累加
       total_amount += amount
@@ -218,6 +223,11 @@ class JxcPurchaseStockInBillsController < ApplicationController
         tempBillDetail.purchase_in_bill_id = @jxc_purchase_stock_in_bill._id
         #商品 入库仓库
         tempBillDetail.storage_id = storage_id
+
+        #商品生产日期
+        tempBillDetail.production_date = billDetailInfo[:production_date].present? ? billDetailInfo[:production_date].to_time : Time.now
+        #商品保质期
+        tempBillDetail.expiration_date = billDetailInfo[:expiration_date].present? ? billDetailInfo[:expiration_date].to_i : 0
 
         tempBillDetail.save
         #单据合计金额累加

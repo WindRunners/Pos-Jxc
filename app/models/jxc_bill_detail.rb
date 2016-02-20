@@ -19,6 +19,9 @@ class JxcBillDetail
 
   field :resource_product_id, type: String  #所属商品ID (商品为 ActiveResource Object)
 
+  field :production_date, type: Time #生产日期
+  field :expiration_date, type: Integer #保质期（ 天 ）
+
   ## 进销存属性
   belongs_to :jxc_storage, foreign_key: :storage_id #仓库
   belongs_to :jxc_contacts_unit, foreign_key: :unit_id #所属供应商 | 客户

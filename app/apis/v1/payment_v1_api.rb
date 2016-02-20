@@ -23,7 +23,7 @@ class PaymentV1API < Grape::API
     # order.id = params[:id]
 
     params = {
-        body: '测试商品',
+        body: "订单（#{order.orderno}）",
         out_trade_no: order.id.to_s
     }
 
@@ -112,4 +112,19 @@ class PaymentV1API < Grape::API
       end
     end
   end
+
+
+  desc '获取支付方式' do
+    detail '{mode:支付方式（0-货到付款 1-支付宝 2-微信支付），enable:是否启用，default:是否默认选中}'
+  end
+  params do
+    requires :userinfo_id, type: String, desc: '小Bid'
+  end
+  get 'paymode_list' do
+    list = []
+    list << {:mode=>0 , :enable => true ,:default => true}
+    list << {:mode=>1 , :enable => false ,:default => false}
+    list << {:mode=>2 , :enable => false ,:default => false}
+  end
+
 end

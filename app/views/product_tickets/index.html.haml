@@ -18,7 +18,7 @@
         %td= product_ticket.end_date_str
         %td= product_ticket.status
         %td
-          = link_to '详细',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-Inverse'
+          = link_to '详细',  '', 'data-href' =>product_ticket_path(product_ticket),class:'btn btn-xs btn-pink'
           - if product_ticket.status == 0
             = link_to '编辑',  '', 'data-href' =>edit_product_ticket_path(product_ticket),class:'btn btn-xs btn-info'
             %input{"type"=>"button",:class=>"btn btn-xs btn-pink",:value=>"发布",:onclick=>"publish('#{product_ticket.id}')"}

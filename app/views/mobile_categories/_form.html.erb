@@ -1,84 +1,48 @@
-<%= form_for [:admin, @user], :html => { :class => "form-horizontal user", multipart: true,remote:true } do |f| %>
-
-    <% if @user.errors.any? %>
-        <div id="error_expl" class="panel panel-danger">
-          <div class="panel-heading">
-            <h3 class="panel-title"><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h3>
-          </div>
-          <div class="panel-body">
-            <ul>
-              <% @user.errors.full_messages.each do |msg| %>
-                  <li><%= msg %></li>
-              <% end %>
-            </ul>
-          </div>
+<%= form_for @category, :html => {:class => 'form-horizontal category'}, remote:true do |f| %>
+    <% if @category.errors.any? %>
+        <div id="error_explanation">
+          <ul>
+            <% @category.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
         </div>
     <% end %>
 
-    <% if @user.avatar.present? %>
 
-        <div class="asset">
-          <p>
-            <%= image_tag(@user.avatar.url, size: "100x100", alt: "Edit Entry") %>
-          </p>
-          <p><small><%= number_to_human_size(@user.avatar.size) %>
-          </small></p>
-        </div>
-    <% end %>
-    <div class="control-group">
-      <%= f.label :name, :class => 'control-label col-xs-2' %>
-      <div class="controls col-xs-10">
-        <%= f.text_field :name, :class => 'col-sm-4' %>
-      </div>
-      <%= f.error_span(@user[:name]) %>
-    </div>
-    <br/><br/><br/>
-    <div class="control-group">
-      <%= f.label :mobile, :class => 'control-label col-xs-2' %>
-      <div class="controls col-xs-10">
-        <%= f.text_field :mobile, :class => 'col-sm-4' %>
-      </div>
-      <%= f.error_span(@user[:mobile]) %>
-    </div>
-    <br/><br/><br/>
-    <div class="control-group">
-      <%= f.label :password , :class => 'control-label col-xs-2'%>
-      <div class="controls col-xs-10">
-        <%= f.password_field :password, autocomplete: "off",:class => 'col-sm-4' %>
+
+    <div class="form-group">
+      <%= f.label :title, :class => 'col-sm-3 control-label no-padding-right' %>
+      <div class="col-sm-3">
+        <%= f.text_field :title, :class => 'form-control' %>
       </div>
     </div>
-    <% if @minimum_password_length %>
-        <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %>
-    <br/><br/><br/>
-    <div class="control-group">
-      <%= f.label :password_confirmation, :class => 'control-label col-xs-2' %>
-      <div class="controls col-xs-10">
-        <%= f.password_field :password_confirmation, autocomplete: "off",:class => 'col-sm-4' %></div>
+
+    <div class="space-4"></div>
+
+
+    <div class="space-4"></div>
+
+    <div class="form-group">
+      <%= f.label :num, class:'col-sm-3 control-label no-padding-right' %>
+      <div class="col-sm-3">
+        <%= f.text_field :num, class:'form-control' %>
+      </div>
     </div>
-    <% if current_user.has_role? :admin %>
-        <div class="field">
-          <%= f.label :email %><br />
-          <%= f.text_field :email, autofocus: true %>
-        </div>
-        <table width = 700px>
-          <tr>
-            <dt><strong>权限:</strong></dt>
-          </tr><tr>
-          <% @roles.each do |role| %>
-              <td>
-                <%= t(role.name) %> <%= check_box_tag "user[roles][]", role.name, @user.roles.include?(role) %>
-              </td>
-          <% end %>
-        </tr>
-        </table>
-    <% end %>
 
-    <div >
-      <%= f.submit nil, :class => 'btn btn-primary' %>
-      <a href='#' class="btn btn-default" onclick='history.go(-1);return false;'>
-        <span class="bigger-110">返回</span>
-      </a>
 
+    <div class="clearfix form-actions">
+      <div class="col-md-offset-4 col-md-9">
+        <button class="btn btn-info" id="save_form" type="submit">
+          <i class="ace-icon fa fa-check bigger-110"></i>
+          保存
+        </button>
+
+        &nbsp; &nbsp; &nbsp;
+        <a class="btn" data-href="<%= mobile_categories_path %>">
+          <i class="ace-icon fa fa-return bigger-110"></i>
+          返回
+        </a>
+      </div>
     </div>
 <% end %>

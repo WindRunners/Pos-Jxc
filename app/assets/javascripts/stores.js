@@ -107,15 +107,26 @@ function showLocationInfo(pt, rs) {
 }
 
 
-//查询
+//门店查询
 function search() {
-    var mobile = $("#search-scope #mobile").val();
+    var name = $("#search-scope #name").val();
     var prefix_url = null;
     if($("#user_id").val()){
-        prefix_url = "?mobile=" + mobile + "&u_id="+$("#user_id").val();
+        prefix_url = "?name=" + name + "&u_id="+$("#user_id").val();
     }else{
-        prefix_url = "?mobile=" + mobile;
+        prefix_url = "?name=" + name;
     }
+    window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
+}
+
+
+//配送员查询
+function delivery_users_search() {
+    var mobile = $("#search-scope #mobile").val();
+    var prefix_url = null;
+
+        prefix_url = "?mobile=" + mobile;
+
     window.location.href = get_location_href_no_search() + prefix_url + "&f=" + get_rand_num();
 }
 

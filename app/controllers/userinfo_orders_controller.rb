@@ -71,8 +71,8 @@ class UserinfoOrdersController < ApplicationController
 
     url_r = 'https://api.weixin.qq.com/sns/oauth2/access_token?'
     url_end= '&grant_type=authorization_code'
-    appid= 'wxbfdca48f1ab5ddf9'
-    secret= '518547e84859422c443ee645075acc48'
+    appid= 'wx5950970145118999'
+    secret= '333c9d0287c88a8c9aad6a2c55364925'
     code=params[:code] || code=""
     url = url_r+"appid="+appid+"&secret="+secret+"&code="+code+url_end
     response = RestClient.get(url)
@@ -80,54 +80,50 @@ class UserinfoOrdersController < ApplicationController
       response_json=JSON.parse(response.body)
       Rails.logger.info "-----------------------=====#{url}============="
       Rails.logger.info "-----------------------=====#{response_json}============="
-        if response_json["errcode"].present? && response_json["errcode"]==40029
-          flash[:error]="请退回公证号重新点击‘绑定商户’在操作"
-          render '/userinfo_orders/getcode',layout: false
+        if response_json["errcode"].present?
+          @error_msg = '请退回公证号重新点击‘商家绑定’在操作'
         else
-           session[:id]=response_json["openid"]
+          @openid = response_json["openid"]
+           # session[:id]=response_json["openid"]
         end
     end
     render layout: false
   end
 
   def binduserinfo
-    if params[:check_user].present?
-      begin
-        @user=User.find_by(mobile: params[:user_mobile])
-        if  @user.userinfo.name==params[:user_name]
 
-          session[:code] = sendMessage(@user.mobile)
-          logger.info session[:code]
-          render "bind_form",layout:false
-        else
-          raise StandardError
-        end
-      rescue
-        respond_to do |format|
-          flash[:error]="用户电话或姓名不存在,请查证"
-          format.html{render 'getcode',layout: false}
-        end
-      end
-      # render "bind_form",layout:false
+    @mobile = params[:mobile] #管理员账号，即各单位的初始化用户
+    password = params[:password] #管理员密码
+    @openid = params["openid"]
+    admin_user = User.where({'mobile' => @mobile}).first
+
+    if !admin_user.present?
+
+      @error_msg = '当前账号不存在，请重新输入！'
+      render "getcode",layout:false
+      return
     end
 
-    if params[:check_mesage].present?
-      begin
-        @userinfo = Userinfo.find(params[:check_info])
-        if session[:code] == params[:mesage]
-          @userinfo.update(:wx_name => params[:wx_name],:openid => session[:id])
-          session[:id]=""
-          session[:code]=""
-        else
-          flash[:error]="验证码有误！！"
-          render "bind_form",layout:false
-        end
-        render "binduserinfo",layout:false
-      rescue
-      end
-
+    if admin_user.user_flag != 1
+      @error_msg = '当前账号不存在，请重新输入！'
+      render "getcode",layout:false
+      return
     end
 
+    if BCrypt::Password.new(admin_user.encrypted_password)!=password
+      @error_msg = '当前密码不正确，请重新输入！'
+      render "getcode",layout:false
+      return
+    end
+
+
+    @userinfo = Userinfo.find(admin_user['userinfo_id'])
+    if @userinfo.update(:openid => @openid)
+      @success_msg = "恭喜您绑定成功！</br> #{@userinfo.shopname}"
+    else
+      @error_msg = "绑定失败，信息为：#{@userinfo.errors.full_messages.join("</br>")}！"
+    end
+    render "getcode",layout:false
   end
 
   def bind_form

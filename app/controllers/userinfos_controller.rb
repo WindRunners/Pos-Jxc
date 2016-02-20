@@ -226,7 +226,7 @@ class UserinfosController < ApplicationController
     @userinfo = Userinfo.find(params[:userinfo_id])
     respond_to do |format|
       if @userinfo.update(userinfo_params)
-        format.json { render json: get_render_common_json(@userinfo,jyd_index_userinfos_path) }
+        format.json { render json: get_render_common_json(@userinfo,"/userinfos/jyd_show/"+@userinfo.id) }
       else
         format.json { render json: get_render_common_json(@userinfo) }
       end
@@ -306,7 +306,7 @@ class UserinfosController < ApplicationController
     params.require(:userinfo).permit(:name, :address, :shopname, :url, :lat, :lng, :busp, :footp, :pdistance, :district, :city, :province, :integral,
                                      :approver, :pusher, :pusher_phone, :healthp, :taxp, :orgp, :idpb, :idpf, :idnumber, :aseet4, :aseet3, :fright, :lowestprice,
                                      :fright_time, :h_lowestprice, :h_fright, :night_time, :province, :city, :district, :address, :start_business, :end_business,
-                                     :status, :email, :role_marks)
+                                     :status, :email, :role_marks,:alarm_stock)
   end
 
   def auth_userinfo_params

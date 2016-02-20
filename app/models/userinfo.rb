@@ -66,8 +66,8 @@ class Userinfo
   field :pdistance_ask, type: Integer,default: 0
   field :fright_time,type: String #日间配送时间点
   field :night_time,type: String #夜间配送时间点
-  field :fright, type: Integer,default: 0 # 运费
-  field :lowestprice, type: Integer,default: 0 # 最低起送价格
+  field :fright, type: Integer,default: 0 # 运费1
+  field :lowestprice, type: Integer,default: 0 # 最低起送价格1
   field :h_fright, type: Integer,default: 0 # 运费h
   field :h_lowestprice, type: Integer,default: 0 # 最低起送价格h
   field :start_business, type: String  #营业开始时间
@@ -147,7 +147,7 @@ class Userinfo
 
   #联盟商省市区唯一
   def position_check
-    userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district)
+    userinfo = Userinfo.where(:province=>self.province,:city=>self.city,:district=>self.district,:id=>{'$ne'=>self.id}).first
     if userinfo.present?
       if self.district.present?
         errors.add(:district, "已经存在联盟商,请进行修改!")

@@ -296,6 +296,8 @@
                   <p><h4>订单状态：待付款</h4></p>
               <% elsif :paid == workflow_state %>
                   <p><h4>订单状态：待接单</h4></p>
+              <% elsif :take == workflow_state %>
+                  <p><h4>订单状态：待接货</h4></p>
               <% elsif :distribution == workflow_state %>
                   <p><h4>订单状态：配送中</h4></p>
               <% elsif :receive == workflow_state %>

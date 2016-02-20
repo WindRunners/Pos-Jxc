@@ -100,7 +100,7 @@ module DeliveryUserV1APIHelper
         # 通用接口
         ChinaSMS.to mobile, '【酒运达】您的配送端登录验证码是'+veriycode
       else
-        ChinaSMS.voice params[:mobile], veriycode
+        ChinaSMS.voice mobile, veriycode
       end
 
       {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
@@ -136,7 +136,7 @@ module DeliveryUserV1APIHelper
         # 通用接口
         ChinaSMS.to mobile, '【酒运达】您的配送端注册验证码是' + veriycode
       else
-        ChinaSMS.voice params[:mobile], veriycode
+        ChinaSMS.voice mobile, veriycode
       end
 
       {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}

@@ -6,6 +6,7 @@ class Dictionary
   field :desc
   field :type
   field :subtype
+  field :userinfo_id
   def to_s
     name
   end

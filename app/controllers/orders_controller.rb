@@ -90,7 +90,7 @@ class OrdersController < ApplicationController
         # orders << order
       end
       @orders = Kaminari.paginate_array(orders, total_count: ordercompleteds.count()).page(params[:page]).per(5)
-    elsif :generation == state_parm || :paid == state_parm || :distribution == state_parm || :receive == state_parm
+    elsif :generation == state_parm || :paid == state_parm || :distribution == state_parm || :receive == state_parm || :take == state_parm
       parm.delete :store_id if :generation == state_parm #待付款时移除门店限制
 
       parm[:workflow_state] = state_parm

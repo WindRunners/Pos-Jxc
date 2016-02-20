@@ -97,6 +97,8 @@
                   待付款
               <% elsif :paid == workflow_state %>
                   待接单
+              <% elsif :take == workflow_state %>
+                  待接货
               <% elsif :distribution == workflow_state %>
                   配送中
               <% elsif :receive == workflow_state %>

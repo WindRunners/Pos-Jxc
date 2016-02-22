@@ -75,9 +75,10 @@ module DeliveryUserV1APIHelper
 
 
   #获取登录验证码
-  def DeliveryUserV1APIHelper.get_login_verifycode(mobile)
+  def DeliveryUserV1APIHelper.get_login_verifycode(mobile,type)
 
     begin
+
 
       deliveryUser = DeliveryUser.where(mobile: mobile).first #根据用户名查询配送员数据
 
@@ -95,8 +96,13 @@ module DeliveryUserV1APIHelper
 
       ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
 
-      # 通用接口
-      ChinaSMS.to mobile, '【酒运达】您的配送端登录验证码是'+veriycode
+      if type == 'sms'
+        # 通用接口
+        ChinaSMS.to mobile, '【酒运达】您的配送端登录验证码是'+veriycode
+      else
+        ChinaSMS.voice mobile, veriycode
+      end
+
       {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
     rescue Exception => e #异常捕获
       puts e.message
@@ -106,7 +112,7 @@ module DeliveryUserV1APIHelper
   end
 
   #获取注册验证码
-  def DeliveryUserV1APIHelper.get_register_verifycode(mobile)
+  def DeliveryUserV1APIHelper.get_register_verifycode(mobile,type)
 
     begin
 
@@ -126,8 +132,13 @@ module DeliveryUserV1APIHelper
       veriycode2.save
       ChinaSMS.use :yunpian, password: '9525738f52010b28d1b965e347945364'
 
-      # 通用接口
-      ChinaSMS.to mobile, '【酒运达】您的配送端注册验证码是' + veriycode
+      if type == 'sms'
+        # 通用接口
+        ChinaSMS.to mobile, '【酒运达】您的配送端注册验证码是' + veriycode
+      else
+        ChinaSMS.voice mobile, veriycode
+      end
+
       {msg: '验证码已发送,请稍后...', flag: 1,data: veriycode}
     rescue Exception => e #异常捕获
       puts e.message

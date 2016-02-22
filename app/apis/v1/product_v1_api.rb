@@ -56,7 +56,8 @@ class ProductV1API < Grape::API
   end
   get 'list' do
 
-    where_params = {}
+    online_state = State.where({:value => 'online'}).first
+    where_params = {:state_id => online_state.id}
     conditions = params[:conditions]
     if conditions.present?
       condition_data = JSON.parse(conditions)
@@ -81,7 +82,10 @@ class ProductV1API < Grape::API
   end
   get 'list_by_sales' do
 
-    products = Product.shop_id(params[:id]).limit(50).order_by(:sale_count => :desc)
+
+    online_state = State.where({:value => 'online'}).first
+    where_params = {:state_id => online_state.id}
+    products = Product.shop_id(params[:id]).where(where_params).limit(50).order_by(:sale_count => :desc)
 
     present products, with: Entities::Product
   end

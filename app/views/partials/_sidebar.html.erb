@@ -435,6 +435,25 @@
           <b class="arrow"></b>
         </li>
 
+        <% if current_user.has_role?(:SuperAdmin)%>
+        <li class="">
+            <a data-href="<%= jyd_index_userinfos_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                    联盟商管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+
+
+        <li class="">
+            <a data-href="<%= admin_users_path %>">
+                <i class="menu-icon fa fa-caret-right"></i>
+                    用户管理
+            </a>
+            <b class="arrow"></b>
+        </li>
+        <% end %>
+
         <li class="">
           <a data-href="<%= jxc_purchase_returns_bills_path %>">
             <i class="menu-icon fa fa-caret-right"></i>

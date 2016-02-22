@@ -44,6 +44,15 @@
     }
 
 
+    $(function(){
+
+        var index = 1;
+        $(".steps .step").each(function(){
+            $(this).html(index);
+            index++;
+        });
+    })
+
 </script>
 
 
@@ -60,75 +69,78 @@
         <div>
           <ul class="steps">
 
-            <% if :generation == workflow_state %>
-                <% states = 2 %>
-            <% elsif :paid == workflow_state %>
-                <% states = 3 %>
-            <% elsif :distribution == workflow_state %>
-                <% states = 4 %>
-            <% elsif :receive == workflow_state %>
-                <% states = 5 %>
-            <% elsif :completed == workflow_state %>
-                <% states = 6 %>
-            <% else %>
-                <% states = 0 %>
-            <% end %>
-
-
-            <% if 1 == states %>
-                <li class="active" data-step="1">
-            <% elsif 1 < states %>
-                <li class="complete" data-step="1">
-            <% else %>
-                <li data-step="1">
-            <% end %>
+            <li class="active" data-step="1">
             <span class="step">1</span>
             <span class="title">下单</span>
             </li>
 
-            <% if 2 == states %>
-                <li class="active" data-step="2">
-            <% elsif 2 < states %>
-                <li class="complete" data-step="2">
-            <% else %>
-                <li data-step="2">
-            <% end %>
-            <span class="step">2</span>
-            <span class="title">付款</span>
-            </li>
 
-            <% if 3 == states %>
+            <% if @order.paymode != 0%>
+                <% if @order.order_tracks.where({'state'=>'generation'}).count > 0%>
+                    <li class="active" data-step="2">
+                      <span class="step">2</span>
+                      <span class="title">付款</span>
+                    </li>
+                <% else %>
+                    <li data-step="2">
+                <% end %>
+            <% end %>
+
+
+
+            <% if @order.order_tracks.where({'state'=>'paid'}).count > 0%>
                 <li class="active" data-step="3">
-            <% elsif 3 < states %>
-                <li class="complete" data-step="3">
             <% else %>
                 <li data-step="3">
             <% end %>
             <span class="step">3</span>
-            <span class="title">接单</span>
+            <span class="title">待接单</span>
             </li>
 
-            <% if 4 == states %>
+            <% if @order.order_tracks.where({'state'=>'take'}).count > 0%>
                 <li class="active" data-step="4">
-            <% elsif 4 < states %>
-                <li class="complete" data-step="4">
             <% else %>
                 <li data-step="4">
             <% end %>
             <span class="step">4</span>
-            <span class="title">发货</span>
+            <span class="title">待接货</span>
             </li>
 
-            <% if 5 == states %>
+            <% if @order.order_tracks.where({'state'=>'distribution'}).count > 0%>
                 <li class="active" data-step="5">
-            <% elsif 5 < states %>
-                <li class="complete" data-step="5">
             <% else %>
                 <li data-step="5">
             <% end %>
             <span class="step">5</span>
-            <span class="title">完成</span>
+            <span class="title">配送中</span>
             </li>
+
+            <% if @order.order_tracks.where({'state'=>'receive'}).count > 0%>
+                <li class="active" data-step="6">
+            <% else %>
+                <li data-step="6">
+            <% end %>
+            <span class="step">3</span>
+            <span class="title">配送完成</span>
+            </li>
+
+            <% if @order.workflow_state == 'cancelled'%>
+                <li class="active" data-step="7">
+                <span class="step">7</span>
+                <span class="title">取消订单</span>
+                </li>
+            <% else %>
+
+                <% if @order.order_tracks.where({'state'=>'completed'}).count > 0%>
+                    <li class="active" data-step="8">
+                <% else %>
+                    <li data-step="8">
+                <% end %>
+                <span class="step">8</span>
+                <span class="title">确认收货</span>
+                </li>
+            <% end %>
+
           </ul>
         </div>
       </td>
@@ -284,6 +296,8 @@
                   <p><h4>订单状态：待付款</h4></p>
               <% elsif :paid == workflow_state %>
                   <p><h4>订单状态：待接单</h4></p>
+              <% elsif :take == workflow_state %>
+                  <p><h4>订单状态：待接货</h4></p>
               <% elsif :distribution == workflow_state %>
                   <p><h4>订单状态：配送中</h4></p>
               <% elsif :receive == workflow_state %>

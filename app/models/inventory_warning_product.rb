@@ -14,6 +14,10 @@ class InventoryWarningProduct
   field :current_inventory, type: Integer #当前库存
   field :inventory_warning_count, type: Integer #预警数量
 
+  scope :by_storage, -> (storage_id){
+    where(:storage_id => storage_id) if storage_id.present?
+  }
+
   #添加库存预警商品
   def self.add_inventory_warning_product(product_id,storage_id,current_inventory,inventory_warning_count)
 

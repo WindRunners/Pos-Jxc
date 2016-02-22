@@ -7,3 +7,5 @@ zh-CN:
         jxc_storage: '过期预警仓库'
         product: '过期预警商品'
         current_inventory: '当前库存'
+        deadline: '过期日期'
+        expiration_date: '剩余保质期(天)'

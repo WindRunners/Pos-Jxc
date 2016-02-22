@@ -3,11 +3,7 @@ class InventoryWarningProductsController < ApplicationController
 
   def index
     storage_id = params[:storage_id] || ''
-    if storage_id.present?
-      @inventory_warning_products = InventoryWarningProduct.where(:storage_id => storage_id).order_by(:created_at => :desc).page(params[:page]).per(10)
-    else
-      @inventory_warning_products = InventoryWarningProduct.order_by(:created_at => :desc).page(params[:page]).per(10)
-    end
+    @inventory_warning_products = InventoryWarningProduct.by_storage(storage_id).order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
   def show

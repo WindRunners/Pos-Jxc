@@ -66,6 +66,7 @@ class JxcStorage
   has_many :jxc_storage_journals  #仓库变更明细
   has_many :jxc_storage_product_details   #仓库商品明细
   has_many :inventory_warning_products  #库存预警商品信息
+  has_many :expired_warning_products    #保质期预警商品信息
 
   def to_s
     self.storage_name

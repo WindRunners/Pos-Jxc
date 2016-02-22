@@ -241,6 +241,7 @@ class JxcPurchaseStockInBill < JxcBaseModel
           @traceObj.jxc_storage = billDetail.jxc_storage  #采购入库仓库
           @traceObj.production_date = billDetail.production_date  #本箱产品的 生产日期
           @traceObj.expiration_date = billDetail.expiration_date  #本箱产品的 保质期
+          @traceObj.deadline = billDetail.production_date + billDetail.expiration_date.to_i.days
 
           @traceObj.save
         end

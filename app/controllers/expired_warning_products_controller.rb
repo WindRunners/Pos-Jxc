@@ -1,28 +1,21 @@
 class ExpiredWarningProductsController < ApplicationController
   before_action :set_expired_warning_product, only: [:show, :edit, :update, :destroy]
 
-  # GET /expired_warning_products
-  # GET /expired_warning_products.json
   def index
-    @expired_warning_products = ExpiredWarningProduct.all
+    storage_id = params[:storage_id] || ''
+    @expired_warning_products = ExpiredWarningProduct.by_storage(storage_id).order_by(:created_at => :desc).page(params[:page]).per(10)
   end
 
-  # GET /expired_warning_products/1
-  # GET /expired_warning_products/1.json
   def show
   end
 
-  # GET /expired_warning_products/new
   def new
     @expired_warning_product = ExpiredWarningProduct.new
   end
 
-  # GET /expired_warning_products/1/edit
   def edit
   end
 
-  # POST /expired_warning_products
-  # POST /expired_warning_products.json
   def create
     @expired_warning_product = ExpiredWarningProduct.new(expired_warning_product_params)
 
@@ -37,8 +30,6 @@ class ExpiredWarningProductsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /expired_warning_products/1
-  # PATCH/PUT /expired_warning_products/1.json
   def update
     respond_to do |format|
       if @expired_warning_product.update(expired_warning_product_params)
@@ -51,8 +42,6 @@ class ExpiredWarningProductsController < ApplicationController
     end
   end
 
-  # DELETE /expired_warning_products/1
-  # DELETE /expired_warning_products/1.json
   def destroy
     @expired_warning_product.destroy
     respond_to do |format|
@@ -62,12 +51,10 @@ class ExpiredWarningProductsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_expired_warning_product
       @expired_warning_product = ExpiredWarningProduct.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def expired_warning_product_params
       params[:expired_warning_product]
     end

@@ -10,11 +10,13 @@ class Traceability
   field :printdate,type: Time #打印时间
   field :flag,type: Integer, default: 0 #是否打印 0未打印 1已打印
   field :generateSubCodeFlag, type: Integer, default:0  #是否已经生成过子码（ 0：未生成  1：已生成 ）
+  field :sellFlag, type: Integer, default:0   #销售标志 （ 0：未销售   1：已销售 ）
 
   field :resource_product_id, type: String #溯源商品信息 (商品为：ActiveResource Object)
 
   field :production_date, type: Time #商品生产日期
   field :expiration_date, type: Integer  #商品保质期（ 天数 ）
+  field :deadline, type: Time #商品过保日期
 
   belongs_to :parent, :class_name => "Traceability", :foreign_key => :parent_id #上级科目
   has_many :childs, :class_name => "Traceability", :autosave => true, :dependent => :destroy #下级科目
@@ -42,4 +44,10 @@ class Traceability
       @product = nil
     end
   end
+
+  #计算剩余保质天数
+  def calc_left_expired_days
+    left_expired_days = (self.deadline.to_date - Time.now.to_date).to_i
+  end
+
 end
